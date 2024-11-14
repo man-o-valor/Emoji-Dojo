@@ -1,5 +1,7 @@
 git rm --cached config.json
 git rm --cached package-lock.json
+git rm --cached package.json
+git rm --cached node_modules
 git rm --cached setavatar.js
 git rm --cached databases
 git rm --cached desktop.ini
