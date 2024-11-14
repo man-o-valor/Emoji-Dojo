@@ -38,13 +38,13 @@ module.exports = {
 					if (rarity >= 0 && !emojisgoneover.includes(vaultarray[i])) {
 						emojisgoneover.push(vaultarray[i])
 						let numberihave = vaultarray.reduce((acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc), 0)
-						vaulttext[rarity] += `${emojis[vaultarray[i]].emoji} `
+						if (vaulttext[rarity] != "") {
+							vaulttext[rarity] += `, `
+						}
+						vaulttext[rarity] += `${emojis[vaultarray[i]].emoji}`
 						vaultnumbers[rarity] += numberihave
 						if (numberihave>1) {
-							vaulttext[rarity] += `x${numberihave}`
-							if (i<vaultarray.length-1) {
-								vaulttext[rarity] += ", "
-							}
+							vaulttext[rarity] += ` x${numberihave}`
 						}
 					}
 				}
