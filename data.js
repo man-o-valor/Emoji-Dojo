@@ -300,7 +300,7 @@ function playturn(gamedata) {
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,1,0-gamedata.squads[gamedata.playerturn-1][1].dmg)
         }
         if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 34) { // zap
-            gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg,"zapped")
+            gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,1,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg,"zapped")
         }
 	if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 37 && gamedata.turn%4<=2) { // ghost
 	        const tempemj = gamedata.squads[gamedata.playerturn*-1+2][0].emoji
