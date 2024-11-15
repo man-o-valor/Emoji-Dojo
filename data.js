@@ -303,13 +303,13 @@ function playturn(gamedata) {
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg,"zapped")
         }
 	if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 37 && gamedata.turn%4<=2) { // ghost
-	    const tempemj = gamedata.squads[gamedata.playerturn*-1+3][0].emoji
-	    const temphp = gamedata.squads[gamedata.playerturn*-1+3][0].hp
-	    const tempdmg = gamedata.squads[gamedata.playerturn*-1+3][0].dmg
-            gamedata.squads[gamedata.playerturn*-1+3].splice(0,1,lodash.cloneDeep(emojis[7]))
-	    gamedata.squads[gamedata.playerturn*-1+3][0].hp = temphp
-	    gamedata.squads[gamedata.playerturn*-1+3][0].dmg = tempdmg
-            gamedata.richtext.push(`\n👻 ${gamedata.player[gamedata.playerturn-1]}'s ${emojis[36].emoji} transformed ${gamedata.player[gamedata.playerturn*-1+3]}'s ${tempemj} into a ${emojis[7].emoji}!`)
+	        const tempemj = gamedata.squads[gamedata.playerturn*-1+2][0].emoji
+	        const temphp = gamedata.squads[gamedata.playerturn*-1+2][0].hp
+	        const tempdmg = gamedata.squads[gamedata.playerturn*-1+2][0].dmg
+            gamedata.squads[gamedata.playerturn*-1+2].splice(0,1,lodash.cloneDeep(emojis[7]))
+	        gamedata.squads[gamedata.playerturn*-1+2][0].hp = temphp
+	        gamedata.squads[gamedata.playerturn*-1+2][0].dmg = tempdmg
+            gamedata.richtext.push(`\n👻 ${gamedata.player[gamedata.playerturn-1]}'s ${emojis[36].emoji} transformed ${gamedata.player[gamedata.playerturn*-1+2]}'s ${tempemj} into a ${emojis[7].emoji}!`)
         }
     }
 
