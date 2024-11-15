@@ -15,15 +15,14 @@ module.exports = {
 			const vaultarray = await getvault(interaction.user.id)
 			console.log(vaultarray)
 			const viewemoji = interaction.options.getString("emoji")
-			//await coinschange(interaction.user.id,-1)
 			if (viewemoji) {
-				const viewemojiid = vaultarray.find(x => emojis[x].name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || emojis[x].emoji == viewemoji.replace(/\s+/g, ''))
-				const existingemojiid = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || x.emoji == viewemoji.replace(/\s+/g, ''))
-				if (viewemojiid || existingemojiid.rarity==-1) {
+				const emojifound = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || x.emoji == viewemoji.replace(/\s+/g, ''))
+				const viewemojiid = vaultarray.find(x => emojis[x].id == emojifound.id)
+				if (viewemojiid || emojifound.rarity==-1) {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
-						.setTitle(`${emojis[viewemojiid].emoji} ${emojis[viewemojiid].name}`)
-						.setDescription(`Health: **${emojis[viewemojiid].hp}**\nAttack: **${emojis[viewemojiid].dmg}**\nRarity: **${raritysymbols[emojis[viewemojiid].rarity]} ${raritynames[emojis[viewemojiid].rarity]}**\nAbility:\n> ${emojis[viewemojiid].description}`)
+						.setTitle(`${emojifound.emoji} ${emojifound.name}`)
+						.setDescription(`Health: **${emojifound.hp}**\nAttack: **${emojifound.dmg}**\nRarity: **${raritysymbols[emojifound.rarity]} ${raritynames[emojifound.rarity]}**\nAbility:\n> ${emojifound.description}`)
 						.setTimestamp()
 						.setFooter({ text: `You have ${vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0)}`})
 					await interaction.reply({embeds:[vaultembed]});
