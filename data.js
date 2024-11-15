@@ -138,8 +138,8 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata = shufflesquad(gamedata,squad2)
             }
 	    if (gamedata.squads[squad-1][pos].id == 36) { // bomb
-                gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded")
-                gamedata.richtext.push(`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded!`)
+                gamedata.richtext.push(`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
+		gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded",true)
             }
             for (i = 0; i < gamedata.squads[squad-1].length; i++) {
                 if (gamedata.squads[squad-1][i].id == 11) { // tombstone
