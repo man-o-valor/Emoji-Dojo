@@ -302,6 +302,15 @@ function playturn(gamedata) {
         if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 34) { // zap
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg,"zapped")
         }
+	if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 36 && gamedata.turn%2==1) { // ghost
+	    const tempemj = gamedata.squads[gamedata.playerturn*-1+3][0].emoji
+	    const temphp = gamedata.squads[gamedata.playerturn*-1+3][0].hp
+	    const tempdmg = gamedata.squads[gamedata.playerturn*-1+3][0].dmg
+            gamedata.squads[gamedata.playerturn*-1+3].splice(0,1,lodash.cloneDeep(emojis[7]))
+	    gamedata.squads[gamedata.playerturn*-1+3][0].hp = temphp
+	    gamedata.squads[gamedata.playerturn*-1+3][0].dmg = tempdmg
+            gamedata.richtext.push(`\n👻 ${gamedata.player[gamedata.playerturn-1]}'s ${emojis[36].emoji} transformed ${gamedata.player[gamedata.playerturn*-1+3]}'s ${tempemj} into a ${emojis[7].emoji}!`)
+        }
     }
 
     scene: {
@@ -512,6 +521,7 @@ const emojis = [
 {emoji:"⚡",id:34,hp:2,dmg:2,rarity:2,name:"Zap",description:"Attacks the 2 frontmost enemy emojis at once"},
 {emoji:"🧱",id:35,hp:3,dmg:1,rarity:0,name:"Bricks",description:"Takes 2 less damage from every attack, to a minimum of 1"},
 {emoji:"💣",id:36,hp:1,dmg:0,rarity:1,name:"Bomb",description:"When attacked or defeated, defeats the frontmost enemy emoji and defeats itself"},
+{emoji:"👻",id:37,hp:4,dmg:2,rarity:2,name:"Ghost",description:"When attacking on odd-numbered rounds, turns the frontmost enemy Emoji into a 😶 with identical stats"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
