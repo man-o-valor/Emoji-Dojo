@@ -302,7 +302,7 @@ function playturn(gamedata) {
         if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 34) { // zap
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg,"zapped")
         }
-	if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 36 && gamedata.turn%4<=2) { // ghost
+	if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 37 && gamedata.turn%4<=2) { // ghost
 	    const tempemj = gamedata.squads[gamedata.playerturn*-1+3][0].emoji
 	    const temphp = gamedata.squads[gamedata.playerturn*-1+3][0].hp
 	    const tempdmg = gamedata.squads[gamedata.playerturn*-1+3][0].dmg
@@ -510,7 +510,7 @@ const emojis = [
 {emoji:"🦎",id:23,hp:3,dmg:1,rarity:0,name:"Lizard",description:"If this is the only undefeated friendly Emoji, become a 🐲"},
 {emoji:"🐲",id:24,hp:6,dmg:5,rarity:-1,name:"Dragon Face",description:"Nothing special"},
 {emoji:"☠️",id:25,hp:3,dmg:1,rarity:2,name:"Skull Crossbones",description:"When an enemy Emoji is killed, heals the friendly Emoji behind it by 1"},
-{emoji:"🍒",id:26,hp:2,dmg:2,rarity:1,name:"Cherries",description:"At the beginning of the Battle, doubles itself"},
+{emoji:"🍒",id:26,hp:2,dmg:1,rarity:1,name:"Cherries",description:"At the beginning of the Battle, doubles itself"},
 {emoji:"🌀",id:27,hp:4,dmg:1,rarity:1,name:"Cyclone",description:"When your Squad is Shuffled, Shuffles the opponent Squad and defeats itself (Only one takes effect if multiple are undefeated)"},
 {emoji:"🛻",id:28,hp:4,dmg:3,rarity:1,name:"Pickup Truck",description:"When your Squad is Shuffled, moves to the back"},
 {emoji:"🚏",id:29,hp:1,dmg:2,rarity:1,name:"Busstop",description:"When your Squad is Shuffled, heals the Emoji behind itself by 2"},
