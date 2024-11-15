@@ -18,7 +18,7 @@ module.exports = {
 			//await coinschange(interaction.user.id,-1)
 			if (viewemoji) {
 				const viewemojiid = vaultarray.find(x => emojis[x].name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || emojis[x].emoji == viewemoji.replace(/\s+/g, ''))
-				const existingemojiid = emojis.find(x => emojis[x].name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || emojis[x].emoji == viewemoji.replace(/\s+/g, ''))
+				const existingemojiid = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || x.emoji == viewemoji.replace(/\s+/g, ''))
 				if (viewemojiid || existingemojiid.rarity==-1) {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
