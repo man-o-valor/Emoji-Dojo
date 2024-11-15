@@ -22,7 +22,7 @@ module.exports = {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
 						.setTitle(`${emojifound.emoji} ${emojifound.name}`)
-						.setDescription(`Health: **${emojifound.hp}**\nAttack: **${emojifound.dmg}**\nRarity: **${raritysymbols[emojifound.rarity]} ${raritynames[emojifound.rarity]}**\nAbility:\n> ${emojifound.description}`)
+						.setDescription(`Health: **${emojifound.hp}**\nAttack: **${emojifound.dmg}**\nRarity: **${raritysymbols[emojifound.rarity] ?? "⬜"} ${raritynames[emojifound.rarity] ?? "N/A"}**\nAbility:\n> ${emojifound.description}`)
 						.setTimestamp()
 						.setFooter({ text: `You have ${vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0)}`})
 					await interaction.reply({embeds:[vaultembed]});
