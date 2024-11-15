@@ -309,7 +309,7 @@ function playturn(gamedata) {
             gamedata.squads[gamedata.playerturn*-1+2].splice(0,1,lodash.cloneDeep(emojis[7]))
 	        gamedata.squads[gamedata.playerturn*-1+2][0].hp = temphp
 	        gamedata.squads[gamedata.playerturn*-1+2][0].dmg = tempdmg
-            gamedata.richtext.push(`\n👻 ${gamedata.player[gamedata.playerturn-1]}'s ${emojis[36].emoji} transformed ${gamedata.player[gamedata.playerturn*-1+2]}'s ${tempemj} into a ${emojis[7].emoji}!`)
+            gamedata.richtext.push(`\n👻 ${gamedata.player[gamedata.playerturn-1]}'s ${emojis[37].emoji} transformed ${gamedata.player[gamedata.playerturn*-1+2]}'s ${tempemj} into a ${emojis[7].emoji}!`)
         }
     }
 
