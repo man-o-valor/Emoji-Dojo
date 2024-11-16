@@ -44,7 +44,7 @@ module.exports = {
 					player2squadtext += `${emojis[player2squadarray[i]].emoji} `
 				}
 
-				let gamedata = {squads:[[],[]],emojitext:"",richtext:[],turn:0,player:[interaction.user.globalName,"DojoBot"],playerturn:1}
+				let gamedata = {squads:[[],[]],emojitext:"",richtext:[],turn:0,player:[interaction.user.globalName,"DojoBot"],playerturn:1,logfile:`${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`}
 				for (let i = 0; i < 8; i++) {
 					gamedata.squads[0].push(lodash.cloneDeep(emojis[player1squadarray[i]]))
 				}
@@ -108,15 +108,16 @@ module.exports = {
 							await delay(4000)
 						}
 						await database.set(interaction.user.id + "battlepending","0")
+						const txt = Buffer.from(gamedata.battlelog)
 						if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
-							await interaction2.channel.send(`🏳️ The match ended in a draw...`)
+							await interaction2.channel.send({files: [{ attachment: txt, name: 'Battle Log.txt' }], content:`🏳️ The match ended in a draw...`})
 						} else {
 							if (gamedata.squads[1].length == 0) {
-								await interaction2.channel.send(`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`)
+								await interaction2.channel.send({files: [{ attachment: txt, name: 'Battle Log.txt' }], content:`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`})
 								await coinschange(interaction.user.id,gamedata.squads[0].length*20)
 							}
 							if (gamedata.squads[0].length == 0) {
-								await interaction2.channel.send(`\`@DojoBot\` is the winner!`)
+								await interaction2.channel.send({files: [{ attachment: txt, name: 'Battle Log.txt' }], content:`\`@DojoBot\` is the winner!`})
 							}
 						}
 					} else {
