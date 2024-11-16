@@ -319,54 +319,57 @@ function playturn(gamedata) {
         }
     }
     
-    gamedata.logfile += "\n\n"
+    gamedata.logfile += "\n\n "
 
     scene: {
     // destroying and recreating the battle scene
         gamedata.emojitext = ""
         for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
             gamedata.emojitext += renderhemoji(gamedata.squads[0][i].hp) + " "
-            gamedata.logfile += " " + gamedata.squads[0][i].hp + " "
+            gamedata.logfile +=  gamedata.squads[0][i].hp + "▪️"
         }
         gamedata.emojitext += " "
-        gamedata.logfile += " "
+        gamedata.logfile.slice(0, -1)
+        gamedata.logfile += "    "
         for (let i = 0; i < gamedata.squads[1].length; i++) {
             gamedata.emojitext += " " + renderhemoji(gamedata.squads[1][i].hp)
-            gamedata.logfile += " " + gamedata.squads[1][i].hp + " "
+            gamedata.logfile += " " + gamedata.squads[1][i].hp + "▪️"
         }
         
         gamedata.emojitext += "\n"
-        gamedata.logfile += "❤️\n"
+        gamedata.logfile.slice(0, -1)
+        gamedata.logfile += "  ❤️\n"
 
         for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
             gamedata.emojitext += renderdemoji(gamedata.squads[0][i].dmg) + " "
-            gamedata.logfile += " " + gamedata.squads[0][i].dmg + " "
+            gamedata.logfile += " " + gamedata.squads[0][i].dmg + "▪️"
         }
         gamedata.emojitext += " "
-        gamedata.logfile += " "
+        gamedata.logfile.slice(0, -1)
+        gamedata.logfile += "    "
         for (let i = 0; i < gamedata.squads[1].length; i++) {
             gamedata.emojitext += " " + renderdemoji(gamedata.squads[1][i].dmg)
-            gamedata.logfile += " " + gamedata.squads[1][i].dmg + " "
+            gamedata.logfile += " " + gamedata.squads[1][i].dmg + "▪️"
         }
         
         gamedata.emojitext += "\n"
-        gamedata.logfile += "⚔️\n"
+        gamedata.logfile.slice(0, -1)
+        gamedata.logfile += "  ⚔️\n"
 
         for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
             gamedata.emojitext += gamedata.squads[0][i].emoji + " "
             gamedata.logfile += gamedata.squads[0][i].emoji + " "
         }
         gamedata.emojitext += "|"
-        gamedata.logfile += "|"
+        gamedata.logfile += "| "
         for (let i = 0; i < gamedata.squads[1].length; i++) {
             gamedata.emojitext += " " + gamedata.squads[1][i].emoji
             gamedata.logfile += gamedata.squads[1][i].emoji + " "
         }
     }
 
-    gamedata.logfile += "\n\n--------------------------------------------------------------\n"
+    gamedata.logfile += "\n\n--------------------------------------------------------------\nTurn " + gamedata.turn + "\n"
 
-    console.log(gamedata)
 
     return gamedata
 }

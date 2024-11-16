@@ -110,14 +110,14 @@ module.exports = {
 						await database.set(interaction.user.id + "battlepending","0")
 						const txt = Buffer.from(gamedata.logfile)
 						if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
-							await interaction2.channel.send({files: [{ attachment: txt, name: 'Battle Log.txt' }], content:`🏳️ The match ended in a draw...`})
+							await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }], content:`🏳️ The match ended in a draw...`})
 						} else {
 							if (gamedata.squads[1].length == 0) {
-								await interaction2.channel.send({files: [{ attachment: txt, name: 'Battle Log.txt' }], content:`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`})
+								await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }], content:`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`})
 								await coinschange(interaction.user.id,gamedata.squads[0].length*20)
 							}
 							if (gamedata.squads[0].length == 0) {
-								await interaction2.channel.send({files: [{ attachment: txt, name: 'Battle Log.txt' }], content:`\`@DojoBot\` is the winner!`})
+								await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }], content:`\`@DojoBot\` is the winner!`})
 							}
 						}
 					} else {
