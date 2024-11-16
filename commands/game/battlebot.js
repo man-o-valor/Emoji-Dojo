@@ -44,7 +44,7 @@ module.exports = {
 					player2squadtext += `${emojis[player2squadarray[i]].emoji} `
 				}
 
-				let gamedata = {squads:[[],[]],emojitext:"",richtext:[],turn:0,player:[interaction.user.globalName,"DojoBot"],playerturn:1,logfile:`${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`}
+				let gamedata = {squads:[[],[]],emojitext:"",richtext:[],turn:0,player:[interaction.user.globalName,"DojoBot"],playerturn:1,logfile:`${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`}
 				for (let i = 0; i < 8; i++) {
 					gamedata.squads[0].push(lodash.cloneDeep(emojis[player1squadarray[i]]))
 				}
