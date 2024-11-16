@@ -108,7 +108,7 @@ module.exports = {
 							await delay(4000)
 						}
 						await database.set(interaction.user.id + "battlepending","0")
-						const txt = Buffer.from(gamedata.battlelog)
+						const txt = Buffer.from(gamedata.logfile)
 						if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
 							await interaction2.channel.send({files: [{ attachment: txt, name: 'Battle Log.txt' }], content:`🏳️ The match ended in a draw...`})
 						} else {
