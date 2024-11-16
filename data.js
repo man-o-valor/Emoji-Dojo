@@ -333,23 +333,23 @@ function playturn(gamedata) {
         gamedata.logfile += "    "
         for (let i = 0; i < gamedata.squads[1].length; i++) {
             gamedata.emojitext += " " + renderhemoji(gamedata.squads[1][i].hp)
-            gamedata.logfile += " " + gamedata.squads[1][i].hp + "▪️"
+            gamedata.logfile += gamedata.squads[1][i].hp + "▪️"
         }
         
         gamedata.emojitext += "\n"
         gamedata.logfile.slice(0, -1)
-        gamedata.logfile += "  ❤️\n"
+        gamedata.logfile += "  ❤️\n "
 
         for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
             gamedata.emojitext += renderdemoji(gamedata.squads[0][i].dmg) + " "
-            gamedata.logfile += " " + gamedata.squads[0][i].dmg + "▪️"
+            gamedata.logfile += gamedata.squads[0][i].dmg + "▪️"
         }
         gamedata.emojitext += " "
         gamedata.logfile.slice(0, -1)
         gamedata.logfile += "    "
         for (let i = 0; i < gamedata.squads[1].length; i++) {
             gamedata.emojitext += " " + renderdemoji(gamedata.squads[1][i].dmg)
-            gamedata.logfile += " " + gamedata.squads[1][i].dmg + "▪️"
+            gamedata.logfile += gamedata.squads[1][i].dmg + "▪️"
         }
         
         gamedata.emojitext += "\n"

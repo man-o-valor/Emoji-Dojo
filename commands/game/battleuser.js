@@ -142,21 +142,22 @@ module.exports = {
 									}
 									await database.set(interaction.user.id + "battlepending","0")
 									await database.set(battleuser.id + "battlepending","0")
+									const txt = Buffer.from(gamedata.logfile)
 									if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
-										await interaction2.channel.send(`🏳️ The match ended in a draw...`)
+										await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.emojibattle` }], content:`🏳️ The match ended in a draw...`})
 									} else {
 										if (gamedata.squads[1].length == 0) {
 											diff1 = await coinschange(interaction.user.id,gamedata.squads[0].length*20)
 											diff2 = diff1*-0.25
 											await coinschange(battleuser.id,diff2)
-											await interaction2.channel.send(`<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙\n${battleuser.globalName}: ${diff2} 🪙`)
+											await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.emojibattle` }], content:`<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙\n${battleuser.globalName}: ${diff2} 🪙`})
 											
 										}
 										if (gamedata.squads[0].length == 0) {
 											diff1 = await coinschange(battleuser.id,gamedata.squads[1].length*20)
 											diff2 = diff1*-0.25
 											await coinschange(interaction.user.id,diff2)
-											await interaction2.channel.send(`<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙\n${interaction.user.globalName}: ${diff2} 🪙`)
+											await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.emojibattle` }], content:`<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙\n${interaction.user.globalName}: ${diff2} 🪙`})
 										}
 									}
 								} else {
