@@ -136,14 +136,14 @@ module.exports = {
 								await database.set(battleuser.id + "battlepending","0")
 								const txt = Buffer.from(gamedata.logfile)
 								if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
-									await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username} (friendly).emojibattle` }], content:`🏳️ The match ended in a draw...`})
+									await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username} (friendly).emojibattle` }], content:`🏳️ The match ended in a draw...`})
 								} else {
 									if (gamedata.squads[1].length == 0) {
-										await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}(friendly).emojibattle` }], content:`<@${interaction.user.id}> is the winner!`})// +${gamedata.squads[0].length*10} 🪙`)
+										await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}(friendly).emojibattle` }], content:`<@${interaction.user.id}> is the winner!`})// +${gamedata.squads[0].length*10} 🪙`)
 										//await coinschange(interaction.user.id,gamedata.squads[0].length*20)
 									}
 									if (gamedata.squads[0].length == 0) {
-										await interaction2.channel.send({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}(friendly).emojibattle` }], content:`<@${battleuser.id}> is the winner!`})
+										await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}(friendly).emojibattle` }], content:`<@${battleuser.id}> is the winner!`})
 									}
 								}
 							} else {
