@@ -109,16 +109,32 @@ module.exports = {
 						}
 						await database.set(interaction.user.id + "battlepending","0")
 						const txt = Buffer.from(gamedata.logfile)
+						let int3
+						const exportbutton = new ButtonBuilder()
+							.setCustomId('export')
+							.setLabel('Download Battle Log')
+							.setEmoji('📤')
+							.setStyle(ButtonStyle.Primary);
+						const row2 = new ActionRowBuilder()
+							.addComponents(exportbutton);
 						if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
-							await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }], content:`🏳️ The match ended in a draw...`})
+							int3 = await interaction2.followUp({components:[row2], content:`🏳️ The match ended in a draw...`})
 						} else {
 							if (gamedata.squads[1].length == 0) {
-								await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }], content:`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`})
+								int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`})
 								await coinschange(interaction.user.id,gamedata.squads[0].length*20)
 							}
 							if (gamedata.squads[0].length == 0) {
-								await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }], content:`\`@DojoBot\` is the winner!`})
+								int3 = await interaction2.followUp({components:[row2], content:`\`@DojoBot\` is the winner!`})
 							}
+						}
+						
+						try {
+							const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
+							interaction3.reply({ephemeral:true,reply:"Battle log:", files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }]})
+						} catch(e) {
+							exportbutton.setDisabled(true)
+							interaction2.editReply({components:[row2]})
 						}
 					} else {
 						await database.set(interaction.user.id + "botbattlecooldown",3600+Math.floor(Date.now()/1000))
