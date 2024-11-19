@@ -319,7 +319,7 @@ function playturn(gamedata) {
         }
     }
     
-    gamedata.logfile += "\n\n "
+    gamedata.logfile += "\n\n"
 
     scene: {
     // destroying and recreating the battle scene
@@ -453,10 +453,10 @@ customemojis: {
     }
 
     function renderdemoji(value) {
-        if (value<0) {
+        if (value<-3) {
             return dmgemojis[0]
         } else if (dmgemojis.length > value) {
-            return dmgemojis[value + 1]
+            return dmgemojis[value + 4]
         } else {
             return dmgemojis[dmgemojis.length - 1]
         }
@@ -483,7 +483,10 @@ customemojis: {
     ]
 
     const dmgemojis = [
-        "<:attack_0:1278757428183437352>",
+        "<:attack__3:1308565301226377348>",
+        "<:attack_3:1308565243768733696>",
+        "<:attack_2:1308565231236157470>",
+        "<:attack_1:1308565220930617425>",
         "<:attack0:1278757419488383090>",
         "<:attack1:1278757410290405522>",
         "<:attack2:1278757401511858287>",
