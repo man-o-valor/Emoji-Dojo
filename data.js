@@ -295,7 +295,7 @@ function playturn(gamedata) {
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 1)
         }
-        if (gamedata.squads[gamedata.playerturn-1][0].id == 13 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // guitar
+        if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 13 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // guitar
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 1)
         }

@@ -131,7 +131,7 @@ module.exports = {
 						
 						try {
 							const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
-							interaction3.reply({ephemeral:true,reply:"Battle log:", files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.emojibattle` }]})
+							interaction3.reply({ephemeral:true, files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.txt` }]})
 						} catch(e) {
 							exportbutton.setDisabled(true)
 							interaction2.editReply({components:[row2]})

@@ -144,22 +144,37 @@ module.exports = {
 									await database.set(battleuser.id + "battlepending","0")
 									const txt = Buffer.from(gamedata.logfile)
 									let int3
+									const exportbutton = new ButtonBuilder()
+										.setCustomId('export')
+										.setLabel('Download Battle Log')
+										.setEmoji('📤')
+										.setStyle(ButtonStyle.Primary);
+									const row2 = new ActionRowBuilder()
+										.addComponents(exportbutton);
 									if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
-										int3 = await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.emojibattle` }], content:`🏳️ The match ended in a draw...`})
+										int3 = await interaction2.followUp({components:[row2], content:`🏳️ The match ended in a draw...`})
 									} else {
 										if (gamedata.squads[1].length == 0) {
 											diff1 = await coinschange(interaction.user.id,gamedata.squads[0].length*20)
 											diff2 = diff1*-0.25
 											await coinschange(battleuser.id,diff2)
-											int3 = await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.emojibattle` }], content:`<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙\n${battleuser.globalName}: ${diff2} 🪙`})
+											int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙\n${battleuser.globalName}: ${diff2} 🪙`})
 											
 										}
 										if (gamedata.squads[0].length == 0) {
 											diff1 = await coinschange(battleuser.id,gamedata.squads[1].length*20)
 											diff2 = diff1*-0.25
 											await coinschange(interaction.user.id,diff2)
-											int3 = await interaction2.followUp({files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.emojibattle` }], content:`<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙\n${interaction.user.globalName}: ${diff2} 🪙`})
+											int3 = await interaction2.followUp({components:[row2], content:`<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙\n${interaction.user.globalName}: ${diff2} 🪙`})
 										}
+									}
+
+									try {
+										const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
+										interaction3.reply({ephemeral:true, files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.txt` }]})
+									} catch(e) {
+										exportbutton.setDisabled(true)
+										interaction2.editReply({components:[row2]})
 									}
 								} else {
 									interaction2.update({content:`<@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you!\n\n\`${interaction.user.globalName.replace(/`/g, '')}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(/`/g, '')}'s\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[0]+1]} \`${battleuser.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[1]+1]}`})
