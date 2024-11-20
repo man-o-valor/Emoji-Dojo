@@ -5,11 +5,18 @@ const lodash = require('lodash');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('battlebot')
-		.setDescription('Battle DojoBot, with no chance of losing coins (You can reject Dojobot every 60 minutes)'),
+		.setDescription('Battle DojoBot, with no chance of losing coins (You can reject Dojobot every 60 minutes)')
+		.addStringOption(option =>
+			option.setName('speed')
+				.setDescription('The time in seconds between each turn (defaults to 4)')),
 	async execute(interaction) {
 		if (await trysetupuser(interaction.user.id)) {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
+			let battlespeed = parseInt(interaction.options.getString("speed")) ?? 4
+			if (battlespeed<1) {
+				battlespeed = 1
+			}
 			const bp = await database.get(interaction.user.id + "battlepending") ?? "0"
 			const bbcd = "0"//await database.get(interaction.user.id + "botbattlecooldown") ?? "0"
 			if (bp < Date.now()/1000 && bbcd < Date.now()/1000) {
@@ -105,7 +112,7 @@ module.exports = {
 								richnumberhidden = "-# " + numberhidden + " lines hidden"
 							}
 							await interaction2.editReply(`<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + richnumberhidden + richtextsnippet)
-							await delay(4000)
+							await delay(battlespeed*1000)
 						}
 						await database.set(interaction.user.id + "battlepending","0")
 						const txt = Buffer.from(gamedata.logfile)

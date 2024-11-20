@@ -10,9 +10,16 @@ module.exports = {
 			option
 				.setName('user')
 				.setDescription('The user to battle')
-				.setRequired(true)),
+				.setRequired(true))
+		.addStringOption(option =>
+			option.setName('speed')
+				.setDescription('The time in seconds between each turn (defaults to 4)')),
 	async execute(interaction) {
 		const battleuser = interaction.options.getUser('user')
+		let battlespeed = parseInt(interaction.options.getString("speed")) ?? 4
+		if (battlespeed<1) {
+			battlespeed = 1
+		}
 		if (await trysetupuser(interaction.user.id)) {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else if (await trysetupuser(battleuser.id)) {
@@ -138,7 +145,7 @@ module.exports = {
 											richnumberhidden = "-# " + numberhidden + " lines hidden"
 										}
 										await interaction2.editReply(`<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + richnumberhidden + richtextsnippet)
-										await delay(4000)
+										await delay(battlespeed*1000)
 									}
 									await database.set(interaction.user.id + "battlepending","0")
 									await database.set(battleuser.id + "battlepending","0")
