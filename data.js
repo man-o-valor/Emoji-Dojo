@@ -553,7 +553,7 @@ const emojis = [
 {emoji:"💣",id:36,hp:1,dmg:0,rarity:1,name:"Bomb",description:"When attacked or defeated, defeats the frontmost enemy emoji and defeats itself"},
 {emoji:"👻",id:37,hp:4,dmg:1,rarity:2,name:"Ghost",description:"Every other round when attacking, turns the frontmost enemy Emoji into a 😶 with identical stats"},
 {emoji:"✨",id:38,hp:3,dmg:-1,rarity:-1,name:"Sparkles",description:"Nothing special"},
-{emoji:"🦄",id:39,hp:3,dmg:2,rarity:-1,name:"Unicorn",description:"When defeated, summons ✨ at the front of the enemy Squad"},
+{emoji:"🦄",id:39,hp:3,dmg:2,rarity:2,name:"Unicorn",description:"When defeated, summons ✨ at the front of the enemy Squad"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
