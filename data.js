@@ -143,9 +143,9 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[10].emoji} Shuffled ${gamedata.player[squad2-1]}'s Squad!`)
                 gamedata = shufflesquad(gamedata,squad2)
             }
-	    if (gamedata.squads[squad-1][pos].id == 36) { // bomb
+	            if (gamedata.squads[squad-1][pos].id == 36) { // bomb
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
-		gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded",true)
+		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded",true)
             }
             for (i = 0; i < gamedata.squads[squad-1].length; i++) {
                 if (gamedata.squads[squad-1][i].id == 11) { // tombstone
@@ -160,7 +160,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata = alterhp(gamedata,squad2,i,squad2,i,1)
                 }
             }
-            // 
+            if (gamedata.squads[squad-1][pos].id == 39) { // unicorn
+                gamedata.squads[0-squad+2].splice(0,0,lodash.cloneDeep(emojis[38]))
+                gamedata = richtextadd(gamedata,`\n🪄 ${gamedata.player[squad-1]}'s ${emojis[39].emoji} summoned a ✨ in ${gamedata.player[0-squad+2]}'s Squad!`)
+            } 
             gamedata.squads[squad-1].splice(pos,1)
         } else {
             if (val>0) { 
@@ -188,9 +191,9 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     }
                     gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad-1]}'s ${emojis[9].emoji} sparked a standing ovation and summoned ${emojis[0].emoji}${emojis[0].emoji}${emojis[0].emoji}, and defeated itself!`)
                 }
-		if (gamedata.squads[squad-1][pos].id == 36) { // bomb (2)
+		        if (gamedata.squads[squad-1][pos].id == 36) { // bomb (2)
                     gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded")
-		    gamedata.squads[squad-1].splice(pos,1)
+		            gamedata.squads[squad-1].splice(pos,1)
                     gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded!`)
                 }
             } else {
@@ -549,6 +552,8 @@ const emojis = [
 {emoji:"🧱",id:35,hp:3,dmg:1,rarity:0,name:"Bricks",description:"Takes 2 less damage from every attack, to a minimum of 1"},
 {emoji:"💣",id:36,hp:1,dmg:0,rarity:1,name:"Bomb",description:"When attacked or defeated, defeats the frontmost enemy emoji and defeats itself"},
 {emoji:"👻",id:37,hp:4,dmg:1,rarity:2,name:"Ghost",description:"Every other round when attacking, turns the frontmost enemy Emoji into a 😶 with identical stats"},
+{emoji:"✨",id:38,hp:3,dmg:-1,rarity:-1,name:"Sparkles",description:"Nothing special"},
+{emoji:"🦄",id:39,hp:3,dmg:2,rarity:-1,name:"Unicorn",description:"When defeated, summons ✨ at the front of the enemy Squad"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
