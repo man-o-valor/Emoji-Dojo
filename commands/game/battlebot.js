@@ -13,7 +13,7 @@ module.exports = {
 		if (await trysetupuser(interaction.user.id)) {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
-			let battlespeed = parseInt(interaction.options.getString("speed")) ?? 4
+			let battlespeed = parseInt(interaction.options.getString("speed") ?? "4")
 			if (battlespeed<1) {
 				battlespeed = 1
 			}
