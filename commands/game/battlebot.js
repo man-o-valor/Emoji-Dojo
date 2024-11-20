@@ -141,7 +141,7 @@ module.exports = {
 							interaction3.reply({ephemeral:true, files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.txt` }]})
 						} catch(e) {
 							exportbutton.setDisabled(true)
-							interaction2.editReply({components:[row2]})
+							int3.editReply({components:[row2]})
 						}
 					} else {
 						await database.set(interaction.user.id + "botbattlecooldown",3600+Math.floor(Date.now()/1000))

@@ -24,14 +24,13 @@ module.exports = {
 			let marketcontents
 
 			marketcontents = 
-	`:asterisk: Random Common Emoji (75 🪙)
-	✳️ Random Rare Emoji (150 🪙)
-	⚛️ Random Special Emoji (450 🪙)
+`:asterisk: Random Common Emoji (75 🪙)
+✳️ Random Rare Emoji (150 🪙)
+⚛️ Random Special Emoji (450 🪙)
 
-	🎁:asterisk: Common Emoji Pack (300 🪙)
-	🎁✳️ Rare Emoji Pack (1000 🪙)
-	🎁⚛️ Special Emoji Pack (2500 🪙)
-			`
+🎁:asterisk: Common Emoji Pack (300 🪙)
+🎁✳️ Rare Emoji Pack (1000 🪙)
+🎁⚛️ Special Emoji Pack (2500 🪙)`
 
 			let shopdata
 
