@@ -73,7 +73,7 @@ module.exports = {
 					let squadarray = await getsquad(interaction.user.id)
 					let numberfound = squadarray.reduce((a, v) => (v === emojifound.id ? a + 1 : a), 0)
 					let numberowned = vaultarray.reduce((a, v) => (v === emojifound.id ? a + 1 : a), 0)
-					if (numberfound<numberowned) {
+					if (numberfound<=numberowned) {
 						comps.push(row1)
 						comps.push(row2)
 					}
