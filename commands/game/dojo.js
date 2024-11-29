@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
-const {getvault,emojis,raritysymbols,raritynames,trysetupuser,database} = require('../../data.js')
+const {getvault,emojis,raritysymbols,raritynames,trysetupuser,database,getsquad} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -17,7 +17,7 @@ module.exports = {
 			const viewemoji = interaction.options.getString("emoji")
 			if (viewemoji) {
 				const emojifound = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || x.emoji == viewemoji.replace(/\s+/g, ''))
-				const viewemojiid = vaultarray.find(x => emojis[x].id == emojifound.id) ?? undefined
+				const viewemojiid = vaultarray.find(x => emojis[x].id == (emojifound ?? {id:undefined}).id)
 				if (viewemojiid || emojifound.rarity==-1) {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
