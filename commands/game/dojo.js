@@ -96,7 +96,7 @@ module.exports = {
 								await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to add one!`})
 							}
 						})} catch (e) {
-						
+							console.log(e)
 						}
 					}
 				} else {
