@@ -83,8 +83,9 @@ module.exports = {
 						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 120000 });
 						try {
 							collector.on('collect', async (interaction2) => {
-							let numberfound = squadarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0)
+							numberfound = squadarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0)
 							if (numberfound<numberowned) {
+								squadarray = await getsquad(interaction.user.id)
 								squadarray[interaction2.customId[5]-1] = emojifound.id
 								await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
 								let squadtext = ""
