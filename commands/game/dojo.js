@@ -78,13 +78,13 @@ module.exports = {
 						comps.push(row2)
 					}
 					const response = await interaction.reply({embeds:[vaultembed],components:comps,fetchReply: true});
-					if (numberfound<numberowned) {
+					if (numberfound<=numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id
 						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 60000 });
 						try {
 							collector.on('collect', async (interaction2) => {
 							let numberfound = squadarray.reduce((a, v) => (v === emojifound.id ? a + 1 : a), 0)
-							if (numberfound<numberowned) {
+							if (numberfound<=numberowned) {
 								squadarray[interaction2.customId[5]] = emojifound.id
 								await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
 								let squadtext = ""
