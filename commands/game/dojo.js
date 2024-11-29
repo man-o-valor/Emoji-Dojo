@@ -1,4 +1,4 @@
-const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
 const {getvault,emojis,raritysymbols,raritynames,trysetupuser,database} = require('../../data.js')
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
 			const viewemoji = interaction.options.getString("emoji")
 			if (viewemoji) {
 				const emojifound = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || x.emoji == viewemoji.replace(/\s+/g, ''))
-				const viewemojiid = vaultarray.find(x => emojis[x].id == emojifound.id)
+				const viewemojiid = vaultarray.find(x => emojis[x].id == emojifound.id) ?? undefined
 				if (viewemojiid || emojifound.rarity==-1) {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
@@ -83,13 +83,18 @@ module.exports = {
 						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 60000 });
 						try {
 							collector.on('collect', async (interaction2) => {
-							squadarray[interaction2.customId[5]] = emojifound.id
-							await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
-							let squadtext = ""
-							for (let i = 7; i > -1; i--) {
-								squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].name} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
+							let numberfound = squadarray.reduce((a, v) => (v === emojifound.id ? a + 1 : a), 0)
+							if (numberfound<numberowned) {
+								squadarray[interaction2.customId[5]] = emojifound.id
+								await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
+								let squadtext = ""
+								for (let i = 7; i > -1; i--) {
+									squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].name} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
+								}
+								await interaction2.reply({ephemeral:true,content:`Your squad has been saved!\n${squadtext}`})
+							} else {
+								await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to add one!`})
 							}
-							await interaction2.reply({ephemeral:true,content:`Your squad has been saved!\n${squadtext}`})
 						})} catch (e) {
 						
 						}
