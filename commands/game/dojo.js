@@ -80,12 +80,12 @@ module.exports = {
 					const response = await interaction.reply({embeds:[vaultembed],components:comps,fetchReply: true});
 					if (numberfound<=numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id
-						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 60000 });
+						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 120000 });
 						try {
 							collector.on('collect', async (interaction2) => {
 							let numberfound = squadarray.reduce((a, v) => (v === emojifound.id ? a + 1 : a), 0)
 							if (numberfound<=numberowned) {
-								squadarray[interaction2.customId[5]] = emojifound.id
+								squadarray[interaction2.customId[5]-1] = emojifound.id
 								await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
 								let squadtext = ""
 								for (let i = 7; i > -1; i--) {
@@ -97,6 +97,15 @@ module.exports = {
 							}
 						})} catch (e) {
 							console.error(e)
+							addto1.setDisabled(true)
+							addto2.setDisabled(true)
+							addto3.setDisabled(true)
+							addto4.setDisabled(true)
+							addto5.setDisabled(true)
+							addto6.setDisabled(true)
+							addto7.setDisabled(true)
+							addto8.setDisabled(true)
+							response.editReply({components:comps})
 						}
 					}
 				} else {
