@@ -135,13 +135,12 @@ module.exports = {
 								int3 = await interaction2.followUp({components:[row2], content:`\`@DojoBot\` is the winner!`})
 							}
 						}
-						
+						const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
 						try {
-							const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
 							interaction3.reply({ephemeral:true, files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.txt` }]})
 						} catch(e) {
 							exportbutton.setDisabled(true)
-							int3.update({components:[row2]})
+							interaction3.editReply({components:[row2]})
 						}
 					} else {
 						await database.set(interaction.user.id + "botbattlecooldown",3600+Math.floor(Date.now()/1000))

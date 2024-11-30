@@ -106,7 +106,7 @@ module.exports = {
 							addto6.setDisabled(true)
 							addto7.setDisabled(true)
 							addto8.setDisabled(true)
-							interaction.update()
+							interaction.editReply()
 						}
 					}
 				} else {
