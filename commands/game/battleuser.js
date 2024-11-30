@@ -181,7 +181,7 @@ module.exports = {
 										interaction3.reply({ephemeral:true, files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.txt` }]})
 									} catch(e) {
 										exportbutton.setDisabled(true)
-										int3.editReply({components:[row2]})
+										int3.update({components:[row2]})
 									}
 								} else {
 									interaction2.update({content:`<@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you!\n\n\`${interaction.user.globalName.replace(/`/g, '')}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(/`/g, '')}'s\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[0]+1]} \`${battleuser.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[1]+1]}`})
