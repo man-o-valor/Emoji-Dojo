@@ -102,17 +102,17 @@ function richtextadd(gamedata,text) {
 
 function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 
-    if (gamedata.squads[squad2-1][pos].id == 22) {// rage
+    if ((gamedata.squads[squad2-1][pos].id ?? {id:undefined}) == 22) {// rage
         val = -Math.min(val + gamedata.squads[squad-1].length,3)
     }
     // protection buffs start here 
-    if (gamedata.squads[squad-1][pos].id == 2 && val < 0) {// relieved face
+    if ((gamedata.squads[squad-1][pos].id ?? {id:undefined}) == 2 && val < 0) {// relieved face
         val = Math.min(val + 1,-1)
     }
-    if (gamedata.squads[squad-1][pos].id == 35 && val < 0) {// bricks
+    if ((gamedata.squads[squad-1][pos].id ?? {id:undefined}) == 35 && val < 0) {// bricks
         val = Math.min(val + 2,-1)
     }
-    if (gamedata.squads[squad-1][pos].id == 17) {// shield
+    if ((gamedata.squads[squad-1][pos].id ?? {id:undefined}) == 17) {// shield
         if (val < 0) {
             val = Math.min(val + gamedata.squads[squad-1].filter(x => x.id == 2).length,-1)
         } else {
