@@ -219,11 +219,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded!`)
                 }
                 if (gamedata.squads[squad2-1][pos2].id == 6 && gamedata.squads[squad2-1][pos2].hp>2) { // speaking head
-                    gamedata.squads[squad-1][pos].dmg -= 1
-                    if (gamedata.squads[squad-1][pos].dmg < 0) {
-                        gamedata.squads[squad-1][pos].dmg = 0
+                    if (gamedata.squads[squad-1][pos].dmg > 0) {
+                        gamedata.squads[squad-1][pos].dmg -= 1
+			gamedata = richtextadd(gamedata,`\n🚧 ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][pos2].emoji} weakened ${gamedata.player[squad-1]}'s ${gamedata.squads[squad-1][pos].emoji}! (-1 attack)`)
                     }
-                    gamedata = richtextadd(gamedata,`\n🚧 ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][pos2].emoji} weakened ${gamedata.player[squad-1]}'s ${gamedata.squads[squad-1][pos].emoji}! (-1 attack)`)
                 }
                 if ((gamedata.squads[squad-1][pos+1] ?? {id:NaN}).id == 1) { // kissing heart face
                     gamedata = alterhp(gamedata,squad,pos,squad,pos+1,1,"kissed")
