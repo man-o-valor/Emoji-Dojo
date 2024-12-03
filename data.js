@@ -102,17 +102,17 @@ function richtextadd(gamedata,text) {
 
 function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 
-    if ((gamedata.squads[squad2-1][pos].id ?? {id:undefined}) == 22) {// rage
+    if ((gamedata.squads[squad2-1][pos] ?? {id:undefined}).id == 22) {// rage
         val = -Math.min(val + gamedata.squads[squad-1].length,3)
     }
     // protection buffs start here 
-    if ((gamedata.squads[squad-1][pos].id ?? {id:undefined}) == 2 && val < 0) {// relieved face
+    if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 2 && val < 0) {// relieved face
         val = Math.min(val + 1,-1)
     }
-    if ((gamedata.squads[squad-1][pos].id ?? {id:undefined}) == 35 && val < 0) {// bricks
+    if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 35 && val < 0) {// bricks
         val = Math.min(val + 2,-1)
     }
-    if ((gamedata.squads[squad-1][pos].id ?? {id:undefined}) == 17) {// shield
+    if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 17) {// shield
         if (val < 0) {
             val = Math.min(val + gamedata.squads[squad-1].filter(x => x.id == 2).length,-1)
         } else {
@@ -160,7 +160,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata = alterhp(gamedata,squad2,i,squad2,i,1)
                 }
             }
-            if (gamedata.squads[squad-1][pos].id == 39) { // unicorn
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 39) { // unicorn
                 gamedata.squads[0-squad+2].splice(0,0,lodash.cloneDeep(emojis[38]))
                 gamedata = richtextadd(gamedata,`\n🪄 ${gamedata.player[squad-1]}'s ${emojis[39].emoji} summoned a ✨ in ${gamedata.player[0-squad+2]}'s Squad!`)
             } 
