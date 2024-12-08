@@ -9,7 +9,7 @@ module.exports = {
 			option.setName('emoji')
 				.setDescription('The Emoji to view details of (optional)')),
 	async execute(interaction) {
-		if (await trysetupuser(interaction.user.id)) {
+		if (await trysetupuser(interaction.user)) {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			const vaultarray = await getvault(interaction.user.id)
