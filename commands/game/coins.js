@@ -1,11 +1,12 @@
 const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
-const {database} = require('../../data.js')
+const {database,trysetupuser} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('coins')
 		.setDescription('View your stash of Emoji Coins'),
 	async execute(interaction) {
+		await trysetupuser(interaction.user)
 		await database.set(interaction.user.id + "coins","10000")
 		const coincount = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
 		let coincd = parseInt(await database.get(interaction.user.id + "coincooldown")  ?? Math.floor(Date.now()/1000))
