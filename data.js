@@ -17,18 +17,43 @@ async function trysetupuser(user) {
     if (rawvault == undefined || rawsquad == undefined) {
         let emojilist = emojis.filter(e => e.rarity == 0);
 		let allemojistoadd = ""
+        let allemojitext = ""
         for (let i = 0; i < 7; i++) {
 		    const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
 		    allemojistoadd += emojitoadd.id + ","
+            allemojitext += " " + emojitoadd.emoji
 		}
         emojilist = emojis.filter(e => e.rarity == 1);
         for (let i = 0; i < 7; i++) {
 		    const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
 	    	allemojistoadd += emojitoadd.id + ","
+            allemojitext += " " + emojitoadd.emoji
 		}
-        const tempvault = await database.get(user.id + "vault")
 		await database.set(user.id+"vault",allemojistoadd)
-		//await user.send({content:`# ⛩️😀 Welcome to the Emoji Dojo, <@${user.id}>! 🏯🎋\nIt is here that you will over time hone your skills and master the art of Emoji Battles. `})
+        const welcomemessage = `# ⛩️😀 Welcome to the Emoji Dojo, <@${user.id}>! 🏯🎋
+**It is here that you will over time hone your skills and master the art of Emoji Battles.**
+
+## 😄💬 \`Denver\`
+\`\`\`Hello! My name is Denver, and I'm in charge of wrangling these here emojis for you to battle with. Here, I'll give you this selection to start off with.\`\`\`
+
+*(You received${allemojitext}!)*
+
+\`\`\`That should be good enough to start with! Go ahead, you can get to know 'em.\`\`\`
+
+*(Use </dojo:1277719095701143680> to see your collection of Emojis, and see details about each one.)*
+
+\`\`\`When you're ready, organize them into a Squad optimized to battle others and create the best synergy.\`\`\`
+
+*(Use </squad:1277719095701143681> to view or edit your Squad. You can also edit your squad from the </dojo:1277719095701143680>.)*
+
+\`\`\`Finally, you can Battle! Engage your friends in a Battle, or lower the stakes with a Friendly Battle. If there's no one who wants to fight you, you can always battle Dojobot in a Bot Battle!\`\`\`
+
+*(Use </battleuser:1279264987717570610> and </battlebot:1277719095701143677> to engage in Battles to earn Coins. You can also use </friendlybattle:1289287177875886161> to battle friends without worrying about losing Coins.)*
+
+\`\`\`Once you have enough Coins, you can visit my Emoji Shop! I sell these little guys to aspiring battlers like you. Stop by when you're looking for an emoji!\`\`\`
+
+*(You can use </coins:1277719095701143678> to see how many Coins you have, and </shop:1290417978734678098> to visit Denver's shop.)*`
+		await user.send({content:welcomemessage})
         return true
     } else {
         return false
