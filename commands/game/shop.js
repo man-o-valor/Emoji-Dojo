@@ -6,7 +6,7 @@ module.exports = {
 		.setName('shop')
 		.setDescription('Visit the Emoji Shop, where you can buy emojis with your Coins'),
 	async execute(interaction) {
-		if (await trysetupuser(interaction.user.id)) {
+		if (await trysetupuser(interaction.user)) {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			const coincount = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
