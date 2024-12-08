@@ -20,7 +20,7 @@ module.exports = {
 		if (battlespeed<1) {
 			battlespeed = 1
 		}
-		if (await trysetupuser(interaction.user.id)) {
+		if (await trysetupuser(interaction.user)) {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else if (await trysetupuser(battleuser.id)) {
 			await interaction.reply({ephemeral:true,content:`<@${battleuser.id}> doesn't have a Squad yet! Show them how to use \`/squad\` and then you can battle.`});
