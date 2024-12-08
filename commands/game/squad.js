@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription('View and edit your Squad of Emojis to battle others with'),
 	async execute(interaction) {
 		all: {
-			await trysetupuser(interaction.user.id)
+			await trysetupuser(interaction.user)
 			let squadarray = await getsquad(interaction.user.id)
 			let squadtext = ""
 			for (let i = 7; i > -1; i--) {
