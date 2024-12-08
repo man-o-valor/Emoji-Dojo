@@ -11,9 +11,9 @@ async function getvault(id) {
     return vault
 }
 
-async function trysetupuser(id) {
-    const rawvault = await database.get(id + "vault")
-    const rawsquad = await database.get(id + "squad")
+async function trysetupuser(user) {
+    const rawvault = await database.get(user.id + "vault")
+    const rawsquad = await database.get(user.id + "squad")
     if (rawvault == undefined || rawsquad == undefined) {
         let emojilist = emojis.filter(e => e.rarity == 0);
 		let allemojistoadd = ""
@@ -24,10 +24,11 @@ async function trysetupuser(id) {
         emojilist = emojis.filter(e => e.rarity == 1);
         for (let i = 0; i < 7; i++) {
 		    const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
-		    allemojistoadd += emojitoadd.id + ","
+	    	allemojistoadd += emojitoadd.id + ","
 		}
-        const tempvault = await database.get(id + "vault")
-		await database.set(id+"vault",allemojistoadd)
+        const tempvault = await database.get(user.id + "vault")
+		await database.set(user.id+"vault",allemojistoadd)
+		//await user.send({content:`# ⛩️😀 Welcome to the Emoji Dojo, <@${user.id}>! 🏯🎋\nIt is here that you will over time hone your skills and master the art of Emoji Battles. `})
         return true
     } else {
         return false
