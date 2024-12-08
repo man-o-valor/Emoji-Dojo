@@ -120,6 +120,9 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
             verb = "tried to " + (verb ?? "heal")
         }
     }
+	if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 40 && val > 0) {// joker
+        val = val + 1
+    }
 
     alter: {
         gamedata.squads[squad-1][pos].hp += val
@@ -549,6 +552,7 @@ const emojis = [
 {emoji:"👻",id:37,hp:4,dmg:1,rarity:2,name:"Ghost",description:"Every other round when attacking, turns the frontmost enemy Emoji into a 😶 with identical stats"},
 {emoji:"✨",id:38,hp:3,dmg:-1,rarity:-1,name:"Sparkles",description:"Nothing special"},
 {emoji:"🦄",id:39,hp:3,dmg:2,rarity:2,name:"Unicorn",description:"When defeated, summons ✨ at the front of the enemy Squad"},
+{emoji:"🃏",id:40,hp:8,dmg:2,rarity:0,name:"Joker",description:"Increases any damage taken to itself by 1"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
