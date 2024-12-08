@@ -10,7 +10,7 @@ module.exports = {
 			option.setName('speed')
 				.setDescription('The time in seconds between each turn (defaults to 4)')),
 	async execute(interaction) {
-		if (await trysetupuser(interaction.user.id)) {
+		if (await trysetupuser(interaction.user)) {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			let battlespeed = parseInt(interaction.options.getString("speed") ?? "4")
