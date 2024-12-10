@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,StringSelectMenuBuilder,StringSelectMenuOptionBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
-const {getsquad,emojis,getvault,database,coinschange,trysetupuser} = require('../../data.js')
+const {emojis,database,coinschange,trysetupuser} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,6 +10,31 @@ module.exports = {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			const coincount = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
+
+			let shoprestock = await database.get("shoprestock") ?? "0"
+
+			if (parseInt(shoprestock) < Date.now() / 1000) {
+				let now = new Date();
+				let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+				let noonToday = startOfDay.getTime() / 1000 + 43200;
+				let timestamp = (startOfDay / 1000) + 43200
+				if (Date.now() / 1000 < noonToday) {
+					// If it's before 12:00 PM, set timestamp to 12:00 PM today
+					timestamp = noonToday;
+				} else {
+					// If it's after 12:00 PM, set timestamp to 12:00 PM tomorrow
+					timestamp = noonToday + 24 * 60 * 60; // Add 24 hours to noonToday
+				}
+				await database.set("shoprestock",timestamp)
+
+				let emojilist = [emojis.filter(e => e.rarity == 0),emojis.filter(e => e.rarity == 1),emojis.filter(e => e.rarity == 2)]
+				const newstring = emojilist[0][Math.floor(Math.random() * emojilist[0].length)] + "," + emojilist[1][Math.floor(Math.random() * emojilist[1].length)] + "," + emojilist[2][Math.floor(Math.random() * emojilist[2].length)] + ","
+				await database.set("shopoffers",newstring)
+			}
+
+			let shopoffers = await database.get("shopoffers") ?? "7,7,7,"
+			let dailyemojis = shopoffers.split(',');
+			dailyemojis.pop()
 
 			const quotes = [
 				"Need some emojis? This is the place!",
@@ -24,7 +49,11 @@ module.exports = {
 			let marketcontents
 
 			marketcontents = 
-`:asterisk: Random Common Emoji (75 🪙)
+`${emojis[dailyemojis[0]].emoji} ${emojis[dailyemojis[0]].name} (100 🪙)
+${emojis[dailyemojis[1]].emoji} ${emojis[dailyemojis[1]].name} (200 🪙)
+${emojis[dailyemojis[2]].emoji} ${emojis[dailyemojis[2]].name} (600 🪙)
+
+:asterisk: Random Common Emoji (75 🪙)
 ✳️ Random Rare Emoji (150 🪙)
 ⚛️ Random Special Emoji (450 🪙)
 
@@ -35,6 +64,9 @@ module.exports = {
 			let shopdata
 
 			shopdata = [
+			{label:emojis[dailyemojis[0]].name,emoji:emojis[dailyemojis[0]].emoji,type:'premoji',id:parseInt(dailyemojis[0]),cost:100,description:emojis[dailyemojis[0]].description},
+			{label:emojis[dailyemojis[1]].name,emoji:emojis[dailyemojis[1]].emoji,type:'premoji',id:parseInt(dailyemojis[1]),cost:200,description:emojis[dailyemojis[0]].description},
+			{label:emojis[dailyemojis[2]].name,emoji:emojis[dailyemojis[2]].emoji,type:'premoji',id:parseInt(dailyemojis[2]),cost:600,description:emojis[dailyemojis[0]].description},
 			{label:`Random Common Emoji`,emoji:`:asterisk:`,type:'emoji',id:0,cost:75,description:"One random common emoji, ready to add to your Squad and use!"},
 			{label:`Random Rare Emoji`,emoji:`✳️`,type:'emoji',id:1,cost:150,description:"One random rare emoji, ready to add to your Squad and use!"},
 			{label:`Random Special Emoji`,emoji:`⚛️`,type:'emoji',id:2,cost:450,description:"One random special emoji, ready to add to your Squad and use!"},
@@ -184,20 +216,34 @@ module.exports = {
 											}
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + emojistoadd)
+										} else if (shopdata[choice].type=="premoji") {
+											await coinschange(interaction.user.id,-1*modalquantity*shopdata[choice].cost)
+											buy.setDisabled(true)
+											buy.setLabel(`You bought ${modalquantity}`)
+											buy.setStyle(1)
+											const emojilist = emojis.filter(e => e.rarity == shopdata[choice].id);
+											let allemojistoadd = shopdata[choice].id + ","
+											let tempvault = await database.get(interaction.user.id+"vault")
+											await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
 										}
 										let emojiString = "";
-										for (const e of emojisbought[0]) {
-										emojiString += e.emoji + " ";
+										if (emojisbought[0][0] != undefined) {
+											for (const e of emojisbought[0]) {
+											emojiString += e.emoji + " ";
+											}
+											emojiString += "\n"
 										}
-										emojiString += "\n"
-										for (const e of emojisbought[1]) {
-										emojiString += e.emoji + " ";
+										if (emojisbought[0][1] != undefined) {
+											for (const e of emojisbought[1]) {
+											emojiString += e.emoji + " ";
+											}
+											emojiString += "\n"
 										}
-										emojiString += "\n"
-										for (const e of emojisbought[2]) {
-										emojiString += e.emoji + " ";
+										if (emojisbought[0][2] != undefined) {
+											for (const e of emojisbought[2]) {
+											emojiString += e.emoji + " ";
+											}
 										}
-										console.log(emojisbought)
 										newerinteraction.reply({content:`<@${interaction.user.id}> bought:\n>>> ${emojiString}`})
 										interaction.editReply({components:[buyrow] });
 									})
