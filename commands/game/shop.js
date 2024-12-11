@@ -28,7 +28,7 @@ module.exports = {
 				await database.set("shoprestock",timestamp)
 
 				let emojilist = [emojis.filter(e => e.rarity == 0),emojis.filter(e => e.rarity == 1),emojis.filter(e => e.rarity == 2)]
-				const newstring = emojilist[0][Math.floor(Math.random() * emojilist[0].length)] + "," + emojilist[1][Math.floor(Math.random() * emojilist[1].length)] + "," + emojilist[2][Math.floor(Math.random() * emojilist[2].length)] + ","
+				const newstring = emojilist[0][Math.floor(Math.random() * emojilist[0].length)].id + "," + emojilist[1][Math.floor(Math.random() * emojilist[1].length)].id + "," + emojilist[2][Math.floor(Math.random() * emojilist[2].length)].id + ","
 				await database.set("shopoffers",newstring)
 				console.log(newstring)
 			}
@@ -63,8 +63,7 @@ ${emojis[dailyemojis[2]].emoji} ${emojis[dailyemojis[2]].name} (600 🪙)
 ⚛️ Random Special Emoji (450 🪙)
 
 🎁:asterisk: Common Emoji Pack (300 🪙)
-🎁✳️ Rare Emoji Pack (1000 🪙)
-🎁⚛️ Special Emoji Pack (2500 🪙)`
+🎁✳️ Rare Emoji Pack (1000 🪙)`
 
 			let shopdata
 
@@ -77,10 +76,10 @@ ${emojis[dailyemojis[2]].emoji} ${emojis[dailyemojis[2]].name} (600 🪙)
 			{label:`Random Special Emoji`,emoji:`⚛️`,type:'emoji',id:2,cost:450,description:"One random special emoji, ready to add to your Squad and use!"},
 			{label:`Common Emoji Pack`,emoji:`🎁:asterisk:`,type:'pack',id:0,cost:300,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: Common Emoji x3\n✳️ Rare Emoji x1"},
 			{label:`Rare Emoji Pack`,emoji:`🎁✳️`,type:'pack',id:1,cost:1000,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x5\n✳️ ✳️ ✳️ Rare Emoji x3\n⚛️ Special Emoji x1"},
-			{label:`Special Emoji Pack`,emoji:`🎁⚛️`,type:'pack',id:2,cost:2500,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x10\n✳️ ✳️ ✳️ ✳️ ✳️ Rare Emoji x5\n⚛️ ⚛️ ⚛️ Special Emoji x3"},
+			//{label:`Special Emoji Pack`,emoji:`🎁⚛️`,type:'pack',id:2,cost:2500,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x10\n✳️ ✳️ ✳️ ✳️ ✳️ Rare Emoji x5\n⚛️ ⚛️ ⚛️ Special Emoji x3"},
 			]
 
-			const packcontents = [[0,0,0,1], [0,0,0,0,0,1,1,1,2], [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2]]
+			const packcontents = [[0,0,0,1], [0,0,0,0,0,1,1,1,2]/*, [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2]*/]
 
 			let options = shopdata.map((item, index) => {
 				return {
