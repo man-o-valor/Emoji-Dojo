@@ -73,8 +73,8 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].name}** (600 🪙)
 			{label:`Random Common Emoji`,emoji:`:asterisk:`,type:'emoji',id:0,cost:75,description:"One random common emoji, ready to add to your Squad and use!"},
 			{label:`Random Rare Emoji`,emoji:`✳️`,type:'emoji',id:1,cost:150,description:"One random rare emoji, ready to add to your Squad and use!"},
 			{label:`Random Special Emoji`,emoji:`⚛️`,type:'emoji',id:2,cost:450,description:"One random special emoji, ready to add to your Squad and use!"},
-			{label:`Common Emoji Pack`,emoji:`🎁:asterisk:`,type:'pack',id:0,cost:300,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: Common Emoji x3\n✳️ Rare Emoji x1"},
-			{label:`Rare Emoji Pack`,emoji:`🎁✳️`,type:'pack',id:1,cost:1000,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x5\n✳️ ✳️ ✳️ Rare Emoji x3\n⚛️ Special Emoji x1"},
+			{label:`Common Emoji Pack`,emoji:`🎁:asterisk:`,type:'pack',id:0,cost:300,description:"‼️ **20% DISCOUNT!** Contains:\n>>> :asterisk: :asterisk: :asterisk: Common Emoji x3\n✳️ Rare Emoji x1"},
+			{label:`Rare Emoji Pack`,emoji:`🎁✳️`,type:'pack',id:1,cost:1000,description:"‼️ **22% DISCOUNT!** Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x5\n✳️ ✳️ ✳️ Rare Emoji x3\n⚛️ Special Emoji x1"},
 			//{label:`Special Emoji Pack`,emoji:`🎁⚛️`,type:'pack',id:2,cost:2500,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x10\n✳️ ✳️ ✳️ ✳️ ✳️ Rare Emoji x5\n⚛️ ⚛️ ⚛️ Special Emoji x3"},
 			]
 
