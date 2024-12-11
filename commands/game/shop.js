@@ -13,7 +13,7 @@ module.exports = {
 
 			let shoprestock = await database.get("shoprestock") ?? "0"
 
-			if (parseInt(shoprestock) < Date.now() / 1000) {
+			if (/*parseInt(shoprestock) < Date.now() / 1000*/true) {
 				let now = new Date();
 				let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 				let noonToday = startOfDay.getTime() / 1000 + 43200;
@@ -30,7 +30,9 @@ module.exports = {
 				let emojilist = [emojis.filter(e => e.rarity == 0),emojis.filter(e => e.rarity == 1),emojis.filter(e => e.rarity == 2)]
 				const newstring = emojilist[0][Math.floor(Math.random() * emojilist[0].length)] + "," + emojilist[1][Math.floor(Math.random() * emojilist[1].length)] + "," + emojilist[2][Math.floor(Math.random() * emojilist[2].length)] + ","
 				await database.set("shopoffers",newstring)
+				console.log(newstring)
 			}
+
 
 			let shopoffers = await database.get("shopoffers") ?? "7,7,7,"
 			let dailyemojis = shopoffers.split(',');
