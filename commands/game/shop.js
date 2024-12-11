@@ -62,7 +62,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].name}** (600 🪙)
 ⚛️ **Random Special Emoji** (450 🪙)
 
 🎁:asterisk: **Common Emoji Pack** (300 🪙)
-🎁✳️ **Rare Emoji Pack** (1000 🪙)\n `
+🎁✳️ **Rare Emoji Pack** (1000 🪙)\n‎`
 
 			let shopdata
 
