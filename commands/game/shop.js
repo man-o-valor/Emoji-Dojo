@@ -13,7 +13,7 @@ module.exports = {
 
 			let shoprestock = await database.get("shoprestock") ?? "0"
 
-			if (/*parseInt(shoprestock) < Date.now() / 1000*/true) {
+			if (parseInt(shoprestock) < Date.now() / 1000) {
 				let now = new Date();
 				let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 				let noonToday = startOfDay.getTime() / 1000 + 43200;
@@ -30,7 +30,6 @@ module.exports = {
 				let emojilist = [emojis.filter(e => e.rarity == 0),emojis.filter(e => e.rarity == 1),emojis.filter(e => e.rarity == 2)]
 				const newstring = emojilist[0][Math.floor(Math.random() * emojilist[0].length)].id + "," + emojilist[1][Math.floor(Math.random() * emojilist[1].length)].id + "," + emojilist[2][Math.floor(Math.random() * emojilist[2].length)].id + ","
 				await database.set("shopoffers",newstring)
-				console.log(newstring)
 			}
 
 
@@ -54,16 +53,16 @@ module.exports = {
 			let marketcontents
 
 			marketcontents = 
-`\n${emojis[dailyemojis[0]].emoji} ${emojis[dailyemojis[0]].name} (100 🪙)
-${emojis[dailyemojis[1]].emoji} ${emojis[dailyemojis[1]].name} (200 🪙)
-${emojis[dailyemojis[2]].emoji} ${emojis[dailyemojis[2]].name} (600 🪙)
+`\n${emojis[dailyemojis[0]].emoji} **${emojis[dailyemojis[0]].name}** (100 🪙)
+${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].name}** (200 🪙)
+${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].name}** (600 🪙)
 
-:asterisk: Random Common Emoji (75 🪙)
-✳️ Random Rare Emoji (150 🪙)
-⚛️ Random Special Emoji (450 🪙)
+:asterisk: **Random Common Emoji** (75 🪙)
+✳️ **Random Rare Emoji** (150 🪙)
+⚛️ **Random Special Emoji** (450 🪙)
 
-🎁:asterisk: Common Emoji Pack (300 🪙)
-🎁✳️ Rare Emoji Pack (1000 🪙)\n`
+🎁:asterisk: **Common Emoji Pack** (300 🪙)
+🎁✳️ **Rare Emoji Pack** (1000 🪙)\n `
 
 			let shopdata
 
