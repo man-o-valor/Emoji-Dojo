@@ -33,7 +33,7 @@ async function trysetupuser(user) {
         const welcomemessage = `# ⛩️😀 Welcome to the Emoji Dojo, <@${user.id}>! 🏯🎋
 **It is here that you will over time hone your skills and master the art of Emoji Battles.**
 
-## 😄💬 \`Denver\`
+## <:denver:1303484366520844289>💬 \`Denver\`
 \`\`\`Hello! My name is Denver, and I'm in charge of wrangling these here emojis for you to battle with. Here, I'll give you this selection to start off with.\`\`\`
 
 *(You received${allemojitext}!)*
