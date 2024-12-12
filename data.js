@@ -401,7 +401,8 @@ function playturn(gamedata) {
         }
     }
 
-    gamedata.logfile += "\n\n--------------------------------------------------------------\nTurn " + parseInt(gamedata.turn)+1 + "\n"
+    const turnnum = gamedata.turn+1
+    gamedata.logfile += "\n\n--------------------------------------------------------------\nTurn " + turnnum + "\n"
 
 
     return gamedata
