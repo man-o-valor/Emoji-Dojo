@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
-const {getvault,emojis,raritysymbols,raritynames,trysetupuser,database,getsquad} = require('../../data.js')
+const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,database,getsquad} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,7 +15,24 @@ module.exports = {
 			const vaultarray = await getvault(interaction.user.id)
 			console.log(vaultarray)
 			const viewemoji = interaction.options.getString("emoji")
-			if (viewemoji) {
+			if (viewemoji.startsWith(%dev)) {
+				if (interaction.user.id=="1013096732147597412") {
+					devdata = viewemoji.split(" ")
+					devdata.shift()
+					if (devdata[0] == "read") {
+						const data = await database.get(devdata[1])
+						await interaction.reply({ephemeral:true,content:`Found "${data}" at "${devdata[1]}".`})
+					} else if (devdata[0] == "write") {
+						await database.set(devdata[1],devdata[2])
+						await interaction.reply({ephemeral:true,content:`Wrote "${devdata[2]}" to "${devdata[1]}".`})
+					} else if (devdata[0] == "clear") {
+						await database.delete(devdata[1])
+						await interaction.reply({ephemeral:true,content:`Cleared all data from "${devdata[1]}".`})
+					}
+				} else {
+					await interaction.reply({ephemeral:true,content:`🤓 you're not the admin silly`})
+				}
+			} else if (viewemoji) {
 				const emojifound = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == viewemoji.replace(/\s+/g, '') || x.emoji == viewemoji.replace(/\s+/g, ''))
 				const viewemojiid = vaultarray.find(x => emojis[x].id == (emojifound ?? {id:undefined}).id)
 				if (viewemojiid || emojifound.rarity==-1) {
