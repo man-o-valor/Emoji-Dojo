@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
-const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,database,getsquad} = require('../../data.js')
+const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,getsquad} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,7 +15,7 @@ module.exports = {
 			const vaultarray = await getvault(interaction.user.id)
 			console.log(vaultarray)
 			const viewemoji = interaction.options.getString("emoji")
-			if (viewemoji.startsWith(%dev)) {
+			if (viewemoji.startsWith("%dev")) {
 				if (interaction.user.id=="1013096732147597412") {
 					devdata = viewemoji.split(" ")
 					devdata.shift()
