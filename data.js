@@ -573,7 +573,7 @@ const emojis = [
 {emoji:"🌳",id:32,hp:3,dmg:2,rarity:2,name:"Deciduous Tree",description:"While undefeated, your squad cannot be Shuffled"},
 {emoji:"💨",id:33,hp:1,dmg:1,rarity:0,name:"Dash",description:"Before your Squad is Shuffled, heals the frontmost friendly Emoji by 2"},
 {emoji:"⚡",id:34,hp:2,dmg:2,rarity:2,name:"Zap",description:"Attacks the 2 frontmost enemy emojis at once"},
-{emoji:"🧱",id:35,hp:3,dmg:1,rarity:0,name:"Bricks",description:"Takes 2 less damage from every attack, to a minimum of 1"},
+{emoji:"🧱",id:35,hp:2,dmg:1,rarity:0,name:"Bricks",description:"Takes 2 less damage from every attack, to a minimum of 1"},
 {emoji:"💣",id:36,hp:1,dmg:0,rarity:1,name:"Bomb",description:"When attacked or defeated, defeats the frontmost enemy emoji and defeats itself"},
 {emoji:"👻",id:37,hp:4,dmg:1,rarity:2,name:"Ghost",description:"Every other round when attacking, turns the frontmost enemy Emoji into a 😶 with identical stats"},
 {emoji:"✨",id:38,hp:3,dmg:-1,rarity:-1,name:"Sparkles",description:"Nothing special"},
