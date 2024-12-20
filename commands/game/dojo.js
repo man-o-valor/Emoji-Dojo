@@ -15,7 +15,7 @@ module.exports = {
 			const vaultarray = await getvault(interaction.user.id)
 			console.log(vaultarray)
 			const viewemoji = interaction.options.getString("emoji")
-			if (viewemoji.startsWith("%dev")) {
+			if ((viewemoji ?? "gyatt").startsWith("%dev")) {
 				if (interaction.user.id=="1013096732147597412") {
 					devdata = viewemoji.split(" ")
 					devdata.shift()
