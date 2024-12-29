@@ -158,6 +158,12 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 
     alter: {
         gamedata.squads[squad-1][pos].hp += val
+		if (gamedata.squads[squad2-1][pos2].id == 42 && gamedata.squads[squad2-1].length > 1) { // dancer
+            const temp = gamedata.squads[squad2-1][pos2]
+            gamedata.squads[squad2-1].splice(pos2,1)
+        	gamedata.squads[squad2-1].splice(pos2+1,0,temp)
+            gamedata = richtextadd(gamedata,`\n💨 ${gamedata.player[squad2-1]}'s ${emojis[42].emoji} danced behind ${gamedata.squads[squad2-1][pos2].emoji}!`)
+		}
         if (gamedata.squads[squad-1][pos].hp <= 0) {
             if (!silence) {
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][pos2].emoji} defeated ${gamedata.player[squad-1]}'s ${gamedata.squads[squad-1][pos].emoji}! (${val*-1} damage)`)
@@ -599,6 +605,7 @@ const emojis = [
 {emoji:"🦄",id:39,hp:3,dmg:2,rarity:2,name:"Unicorn",description:"When defeated, summons ✨ at the front of the enemy Squad"},
 {emoji:"🃏",id:40,hp:8,dmg:2,rarity:0,name:"Black Joker",description:"Increases any damage taken to itself by 1"},
 {emoji:"🌪️",id:41,hp:3,dmg:1,rarity:1,name:"Tornado",description:"When attacked or defeated, Shuffles the enemy Squad"},
+{emoji:"💃",id:42,hp:2,dmg:1,rarity:1,name:"Dancer",description:"After attacking, switches places with the friendly Emoji behind it"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
