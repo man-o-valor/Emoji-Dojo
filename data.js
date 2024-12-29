@@ -188,6 +188,13 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
 		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded",true)
             }
+			if (gamedata.squads[squad-1][pos].id == 43) { // pinata
+                gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} shattered, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
+		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-2,"threw candy at",true)
+				if (gamedata.squads[squad1-1].length > 1) {
+					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",true)
+				}
+            }
             for (i = 0; i < gamedata.squads[squad-1].length; i++) {
                 if (gamedata.squads[squad-1][i].id == 11) { // tombstone
                     gamedata = alterhp(gamedata,squad,i,squad,i,1)
@@ -606,6 +613,7 @@ const emojis = [
 {emoji:"🃏",id:40,hp:8,dmg:2,rarity:0,name:"Black Joker",description:"Increases any damage taken to itself by 1"},
 {emoji:"🌪️",id:41,hp:3,dmg:1,rarity:1,name:"Tornado",description:"When attacked or defeated, Shuffles the enemy Squad"},
 {emoji:"💃",id:42,hp:2,dmg:1,rarity:1,name:"Dancer",description:"After attacking, switches places with the friendly Emoji behind it"},
+{emoji:"🪅",id:43,hp:4,dmg:1,rarity:1,name:"Piñata",description:"When defeated, heals the new frontmost friendly Emoji by 2 and damages the frontmost enemy Emoji by 2"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
