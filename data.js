@@ -180,6 +180,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 }
                 gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad-1]}'s ${emojis[9].emoji} sparked a standing ovation and summoned ${emojis[0].emoji}${emojis[0].emoji}${emojis[0].emoji}!`)
             }
+			if (gamedata.squads[squad-1][pos].id == 45) { // radio
+                gamedata.squads[0-squad+2].splice(gamedata.squads[0-squad+2].length,0,lodash.cloneDeep(emojis[14]))
+                gamedata = richtextadd(gamedata,`\n🎵 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
+            }
             if (gamedata.squads[squad-1][pos].id == 10) { // shuffle button
                 gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[10].emoji} Shuffled ${gamedata.player[squad2-1]}'s Squad!`)
                 gamedata = shufflesquad(gamedata,squad2)
@@ -356,6 +360,10 @@ function playturn(gamedata) {
         if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 13 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // guitar
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 1)
+        }
+		if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:0}).id == 44 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // violin
+            basicattackflag = false
+            gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 3)
         }
         if (basicattackflag) {
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg)
@@ -614,6 +622,8 @@ const emojis = [
 {emoji:"🌪️",id:41,hp:3,dmg:1,rarity:1,name:"Tornado",description:"When attacked or defeated, Shuffles the enemy Squad"},
 {emoji:"💃",id:42,hp:2,dmg:1,rarity:1,name:"Dancer",description:"After attacking, switches places with the friendly Emoji behind it"},
 {emoji:"🪅",id:43,hp:4,dmg:1,rarity:1,name:"Piñata",description:"When defeated, heals the new frontmost friendly Emoji by 2 and damages the frontmost enemy Emoji by 2"},
+{emoji:"🎻",id:44,hp:3,dmg:2,rarity:0,name:"Violin",description:"If there is at least one undefeated friendly 🎵, deal 3 more damage"},
+{emoji:"📻",id:45,hp:3,dmg:2,rarity:1,name:"Radio",description:"When defeated, summons 🎵 at the back of your Squad"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
