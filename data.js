@@ -195,7 +195,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 			if (gamedata.squads[squad-1][pos].id == 43) { // pinata
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} shattered, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
 		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-2,"threw candy at",true)
-				if (gamedata.squads[squad1-1].length > 1) {
+				if (gamedata.squads[squad-1].length > 1) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",true)
 				}
             }
