@@ -33,7 +33,7 @@ module.exports = {
 					await interaction.reply({ephemeral:true,content:`🤓 you're not the admin silly`})
 				}
 			} else if (viewemoji) {
-				const emojifound = emojis.find(x => x.names[0].replace(/\s+/g, '_').toLowerCase() == viewemoji.trim().replace(/\s+/g, '_').toLowerCase() || x.emoji == viewemoji.replace(/\s+/g, ''))
+				const emojifound = emojis.find(x => x.names.find(y => y.replace(/\s+/g, '_').toLowerCase() == viewemoji.trim().replace(/\s+/g, '_').toLowerCase()) || x.emoji == viewemoji.replace(/\s+/g, ''))
 				const viewemojiid = vaultarray.find(x => emojis[x].id == (emojifound ?? {id:undefined}).id)
 				if (viewemojiid || emojifound.rarity==-1) {
 					const vaultembed = new EmbedBuilder()
