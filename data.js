@@ -619,7 +619,7 @@ const emojis = [
 {emoji:"✨",id:38,hp:3,dmg:-1,rarity:-1,name:"Sparkles",description:"Nothing special"},
 {emoji:"🦄",id:39,hp:3,dmg:2,rarity:2,name:"Unicorn",description:"When defeated, summons ✨ at the front of the enemy Squad"},
 {emoji:"🃏",id:40,hp:8,dmg:2,rarity:0,name:"Black Joker",description:"Increases any damage taken to itself by 1"},
-{emoji:"🌪️",id:41,hp:3,dmg:1,rarity:1,name:"Tornado",description:"When attacked or defeated, Shuffles the enemy Squad"},
+{emoji:"🌪️",id:41,hp:3,dmg:1,rarity:1,name:"Cloud Tornado",description:"When attacked or defeated, Shuffles the enemy Squad"},
 {emoji:"💃",id:42,hp:2,dmg:1,rarity:1,name:"Dancer",description:"After attacking, switches places with the friendly Emoji behind it"},
 {emoji:"🪅",id:43,hp:4,dmg:1,rarity:1,name:"Piñata",description:"When defeated, heals the new frontmost friendly Emoji by 2 and damages the frontmost enemy Emoji by 2"},
 {emoji:"🎻",id:44,hp:3,dmg:2,rarity:0,name:"Violin",description:"If there is at least one undefeated friendly 🎵, deal 3 more damage"},
