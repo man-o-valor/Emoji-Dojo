@@ -199,6 +199,11 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",false)
 				}
             }
+            if (gamedata.squads[squad-1][pos].id == 46) { // fire
+				if (gamedata.squads[squad-1].length > 1) {
+					gamedata = alterhp(gamedata,squad,1,squad,pos,-2,"burned",false)
+				}
+            }
             for (i = 0; i < gamedata.squads[squad-1].length; i++) {
                 if (gamedata.squads[squad-1][i].id == 11) { // tombstone
                     gamedata = alterhp(gamedata,squad,i,squad,i,1)
@@ -486,6 +491,13 @@ function shufflesquad(gamedata,squad) {
         }
 
         for (let i = gamedata.squads[squad-1].length - 1; i > 0; i--) {
+            if (gamedata.squads[squad-1][i].id == 47) { // volcano
+                gamedata.squads[0-squad+2].splice(0,0,lodash.cloneDeep(emojis[46]))
+                gamedata = richtextadd(gamedata,`\n🔥 ${gamedata.player[squad-1]}'s ${emojis[47].emoji} lit a ${emojis[46].emoji} in ${gamedata.player[0-squad+2]}'s Squad!`)
+            }
+        }
+
+        for (let i = gamedata.squads[squad-1].length - 1; i > 0; i--) {
             if (gamedata.squads[squad-1][i].id == 27) { // cyclone
                 gamedata.squads[squad-1].splice(i,1)
                 gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[27].emoji} Shuffled ${gamedata.player[0-squad+2]}'s Squad and defeated itself!`)
@@ -624,6 +636,8 @@ const emojis = [
 {emoji:"🪅",id:43,hp:4,dmg:1,rarity:1,names:["Piñata","Pinata"],description:"When defeated, heals the new frontmost friendly Emoji by 2 and damages the frontmost enemy Emoji by 2"},
 {emoji:"🎻",id:44,hp:3,dmg:2,rarity:0,names:["Violin","Cello"],description:"If there is at least one undefeated friendly 🎵, deal 3 more damage"},
 {emoji:"📻",id:45,hp:3,dmg:2,rarity:1,names:["Radio"],description:"When defeated, summons 🎵 at the back of your Squad"},
+{emoji:"🔥",id:46,hp:4,dmg:4,rarity:1,names:["Fire"],description:"When this Emoji is defeated, damages the new frontmost friendly Emoji by 2"},
+{emoji:"🌋",id:47,hp:4,dmg:2,rarity:2,names:["Volcano"],description:"When your Squad is Shuffled, summon 🔥 at the front of the enemy team with 1 health and 1 attack power"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}

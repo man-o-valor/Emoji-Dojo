@@ -39,7 +39,7 @@ module.exports = {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
 						.setTitle(`${emojifound.emoji} ${emojifound.names[0]}`)
-						.setDescription(`Health: **${emojifound.hp}**\nAttack: **${emojifound.dmg}**\nRarity: **${raritysymbols[emojifound.rarity] ?? "⬜"} ${raritynames[emojifound.rarity] ?? "N/A"}**\nAbility:\n> ${emojifound.description}`)
+						.setDescription(`Health: **${emojifound.hp}**\nAttack Power: **${emojifound.dmg}**\nRarity: **${raritysymbols[emojifound.rarity] ?? "⬜"} ${raritynames[emojifound.rarity] ?? "N/A"}**\nAbility:\n> ${emojifound.description}`)
 						.setTimestamp()
 						.setFooter({ text: `You have ${vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0)}`})
 					const addto1 = new ButtonBuilder()
