@@ -53,9 +53,9 @@ module.exports = {
 			let marketcontents
 
 			marketcontents = 
-`\n${emojis[dailyemojis[0]].emoji} **${emojis[dailyemojis[0]].name}** (100 🪙)
-${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].name}** (200 🪙)
-${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].name}** (600 🪙)
+`\n${emojis[dailyemojis[0]].emoji} **${emojis[dailyemojis[0]].names[0]}** (100 🪙)
+${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].names[0]}** (200 🪙)
+${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙)
 
 :asterisk: **Random Common Emoji** (75 🪙)
 ✳️ **Random Rare Emoji** (150 🪙)
@@ -67,9 +67,9 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].name}** (600 🪙)
 			let shopdata
 
 			shopdata = [
-			{label:emojis[dailyemojis[0]].name,emoji:emojis[dailyemojis[0]].emoji,type:'premoji',id:dailyemojis[0],cost:100,description:emojis[dailyemojis[0]].description},
-			{label:emojis[dailyemojis[1]].name,emoji:emojis[dailyemojis[1]].emoji,type:'premoji',id:dailyemojis[1],cost:200,description:emojis[dailyemojis[1]].description},
-			{label:emojis[dailyemojis[2]].name,emoji:emojis[dailyemojis[2]].emoji,type:'premoji',id:dailyemojis[2],cost:600,description:emojis[dailyemojis[2]].description},
+			{label:emojis[dailyemojis[0]].names[0],emoji:emojis[dailyemojis[0]].emoji,type:'premoji',id:dailyemojis[0],cost:100,description:emojis[dailyemojis[0]].description},
+			{label:emojis[dailyemojis[1]].names[0],emoji:emojis[dailyemojis[1]].emoji,type:'premoji',id:dailyemojis[1],cost:200,description:emojis[dailyemojis[1]].description},
+			{label:emojis[dailyemojis[2]].names[0],emoji:emojis[dailyemojis[2]].emoji,type:'premoji',id:dailyemojis[2],cost:600,description:emojis[dailyemojis[2]].description},
 			{label:`Random Common Emoji`,emoji:`:asterisk:`,type:'emoji',id:0,cost:75,description:"One random common emoji, ready to add to your Squad and use!"},
 			{label:`Random Rare Emoji`,emoji:`✳️`,type:'emoji',id:1,cost:150,description:"One random rare emoji, ready to add to your Squad and use!"},
 			{label:`Random Special Emoji`,emoji:`⚛️`,type:'emoji',id:2,cost:450,description:"One random special emoji, ready to add to your Squad and use!"},

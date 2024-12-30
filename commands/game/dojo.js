@@ -33,12 +33,12 @@ module.exports = {
 					await interaction.reply({ephemeral:true,content:`🤓 you're not the admin silly`})
 				}
 			} else if (viewemoji) {
-				const emojifound = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == viewemoji.trim().replace(/\s+/g, '_').toLowerCase() || x.emoji == viewemoji.replace(/\s+/g, ''))
+				const emojifound = emojis.find(x => x.names[0].replace(/\s+/g, '_').toLowerCase() == viewemoji.trim().replace(/\s+/g, '_').toLowerCase() || x.emoji == viewemoji.replace(/\s+/g, ''))
 				const viewemojiid = vaultarray.find(x => emojis[x].id == (emojifound ?? {id:undefined}).id)
 				if (viewemojiid || emojifound.rarity==-1) {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
-						.setTitle(`${emojifound.emoji} ${emojifound.name}`)
+						.setTitle(`${emojifound.emoji} ${emojifound.names[0]}`)
 						.setDescription(`Health: **${emojifound.hp}**\nAttack: **${emojifound.dmg}**\nRarity: **${raritysymbols[emojifound.rarity] ?? "⬜"} ${raritynames[emojifound.rarity] ?? "N/A"}**\nAbility:\n> ${emojifound.description}`)
 						.setTimestamp()
 						.setFooter({ text: `You have ${vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0)}`})
@@ -107,7 +107,7 @@ module.exports = {
 								await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
 								let squadtext = ""
 								for (let i = 7; i > -1; i--) {
-									squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].name} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
+									squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].names[0]} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
 								}
 								await interaction2.reply({ephemeral:true,content:`Your squad has been saved!\n${squadtext}`})
 							} else {

@@ -11,7 +11,7 @@ module.exports = {
 			let squadarray = await getsquad(interaction.user.id)
 			let squadtext = ""
 			for (let i = 7; i > -1; i--) {
-				squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].name} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
+				squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].names[0]} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
 			}
 			const edit = new ButtonBuilder()
 				.setCustomId('edit')
@@ -87,7 +87,7 @@ module.exports = {
 											inputarr = input.split(":")
 										} else {
 											for (let i = 0; i < input.length; i++) {
-												inputarr.push(emojis.find(x => x.emoji == input[i]).name.replace(/\s+/g, '_').toLowerCase())
+												inputarr.push(emojis.find(x => x.emoji == input[i]).names[0].replace(/\s+/g, '_').toLowerCase())
 											}
 										}
 										inputarr = inputarr.filter(item => item != '');
@@ -102,12 +102,12 @@ module.exports = {
 										
 										if (!errorflag) {
 											for (let i = 0; i < 8; i++) {
-												let objectalternative = emojis.find(x => x.name.replace(/\s+/g, '_').toLowerCase() == inputarr[i])
+												let objectalternative = emojis.find(x => x.names[0].replace(/\s+/g, '_').toLowerCase() == inputarr[i])
 												if (objectalternative != undefined) {
 													if (vaultarray.find(x => x == objectalternative.id) != undefined) {
 														vaultarray.splice(vaultarray.findIndex(x => x == objectalternative.id), 1);
 														datainput = objectalternative.id + "," + datainput
-														emojiinput += `[${objectalternative.emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${objectalternative.name} | ${objectalternative.hp} health, ${objectalternative.dmg} attack power. ${objectalternative.description}\") `
+														emojiinput += `[${objectalternative.emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${objectalternative.names[0]} | ${objectalternative.hp} health, ${objectalternative.dmg} attack power. ${objectalternative.description}\") `
 													} else {
 														errorflag = inputarr[i]
 														errorreason = "You don't have enough of an emoji listed, or it doesn't exist: "
