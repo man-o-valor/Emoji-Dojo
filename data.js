@@ -234,6 +234,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                         gamedata = richtextadd(gamedata,`\n💗 ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][pos2].emoji} ${verb ?? "healed"} ${gamedata.player[squad-1]}'s ${gamedata.squads[squad-1][pos].emoji}. (${val} health)`)
                     }
                 }
+                if (gamedata.squads[squad-1][pos].id == 50) { // track next
+                    gamedata = shufflesquad(gamedata,squad)
+                    gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[50].emoji} Shuffled ${gamedata.player[squad-1]}'s Squad!`)
+                }
             } else if (val == 0) {
                 if (!silence) {
                     gamedata = richtextadd(gamedata,`\n🤜 ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][pos2].emoji} ${verb ?? "tried to attack"} ${gamedata.player[squad-1]}'s ${gamedata.squads[squad-1][pos].emoji}... but it did nothing.`)
@@ -319,6 +323,11 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata.squads[squad2-1].splice(0,1)
                     gamedata.squads[squad2-1].splice(gamedata.squads[squad2-1].length,0,temp)
                     gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad-1]}'s ${emojis[16].emoji} whacked ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][gamedata.squads[squad2-1].length-1].emoji} to the back of their Squad!`)
+                }
+                if (gamedata.squads[squad2-1][pos2].id == 49) { // flying disc
+                    if (gamedata.squads[squad2-1].length > 2) {
+                        gamedata = alterhp(gamedata,squad2,1,squad,pos,-1,"whacked")
+                    }
                 }
             }
             if (gamedata.squads[0].length == 1 && gamedata.squads[0][0].id == 23) { // lizard / dragon
@@ -643,6 +652,7 @@ const emojis = [
 {emoji:"🌋",id:47,hp:4,dmg:2,rarity:2,names:["Volcano"],description:"When your Squad is Shuffled, summon 🔥 at the front of the enemy team with 1 health and 1 attack power"},
 {emoji:"🎉",id:48,hp:2,dmg:1,rarity:1,names:["Tada","Party Popper","Party Horn"],description:"When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 2"},
 {emoji:"🥏",id:49,hp:4,dmg:4,rarity:2,names:["Flying Disc","Disc","Frisbee"],description:"Deals one damage to the Emoji behind this when attacking"},
+{emoji:"⏭️",id:50,hp:3,dmg:2,rarity:1,names:["Track Next","Next Track","Next Track Button"],description:"When healed, Shuffles your Squad"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
