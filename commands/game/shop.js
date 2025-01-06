@@ -26,6 +26,7 @@ module.exports = {
 					timestamp = noonToday + 24 * 60 * 60; // Add 24 hours to noonToday
 				}
 				await database.set("shoprestock",timestamp)
+				shoprestock = timestamp
 
 				let emojilist = [emojis.filter(e => e.rarity == 0),emojis.filter(e => e.rarity == 1),emojis.filter(e => e.rarity == 2)]
 				const newstring = emojilist[0][Math.floor(Math.random() * emojilist[0].length)].id + "," + emojilist[1][Math.floor(Math.random() * emojilist[1].length)].id + "," + emojilist[2][Math.floor(Math.random() * emojilist[2].length)].id + ","
@@ -200,7 +201,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 												allemojistoadd += emojitoadd.id + ","
 												emojisbought[shopdata[choice].id].push(emojitoadd)
 											}
-											console.log(emojilist,allemojistoadd)
+											console.log(emojilist,allemojistoadd,emojisbought)
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
 										} else if (shopdata[choice].type=="pack") {
@@ -224,7 +225,6 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 											buy.setDisabled(true)
 											buy.setLabel(`You bought ${modalquantity}`)
 											buy.setStyle(1)
-											const emojilist = emojis.filter(e => e.rarity == shopdata[choice].id);
 											let allemojistoadd = shopdata[choice].id + ","
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
@@ -279,15 +279,15 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 							if (newinteraction.customId!="buymore") {
 								let emojiString = "";
 								for (const e of emojisbought[0]) {
-								emojiString += e.emoji + " ";
+									emojiString += e.emoji + " ";
 								}
 								emojiString += "\n"
 								for (const e of emojisbought[1]) {
-								emojiString += e.emoji + " ";
+									emojiString += e.emoji + " ";
 								}
 								emojiString += "\n"
 								for (const e of emojisbought[2]) {
-								emojiString += e.emoji + " ";
+									emojiString += e.emoji + " ";
 								}
 								newinteraction.reply({content:`🛒 <@${interaction.user.id}> bought:\n>>> ${emojiString}`})
 								interaction.editReply({components:[buyrow] });
