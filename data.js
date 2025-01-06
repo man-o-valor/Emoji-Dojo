@@ -216,6 +216,9 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 if (gamedata.squads[squad2-1][i].id == 18) { // skull
                     gamedata = alterhp(gamedata,squad2,i,squad2,i,1)
                 }
+                if (gamedata.squads[squad2-1][i].id == 48) { // tada
+                    gamedata = alterhp(gamedata,squad,1,squad,pos,2,"congratulated")
+                }
             }
             if (gamedata.squads[squad-1][pos].id == 41) { // tornado
                 gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[41].emoji} Shuffled ${gamedata.player[squad2-1]}'s Squad!`)
@@ -638,6 +641,8 @@ const emojis = [
 {emoji:"📻",id:45,hp:3,dmg:2,rarity:1,names:["Radio"],description:"When defeated, summons 🎵 at the back of your Squad"},
 {emoji:"🔥",id:46,hp:4,dmg:4,rarity:1,names:["Fire"],description:"When this Emoji is defeated, damages the new frontmost friendly Emoji by 2"},
 {emoji:"🌋",id:47,hp:4,dmg:2,rarity:2,names:["Volcano"],description:"When your Squad is Shuffled, summon 🔥 at the front of the enemy team with 1 health and 1 attack power"},
+{emoji:"🎉",id:48,hp:2,dmg:1,rarity:1,names:["Tada","Party Popper","Party Horn"],description:"When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 2"},
+{emoji:"🥏",id:49,hp:4,dmg:4,rarity:2,names:["Flying Disc","Disc","Frisbee"],description:"Deals one damage to the Emoji behind this when attacking"},
 ]
 
 module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
