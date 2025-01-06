@@ -201,7 +201,6 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 												allemojistoadd += emojitoadd.id + ","
 												emojisbought[shopdata[choice].id].push(emojitoadd)
 											}
-											console.log(emojilist,allemojistoadd,emojisbought)
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
 										} else if (shopdata[choice].type=="pack") {
@@ -236,13 +235,13 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 											}
 											emojiString += "\n"
 										}
-										if (emojisbought[0][1] != undefined) {
+										if (emojisbought[1][0] != undefined) {
 											for (const e of emojisbought[1]) {
 											emojiString += e.emoji + " ";
 											}
 											emojiString += "\n"
 										}
-										if (emojisbought[0][2] != undefined) {
+										if (emojisbought[1][0] != undefined) {
 											for (const e of emojisbought[2]) {
 											emojiString += e.emoji + " ";
 											}
