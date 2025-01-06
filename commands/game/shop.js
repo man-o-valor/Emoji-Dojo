@@ -241,7 +241,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 											}
 											emojiString += "\n"
 										}
-										if (emojisbought[1][0] != undefined) {
+										if (emojisbought[2][0] != undefined) {
 											for (const e of emojisbought[2]) {
 											emojiString += e.emoji + " ";
 											}
