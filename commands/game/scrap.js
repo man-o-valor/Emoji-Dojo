@@ -17,11 +17,11 @@ module.exports = {
 				}
 				let progresssquares = [
 					["<:startbar1:1326207319004024832>","<:startbar2:1326207327858200646>","<:startbar3:1326207335324188752>","<:startbar4:1326207342823604325>","<:startbar5:1326207351631384698>"],
-					["<:bar1:1326207360166789200>","<:bar2:1326207385462636586>","<:bar4:1326207378340708474>","<:bar4:1326207378340708474>","<:bar5:1326207393343737858>"],
+					["<:bar1:1326207360166789200>","<:bar2:1326207385462636586>","<:bar3:1326207371621699676>","<:bar4:1326207378340708474>","<:bar5:1326207393343737858>"],
 					["<:endbar1:1326207400860061736>","<:endbar2:1326207409470967869>","<:endbar3:1326207416857002034>","<:endbar4:1326207424788562041>","<:endbar5:1326207432644362291>"]
 				]
 				let progressbar = progresssquares[0][Math.min(userlab[i]%40,4)]
-				progressbar += progresssquares[1][4].repeat(Math.floor(userlab[i] % 40 / 4))
+				progressbar += progresssquares[1][4].repeat(Math.floor(userlab[i] % 40 / 4)-1)
 				progressbar += ((userlab[i] % 40 > 35) ? "" : progresssquares[1][userlab[i] % 40 % 4])
 				progressbar += progresssquares[1][0].repeat(8-Math.floor(userlab[i] % 40 / 4))
 				progressbar += progresssquares[2][4-Math.min(40-(userlab[i]%40),4)]
