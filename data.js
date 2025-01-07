@@ -235,10 +235,9 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata = alterhp(gamedata,squad,i,squad,i,1)
                 }
                 if (gamedata.squads[squad-1][i].id == 51) { // xray
-                    for (j = 0; j < gamedata.squads[squad-1].length; i++) {
-                        if (gamedata.squads[squad-1][i].id != 51) {
-                            gamedata = alterhp(gamedata,squad,j,squad,i,1,"healed",true)
-                        }
+                    for (j = i; j < gamedata.squads[squad-1].length; i++) {
+                        gamedata = alterhp(gamedata,squad,j,squad,i,1,"healed",true)
+                        gamedata = richtextadd(gamedata,`\n💗 ${gamedata.player[squad-1]}'s ${emojis[51].emoji} healed all Emojis behind itself by 1!`)
                     }
                 }
             }
@@ -704,7 +703,7 @@ const emojis = [
 {emoji:"🎉",id:48,hp:2,dmg:1,rarity:1,names:["Tada","Party Popper","Party Horn"],description:"When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 2"},
 {emoji:"🥏",id:49,hp:4,dmg:4,rarity:2,names:["Flying Disc","Disc","Frisbee"],description:"Deals one damage to the Emoji behind this when attacking"},
 {emoji:"⏭️",id:50,hp:3,dmg:2,rarity:1,names:["Track Next","Next Track","Next Track Button"],description:"When healed, Shuffles your Squad"},
-{emoji:"🩻",id:51,hp:1,dmg:2,rarity:3,names:["X Ray","X-ray","Xray"],description:"When a friendly Emoji is defeated, heals all non-X Ray friendly Emojis by 1"}, // Class: Healing
+{emoji:"🩻",id:51,hp:1,dmg:2,rarity:3,names:["X Ray","X-ray","Xray"],description:"When a friendly Emoji is defeated, heals all friendly Emojis behind itself by 1"}, // Class: Healing
 {emoji:"🌃",id:52,hp:3,dmg:2,rarity:2,names:["Night with Stars","Night","Night in City"],description:"When this defeats an Emoji, hurts all enemy copies of it by 1"},
 {emoji:"🐺",id:53,hp:4,dmg:3,rarity:3,names:["Wolf"],description:"When this defeats an Emoji, heals itself by 1 and increases its attack power by 1"}, // Class: Damaging
 ]
