@@ -30,7 +30,7 @@ module.exports = {
 		const labembed = new EmbedBuilder()
 			.setColor(0x6ADA90)
 			.setTitle(`Lab 🧪`)
-			.setDescription(``)
+			.setDescription(embeddescription)
 			.setTimestamp()
 			.setFooter({ text: `${interaction.user.globalName}'s Lab`});
 		await interaction.reply({embeds:[labembed]});
