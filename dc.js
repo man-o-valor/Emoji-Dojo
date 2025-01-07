@@ -42,6 +42,11 @@ const rest = new REST().setToken(token);
 		console.error(error);
 	}
 })();
+
+rest.delete(Routes.applicationCommand(clientId, '1326005959453311076'))
+	.then(() => console.log('Successfully deleted application command'))
+	.catch(console.error);
+
 /*
 
 Use this to delete all guild commands
