@@ -24,7 +24,7 @@ module.exports = {
 				console.log(userlab[i] % 40);
 			}
 		}
-		if (embeddescription = "") {
+		if (embeddescription == "") {
 			embeddescription = "You haven't researched any emojis yet."
 		}
 		const labembed = new EmbedBuilder()
