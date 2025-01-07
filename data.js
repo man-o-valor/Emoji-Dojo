@@ -635,7 +635,7 @@ const raritynames = [
 ]
 
 const classes = [
-    {name:"Healing",emoji:"💜",legendary:51}, {name:"Damaging",emoji:"<:damaging:1326215155339493488>",legendary:53}
+    {name:"Healing",emoji:"<:healing:1326216242683711560>",legendary:51}, {name:"Damaging",emoji:"<:damaging:1326215155339493488>",legendary:53}
 ]
 /*
 
