@@ -11,6 +11,20 @@ async function getvault(id) {
     return vault
 }
 
+async function fetchresearch(id) {
+    const userresearch = await database.get(id + "research") ?? "0/0/0/0/0/0/0/0"
+    let lab = userresearch.split('/');
+	lab.pop()
+    while (lab.length < 8) {
+        lab.push(0);
+    }
+    return lab.map(Number)
+}
+
+async function syncresearch(id,lab) {
+    await database.set(id + "research",lab.join("/"))
+}
+
 async function trysetupuser(user) {
     const rawvault = await database.get(user.id + "vault")
     const rawsquad = await database.get(user.id + "squad")
@@ -207,6 +221,13 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
             for (i = 0; i < gamedata.squads[squad-1].length; i++) {
                 if (gamedata.squads[squad-1][i].id == 11) { // tombstone
                     gamedata = alterhp(gamedata,squad,i,squad,i,1)
+                }
+                if (gamedata.squads[squad-1][i].id == 51) { // xray
+                    for (j = 0; j < gamedata.squads[squad-1].length; i++) {
+                        if (gamedata.squads[squad-1][i].id != 51) {
+                            gamedata = alterhp(gamedata,squad,j,squad,i,1,"healed",true)
+                        }
+                    }
                 }
             }
             for (i = 0; i < gamedata.squads[squad2-1].length-1; i++) {
@@ -594,12 +615,30 @@ customemojis: {
 }
 
 const raritysymbols = [
-"*️⃣", "✳️", "⚛️",
+"*️⃣", "✳️", "⚛️", "<:legendary:1325987682941145259>"
 ]
 
 const raritynames = [
-"Common", "Rare", "Special",
+"Common", "Rare", "Special", "Legendary"
 ]
+
+const classes = [
+    {name:"Healing",emoji:"💗",legendary:51}
+]
+/*
+
+Class ideas:
+Healing: X-ray
+Damaging: Night with Stars
+Summoning
+Defense: Mirror?
+Transforming: Germ?
+Shuffling
+Musical
+Movement
+Solar?
+
+*/
 
 const emojis = [
 {emoji:"👏",id:0,hp:4,dmg:0,rarity:0,names:["Clap","Clapping","Clapping Hands"],description:"Deals 1 more damage for each other undefeated friendly 👏"},
@@ -653,6 +692,7 @@ const emojis = [
 {emoji:"🎉",id:48,hp:2,dmg:1,rarity:1,names:["Tada","Party Popper","Party Horn"],description:"When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 2"},
 {emoji:"🥏",id:49,hp:4,dmg:4,rarity:2,names:["Flying Disc","Disc","Frisbee"],description:"Deals one damage to the Emoji behind this when attacking"},
 {emoji:"⏭️",id:50,hp:3,dmg:2,rarity:1,names:["Track Next","Next Track","Next Track Button"],description:"When healed, Shuffles your Squad"},
+{emoji:"🩻",id:51,hp:1,dmg:2,rarity:3,names:["X Ray","X-ray","Xray"],description:"When a friendly Emoji is defeated, heals all non-X Ray friendly Emojis by 1"}, // Class: Healing
 ]
 
-module.exports = {database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser}
+module.exports = {classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}
