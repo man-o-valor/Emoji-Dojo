@@ -623,7 +623,7 @@ const raritynames = [
 ]
 
 const classes = [
-    {name:"Healing",emoji:"💗",legendary:51}
+    {name:"Healing",emoji:"💗",legendary:51}, {name:"Damaging",emoji:"🤜",legendary:52}
 ]
 /*
 
@@ -693,6 +693,7 @@ const emojis = [
 {emoji:"🥏",id:49,hp:4,dmg:4,rarity:2,names:["Flying Disc","Disc","Frisbee"],description:"Deals one damage to the Emoji behind this when attacking"},
 {emoji:"⏭️",id:50,hp:3,dmg:2,rarity:1,names:["Track Next","Next Track","Next Track Button"],description:"When healed, Shuffles your Squad"},
 {emoji:"🩻",id:51,hp:1,dmg:2,rarity:3,names:["X Ray","X-ray","Xray"],description:"When a friendly Emoji is defeated, heals all non-X Ray friendly Emojis by 1"}, // Class: Healing
-]
+{emoji:"🌃",id:52,hp:3,dmg:2,rarity:3,names:["Night with Stars","Night","Night in City"],description:"When an enemy Emoji dies, hurts all enemy copies of it by 1"}, // Class: Damaging
+] // MAKE NWS WORK
 
 module.exports = {classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}

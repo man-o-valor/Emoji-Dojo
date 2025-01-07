@@ -16,11 +16,11 @@ module.exports = {
 					rewardemoji = emojis[classes[i].legendary].emoji
 				}
 				let progressbar = "⬜".repeat(Math.floor(userlab[i] % 40 / 4))
-				let progresssquares = ["⬛","▫️","◽","◻️"]
+				let progresssquares = ["▪️","▫️","◽","◻️"]
 				progressbar += progresssquares[userlab[i] % 40 % 4]
-				progressbar += "⬛".repeat(9-Math.floor(userlab[i] % 40 / 4))
+				progressbar += "▪️".repeat(9-Math.floor(userlab[i] % 40 / 4))
 
-				embeddescription += `${classes[i].emoji} **${classes[i].name}:** ${userlab[i]%40}/40 | Reward: ${rewardemoji}\n${progressbar}\n`
+				embeddescription += `${classes[i].emoji} **${classes[i].name}:** ${userlab[i]%40}/40 | Reward: ${rewardemoji}\n${progressbar}\n\n`
 				console.log(userlab[i] % 40);
 			}
 		}
