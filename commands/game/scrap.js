@@ -3,8 +3,8 @@ const {classes,emojis,trysetupuser,fetchresearch} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('lab')
-		.setDescription('See progress towards Legendary emojis'),
+		.setName('devotions')
+		.setDescription('See your devotion progress towards Master emojis'),
 	async execute(interaction) {
 		await trysetupuser(interaction.user)
 		let userlab = await fetchresearch(interaction.user.id)
@@ -25,14 +25,14 @@ module.exports = {
 			}
 		}
 		if (embeddescription == "") {
-			embeddescription = "You haven't researched any emojis yet."
+			embeddescription = "You haven't devoted any emojis yet."
 		}
 		const labembed = new EmbedBuilder()
-			.setColor(0x6ADA90)
-			.setTitle(`Lab 🧪`)
+			.setColor(0x9266CC)
+			.setTitle(`Devotions 🛐`)
 			.setDescription(embeddescription)
 			.setTimestamp()
-			.setFooter({ text: `${interaction.user.globalName}'s Lab`});
+			.setFooter({ text: `${interaction.user.globalName}'s Devotions`});
 		await interaction.reply({embeds:[labembed]});
 	},
 };

@@ -43,9 +43,15 @@ const rest = new REST().setToken(token);
 	}
 })();
 
-rest.delete(Routes.applicationCommand(clientId, '1326005959453311076'))
+/*
+
+Use this to delete one command
+
+rest.delete(Routes.applicationCommand(clientId, 'COMMAND ID'))
 	.then(() => console.log('Successfully deleted application command'))
 	.catch(console.error);
+
+*/
 
 /*
 
