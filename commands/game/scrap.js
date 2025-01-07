@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
-const {emojis,trysetupuser,fetchresearch} = require('../../data.js')
+const {classes,emojis,trysetupuser,fetchresearch} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
