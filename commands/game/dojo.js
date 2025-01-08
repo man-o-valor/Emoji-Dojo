@@ -1,4 +1,4 @@
-const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder } = require('discord.js');
+const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
 const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,getsquad} = require('../../data.js')
 
 module.exports = {
@@ -129,7 +129,7 @@ module.exports = {
 										.setTitle(`Devote some ${emojifound.emoji}!`);
 									const buymoreinput = new TextInputBuilder()
 										.setCustomId('devoteamt')
-										.setLabel("🛐 How many do you want to devote?")
+										.setLabel("🛐 How many do you want to devote? All emojis devoted will be lost.")
 										.setPlaceholder(`1 - ${numberowned-numberfound}`)
 										.setStyle(TextInputStyle.Short);
 									const actionRow = new ActionRowBuilder().addComponents(buymoreinput);
