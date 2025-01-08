@@ -129,7 +129,7 @@ module.exports = {
 										.setTitle(`Devote some ${emojifound.emoji}!`);
 									const buymoreinput = new TextInputBuilder()
 										.setCustomId('devoteamt')
-										.setLabel("🛐 How many do you want to devote? All emojis devoted will be lost.")
+										.setLabel("🛐 How many do you want to devote?")
 										.setPlaceholder(`1 - ${numberowned-numberfound}`)
 										.setStyle(TextInputStyle.Short);
 									const actionRow = new ActionRowBuilder().addComponents(buymoreinput);
