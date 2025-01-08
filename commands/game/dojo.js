@@ -1,4 +1,4 @@
-const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
+const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder } = require('discord.js');
 const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,getsquad} = require('../../data.js')
 
 module.exports = {
@@ -82,10 +82,17 @@ module.exports = {
 						.setLabel('Equip')
 						.setEmoji('8️⃣')
 						.setStyle(ButtonStyle.Secondary);
+					const devote = new ButtonBuilder()
+						.setCustomId('devote')
+						.setLabel('Devote')
+						.setStyle(ButtonStyle.Primary)
+						.setEmoji('🛐');
 					const row1 = new ActionRowBuilder()
 						.addComponents(addto1,addto2,addto3,addto4);
 					const row2 = new ActionRowBuilder()
 						.addComponents(addto5,addto6,addto7,addto8);
+					const devoterow = new ActionRowBuilder()
+						.addComponents(devote);
 					let comps = []
 					let squadarray = await getsquad(interaction.user.id)
 					let numberfound = squadarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0)
@@ -94,6 +101,7 @@ module.exports = {
 						comps.push(row1)
 						comps.push(row2)
 					}
+					comps.push(devoterow)
 					const response = await interaction.reply({embeds:[vaultembed],components:comps,fetchReply: true});
 					if (numberfound<numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id
@@ -101,17 +109,43 @@ module.exports = {
 						try {
 							collector.on('collect', async (interaction2) => {
 							numberfound = squadarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0)
-							if (numberfound<numberowned) {
-								squadarray = await getsquad(interaction.user.id)
-								squadarray[interaction2.customId[5]-1] = emojifound.id
-								await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
-								let squadtext = ""
-								for (let i = 7; i > -1; i--) {
-									squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].names[0]} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
+							if (interaction2.customId.includes("addto")) {
+								if (numberfound<numberowned) {
+									squadarray = await getsquad(interaction.user.id)
+									squadarray[interaction2.customId[5]-1] = emojifound.id
+									await database.set(interaction.user.id+"squad",squadarray.join(",") + ",")
+									let squadtext = ""
+									for (let i = 7; i > -1; i--) {
+										squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].names[0]} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
+									}
+									await interaction2.reply({ephemeral:true,content:`Your squad has been saved!\n${squadtext}`})
+								} else {
+									await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to add one!`})
 								}
-								await interaction2.reply({ephemeral:true,content:`Your squad has been saved!\n${squadtext}`})
-							} else {
-								await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to add one!`})
+							} else if (interaction2.customId == "devote") {
+								if (numberfound<numberowned) {
+									const modal = new ModalBuilder()
+										.setCustomId('devoteModal')
+										.setTitle(`Devote some ${emojifound.emoji}!`);
+									const buymoreinput = new TextInputBuilder()
+										.setCustomId('devoteamt')
+										.setLabel("🛐 How many do you want to devote?")
+										.setPlaceholder(`1 - ${numberowned-numberfound}`)
+										.setStyle(TextInputStyle.Short);
+									const actionRow = new ActionRowBuilder().addComponents(buymoreinput);
+									modal.addComponents(actionRow)
+									await interaction2.showModal(modal);
+									interaction2.awaitModalSubmit({ time: 60000 })
+										.then(async interaction3 => {
+											if (numberfound<numberowned) {
+												await interaction3.reply({ephemeral:true,content:`nothing happened lol but the code works`})
+											} else {
+												await interaction3.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
+											}
+										})
+								} else {
+									await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
+								}
 							}
 						})} catch (e) {
 							console.error(e)
