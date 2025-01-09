@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
-const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,getsquad} = require('../../data.js')
+const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,getsquad,devoteemojis} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,7 +13,6 @@ module.exports = {
 			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			const vaultarray = await getvault(interaction.user.id)
-			console.log(vaultarray)
 			const viewemoji = interaction.options.getString("emoji")
 			if ((viewemoji ?? "gyatt").startsWith("%dev")) {
 				if (interaction.user.id=="1013096732147597412") {
@@ -138,7 +137,13 @@ module.exports = {
 									interaction2.awaitModalSubmit({ time: 60000 })
 										.then(async interaction3 => {
 											if (numberfound<numberowned) {
-												await interaction3.reply({ephemeral:true,content:`nothing happened lol but the code works`})
+												const devoteamt = parseInt(interaction3.fields.getTextInputValue("devoteamt").toLowerCase())
+												if (devoteamt>numberowned-numberfound || devoteamt<1) {
+													await interaction3.reply({ephemeral:true,content:`⚠️ Your input was invalid!`})
+												} else {
+													let emojidisplay = devoteemojis(interaction.user.id,emojifound.id,devoteamt)
+													await interaction3.reply({ephemeral:true,content:`nothing happened lol but the code works`})
+												}
 											} else {
 												await interaction3.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
 											}

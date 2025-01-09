@@ -1,3 +1,4 @@
+const {} = require('discord.js');
 const Keyv = require('keyv');
 const lodash = require('lodash');
 
@@ -9,6 +10,20 @@ async function getvault(id) {
 	let vault = rawvault.split(',');
 	vault.pop()
     return vault
+}
+
+async function devoteemojis(id,emojiid,amount) {
+    const vaultarray = await getvault(id)
+    for (let j = 0; j < amount; j++) {
+        for (let i = 0; i < vaultarray.length; i++) {
+            if (vaultarray[i].id === emojiid) {
+                indexToRemove = i;
+            }
+        }
+        vaultarray.splice(indexToRemove, 1);
+    }
+    await database.set(id + "vault",vaultarray.join(","))
+    return (emojis[emojiid].emoji + " ").repeat(amount)
 }
 
 async function fetchresearch(id) {
@@ -715,4 +730,4 @@ const emojis = [
 {emoji:"🐺",id:53,hp:4,dmg:3,rarity:3,names:["Wolf"],description:"When this defeats an Emoji, heals itself by 1 and increases its attack power by 1"}, // Class: Damaging
 ]
 
-module.exports = {classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}
+module.exports = {devoteemojis,classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}
