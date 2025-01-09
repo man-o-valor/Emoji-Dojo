@@ -142,7 +142,7 @@ module.exports = {
 													await interaction3.reply({ephemeral:true,content:`⚠️ Your input was invalid!`})
 												} else {
 													let emojidisplay = devoteemojis(interaction.user.id,emojifound.id,devoteamt)
-													await interaction3.reply({ephemeral:true,content:`nothing happened lol but the code works`})
+													await interaction3.reply({ephemeral:true,content:`You devoted ${emojidisplay}`})
 												}
 											} else {
 												await interaction3.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
