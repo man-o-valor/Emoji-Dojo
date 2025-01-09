@@ -141,7 +141,7 @@ module.exports = {
 												if (devoteamt>numberowned-numberfound || devoteamt<1) {
 													await interaction3.reply({ephemeral:true,content:`⚠️ Your input was invalid!`})
 												} else {
-													let emojidisplay = devoteemojis(interaction.user.id,emojifound.id,devoteamt)
+													let emojidisplay = await devoteemojis(interaction.user.id,emojifound.id,devoteamt)
 													await interaction3.reply({ephemeral:true,content:`You devoted ${emojidisplay}`})
 												}
 											} else {

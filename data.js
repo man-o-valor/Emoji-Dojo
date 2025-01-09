@@ -14,9 +14,10 @@ async function getvault(id) {
 
 async function devoteemojis(id,emojiid,amount) {
     const vaultarray = await getvault(id)
+    let indexToRemove;
     for (let j = 0; j < amount; j++) {
         for (let i = 0; i < vaultarray.length; i++) {
-            if (vaultarray[i].id === emojiid) {
+            if (vaultarray[i].id == emojiid) {
                 indexToRemove = i;
             }
         }
