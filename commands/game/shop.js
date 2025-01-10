@@ -224,7 +224,10 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 											buy.setDisabled(true)
 											buy.setLabel(`You bought ${modalquantity}`)
 											buy.setStyle(1)
-											let allemojistoadd = shopdata[choice].id + ","
+											let allemojistoadd = "" 
+											for (let i = 0; i < modalquantity; i++) {
+												allemojistoadd += shopdata[choice].id + ","
+											}
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
 										}
@@ -274,6 +277,14 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 								}
 								let tempvault = await database.get(interaction.user.id+"vault")
 								await database.set(interaction.user.id+"vault",tempvault + emojistoadd)
+							} else if (shopdata[choice].type=="premoji") {
+								await coinschange(interaction.user.id,-1*modalquantity*shopdata[choice].cost)
+								buy.setDisabled(true)
+								buy.setLabel(`You bought ${modalquantity}`)
+								buy.setStyle(1)
+								let allemojistoadd = shopdata[choice].id + ","
+								let tempvault = await database.get(interaction.user.id+"vault")
+								await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
 							}
 							if (newinteraction.customId!="buymore") {
 								let emojiString = "";

@@ -142,7 +142,13 @@ module.exports = {
 													await interaction3.reply({ephemeral:true,content:`⚠️ Your input was invalid!`})
 												} else {
 													let emojidisplay = await devoteemojis(interaction.user.id,emojifound.id,devoteamt)
+													let lab = await fetchresearch(id)
 													await interaction3.reply({ephemeral:true,content:`🛐 You devoted ${emojidisplay} to the master of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!** (+${devoteamt*(2*(emojifound.rarity)+1)} devotion points)`})
+													if (Math.floor(lab[emojifound.class]/40) != Math.floor((lab[emojifound.class]-devoteamt*(2*(emojifound.rarity)+1))/40)) {
+														let tempvault = await database.get(interaction.user.id+"vault")
+														await database.set(interaction.user.id+"vault",tempvault + emojis[classes[emojifound.class].legendary].id + ",")
+														await interaction3.followUp({ephemeral:false,content:`\`\`\` \`\`\`\n\nYour frequent 🛐 **Devotion** has attracted the attention of ${emojis[classes[emojifound.class].legendary].emoji} **${emojis[classes[emojifound.class].legendary].name}**, master of the art of ${classes[emojifound.class].emoji} **${emojifound.class}!**\n\n\`\`\` \`\`\``})
+													}
 												}
 											} else {
 												await interaction3.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
