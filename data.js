@@ -13,10 +13,10 @@ async function getvault(id) {
 }
 
 async function devoteemojis(id,emojiid,amount) {
-    const vaultarray = await getvault(id)
+    let vaultarray = await getvault(id)
     let indexToRemove;
     for (let j = 0; j < amount; j++) {
-        for (let i = 0; i < vaultarray.length; i++) {
+        for (let i = vaultarray.length; i > 0; i--) {
             if (vaultarray[i].id == emojiid) {
                 indexToRemove = i;
             }
@@ -24,6 +24,9 @@ async function devoteemojis(id,emojiid,amount) {
         vaultarray.splice(indexToRemove, 1);
     }
     await database.set(id + "vault",vaultarray.join(","))
+    let lab = await fetchresearch(id) 
+    lab[emojis[emojiid].class] += 2(emojis[emojiid].rarity)+1
+    await database.set(id + "research",lab.join("/"))
     return (emojis[emojiid].emoji + " ").repeat(amount)
 }
 
