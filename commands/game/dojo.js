@@ -83,7 +83,7 @@ module.exports = {
 						.setStyle(ButtonStyle.Secondary);
 					const devote = new ButtonBuilder()
 						.setCustomId('devote')
-						.setLabel(`Devote for ${2*(emojifound.rarity)+1} points each`)
+						.setLabel(`Devote for ${2*(emojifound.rarity)+1} point${(2*(emojifound.rarity)+1!=1) ? 's' : ''} each`)
 						.setStyle(ButtonStyle.Primary)
 						.setEmoji('🛐');
 					const row1 = new ActionRowBuilder()
