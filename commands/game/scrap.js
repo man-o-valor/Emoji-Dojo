@@ -36,7 +36,7 @@ module.exports = {
 		const labembed = new EmbedBuilder()
 			.setColor(0x9266CC)
 			.setTitle(`Devotions 🛐`)
-			.setDescription(embeddescription)
+			.setDescription("<:divider1:1327378203156676810><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider3:1327378225512316938>\n" + embeddescription)
 			.setTimestamp()
 			.setFooter({ text: `${interaction.user.globalName}'s Devotions`});
 		await interaction.reply({embeds:[labembed]});
