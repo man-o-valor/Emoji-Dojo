@@ -147,7 +147,7 @@ module.exports = {
 													if (Math.floor(lab[emojifound.class]/40) != Math.floor((lab[emojifound.class]-devoteamt*(2*(emojifound.rarity)+1))/40)) {
 														let tempvault = await database.get(interaction.user.id+"vault")
 														await database.set(interaction.user.id+"vault",tempvault + emojis[classes[emojifound.class].legendary].id + ",")
-														await interaction3.followUp({ephemeral:false,content:`\`\`\` \`\`\`\n\nYour frequent 🛐 **Devotion** has attracted the attention of ${emojis[classes[emojifound.class].legendary].emoji} **${emojis[classes[emojifound.class].legendary].name}**, master of the art of ${classes[emojifound.class].emoji} **${emojifound.class}!**\n\n\`\`\` \`\`\``})
+														await interaction3.followUp({ephemeral:false,content:`\`\`\` \`\`\`\n\nYour frequent 🛐 **Devotion** has attracted the attention of ${emojis[classes[emojifound.class].legendary].emoji} **${emojis[classes[emojifound.class].legendary].names[0]}**, master of the art of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!**\n\n\`\`\` \`\`\``})
 													}
 												}
 											} else {
@@ -204,7 +204,7 @@ module.exports = {
 					desc += `## Special Emojis ⚛️\n${vaulttext[2]}\n`
 				}
 				if (vaultnumbers[3]>0) {
-					desc += `## Legendary Emojis 💟\n${vaulttext[3]}`
+					desc += `## Master Emojis <:master:1325987682941145259>\n${vaulttext[3]}`
 				}
 				const vaultembed = new EmbedBuilder()
 					.setColor(0xC1694F)
