@@ -22,7 +22,7 @@ module.exports = {
 				]
 				let progressbar = progresssquares[0][Math.min(userlab[i]%40,4)]
 				progressbar += progresssquares[1][4].repeat(Math.max(Math.floor(userlab[i] % 40 / 4)-1,0))
-				progressbar += ((userlab[i] % 40 > 35) ? "" : progresssquares[1][userlab[i] % 40 % 4])
+				progressbar += ((userlab[i] % 40 > 35 || userlab[i] % 40 < 5) ? "" : progresssquares[1][userlab[i] % 40 % 4])
 				progressbar += progresssquares[1][0].repeat(Math.max(8-Math.floor(userlab[i] % 40 / 4),0))
 				progressbar += progresssquares[2][4-Math.min(40-(userlab[i]%40),4)]
 

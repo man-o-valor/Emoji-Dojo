@@ -143,7 +143,7 @@ module.exports = {
 												} else {
 													let emojidisplay = await devoteemojis(interaction.user.id,emojifound.id,devoteamt)
 													let lab = await fetchresearch(interaction.user.id)
-													await interaction3.reply({ephemeral:true,content:`🛐 You devoted ${emojidisplay} to the master of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!** (+${devoteamt*(2*(emojifound.rarity)+1)} devotion points)`})
+													await interaction3.reply({ephemeral:true,content:`🛐 You devoted ${emojidisplay}to the master of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!** (+${devoteamt*(2*(emojifound.rarity)+1)} devotion point${(devoteamt*(2*(emojifound.rarity)+1)!=1) ? 's' : ''})`})
 													if (Math.floor(lab[emojifound.class]/40) != Math.floor((lab[emojifound.class]-devoteamt*(2*(emojifound.rarity)+1))/40)) {
 														let tempvault = await database.get(interaction.user.id+"vault")
 														await database.set(interaction.user.id+"vault",tempvault + emojis[classes[emojifound.class].legendary].id + ",")
