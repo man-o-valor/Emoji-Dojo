@@ -23,9 +23,9 @@ async function devoteemojis(id,emojiid,amount) {
         }
         vaultarray.splice(indexToRemove, 1);
     }
-    await database.set(id + "vault",vaultarray.join(","))
+    await database.set(id + "vault",vaultarray.join(",") + ",")
     let lab = await fetchresearch(id) 
-    lab[emojis[emojiid].class] += 2*(emojis[emojiid].rarity)+1
+    lab[emojis[emojiid].class] += amount*(2*(emojis[emojiid].rarity)+1)
     await database.set(id + "research",lab.join("/"))
     return (emojis[emojiid].emoji + " ").repeat(amount)
 }

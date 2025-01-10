@@ -142,7 +142,7 @@ module.exports = {
 													await interaction3.reply({ephemeral:true,content:`⚠️ Your input was invalid!`})
 												} else {
 													let emojidisplay = await devoteemojis(interaction.user.id,emojifound.id,devoteamt)
-													await interaction3.reply({ephemeral:true,content:`🛐 You devoted ${emojidisplay} to the master of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!** (+${2*(emojifound.rarity)+1} devotion points)`})
+													await interaction3.reply({ephemeral:true,content:`🛐 You devoted ${emojidisplay} to the master of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!** (+${devoteamt*(2*(emojifound.rarity)+1)} devotion points)`})
 												}
 											} else {
 												await interaction3.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
