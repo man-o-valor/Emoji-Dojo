@@ -21,9 +21,9 @@ module.exports = {
 					["<:endbar1:1326207400860061736>","<:endbar2:1326207409470967869>","<:endbar3:1326207416857002034>","<:endbar4:1326207424788562041>","<:endbar5:1326207432644362291>"]
 				]
 				let progressbar = progresssquares[0][Math.min(userlab[i]%40,4)]
-				progressbar += progresssquares[1][4].repeat(Math.floor(userlab[i] % 40 / 4)-1)
+				progressbar += progresssquares[1][4].repeat(Math.max(Math.floor(userlab[i] % 40 / 4)-1,0))
 				progressbar += ((userlab[i] % 40 > 35) ? "" : progresssquares[1][userlab[i] % 40 % 4])
-				progressbar += progresssquares[1][0].repeat(8-Math.floor(userlab[i] % 40 / 4))
+				progressbar += progresssquares[1][0].repeat(Math.max(8-Math.floor(userlab[i] % 40 / 4),0))
 				progressbar += progresssquares[2][4-Math.min(40-(userlab[i]%40),4)]
 
 				embeddescription += `${classes[i].emoji} **${classes[i].name}:** ${userlab[i]%40}/40 | Reward: ${rewardemoji}\n${progressbar}\n<:divider1:1327378203156676810><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider3:1327378225512316938>\n`
