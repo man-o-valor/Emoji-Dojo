@@ -736,9 +736,9 @@ const emojis = [
 {emoji:"🎉",id:48,hp:2,dmg:1,rarity:1,names:["Tada","Party Popper","Party Horn"],class:0,description:"When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 2"},
 {emoji:"🥏",id:49,hp:4,dmg:4,rarity:2,names:["Flying Disc","Disc","Frisbee"],class:1,description:"Deals one damage to the Emoji behind this when attacking"},
 {emoji:"⏭️",id:50,hp:3,dmg:2,rarity:1,names:["Track Next","Next Track","Next Track Button"],class:6,description:"When healed, Shuffles your Squad"},
-{emoji:"🩻",id:51,hp:1,dmg:2,rarity:3,names:["X Ray","X-ray","Xray"],description:"When a friendly Emoji is defeated, heals all friendly Emojis behind itself by 1"}, // Class: Healing
+{emoji:"🩻",id:51,hp:1,dmg:2,rarity:3,names:["X Ray","X-ray","Xray"],class:0,description:"When a friendly Emoji is defeated, heals all friendly Emojis behind itself by 1"}, // Class: Healing
 {emoji:"🌃",id:52,hp:3,dmg:2,rarity:2,names:["Night with Stars","Night","Night in City"],class:1,description:"When this defeats an Emoji, hurts all enemy copies of it by 1"},
-{emoji:"🐺",id:53,hp:4,dmg:3,rarity:3,names:["Wolf"],description:"When this defeats an Emoji, heals itself by 1 and increases its attack power by 1"}, // Class: Damaging
+{emoji:"🐺",id:53,hp:4,dmg:3,rarity:3,names:["Wolf"],class:1,description:"When this defeats an Emoji, heals itself by 1 and increases its attack power by 1"}, // Class: Damaging
 ]
 
 module.exports = {raritycolors,devotionhelp,devoteemojis,classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}
