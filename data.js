@@ -101,30 +101,6 @@ const classes = [
 
 const devotionhelp = "At any time through `/dojo` you have the ability to 🛐 **Devote** any amount of Emojis to the art of their class, permanently losing them in exchange for **\"devotion points\"** correlated to their rarity. You can view your devotion progress at any time by running `/devotions`.\n\nWhen you collect a total of **40** devotion points for a single class, you will be awarded the <:master:1325987682941145259> **Master** of that class to be used in your own Squad. The bar will roll back to 0, and you are able to get more of the same <:master:1325987682941145259> **Master**s. These <:master:1325987682941145259> **Master** Emojis are quite powerful, synergizing with their class like no other Emoji can."
 
-const welcomemessage = `# ⛩️😀 Welcome to the Emoji Dojo, <@${user.id}>! 🏯🎋
-**It is here that you will over time hone your skills and master the art of Emoji Battles.**
-
-## <:denver:1303484366520844289>💬 \`Denver\`
-\`\`\`Hello! My name is Denver, and I'm in charge of wrangling these here emojis for you to battle with. Here, I'll give you this selection to start off with.\`\`\`
-
-*(You received${allemojitext}!)*
-
-\`\`\`That should be good enough to start with! Go ahead, you can get to know 'em.\`\`\`
-
-*(Use </dojo:1277719095701143680> to see your collection of Emojis, and see details about each one.)*
-
-\`\`\`When you're ready, organize them into a Squad optimized to battle others and create the best synergy.\`\`\`
-
-*(Use </squad:1277719095701143681> to view or edit your Squad. You can also edit your squad from the </dojo:1277719095701143680>.)*
-
-\`\`\`Finally, you can Battle! Engage your friends in a Battle, or lower the stakes with a Friendly Battle. If there's no one who wants to fight you, you can always battle Dojobot in a Bot Battle!\`\`\`
-
-*(Use </battleuser:1279264987717570610> and </battlebot:1277719095701143677> to engage in Battles to earn Coins. You can also use </friendlybattle:1289287177875886161> to battle friends without worrying about losing Coins.)*
-
-\`\`\`Once you have enough Coins, you can visit my Emoji Shop! I sell these little guys to aspiring battlers like you. Stop by when you're looking for an emoji!\`\`\`
-
-*(You can use </coins:1277719095701143678> to see how many Coins you have, and </shop:1290417978734678098> to visit Denver's shop.)*`
-
 /*
 
 Class ideas:
@@ -842,4 +818,4 @@ const emojis = [
     },
 ]
 
-module.exports = {welcomemessage,healthemojis,dmgemojis,raritycolors,devotionhelp,classes,database,emojis,raritysymbols,raritynames}
+module.exports = {healthemojis,dmgemojis,raritycolors,devotionhelp,classes,database,emojis,raritysymbols,raritynames}
