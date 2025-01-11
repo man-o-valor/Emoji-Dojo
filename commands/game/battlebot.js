@@ -1,5 +1,6 @@
 const { SlashCommandBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
-const {getsquad,allemojisofrarity,emojis,playturn,database,coinschange,trysetupuser} = require('../../data.js')
+const {emojis} = require('../../data.js')
+const {getsquad,allemojisofrarity,playturn,database,coinschange,trysetupuser} = require('../../functions.js')
 const lodash = require('lodash');
 
 module.exports = {

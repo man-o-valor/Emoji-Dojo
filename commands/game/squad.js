@@ -1,5 +1,6 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
-const {getsquad,emojis,getvault,database,trysetupuser} = require('../../data.js')
+const {emojis} = require('../../data.js')
+const {getsquad,getvault,database,trysetupuser} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
