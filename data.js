@@ -648,6 +648,10 @@ const raritysymbols = [
 "*️⃣", "✳️", "⚛️", "<:master:1325987682941145259>"
 ]
 
+const raritycolors = [
+    0x3B88C3, 0x77B255, 0x9266CC, 0xEC9603
+    ]
+
 const raritynames = [
 "Common", "Rare", "Special", "Master"
 ]
@@ -737,4 +741,4 @@ const emojis = [
 {emoji:"🐺",id:53,hp:4,dmg:3,rarity:3,names:["Wolf"],description:"When this defeats an Emoji, heals itself by 1 and increases its attack power by 1"}, // Class: Damaging
 ]
 
-module.exports = {devotionhelp,devoteemojis,classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}
+module.exports = {raritycolors,devotionhelp,devoteemojis,classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}

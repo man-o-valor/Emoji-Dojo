@@ -36,7 +36,7 @@ module.exports = {
 				const viewemojiid = vaultarray.find(x => emojis[x].id == (emojifound ?? {id:undefined}).id)
 				if (viewemojiid || emojifound.rarity==-1) {
 					const vaultembed = new EmbedBuilder()
-						.setColor(0xC1694F)
+						.setColor(raritycolors[emojifound.rarity] ?? 0xFFFFFF)
 						.setTitle(`${emojifound.emoji} ${emojifound.names[0]}`)
 						.setDescription(`❤️ Health: **${emojifound.hp}**\n<:attackpower:1327657903447998477> Attack Power: **${emojifound.dmg}**\n${raritysymbols[emojifound.rarity] ?? "⬜"} Rarity: **${raritynames[emojifound.rarity] ?? "N/A"}**\nAbility:\n> ${emojifound.description}`)
 						.setTimestamp()
