@@ -662,6 +662,9 @@ const classes = [
     {id:6,name:"Shuffling",emoji:"<:shuffling:1326215184733179957>",legendary:7},
     {id:7,name:"Musical",emoji:"<:musical:1326215176294236212>",legendary:7},
 ]
+
+const devotionhelp = "At any time through `/dojo` you have the ability to 🛐 **Devote** any amount of Emojis to the art of their class, permanently losing them in exchange for **\"devotion points\"** correlated to their rarity. You can view your devotion progress at any time by running `/devotions`.\n\nWhen you collect a total of **40** devotion points for a single class, you will be awarded the <:master:1325987682941145259> **Master** of that class to be used in your own Squad. The bar will roll back to 0, and you are able to get more of the same <:master:1325987682941145259> **Master**s. These <:master:1325987682941145259> **Master** Emojis are quite powerful, synergizing with their class like no other Emoji can."
+
 /*
 
 Class ideas:
@@ -734,4 +737,4 @@ const emojis = [
 {emoji:"🐺",id:53,hp:4,dmg:3,rarity:3,names:["Wolf"],description:"When this defeats an Emoji, heals itself by 1 and increases its attack power by 1"}, // Class: Damaging
 ]
 
-module.exports = {devoteemojis,classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}
+module.exports = {devotionhelp,devoteemojis,classes,database,getvault,getsquad,coinschange,allemojisofrarity,emojis,playturn,raritysymbols,raritynames,trysetupuser,fetchresearch,syncresearch}

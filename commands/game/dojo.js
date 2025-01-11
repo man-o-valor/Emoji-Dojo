@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
-const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,getsquad,devoteemojis,classes,fetchresearch} = require('../../data.js')
+const {database,getvault,emojis,raritysymbols,raritynames,trysetupuser,getsquad,devoteemojis,classes,fetchresearch,devotionhelp} = require('../../data.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -38,7 +38,7 @@ module.exports = {
 					const vaultembed = new EmbedBuilder()
 						.setColor(0xC1694F)
 						.setTitle(`${emojifound.emoji} ${emojifound.names[0]}`)
-						.setDescription(`Health: **${emojifound.hp}**\nAttack Power: **${emojifound.dmg}**\nRarity: **${raritysymbols[emojifound.rarity] ?? "⬜"} ${raritynames[emojifound.rarity] ?? "N/A"}**\nAbility:\n> ${emojifound.description}`)
+						.setDescription(`❤️ Health: **${emojifound.hp}**\n<:attackpower:1327657903447998477> Attack Power: **${emojifound.dmg}**\n<:rarity:1327659216516939807> Rarity: **${raritysymbols[emojifound.rarity] ?? "⬜"} ${raritynames[emojifound.rarity] ?? "N/A"}**\nAbility:\n> ${emojifound.description}`)
 						.setTimestamp()
 						.setFooter({ text: `You have ${vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0)}`})
 					const addto1 = new ButtonBuilder()
@@ -86,12 +86,17 @@ module.exports = {
 						.setLabel(`Devote for ${2*(emojifound.rarity)+1} point${(2*(emojifound.rarity)+1!=1) ? 's' : ''} each`)
 						.setStyle(ButtonStyle.Primary)
 						.setEmoji('🛐');
+					const devotehelp = new ButtonBuilder()
+						.setCustomId('devotehelp')
+						.setLabel(`Devotion Help`)
+						.setStyle(ButtonStyle.Danger)
+						.setEmoji('❔');
 					const row1 = new ActionRowBuilder()
 						.addComponents(addto1,addto2,addto3,addto4);
 					const row2 = new ActionRowBuilder()
 						.addComponents(addto5,addto6,addto7,addto8);
 					const devoterow = new ActionRowBuilder()
-						.addComponents(devote);
+						.addComponents(devote,devotehelp);
 					let comps = []
 					let squadarray = await getsquad(interaction.user.id)
 					let numberfound = squadarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0)
@@ -100,7 +105,9 @@ module.exports = {
 						comps.push(row1)
 						comps.push(row2)
 					}
-					comps.push(devoterow)
+					if (emojifound.rarity>=0&&emojifound.rarity<=2) {
+						comps.push(devoterow)
+					}
 					const response = await interaction.reply({embeds:[vaultembed],components:comps,fetchReply: true});
 					if (numberfound<numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id
@@ -157,6 +164,8 @@ module.exports = {
 								} else {
 									await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
 								}
+							} else if (interaction2.customId == "devotehelp") {
+								interaction2.reply({ephemeral:true,content:devotionhelp})
 							}
 						})} catch (e) {
 							console.error(e)
@@ -203,15 +212,17 @@ module.exports = {
 				if (vaultnumbers[2]>0) {
 					desc += `## Special Emojis ⚛️\n${vaulttext[2]}\n`
 				}
+				let mastermsg = ""
 				if (vaultnumbers[3]>0) {
 					desc += `## Master Emojis <:master:1325987682941145259>\n${vaulttext[3]}`
+					mastermsg = `, ${vaultnumbers[3]} Master${((vaultnumbers[3]==1) ? "" : "s")}`
 				}
 				const vaultembed = new EmbedBuilder()
 					.setColor(0xC1694F)
 					.setTitle(`${interaction.user.globalName}'s Dojo`)
 					.setDescription(`Run \`/dojo [emoji]\` to view details on a specific emoji.\n` + desc)
 					.setTimestamp()
-					.setFooter({ text: `${vaultnumbers[0]} Common, ${vaultnumbers[1]} Rare, ${vaultnumbers[2]} Special`}); // , ${vaultnumbers[3]} Legendary
+					.setFooter({ text: `${vaultnumbers[0]} Common${((vaultnumbers[0]==1) ? "" : "s")}, ${vaultnumbers[1]} Rare${((vaultnumbers[1]==1) ? "" : "s")}, ${vaultnumbers[2]} Special${((vaultnumbers[2]==1) ? "" : "s")}${mastermsg}`}); // , ${vaultnumbers[3]} Legendary
 				await interaction.reply({embeds:[vaultembed]});
 			}
 		}
