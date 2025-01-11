@@ -1,4 +1,4 @@
-const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
 const {classes,emojis,trysetupuser,fetchresearch} = require('../../data.js')
 
 module.exports = {
@@ -29,16 +29,40 @@ module.exports = {
 				embeddescription += `${classes[i].emoji} **${classes[i].name}:** ${userlab[i]%40}/40 | Reward: ${rewardemoji}\n${progressbar}\n<:divider1:1327378203156676810><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider3:1327378225512316938>\n`
 			}
 		}
+
 		if (embeddescription == "") {
-			embeddescription = "You haven't devoted any emojis yet."
+			embeddescription = "☮️ You haven't devoted any emojis yet."
 		}
+
+		const help = new ButtonBuilder()
+			.setCustomId('help')
+			.setLabel('Help')
+			.setEmoji('❔')
+			.setStyle(ButtonStyle.Danger);
+		const row1 = new ActionRowBuilder()
+			.addComponents(help);
+
 		const labembed = new EmbedBuilder()
 			.setColor(0x9266CC)
 			.setTitle(`Devotions 🛐`)
 			.setDescription("<:divider1:1327378203156676810><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider3:1327378225512316938>\n" + embeddescription)
 			.setTimestamp()
 			.setFooter({ text: `${interaction.user.globalName}'s Devotions`});
-		await interaction.reply({embeds:[labembed]});
+		const response = await interaction.reply({embeds:[labembed],components:[row1]});
+
+		const collectorFilter = i => i.user.id === interaction.user.id;
+
+		try {
+			const interaction2 = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
+			const devotionhelp = "At any time through `/dojo` you have the ability to 🛐 **Devote** any amount of Emojis to the art of their class, permanently losing them in exchange for **\"devotion points\"** correlated to their rarity. You can view your devotion progress at any time by running `/devotions`.\n\nWhen you collect a total of **40** devotion points for a single class, you will be awarded the <:master:1325987682941145259> **Master** of that class to be used in your own Squad. The bar will roll back to 0, and you are able to get more of the same <:master:1325987682941145259> **Master**s. These <:master:1325987682941145259> **Master** Emojis are quite powerful, synergizing with their class like no other Emoji can."
+			interaction2.reply({ephemeral:true,content:devotionhelp})
+			help.setDisabled(true)
+			interaction.editReply({components:[row1]})
+		} catch(e) {
+			console.error(e)
+			help.setDisabled(true)
+			interaction.editReply({components:[row1]})
+		}
 	},
 };
 
