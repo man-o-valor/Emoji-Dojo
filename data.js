@@ -818,4 +818,4 @@ const emojis = [
     },
 ]
 
-module.exports = {healthemojis,dmgemojis,raritycolors,devotionhelp,classes,database,emojis,raritysymbols,raritynames}
+module.exports = {healthemojis,dmgemojis,raritycolors,devotionhelp,classes,emojis,raritysymbols,raritynames}
