@@ -1,7 +1,7 @@
 const {} = require('discord.js');
 const Keyv = require('keyv');
 const lodash = require('lodash');
-const {emojis,healthemojis,dmgemojis} = require('data.js')
+const {emojis,healthemojis,dmgemojis} = require('./data.js')
 
 const database = new Keyv('sqlite://databases//database.sqlite',{namespace:"userdata"});
 
