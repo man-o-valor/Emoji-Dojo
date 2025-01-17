@@ -1,4 +1,3 @@
-const {} = require('discord.js');
 const Keyv = require('keyv');
 const lodash = require('lodash');
 const {emojis,healthemojis,dmgemojis} = require('./data.js')

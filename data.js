@@ -739,7 +739,7 @@ const emojis = [
         id:48,
         hp:2,
         dmg:1,
-        rarity:1,
+        rarity:2,
         names:[
             "Tada",
             "Party Popper",
