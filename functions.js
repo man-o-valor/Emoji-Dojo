@@ -63,6 +63,7 @@ async function trysetupuser(user) {
             allemojitext += " " + emojitoadd.emoji
 		}
 		await database.set(user.id+"vault",allemojistoadd)
+        await database.set(user.id+"squad",allemojistoadd)
         const welcomemessage = `# ⛩️😀 Welcome to the Emoji Dojo, <@${user.id}>! 🏯🎋
 **It is here that you will over time hone your skills and master the art of Emoji Battles.**
 
