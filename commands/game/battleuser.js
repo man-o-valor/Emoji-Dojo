@@ -109,44 +109,48 @@ module.exports = {
 										return new Promise(resolve => setTimeout(resolve, time));
 									}
 									let prevturn = lodash.cloneDeep(gamedata.squads)
-									while (gamedata.turn<200 && gamedata.squads[0][0]!=null && gamedata.squads[1][0]!=null) {
-										if (gamedata.turn%5 == 0) {
-											prevturn = lodash.cloneDeep(gamedata.squads)
-										}
-										gamedata = playturn(gamedata)
-										if (gamedata.turn%5 == 0 && lodash.isEqual(gamedata.squads,prevturn)) {
-											gamedata.turn = 999
-											break
-										}
-										let richtextsnippet = ""
-										let numberhidden = gamedata.richtext.length
-										if (gamedata.richtext.length>4) {
-											richtextsnippet += gamedata.richtext[gamedata.richtext.length - 5].replace(/\n/g, "\n-# ")
+									try {
+										while (gamedata.turn<200 && gamedata.squads[0][0]!=null && gamedata.squads[1][0]!=null) {
+											if (gamedata.turn%5 == 0) {
+												prevturn = lodash.cloneDeep(gamedata.squads)
+											}
+											gamedata = playturn(gamedata)
+											if (gamedata.turn%5 == 0 && lodash.isEqual(gamedata.squads,prevturn)) {
+												gamedata.turn = 999
+												break
+											}
+											let richtextsnippet = ""
+											let numberhidden = gamedata.richtext.length
+											if (gamedata.richtext.length>4) {
+												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 5].replace(/\n/g, "\n-# ")
+												numberhidden --
+											}
+											if (gamedata.richtext.length>3) {
+												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 4].replace(/\n/g, "\n-# ")
+												numberhidden --
+											}
+											if (gamedata.richtext.length>2) {
+												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 3].replace(/\n/g, "\n-# ")
+												numberhidden --
+											}
+											if (gamedata.richtext.length>1) {
+												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 2].replace(/\n/g, "\n-# ")
+												numberhidden --
+											}
+											richtextsnippet += gamedata.richtext[gamedata.richtext.length - 1]
 											numberhidden --
+											richtextsnippet += " 🔼"
+											let richnumberhidden = ""
+											if (numberhidden == 1) {
+												richnumberhidden = "-# 1 line hidden"
+											} else if (numberhidden > 0) {
+												richnumberhidden = "-# " + numberhidden + " lines hidden"
+											}
+											await interaction2.editReply(`<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + richnumberhidden + richtextsnippet)
+											await delay(battlespeed*1000)
 										}
-										if (gamedata.richtext.length>3) {
-											richtextsnippet += gamedata.richtext[gamedata.richtext.length - 4].replace(/\n/g, "\n-# ")
-											numberhidden --
-										}
-										if (gamedata.richtext.length>2) {
-											richtextsnippet += gamedata.richtext[gamedata.richtext.length - 3].replace(/\n/g, "\n-# ")
-											numberhidden --
-										}
-										if (gamedata.richtext.length>1) {
-											richtextsnippet += gamedata.richtext[gamedata.richtext.length - 2].replace(/\n/g, "\n-# ")
-											numberhidden --
-										}
-										richtextsnippet += gamedata.richtext[gamedata.richtext.length - 1]
-										numberhidden --
-										richtextsnippet += " 🔼"
-										let richnumberhidden = ""
-										if (numberhidden == 1) {
-											richnumberhidden = "-# 1 line hidden"
-										} else if (numberhidden > 0) {
-											richnumberhidden = "-# " + numberhidden + " lines hidden"
-										}
-										await interaction2.editReply(`<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + richnumberhidden + richtextsnippet)
-										await delay(battlespeed*1000)
+									} catch(e) {
+										await interaction2.editReply(`<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + richnumberhidden + richtextsnippet + "\n🤒 An error has ocurred and the Battle cannot continue.\`\`\`" + e + "\`\`\`")
 									}
 									await database.set(interaction.user.id + "battlepending","0")
 									await database.set(battleuser.id + "battlepending","0")
