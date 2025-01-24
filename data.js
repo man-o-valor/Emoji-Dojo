@@ -746,7 +746,7 @@ const emojis = [
             "Party Horn"
         ],
         class:0,
-        description:"When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 2"
+        description:"When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 1"
     },
     {
         emoji:"🥏",

@@ -7,7 +7,8 @@ module.exports = {
 		.setDescription('View your stash of Emoji Coins'),
 	async execute(interaction) {
 		await trysetupuser(interaction.user)
-		await database.set(interaction.user.id + "coins","10000")
+		// await database.set(interaction.user.id + "coins","10000")
+		// this was for testing
 		const coincount = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
 		let coincd = parseInt(await database.get(interaction.user.id + "coincooldown")  ?? Math.floor(Date.now()/1000))
 		if (coincd - Math.floor(Date.now()/1000) > 86400) {
