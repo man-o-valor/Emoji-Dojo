@@ -28,6 +28,14 @@ module.exports = {
 					} else if (devdata[0] == "clear") {
 						await database.delete(devdata[1])
 						await interaction.reply({ephemeral:true,content:`Cleared all data from "${devdata[1]}".`})
+					} else if (devdata[0] == "give") {
+						let allemojistoadd = "" 
+						for (let i = 0; i < (parseInt(devdata[3]) ?? 1); i++) {
+							allemojistoadd += emojis.find(x => x.names.find(y => y.replace(/\s+/g, '_').toLowerCase() == devdata[2].trim().replace(/\s+/g, '_').toLowerCase()) || x.emoji == devdata[2].replace(/\s+/g, '')).id + ","
+						}
+						const data = await database.get(devdata[1]+"vault")
+						await database.set(devdata[1]+"vault",data + allemojistoadd)
+						await interaction.reply({ephemeral:false,content:`Gave <@${devdata[1]}> ${parseInt(devdata[3]) ?? 1}x ${emojis.find(x => x.names.find(y => y.replace(/\s+/g, '_').toLowerCase() == devdata[2].trim().replace(/\s+/g, '_').toLowerCase()) || x.emoji == devdata[2].replace(/\s+/g, '')).emoji}.`})
 					}
 				} else {
 					await interaction.reply({ephemeral:true,content:`🤓 you're not the admin silly`})
