@@ -58,7 +58,7 @@ module.exports = {
 						const collectorFilter = i => i.user.id == interaction.user.id
 						let collector
 						try {
-							collector = readyresponse.createMessageComponentCollector({ filter: collectorFilter, time: 120000 });
+							collector = readyresponse.createMessageComponentCollector({time: 120000 });
 							console.log("I PASSED IT??? WHAT")
 						} catch(e) {
 							console.error(e)
