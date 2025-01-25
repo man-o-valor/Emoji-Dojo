@@ -55,114 +55,120 @@ module.exports = {
 						const row2 = new ActionRowBuilder()
 							.addComponents(ready);
 						const readyresponse = await interaction2.reply({content:`Here is a list of all the Emojis you have in your Dojo. Type out a message of 8 Emojis for your Squad and copy it.\nThis message will become your new Squad, from back to front (order matters!). Once you've copied it, click the button below.\n(Note: To read their abilities and stats, run \`/dojo\` with the name of the emoji.)\n\n${vaulttext}`,flags: 'Ephemeral',components:[row2],withResponse:true})
-							const interaction3 = await readyresponse.awaitMessageComponent({ time: 120000 });
-								const modal = new ModalBuilder()
-									.setCustomId('squadmodal')
-									.setTitle(`Edit your Squad`);
+							let collector = readyresponse.createMessageComponentCollector({time: 120000 });
+							try {
+								collector.on('collect', async (interaction3) => {
+									const modal = new ModalBuilder()
+										.setCustomId('squadmodal')
+										.setTitle(`Edit your Squad`);
 
-								// Create the text input components
-								const input = new TextInputBuilder()
-									.setCustomId('input')
-									.setLabel("Paste your dojo here")
-									.setPlaceholder("\":hotdog::frenchfries::up_arrow::down_arrow:\" etc")
-									.setStyle(TextInputStyle.Short);
+									// Create the text input components
+									const input = new TextInputBuilder()
+										.setCustomId('input')
+										.setLabel("Paste your dojo here")
+										.setPlaceholder("\":hotdog::frenchfries::up_arrow::down_arrow:\" etc")
+										.setStyle(TextInputStyle.Short);
 
-								// An action row only holds one text input,
-								// so you need one action row per text input.
-								const firstActionRow = new ActionRowBuilder().addComponents(input);
+									// An action row only holds one text input,
+									// so you need one action row per text input.
+									const firstActionRow = new ActionRowBuilder().addComponents(input);
 
-								// Add inputs to the modal
-								modal.addComponents(firstActionRow);
+									// Add inputs to the modal
+									modal.addComponents(firstActionRow);
 
-								// Show the modal to the user
-								const modalresponse = await interaction3.showModal(modal);
+									// Show the modal to the user
+									const modalresponse = await interaction3.showModal(modal);
 
-								interaction3.awaitModalSubmit({ time: 60000 })
-									.then(async interaction4 => {
-										let input = interaction4.fields.getTextInputValue("input").replace(/\s+/g,'')
-										let inputarr = []
-										let errorflag = false
-										let errorreason = ""
-										if (input.includes(":")) {
-											input.replace(/::/g,':')
-											inputarr = input.split(":")
-										} else {
-											/*
-											inputemojiarr = Array.from(input)
-											for (let i = 0; i < inputemojiarr.length; i++) {
-												console.log(inputemojiarr[i])
-												inputarr.push(emojis.find(x => x.emoji == inputemojiarr[i]).names[0].replace(/\s+/g, '_').toLowerCase())
+									interaction3.awaitModalSubmit({ time: 60000 })
+										.then(async interaction4 => {
+											let input = interaction4.fields.getTextInputValue("input").replace(/\s+/g,'')
+											let inputarr = []
+											let errorflag = false
+											let errorreason = ""
+											if (input.includes(":")) {
+												input.replace(/::/g,':')
+												inputarr = input.split(":")
+											} else {
+												/*
+												inputemojiarr = Array.from(input)
+												for (let i = 0; i < inputemojiarr.length; i++) {
+													console.log(inputemojiarr[i])
+													inputarr.push(emojis.find(x => x.emoji == inputemojiarr[i]).names[0].replace(/\s+/g, '_').toLowerCase())
+												}
+												*/
+												errorflag = true
+												errorreason = "Emojis must be in text format, like \"`:smiley:`\"."
 											}
-											*/
-											errorflag = true
-											errorreason = "Emojis must be in text format, like \"`:smiley:`\"."
-										}
-										inputarr = inputarr.filter(item => item != '');
+											inputarr = inputarr.filter(item => item != '');
 
-										if (inputarr.length < 8 && !errorflag) {
-											errorflag = true
-											errorreason = "Your Squad isn't formatted right! It's too short-- it needs 8 emojis in it. (Any extra will be ignored.)"
-										}
+											if (inputarr.length < 8 && !errorflag) {
+												errorflag = true
+												errorreason = "Your Squad isn't formatted right! It's too short-- it needs 8 emojis in it. (Any extra will be ignored.)"
+											}
 
-										let emojiinput = ""
-										let datainput = []
-										
-										if (!errorflag) {
-											for (let i = 0; i < 8; i++) {
-												let objectalternative = emojis.find(x => x.names[0].replace(/\s+/g, '_').toLowerCase() == inputarr[i])
-												if (objectalternative != undefined) {
-													if (vaultarray.find(x => x == objectalternative.id) != undefined) {
-														vaultarray.splice(vaultarray.findIndex(x => x == objectalternative.id), 1);
-														datainput = objectalternative.id + "," + datainput
-														emojiinput += `[${objectalternative.emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${objectalternative.names[0]} | ${objectalternative.hp} health, ${objectalternative.dmg} attack power. ${objectalternative.description}\") `
+											let emojiinput = ""
+											let datainput = []
+											
+											if (!errorflag) {
+												for (let i = 0; i < 8; i++) {
+													let objectalternative = emojis.find(x => x.names[0].replace(/\s+/g, '_').toLowerCase() == inputarr[i])
+													if (objectalternative != undefined) {
+														if (vaultarray.find(x => x == objectalternative.id) != undefined) {
+															vaultarray.splice(vaultarray.findIndex(x => x == objectalternative.id), 1);
+															datainput = objectalternative.id + "," + datainput
+															emojiinput += `[${objectalternative.emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${objectalternative.names[0]} | ${objectalternative.hp} health, ${objectalternative.dmg} attack power. ${objectalternative.description}\") `
+														} else {
+															errorflag = inputarr[i]
+															errorreason = "You don't have enough of an emoji listed, or it doesn't exist: "
+															break
+														}
 													} else {
 														errorflag = inputarr[i]
 														errorreason = "You don't have enough of an emoji listed, or it doesn't exist: "
 														break
 													}
-												} else {
-													errorflag = inputarr[i]
-													errorreason = "You don't have enough of an emoji listed, or it doesn't exist: "
-													break
 												}
 											}
-										}
 
-										if (errorflag) {
-											if (errorreason == "You don't have enough of an emoji listed, or it doesn't exist: ") {
-												await interaction4.reply({content:`You don't have enough of an emoji listed, or it doesn't exist: :${errorflag}:`,flags: 'Ephemeral'})
+											if (errorflag) {
+												if (errorreason == "You don't have enough of an emoji listed, or it doesn't exist: ") {
+													await interaction4.reply({content:`You don't have enough of an emoji listed, or it doesn't exist: :${errorflag}:`,flags: 'Ephemeral'})
+												} else {
+													await interaction4.reply({content:errorreason,flags: 'Ephemeral'})
+												}
 											} else {
-												await interaction4.reply({content:errorreason,flags: 'Ephemeral'})
+											// Checks out!
+											const confirm = new ButtonBuilder()
+												.setCustomId('confirm')
+												.setLabel('Confirm')
+												.setStyle(ButtonStyle.Success);
+											const cancel = new ButtonBuilder()
+												.setCustomId('cancel')
+												.setLabel('Cancel')
+												.setStyle(ButtonStyle.Danger);
+											const row3 = new ActionRowBuilder()
+												.addComponents(confirm,cancel);
+											const lastresponse = await interaction4.reply({content:`Your Squad will be set to (hover over emojis to read info):\n${emojiinput}`,flags: 'Ephemeral',components:[row3],withResponse:true})
+											try {
+												const lastinteraction = await lastresponse.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
+												if (lastinteraction.customId === 'confirm') {
+													await database.set(interaction.user.id+"squad",datainput)
+													lastinteraction.reply({content:"Success!",flags: 'Ephemeral'})
+												} else {
+													lastinteraction.reply({content:"Edit cancelled.",flags: 'Ephemeral'})
+												}
+											} catch(e) {
+												console.error(e)
 											}
-										} else {
-										// Checks out!
-										const confirm = new ButtonBuilder()
-											.setCustomId('confirm')
-											.setLabel('Confirm')
-											.setStyle(ButtonStyle.Success);
-										const cancel = new ButtonBuilder()
-											.setCustomId('cancel')
-											.setLabel('Cancel')
-											.setStyle(ButtonStyle.Danger);
-										const row3 = new ActionRowBuilder()
-											.addComponents(confirm,cancel);
-										const lastresponse = await interaction4.reply({content:`Your Squad will be set to (hover over emojis to read info):\n${emojiinput}`,flags: 'Ephemeral',components:[row3],withResponse:true})
-										try {
-											const lastinteraction = await lastresponse.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
-											if (lastinteraction.customId === 'confirm') {
-												await database.set(interaction.user.id+"squad",datainput)
-												lastinteraction.reply({content:"Success!",flags: 'Ephemeral'})
-											} else {
-												lastinteraction.reply({content:"Edit cancelled.",flags: 'Ephemeral'})
 											}
-										} catch(e) {
-											console.log(e)
-										}
-										}
-									})
+										})
+								})
+							} catch(e) {
+								console.error(e)
+							}
 					}
 			} catch(e) {
-				console.log(e)
+				console.error(e)
 			}
 		}
 	},
