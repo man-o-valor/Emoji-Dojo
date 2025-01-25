@@ -25,7 +25,6 @@ module.exports = {
 				.setColor(0x226699)
 				.setTitle(`${interaction.user.globalName}'s Squad 👥`)
 				.setDescription(` \`🔙\` ${squadtext}`)
-				.setTimestamp()
 				.setFooter({ text: `This is your Squad. Hover over your Emojis to read their descriptions. Add emojis to your squad with /dojo`});
 			const response = await interaction.reply({embeds:[squadembed],components:[/*row1*/]});
 			/*
