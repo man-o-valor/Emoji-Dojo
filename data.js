@@ -29,7 +29,7 @@ const dmgemojis = [
     "<:attack3:1278757393563389995>",
     "<:attack4:1278757385405730846>",
     "<:attack5:1278757377222639616>",
-    "<:attack6:1278523977303851122>",
+    "<:attack6:1278757369819562036>",
     "<:attack7:1278757359606435922>",
     "<:attack8:1278757344066666517>",
     "<:attack9:1278757315373306009>",
@@ -109,7 +109,7 @@ Damaging: Wolf
 Summoning: Wand?
 Defense: Mirror?
 Transforming: Germ?
-Shuffling
+Shuffling: Volcano
 Musical
 Movement
 Solar?
@@ -731,7 +731,7 @@ const emojis = [
         names:[
             "Volcano"
         ],
-        class:3,
+        class:6,
         description:"When your Squad is Shuffled, summon 🔥 at the front of the enemy team with 1 health and 1 attack power"
     },
     {

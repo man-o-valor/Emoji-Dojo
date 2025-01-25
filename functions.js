@@ -191,7 +191,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
     }
 
     alter: {
-        gamedata.squads[squad-1][pos].hp += val
+        (gamedata.squads[squad-1][pos].hp ?? 0) += val
 		if ((gamedata.squads[squad2-1][pos2] ?? {id:undefined}).id == 42 && gamedata.squads[squad2-1].length > 1) { // dancer
             const temp = gamedata.squads[squad2-1][pos2]
             gamedata.squads[squad2-1].splice(pos2,1)
