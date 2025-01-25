@@ -88,9 +88,8 @@ module.exports = {
 											input.replace(/::/g,':')
 											inputarr = input.split(":")
 										} else {
-											for (let i = 0; i < input.length; i++) {
-												interaction.user.send(input.charAt(i))
-												
+											for (let i = 1; i < input.length; i++) {
+												console.log(input.charAt(i))
 												inputarr.push(emojis.find(x => x.emoji == input.charAt(i)).names[0].replace(/\s+/g, '_').toLowerCase())
 											}
 										}
