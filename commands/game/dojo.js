@@ -117,7 +117,7 @@ module.exports = {
 					if (emojifound.rarity>=0&&emojifound.rarity<=2) {
 						comps.push(devoterow)
 					}
-					const response = await interaction.reply({embeds:[vaultembed],components:comps});
+					const response = await interaction.reply({embeds:[vaultembed],components:comps,withResponse:true});
 					if (numberfound<numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id
 						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 120000 });

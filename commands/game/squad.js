@@ -54,7 +54,7 @@ module.exports = {
 							.setStyle(ButtonStyle.Secondary);
 						const row2 = new ActionRowBuilder()
 							.addComponents(ready);
-						const readyresponse = await interaction2.reply({content:`Here is a list of all the Emojis you have in your Dojo. Type out a message of 8 Emojis for your Squad and copy it.\nThis message will become your new Squad, from back to front (order matters!). Once you've copied it, click the button below.\n(Note: To read their abilities and stats, run \`/dojo\` with the name of the emoji.)\n\n${vaulttext}`,flags: 'Ephemeral',components:[row2]})
+						const readyresponse = await interaction2.reply({content:`Here is a list of all the Emojis you have in your Dojo. Type out a message of 8 Emojis for your Squad and copy it.\nThis message will become your new Squad, from back to front (order matters!). Once you've copied it, click the button below.\n(Note: To read their abilities and stats, run \`/dojo\` with the name of the emoji.)\n\n${vaulttext}`,flags: 'Ephemeral',components:[row2],withResponse:true})
 							const interaction3 = await readyresponse.awaitMessageComponent({ time: 120000 });
 								const modal = new ModalBuilder()
 									.setCustomId('squadmodal')
@@ -146,7 +146,7 @@ module.exports = {
 											.setStyle(ButtonStyle.Danger);
 										const row3 = new ActionRowBuilder()
 											.addComponents(confirm,cancel);
-										const lastresponse = await interaction4.reply({content:`Your Squad will be set to (hover over emojis to read info):\n${emojiinput}`,flags: 'Ephemeral',components:[row3]})
+										const lastresponse = await interaction4.reply({content:`Your Squad will be set to (hover over emojis to read info):\n${emojiinput}`,flags: 'Ephemeral',components:[row3],withResponse:true})
 										try {
 											const lastinteraction = await lastresponse.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 											if (lastinteraction.customId === 'confirm') {
