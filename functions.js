@@ -180,8 +180,8 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
             verb = "tried to " + (verb ?? "heal")
         }
     }
-	if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 40 && val > 0) {// joker
-        val = val + 1
+	if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 40 && val < 0) {// joker
+        val = val - 1
     }
     if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 25) {// bricks
         if (val > 0) {
@@ -214,47 +214,47 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     }
                 }
             }
-            if (gamedata.squads[squad2-1][pos2].id == 53) { // wolf
+            if (gamedata.squads[squad2-1][pos2].id ?? -1 == 53) { // wolf
                 gamedata = alterhp(gamedata,squad2,pos2,squad2,pos2,1,"",true)
                 gamedata.squads[squad2-1][pos2].dmg += 1
 			    gamedata = richtextadd(gamedata,`\n🩸 ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][pos2].emoji} strengthened itself! (+1 attack, +1 health)`)
             }
-            if (gamedata.squads[squad-1][pos].id == 9) { // mortar board
+            if (gamedata.squads[squad-1][pos].id ?? -1 == 9) { // mortar board
                 for (i = 0; i < 3; i++) {
                     gamedata.squads[squad-1].splice(pos+1,0,lodash.cloneDeep(emojis[0]))
                     gamedata.squads[squad-1][pos+1].hp = 1
                 }
                 gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad-1]}'s ${emojis[9].emoji} sparked a standing ovation and summoned ${emojis[0].emoji}${emojis[0].emoji}${emojis[0].emoji}!`)
             }
-			if (gamedata.squads[squad-1][pos].id == 45) { // radio
+			if (gamedata.squads[squad-1][pos].id ?? -1 == 45) { // radio
                 gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,lodash.cloneDeep(emojis[14]))
                 gamedata = richtextadd(gamedata,`\n🎵 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
             }
-            if (gamedata.squads[squad-1][pos].id == 10) { // shuffle button
+            if (gamedata.squads[squad-1][pos].id ?? -1 == 10) { // shuffle button
                 gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[10].emoji} Shuffled ${gamedata.player[squad2-1]}'s Squad!`)
                 gamedata = shufflesquad(gamedata,squad2)
             }
-	        if (gamedata.squads[squad-1][pos].id == 36) { // bomb
+	        if (gamedata.squads[squad-1][pos].id ?? -1 == 36) { // bomb
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
 		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded",true)
             }
-			if (gamedata.squads[squad-1][pos].id == 43) { // pinata
+			if (gamedata.squads[squad-1][pos].id ?? -1 == 43) { // pinata
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[43].emoji} shattered!`)
 		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-2,"threw candy at",false)
 				if (gamedata.squads[squad-1].length > 1) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",false)
 				}
             }
-            if (gamedata.squads[squad-1][pos].id == 46) { // fire
+            if (gamedata.squads[squad-1][pos].id ?? -1 == 46) { // fire
 				if (gamedata.squads[squad-1].length > 1) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,-2,"burned",false)
 				}
             }
             for (i = 0; i < gamedata.squads[squad-1].length; i++) {
-                if (gamedata.squads[squad-1][i].id == 11) { // tombstone
+                if (gamedata.squads[squad-1][i].id ?? 0 == 11) { // tombstone
                     gamedata = alterhp(gamedata,squad,i,squad,i,1)
                 }
-                if (gamedata.squads[squad-1][i].id == 51) { // xray
+                if (gamedata.squads[squad-1][i].id ?? 0 == 51) { // xray
                     for (j = i; j < gamedata.squads[squad-1].length; i++) {
                         gamedata = alterhp(gamedata,squad,j,squad,i,1,"healed",true)
                         gamedata = richtextadd(gamedata,`\n💗 ${gamedata.player[squad-1]}'s ${emojis[51].emoji} healed all Emojis behind itself by 1!`)

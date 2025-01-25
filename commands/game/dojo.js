@@ -11,7 +11,7 @@ module.exports = {
 				.setDescription('The Emoji to view details of (optional)')),
 	async execute(interaction) {
 		if (await trysetupuser(interaction.user)) {
-			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
+			await interaction.reply({flags: 'Ephemeral',content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			const vaultarray = await getvault(interaction.user.id)
 			const viewemoji = interaction.options.getString("emoji")
@@ -21,13 +21,13 @@ module.exports = {
 					devdata.shift()
 					if (devdata[0] == "read") {
 						const data = await database.get(devdata[1])
-						await interaction.reply({ephemeral:true,content:`Found "${data}" at "${devdata[1]}".`})
+						await interaction.reply({flags: 'Ephemeral',content:`Found "${data}" at "${devdata[1]}".`})
 					} else if (devdata[0] == "write") {
 						await database.set(devdata[1],devdata[2])
-						await interaction.reply({ephemeral:true,content:`Wrote "${devdata[2]}" to "${devdata[1]}".`})
+						await interaction.reply({flags: 'Ephemeral',content:`Wrote "${devdata[2]}" to "${devdata[1]}".`})
 					} else if (devdata[0] == "clear") {
 						await database.delete(devdata[1])
-						await interaction.reply({ephemeral:true,content:`Cleared all data from "${devdata[1]}".`})
+						await interaction.reply({flags: 'Ephemeral',content:`Cleared all data from "${devdata[1]}".`})
 					} else if (devdata[0] == "give") {
 						let allemojistoadd = "" 
 						for (let i = 0; i < (parseInt(devdata[3] ?? "1")); i++) {
@@ -38,7 +38,7 @@ module.exports = {
 						await interaction.reply({ephemeral:false,content:`Gave <@${devdata[1]}> ${parseInt(devdata[3] ?? "1")}x ${emojis.find(x => x.names.find(y => y.replace(/\s+/g, '_').toLowerCase() == devdata[2].trim().replace(/\s+/g, '_').toLowerCase()) || x.emoji == devdata[2].replace(/\s+/g, '')).emoji}.`})
 					}
 				} else {
-					await interaction.reply({ephemeral:true,content:`🤓 you're not the admin silly`})
+					await interaction.reply({flags: 'Ephemeral',content:`🤓 you're not the admin silly`})
 				}
 			} else if (viewemoji) {
 				const emojifound = emojis.find(x => x.names.find(y => y.replace(/\s+/g, '_').toLowerCase() == viewemoji.trim().replace(/\s+/g, '_').toLowerCase()) || x.emoji == viewemoji.replace(/\s+/g, ''))
@@ -117,7 +117,7 @@ module.exports = {
 					if (emojifound.rarity>=0&&emojifound.rarity<=2) {
 						comps.push(devoterow)
 					}
-					const response = await interaction.reply({embeds:[vaultembed],components:comps,fetchReply: true});
+					const response = await interaction.reply({embeds:[vaultembed],components:comps});
 					if (numberfound<numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id
 						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 120000 });
@@ -133,9 +133,9 @@ module.exports = {
 									for (let i = 7; i > -1; i--) {
 										squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].names[0]} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
 									}
-									await interaction2.reply({ephemeral:true,content:`Your squad has been saved!\n${squadtext}`})
+									await interaction2.reply({flags: 'Ephemeral',content:`Your squad has been saved!\n${squadtext}`})
 								} else {
-									await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to add one!`})
+									await interaction2.reply({flags: 'Ephemeral',content:`⚠️ You don't have enough ${emojifound.emoji} to add one!`})
 								}
 							} else if (interaction2.customId == "devote") {
 								if (numberfound<numberowned) {
@@ -155,11 +155,11 @@ module.exports = {
 											if (numberfound<numberowned) {
 												const devoteamt = parseInt(interaction3.fields.getTextInputValue("devoteamt").toLowerCase())
 												if (devoteamt>numberowned-numberfound || devoteamt<1) {
-													await interaction3.reply({ephemeral:true,content:`⚠️ Your input was invalid!`})
+													await interaction3.reply({flags: 'Ephemeral',content:`⚠️ Your input was invalid!`})
 												} else {
 													let emojidisplay = await devoteemojis(interaction.user.id,emojifound.id,devoteamt)
 													let lab = await fetchresearch(interaction.user.id)
-													await interaction3.reply({ephemeral:true,content:`🛐 You devoted ${emojidisplay}to the master of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!** (+${devoteamt*(2*(emojifound.rarity)+1)} devotion point${(devoteamt*(2*(emojifound.rarity)+1)!=1) ? 's' : ''})`})
+													await interaction3.reply({flags: 'Ephemeral',content:`🛐 You devoted ${emojidisplay}to the master of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!** (+${devoteamt*(2*(emojifound.rarity)+1)} devotion point${(devoteamt*(2*(emojifound.rarity)+1)!=1) ? 's' : ''})`})
 													if (Math.floor(lab[emojifound.class]/40) != Math.floor((lab[emojifound.class]-devoteamt*(2*(emojifound.rarity)+1))/40)) {
 														let tempvault = await database.get(interaction.user.id+"vault")
 														await database.set(interaction.user.id+"vault",tempvault + emojis[classes[emojifound.class].legendary].id + ",")
@@ -167,14 +167,14 @@ module.exports = {
 													}
 												}
 											} else {
-												await interaction3.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
+												await interaction3.reply({flags: 'Ephemeral',content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
 											}
 										})
 								} else {
-									await interaction2.reply({ephemeral:true,content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
+									await interaction2.reply({flags: 'Ephemeral',content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
 								}
 							} else if (interaction2.customId == "devotehelp") {
-								interaction2.reply({ephemeral:true,content:devotionhelp})
+								interaction2.reply({flags: 'Ephemeral',content:devotionhelp})
 							}
 						})} catch (e) {
 							console.error(e)
@@ -190,7 +190,7 @@ module.exports = {
 						}
 					}
 				} else {
-					await interaction.reply({content:`You don't have the "${viewemoji}" emoji, or it doesn't exist.`,ephemeral:true});
+					await interaction.reply({content:`You don't have the "${viewemoji}" emoji, or it doesn't exist.`,flags: 'Ephemeral'});
 				}
 			} else {
 				let vaulttext = ["","","",""]

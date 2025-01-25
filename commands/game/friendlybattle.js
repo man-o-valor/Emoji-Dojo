@@ -21,9 +21,9 @@ module.exports = {
 			battlespeed = 1
 		}
 		if (await trysetupuser(interaction.user)) {
-			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
+			await interaction.reply({flags: 'Ephemeral',content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else if (await trysetupuser(battleuser.id)) {
-			await interaction.reply({ephemeral:true,content:`<@${battleuser.id}> doesn't have a Squad yet! Show them how to use \`/squad\` and then you can battle.`});
+			await interaction.reply({flags: 'Ephemeral',content:`<@${battleuser.id}> doesn't have a Squad yet! Show them how to use \`/squad\` and then you can battle.`});
 		} else {
 			if (battleuser.globalName != undefined && battleuser.id != interaction.user.id) {
 					const cook = new ButtonBuilder()
@@ -167,7 +167,7 @@ module.exports = {
 								}
 								const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
 								try {
-									interaction3.reply({ephemeral:true, files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot (friendly).txt` }]})
+									interaction3.reply({flags: 'Ephemeral', files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot (friendly).txt` }]})
 								} catch(e) {
 									exportbutton.setDisabled(true)
 									interaction3.editReply({components:[row2]})
@@ -183,9 +183,9 @@ module.exports = {
 					}
 			} else {
 				if (interaction.user.id == battleuser.id) {
-					await interaction.reply({content:`You cannot battle yourself!`,ephemeral:true})
+					await interaction.reply({content:`You cannot battle yourself!`,flags: 'Ephemeral'})
 				} else {
-					await interaction.reply({content:`You cannot battle apps!`,ephemeral:true})
+					await interaction.reply({content:`You cannot battle apps!`,flags: 'Ephemeral'})
 				}
 			}
 		}

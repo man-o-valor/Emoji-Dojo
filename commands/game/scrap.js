@@ -55,7 +55,7 @@ module.exports = {
 
 		try {
 			const interaction2 = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
-			interaction2.reply({ephemeral:true,content:devotionhelp})
+			interaction2.reply({flags: 'Ephemeral',content:devotionhelp})
 			help.setDisabled(true)
 			interaction.editReply({components:[row1]})
 		} catch(e) {

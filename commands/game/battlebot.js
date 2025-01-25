@@ -12,7 +12,7 @@ module.exports = {
 				.setDescription('The time in seconds between each turn (defaults to 4)')),
 	async execute(interaction) {
 		if (await trysetupuser(interaction.user)) {
-			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
+			await interaction.reply({flags: 'Ephemeral',content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			let battlespeed = parseInt(interaction.options.getString("speed") ?? "4")
 			if (battlespeed<1) {
@@ -142,7 +142,7 @@ module.exports = {
 						}
 						const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
 						try {
-							interaction3.reply({ephemeral:true, files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.txt` }]})
+							interaction3.reply({flags: 'Ephemeral', files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.txt` }]})
 						} catch(e) {
 							exportbutton.setDisabled(true)
 							interaction3.editReply({components:[row2]})
@@ -158,7 +158,7 @@ module.exports = {
 					await interaction.editReply({components:[], content:`\`@DojoBot\`, <@${interaction.user.id}> wants to battle with you!\n\n\`${interaction.user.globalName.replace(/`/g, '')}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`DojoBot's\``});
 				}
 			} else {
-			await interaction.reply({content:`You cannot battle DojoBot right now! Come back <t:${Math.max(bp,bbcd)}:R>.`,ephemeral:true})
+			await interaction.reply({content:`You cannot battle DojoBot right now! Come back <t:${Math.max(bp,bbcd)}:R>.`,flags: 'Ephemeral'})
 			}
 		}
 	},

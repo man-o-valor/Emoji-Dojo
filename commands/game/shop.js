@@ -8,7 +8,7 @@ module.exports = {
 		.setDescription('Visit the Emoji Shop, where you can buy emojis with your Coins'),
 	async execute(interaction) {
 		if (await trysetupuser(interaction.user)) {
-			await interaction.reply({ephemeral:true,content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
+			await interaction.reply({flags: 'Ephemeral',content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
 			const coincount = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
 
@@ -106,7 +106,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 				.setTimestamp()
 				.setFooter({ text: `You have ${coincount} 🪙`});
 
-			const message = await interaction.reply({embeds:[shopembed], components:[shop], fetchReply:true});
+			const message = await interaction.reply({embeds:[shopembed], components:[shop]});
 
 			const collectorFilter = (i) => {
 				return interaction.user.id == i.user.id && i.isStringSelectMenu();
@@ -169,7 +169,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 
 						const $ = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
 						if ($<shopdata[choice].cost) {
-							newinteraction.reply({content:makemessage("Oops, you don't have enough 🪙 to buy this anymore!",myfood),ephemeral:true})
+							newinteraction.reply({content:makemessage("Oops, you don't have enough 🪙 to buy this anymore!",myfood),flags: 'Ephemeral'})
 						} else {
 							let emojisbought = [[],[],[]]
 							if (newinteraction.customId=="buymore") {
