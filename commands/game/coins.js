@@ -15,7 +15,7 @@ module.exports = {
 			coincd = Math.floor(Date.now()/1000)
 		}
 		const coinsleft = parseInt(await database.get(interaction.user.id + "coinsleft")  ?? 200)
-		let battlemsg = `❎ You need ${40-coincount} more 🪙 to battle other users. \`Use /battlebot\` to earn some!`
+		let battlemsg = `❎ You need ${40-coincount} more 🪙 to battle other users. Use \`/battlebot\` to earn some!`
 		if (coincount>=40) {
 			battlemsg = `✅ You have enough 🪙 to battle other users. Challenge your friends with \`/battleuser\`!`
 		}

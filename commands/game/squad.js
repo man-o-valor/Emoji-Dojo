@@ -1,6 +1,6 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
 const {emojis} = require('../../data.js')
-const {getsquad,getvault,database,trysetupuser} = require('../../functions.js')
+const {getsquad,/*getvault,database,*/trysetupuser} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -19,16 +19,16 @@ module.exports = {
 				.setLabel('Edit')
 				.setEmoji('✏️')
 				.setStyle(ButtonStyle.Secondary);
-			const row1 = new ActionRowBuilder()
-					.addComponents(edit);
+			//const row1 = new ActionRowBuilder()
+			//	.addComponents(edit);
 			const squadembed = new EmbedBuilder()
 				.setColor(0x226699)
 				.setTitle(`${interaction.user.globalName}'s Squad 👥`)
 				.setDescription(` \`🔙\` ${squadtext}`)
 				.setTimestamp()
-				.setFooter({ text: `This is your Squad. Hover over your Emojis to read their descriptions`});
-			const response = await interaction.reply({embeds:[squadembed],components:[row1]});
-
+				.setFooter({ text: `This is your Squad. Hover over your Emojis to read their descriptions. Add emojis to your squad with /dojo`});
+			const response = await interaction.reply({embeds:[squadembed],components:[/*row1*/]});
+			/*
 			const collectorFilter = i => i.user.id === interaction.user.id;
 
 			try {
@@ -55,7 +55,6 @@ module.exports = {
 						const row2 = new ActionRowBuilder()
 							.addComponents(ready);
 						const readyresponse = await interaction2.reply({content:`Here is a list of all the Emojis you have in your Dojo. Type out a message of 8 Emojis for your Squad and copy it.\nThis message will become your new Squad, from back to front (order matters!). Once you've copied it, click the button below.\n(Note: To read their abilities and stats, run \`/dojo\` with the name of the emoji.)\n\n${vaulttext}`,flags: 'Ephemeral',components:[row2]})
-						const collectorFilter = i => i.user.id == interaction.user.id
 						let collector
 						try {
 							collector = readyresponse.createMessageComponentCollector({time: 120000 });
@@ -63,8 +62,8 @@ module.exports = {
 						} catch(e) {
 							console.error(e)
 						}
-							try {
-								collector.on('collect', async (interaction3) => {
+						try {
+							collector.on('collect', async (interaction3) => {
 									console.log("Got here")
 									const modal = new ModalBuilder()
 										.setCustomId('squadmodal')
@@ -99,13 +98,6 @@ module.exports = {
 												input.replace(/::/g,':')
 												inputarr = input.split(":")
 											} else {
-												/*
-												inputemojiarr = Array.from(input)
-												for (let i = 0; i < inputemojiarr.length; i++) {
-													console.log(inputemojiarr[i])
-													inputarr.push(emojis.find(x => x.emoji == inputemojiarr[i]).names[0].replace(/\s+/g, '_').toLowerCase())
-												}
-												*/
 												errorflag = true
 												errorreason = "Emojis must be in text format, like \"`:smiley:`\"."
 											}
@@ -177,9 +169,11 @@ module.exports = {
 								console.error(e)
 							}
 					}
+				
 			} catch(e) {
 				console.error(e)
 			}
+			*/
 		}
 	},
 };
