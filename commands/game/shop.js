@@ -106,7 +106,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 				.setTimestamp()
 				.setFooter({ text: `You have ${coincount} 🪙`});
 
-			const message = await interaction.reply({embeds:[shopembed], components:[shop],withResponse:true});
+			const message = await interaction.reply({embeds:[shopembed], components:[shop]});
 
 			const collectorFilter = (i) => {
 				return interaction.user.id == i.user.id && i.isStringSelectMenu();
