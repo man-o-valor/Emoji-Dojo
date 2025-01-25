@@ -255,10 +255,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata = alterhp(gamedata,squad,i,squad,i,1)
                 }
                 if ((gamedata.squads[squad-1][i] ?? {id:undefined}).id == 51) { // xray
-                    for (j = i; j < gamedata.squads[squad-1].length; j++) {
+                    for (j = i+1; j < gamedata.squads[squad-1].length; j++) {
                         gamedata = alterhp(gamedata,squad,j,squad,i,1,"healed",true)
-                        gamedata = richtextadd(gamedata,`\n💗 ${gamedata.player[squad-1]}'s ${emojis[51].emoji} healed all Emojis behind itself by 1!`)
                     }
+                    gamedata = richtextadd(gamedata,`\n💗 ${gamedata.player[squad-1]}'s ${emojis[51].emoji} healed all Emojis behind itself by 1!`)
                 }
             }
             for (i = 0; i < gamedata.squads[squad2-1].length-1; i++) {
