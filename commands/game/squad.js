@@ -55,9 +55,12 @@ module.exports = {
 						const row2 = new ActionRowBuilder()
 							.addComponents(ready);
 						const readyresponse = await interaction2.reply({content:`Here is a list of all the Emojis you have in your Dojo. Type out a message of 8 Emojis for your Squad and copy it.\nThis message will become your new Squad, from back to front (order matters!). Once you've copied it, click the button below.\n(Note: To read their abilities and stats, run \`/dojo\` with the name of the emoji.)\n\n${vaulttext}`,flags: 'Ephemeral',components:[row2],withResponse:true})
-							let collector = readyresponse.createMessageComponentCollector({time: 120000 });
+						console.log("Got here -2")
+						let collector = readyresponse.createMessageComponentCollector({ time: 120000 });
+						console.log("Got here -1")
 							try {
 								collector.on('collect', async (interaction3) => {
+									console.log("Got here")
 									const modal = new ModalBuilder()
 										.setCustomId('squadmodal')
 										.setTitle(`Edit your Squad`);
@@ -77,7 +80,9 @@ module.exports = {
 									modal.addComponents(firstActionRow);
 
 									// Show the modal to the user
+									console.log("Got here 2")
 									const modalresponse = await interaction3.showModal(modal);
+									console.log("Got here 3")
 
 									interaction3.awaitModalSubmit({ time: 60000 })
 										.then(async interaction4 => {
