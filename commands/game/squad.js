@@ -83,13 +83,14 @@ module.exports = {
 										let inputarr = []
 										let errorflag = false
 										let errorreason = ""
+										console.log(input)
 										if (input.includes(":")) {
 											input.replace(/::/g,':')
 											inputarr = input.split(":")
 										} else {
 											for (let i = 0; i < input.length; i++) {
 												interaction.user.send(input.charAt(i))
-
+												
 												inputarr.push(emojis.find(x => x.emoji == input.charAt(i)).names[0].replace(/\s+/g, '_').toLowerCase())
 											}
 										}
