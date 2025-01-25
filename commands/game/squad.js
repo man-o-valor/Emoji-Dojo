@@ -89,7 +89,8 @@ module.exports = {
 											inputarr = input.split(":")
 										} else {
 											inputemojiarr = Array.from(input)
-											for (let i = 0; i < inputarr.length; i++) {
+											for (let i = 0; i < inputemojiarr.length; i++) {
+												console.log(inputemojiarr[i])
 												inputarr.push(emojis.find(x => x.emoji == inputemojiarr[i]).names[0].replace(/\s+/g, '_').toLowerCase())
 											}
 										}
