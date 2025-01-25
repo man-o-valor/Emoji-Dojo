@@ -1,5 +1,4 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
-const runes = require('runes');
 const {emojis} = require('../../data.js')
 const {getsquad,getvault,database,trysetupuser} = require('../../functions.js')
 
@@ -89,9 +88,9 @@ module.exports = {
 											input.replace(/::/g,':')
 											inputarr = input.split(":")
 										} else {
-											for (let i = 0; i < input.length; i++) {
-												console.log(runes.substr(input,i,i))
-												inputarr.push(emojis.find(x => x.emoji == runes.substr(input,i,i)).names[0].replace(/\s+/g, '_').toLowerCase())
+											inputemojiarr = Array.from(input)
+											for (let i = 0; i < inputarr.length; i++) {
+												inputarr.push(emojis.find(x => x.emoji == inputemojiarr[i]).names[0].replace(/\s+/g, '_').toLowerCase())
 											}
 										}
 										inputarr = inputarr.filter(item => item != '');
