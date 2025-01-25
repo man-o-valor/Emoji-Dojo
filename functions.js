@@ -272,7 +272,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata = alterhp(gamedata,squad2,i,squad2,i,1)
                 }
                 if ((gamedata.squads[squad2-1][i] ?? {id:undefined}).id == 48) { // tada
-                    gamedata = alterhp(gamedata,squad,1,squad,pos,1,"congratulated")
+                    gamedata = alterhp(gamedata,squad2,1,squad2,pos,1,"congratulated")
                 }
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 41) { // tornado
