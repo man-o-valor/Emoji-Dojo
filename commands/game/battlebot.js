@@ -117,7 +117,8 @@ module.exports = {
 								await delay(battlespeed*1000)
 							}
 						} catch(e) {
-							await interaction2.editReply(`<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + (richnumberhidden ?? "") + richtextsnippet + "\n🤒 An error has ocurred and the Battle cannot continue.\`\`\`" + e + "\`\`\`")
+							console.error(e)
+							await interaction2.editReply(`<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + "🤒 An error has ocurred and the Battle cannot continue.\`\`\`" + e + "\`\`\`")
 						}
 						await database.set(interaction.user.id + "battlepending","0")
 						const txt = Buffer.from(gamedata.logfile)
