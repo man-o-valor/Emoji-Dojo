@@ -89,7 +89,7 @@ module.exports = {
 											input.replace(/::/g,':')
 											inputarr = input.split(":")
 										} else {
-											for (let i = 1; i < input.length; i++) {
+											for (let i = 0; i < input.length; i++) {
 												console.log(runes.substr(input,i,i))
 												inputarr.push(emojis.find(x => x.emoji == runes.substr(input,i,i)).names[0].replace(/\s+/g, '_').toLowerCase())
 											}
