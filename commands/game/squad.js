@@ -57,6 +57,7 @@ module.exports = {
 						const readyresponse = await interaction2.reply({content:`Here is a list of all the Emojis you have in your Dojo. Type out a message of 8 Emojis for your Squad and copy it.\nThis message will become your new Squad, from back to front (order matters!). Once you've copied it, click the button below.\n(Note: To read their abilities and stats, run \`/dojo\` with the name of the emoji.)\n\n${vaulttext}`,flags: 'Ephemeral',components:[row2],withResponse:true})
 						try {
 						console.log("Got here -2")
+						console.log(readyresponse)
 						let collector = readyresponse.createMessageComponentCollector({ time: 120000 });
 						console.log("Got here -1")
 						} catch(e) {
