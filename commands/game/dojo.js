@@ -43,7 +43,7 @@ module.exports = {
 			} else if (viewemoji) {
 				const emojifound = emojis.find(x => x.names.find(y => y.replace(/\s+/g, '_').toLowerCase() == viewemoji.trim().replace(/\s+/g, '_').toLowerCase()) || x.emoji == viewemoji.replace(/\s+/g, ''))
 				const viewemojiid = vaultarray.find(x => emojis[x].id == (emojifound ?? {id:undefined}).id)
-				if (viewemojiid || emojifound.rarity==-1) {
+				if (viewemojiid || (emojifound ?? {rarity:undefined}).rarity==-1) {
 					const vaultembed = new EmbedBuilder()
 						.setColor(raritycolors[emojifound.rarity] ?? 0xFFFFFF)
 						.setTitle(`${emojifound.emoji} ${emojifound.names[0]}`)
