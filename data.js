@@ -108,9 +108,9 @@ Healing: X-ray
 Damaging: Wolf
 Summoning: Wand?
 Defense: Mirror?
-Transforming: Germ?
+Transforming: Mask?
 Shuffling: Volcano
-Musical
+Musical?
 Movement
 Solar?
 
@@ -576,7 +576,7 @@ const emojis = [
         id:35,
         hp:2,
         dmg:1,
-        rarity:0,
+        rarity:1,
         names:[
             "Bricks",
             "Brick"
@@ -815,6 +815,73 @@ const emojis = [
         ],
         class:1,
         description:"When this defeats an Emoji, heals itself by 1 and increases its attack power by 1"
+    },
+    {
+        emoji:"🫧",
+        id:54,
+        hp:2,
+        dmg:3,
+        rarity:1,
+        names:[
+            "Bubbles",
+            "Bubble"
+        ],
+        class:2,
+        description:"Reduces any damage taken to itself to 1. Cannot be healed"
+    },
+    {
+        emoji:"🍌",
+        id:55,
+        hp:2,
+        dmg:2,
+        rarity:1,
+        names:[
+            "Banana",
+            "Banana Peel"
+        ],
+        class:4,
+        description:"When defeated, damages the frontmost enemy Emoji by 2 and moves it to the back of the enemy Squad"
+    },
+    {
+        emoji:"🧲",
+        id:56,
+        hp:2,
+        dmg:2,
+        rarity:1,
+        names:[
+            "Magnet"
+        ],
+        class:4,
+        description:"When defeated, damages the furthermost enemy Emoji by 2 and moves it to the front of the enemy Squad"
+    },
+    {
+        emoji:"😷",
+        id:57,
+        hp:2,
+        dmg:1,
+        rarity:3, // Master of Transformation
+        names:[
+            "Mask",
+            "Facemask",
+            "Face Mask",
+            "Face with Mask"
+        ],
+        class:5,
+        description:"When defeated, summons 🦠 at the front of the enemy Squad, and then Shuffles it"
+    },
+    {
+        emoji:"🦠",
+        id:58,
+        hp:2,
+        dmg:1,
+        rarity:-1,
+        names:[
+            "Microbe",
+            "Virus",
+            "Germ",
+            "Bacteria"
+        ],
+        description:"Before being Shuffled, transforms the Emoji behind it into a 🦠 with identical stats"
     },
 ]
 

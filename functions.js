@@ -1,8 +1,18 @@
 const Keyv = require('keyv');
 const lodash = require('lodash');
 const {emojis,healthemojis,dmgemojis} = require('./data.js')
+const fs = require('fs');
 
 const database = new Keyv('sqlite://databases//database.sqlite',{namespace:"userdata"});
+
+function getlogs() {
+    const logs = JSON.parse(fs.readFileSync('logs.json', 'utf8'));
+    return logs
+}
+
+function writelogs(json) {
+    fs.writeFileSync('logs.json', JSON.stringify(json), 'utf8');
+}
 
 async function getvault(id) {
     //await database.set(id+"vault","0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,22,23,0,1,2,3,4,5,6,8,")
@@ -172,23 +182,27 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
     if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 35 && val < 0) {// bricks
         val = Math.min(val + 2,-1)
     }
+    if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 54 && val < 0) {// bubbles
+        val = -1
+    }
     if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 17) {// shield
         if (val < 0) {
             val = Math.min(val + gamedata.squads[squad-1].filter(x => x.id == 2).length,-1)
         } else {
             val = 0
-            verb = "tried to " + (verb ?? "heal")
+            verb = "tried to heal"
         }
     }
 	if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 40 && val < 0) {// joker
         val = val - 1
     }
-    if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 25) {// bricks
+    if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 25 || (gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 54) {// bricks, bubbles
         if (val > 0) {
             val = 0
-            verb = "tried to " + (verb ?? "heal")
+            verb = "tried to heal"
         }
     }
+    
 
     alter: {
         if (gamedata.squads[squad-1][pos].hp == undefined || gamedata.squads[squad-1][pos].hp > 0) {
@@ -241,12 +255,32 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
 		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded",true)
             }
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 57) { // mask
+                gamedata.squads[0-squad+2].splice(0,0,lodash.cloneDeep(emojis[58]))
+                gamedata = richtextadd(gamedata,`\n🦠 ${gamedata.player[squad-1]}'s ${emojis[57].emoji} infected ${gamedata.player[0-squad+2]}'s Squad with a ${emojis[58].emoji}!`)
+                gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[57].emoji} Shuffled ${gamedata.player[squad2-1]}'s Squad!`)
+                gamedata = shufflesquad(gamedata,squad2)
+            }
 			if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 43) { // pinata
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[43].emoji} shattered!`)
 		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-2,"threw candy at",false)
 				if (gamedata.squads[squad-1].length > 1) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",false)
 				}
+            }
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 55) { // banana
+                gamedata = alterhp(gamedata,squad2,0,squad,pos,-2,"",true)
+                const temp = gamedata.squads[squad2-1][0]
+                gamedata.squads[squad2-1].splice(0,1)
+                gamedata.squads[squad2-1].splice(gamedata.squads[squad2-1].length,0,temp)
+                gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][gamedata.squads[squad2-1].length].emoji} slipped on ${gamedata.player[squad-1]}'s ${emojis[55].emoji}!`)
+            }
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 56) { // magnet
+                gamedata = alterhp(gamedata,squad2,gamedata.squads[squad2-1].length-1,squad,pos,-2,"",true)
+                const temp = gamedata.squads[squad2-1][gamedata.squads[squad2-1].length-1]
+                gamedata.squads[squad2-1].splice(gamedata.squads[squad2-1].length-1,1)
+                gamedata.squads[squad2-1].splice(0,0,temp)
+                gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][0].emoji} was pulled to the front of the Squad by ${gamedata.player[squad-1]}'s ${emojis[56].emoji}!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 46) { // fire
 				if (gamedata.squads[squad-1].length > 1) {
@@ -520,12 +554,22 @@ function shufflesquad(gamedata,squad) {
             if (gamedata.squads[squad-1][i].id == 33) { // dash
                 gamedata = alterhp(gamedata,squad,0,squad,i,2)
             }
+            if (gamedata.squads[squad-1][i].id == 58 || i<gamedata.squads[squad-1].length-1) { // microbe
+                const tempemj = gamedata.squads[squad-1][i+1].id
+                const temphp = gamedata.squads[squad-1][i+1].hp
+                const tempdmg = gamedata.squads[squad-1][i+1].dmg
+                gamedata.squads[squad-1].splice(i+1,1,lodash.cloneDeep(emojis[58]))
+                gamedata.squads[squad-1][i+1].hp = temphp
+                gamedata.squads[squad-1][i+1].dmg = tempdmg
+                gamedata = richtextadd(gamedata,`\n🦠 ${gamedata.player[squad-1]}'s ${emojis[58].emoji} infected a ${emojis[tempemj].emoji}!`)
+            }
         }
 
-        for (let i = gamedata.squads[squad-1].length - 1; i > 0; i--) {
+        for (let i = gamedata.squads[squad-1].length - 1; i > 0; i--) { // the shuffle part
             const j = Math.floor(Math.random() * (i + 1));
             [gamedata.squads[squad-1][i], gamedata.squads[squad-1][j]] = [gamedata.squads[squad-1][j], gamedata.squads[squad-1][i]];
         }
+
         for (let i = gamedata.squads[squad-1].length - 1; i > 0; i--) {
             if (gamedata.squads[squad-1][i].id == 28) { // pickup truck
                 const temp = gamedata.squads[squad-1][i]
@@ -560,6 +604,8 @@ function shufflesquad(gamedata,squad) {
         for (let i = gamedata.squads[squad-1].length - 1; i > 0; i--) {
             if (gamedata.squads[squad-1][i].id == 47) { // volcano
                 gamedata.squads[0-squad+2].splice(0,0,lodash.cloneDeep(emojis[46]))
+                gamedata.squads[0-squad+2][0].dmg = 1
+                gamedata.squads[0-squad+2][0].hp = 1
                 gamedata = richtextadd(gamedata,`\n🔥 ${gamedata.player[squad-1]}'s ${emojis[47].emoji} lit a ${emojis[46].emoji} in ${gamedata.player[0-squad+2]}'s Squad!`)
             }
         }
@@ -610,4 +656,4 @@ customemojis: {
 
 }
 
-module.exports = {devoteemojis,database,getvault,getsquad,coinschange,allemojisofrarity,playturn,trysetupuser,fetchresearch,syncresearch}
+module.exports = {writelogs,getlogs,devoteemojis,database,getvault,getsquad,coinschange,allemojisofrarity,playturn,trysetupuser,fetchresearch,syncresearch}
