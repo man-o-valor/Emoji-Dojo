@@ -205,7 +205,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
     
 
     alter: {
-        if (gamedata.squads[squad-1][pos].hp == undefined || gamedata.squads[squad-1][pos].hp > 0) {
+        if (gamedata.squads[squad-1][pos].hp == undefined || gamedata.squads[squad-1][pos].hp < 0) {
             gamedata.squads[squad-1][pos].hp = 0
         }
         gamedata.squads[squad-1][pos].hp += val
@@ -245,7 +245,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
             }
 			if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 45) { // radio
                 gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,lodash.cloneDeep(emojis[14]))
-                gamedata = richtextadd(gamedata,`\n🎵 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
+                gamedata = richtextadd(gamedata,`\n🎶 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 10) { // shuffle button
                 gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[10].emoji} Shuffled ${gamedata.player[squad2-1]}'s Squad!`)
