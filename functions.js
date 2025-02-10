@@ -562,6 +562,7 @@ function shufflesquad(gamedata,squad) {
                 gamedata.squads[squad-1][i+1].hp = temphp
                 gamedata.squads[squad-1][i+1].dmg = tempdmg
                 gamedata = richtextadd(gamedata,`\n🦠 ${gamedata.player[squad-1]}'s ${emojis[58].emoji} infected a ${emojis[tempemj].emoji}!`)
+                i++
             }
         }
 
