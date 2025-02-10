@@ -550,11 +550,11 @@ function playturn(gamedata) {
 function shufflesquad(gamedata,squad) {
     if (!gamedata.squads[squad-1].find(i => i.id == 32)) { // deciduous tree
 
-        for (let i = gamedata.squads[squad-1].length - 1; i > 0; i--) {
+        for (let i = gamedata.squads[squad-1].length - 1; i > -1; i--) {
             if (gamedata.squads[squad-1][i].id == 33) { // dash
                 gamedata = alterhp(gamedata,squad,0,squad,i,2)
             }
-            if (gamedata.squads[squad-1][i].id == 58) { // microbe
+            if (gamedata.squads[squad-1][i].id == 58 && i!=gamedata.squads[squad-1].length-1) { // microbe
                 const tempemj = gamedata.squads[squad-1][i+1].id
                 const temphp = gamedata.squads[squad-1][i+1].hp
                 const tempdmg = gamedata.squads[squad-1][i+1].dmg
