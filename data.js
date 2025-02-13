@@ -108,7 +108,7 @@ Healing: X-ray
 Damaging: Wolf
 Summoning: Wand?
 Defense: Mirror?
-Transforming: Mask?
+Transforming: Mask
 Shuffling: Volcano
 Musical?
 Movement
@@ -298,17 +298,19 @@ const emojis = [
             "Guitar"
         ],
         class:7,
-        description:"If you have at least one undefeated 🎵 on your squad, deal 1 more damage"
+        description:"If you have at least one undefeated 🎶 on your squad, deal 1 more damage"
     },
     {
-        emoji:"🎵",
+        emoji:"🎶",
         id:14,
         hp:1,
         dmg:1,
         rarity:0,
         names:[
-            "Musical Note",
+            "Notes",
             "Music",
+            "Musical Notes",
+            "Music Notes",
             "Music Note"
         ],
         class:7,
@@ -696,7 +698,7 @@ const emojis = [
             "Cello"
         ],
         class:7,
-        description:"If there is at least one undefeated friendly 🎵, deal 3 more damage"
+        description:"If there is at least one undefeated friendly 🎶, deal 3 more damage"
     },
     {
         emoji:"📻",
@@ -708,7 +710,7 @@ const emojis = [
             "Radio"
         ],
         class:7,
-        description:"When defeated, summons 🎵 at the back of your Squad"
+        description:"When defeated, summons 🎶 at the back of your Squad"
     },
     {
         emoji:"🔥",
@@ -727,7 +729,7 @@ const emojis = [
         id:47,
         hp:4,
         dmg:2,
-        rarity:2,
+        rarity:3, // Master of Shuffling
         names:[
             "Volcano"
         ],

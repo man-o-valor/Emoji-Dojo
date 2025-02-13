@@ -47,7 +47,7 @@ module.exports = {
 					const vaultembed = new EmbedBuilder()
 						.setColor(raritycolors[emojifound.rarity] ?? 0xFFFFFF)
 						.setTitle(`${emojifound.emoji} ${emojifound.names[0]}`)
-						.setDescription(`❤️ Health: **${emojifound.hp}**\n<:attackpower:1327657903447998477> Attack Power: **${emojifound.dmg}**\n${raritysymbols[emojifound.rarity] ?? "⬜"} Rarity: **${raritynames[emojifound.rarity] ?? "N/A"}**\n${(emojifound.class!=undefined) ? classes[emojifound.class].emoji ?? "🟪" : ("🟪")} Class: **${(emojifound.class!=undefined) ? classes[emojifound.class].emoji ?? "Unknown" : ("None")}**\nAbility:\n> ${emojifound.description}`)
+						.setDescription(`❤️ Health: **${emojifound.hp}**\n<:attackpower:1327657903447998477> Attack Power: **${emojifound.dmg}**\n${raritysymbols[emojifound.rarity] ?? "⬜"} Rarity: **${raritynames[emojifound.rarity] ?? "N/A"}**\n${(emojifound.class!=undefined) ? classes[emojifound.class].emoji ?? "🟪" : ("🟪")} Class: **${(emojifound.class!=undefined) ? classes[emojifound.class].name ?? "Unknown" : ("None")}**\nAbility:\n> ${emojifound.description}`)
 						.setTimestamp()
 						.setFooter({ text: `You have ${vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0)}`})
 					const addto1 = new ButtonBuilder()
