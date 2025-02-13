@@ -273,7 +273,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 const temp = gamedata.squads[squad2-1][0]
                 gamedata.squads[squad2-1].splice(0,1)
                 gamedata.squads[squad2-1].splice(gamedata.squads[squad2-1].length,0,temp)
-                gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][gamedata.squads[squad2-1].length].emoji} slipped on ${gamedata.player[squad-1]}'s ${emojis[55].emoji}!`)
+                gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad2-1]}'s ${temp.emoji} slipped on ${gamedata.player[squad-1]}'s ${emojis[55].emoji}!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 56) { // magnet
                 gamedata = alterhp(gamedata,squad2,gamedata.squads[squad2-1].length-1,squad,pos,-2,"",true)
