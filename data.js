@@ -822,7 +822,7 @@ const emojis = [
         emoji:"🫧",
         id:54,
         hp:2,
-        dmg:3,
+        dmg:2,
         rarity:1,
         names:[
             "Bubbles",
