@@ -283,7 +283,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad2-1]}'s ${temp.emoji} was pulled to the front of the Squad by ${gamedata.player[squad-1]}'s ${emojis[56].emoji}!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 46) { // fire
-				if (gamedata.squads[squad-1].length > 1) {
+				if (gamedata.squads[squad-1].length > 1 && gamedata.squads[squad-1][1].id != 46) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,-2,"burned",false)
 				}
             }
