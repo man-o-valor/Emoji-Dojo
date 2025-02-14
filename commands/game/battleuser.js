@@ -63,7 +63,7 @@ module.exports = {
 							player2squadtext += `${emojis[player2squadarray[i]].emoji} `
 						}
 
-						let gamedata = {squads:[[],[]],emojitext:"",richtext:[],turn:0,player:[interaction.user.globalName,battleuser.globalName],playerturn:1,logfile:`${interaction.user.id} (${interaction.user.username}) vs ${battleuser.id} (${battleuser.username})\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`}
+						let gamedata = {squads:[[],[]],emojitext:"",richtext:[],turn:0,player:[interaction.user.globalName,battleuser.globalName],playerturn:1,newlines:0,logfile:`${interaction.user.id} (${interaction.user.username}) vs ${battleuser.id} (${battleuser.username})\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`}
 						for (let i = 0; i < 8; i++) {
 							gamedata.squads[0].push(lodash.cloneDeep(emojis[player1squadarray[i]]))
 						}
