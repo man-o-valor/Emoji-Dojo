@@ -129,7 +129,6 @@ module.exports = {
 								} else if (numberhidden > 0) {
 									richnumberhidden = "-# " + numberhidden + " lines hidden"
 								}
-								console.log(gamedata.newlines)
 								await interaction2.editReply(`<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` + gamedata.emojitext + "\n\n" + richnumberhidden + richtextsnippet)
 								await delay(battlespeed*1000)
 							}
