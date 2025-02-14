@@ -122,19 +122,35 @@ module.exports = {
 											let richtextsnippet = ""
 											let numberhidden = gamedata.richtext.length
 											if (gamedata.richtext.length>4) {
-												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 5].replace(/\n/g, "\n-# ")
+												let toadd = gamedata.richtext[gamedata.richtext.length - 5]
+													if (!gamedata.newlines>4) {
+														toadd = toadd.replace(/\n/g, "\n-# ")
+													}
+												richtextsnippet += toadd
 												numberhidden --
 											}
 											if (gamedata.richtext.length>3) {
-												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 4].replace(/\n/g, "\n-# ")
+												let toadd = gamedata.richtext[gamedata.richtext.length - 4]
+													if (!gamedata.newlines>3) {
+														toadd = toadd.replace(/\n/g, "\n-# ")
+													}
+												richtextsnippet += toadd
 												numberhidden --
 											}
 											if (gamedata.richtext.length>2) {
-												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 3].replace(/\n/g, "\n-# ")
+												let toadd = gamedata.richtext[gamedata.richtext.length - 3]
+													if (!gamedata.newlines>2) {
+														toadd = toadd.replace(/\n/g, "\n-# ")
+													}
+												richtextsnippet += toadd
 												numberhidden --
 											}
 											if (gamedata.richtext.length>1) {
-												richtextsnippet += gamedata.richtext[gamedata.richtext.length - 2].replace(/\n/g, "\n-# ")
+												let toadd = gamedata.richtext[gamedata.richtext.length - 2]
+													if (!gamedata.newlines>1) {
+														toadd = toadd.replace(/\n/g, "\n-# ")
+													}
+												richtextsnippet += toadd
 												numberhidden --
 											}
 											richtextsnippet += gamedata.richtext[gamedata.richtext.length - 1]

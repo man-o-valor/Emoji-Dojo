@@ -167,6 +167,7 @@ function allemojisofrarity(rarity) {
 function richtextadd(gamedata,text) {
     gamedata.richtext.push(text)
     gamedata.logfile += text
+    gamedata.newlines += 1
     return gamedata
 }
 
@@ -450,6 +451,7 @@ function playturn(gamedata) {
         }
         gamedata.turn ++
         gamedata.playerturn = (gamedata.playerturn + 1) % 2 * -1 + 2
+        gamedata.newlines = 0
     }
 
     attack: {
