@@ -172,8 +172,8 @@ function richtextadd(gamedata,text) {
 
 function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 
-    if ((gamedata.squads[squad2-1][pos] ?? {id:undefined}).id == 22) {// rage
-        val = -Math.min(val + gamedata.squads[squad-1].length,3)
+    if ((gamedata.squads[squad2-1][pos] ?? {id:undefined}).id == 22 && val < 0) {// rage
+        val = 0-Math.min(val + gamedata.squads[squad-1].length,3)
     }
     // protection buffs start here 
     if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 2 && val < 0) {// relieved face
