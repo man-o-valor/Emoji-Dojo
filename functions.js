@@ -5,8 +5,8 @@ const fs = require('fs');
 
 const database = new Keyv('sqlite://databases//database.sqlite',{namespace:"userdata"});
 
-function getlogs() {
-    const logs = JSON.parse(fs.readFileSync('logs.json', 'utf8'));
+async function getlogs() {
+    const logs = await JSON.parse(fs.readFileSync('logs.json', 'utf8'));
     return logs
 }
 

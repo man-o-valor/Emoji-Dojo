@@ -22,7 +22,7 @@ module.exports = {
 			const bbcd = "0"//await database.get(interaction.user.id + "botbattlecooldown") ?? "0"
 			// UNCOMMENT THIS WHEN RELEASING
 			if (bp < Date.now()/1000 && bbcd < Date.now()/1000) {
-				let logs = getlogs()
+				let logs = await getlogs();
 				(logs.logs.games.botopened ?? 0) += 1
 				(logs.logs.games.opened ?? 0) += 1
 				(logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {})
