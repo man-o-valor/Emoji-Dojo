@@ -23,8 +23,8 @@ module.exports = {
 			// UNCOMMENT THIS WHEN RELEASING
 			if (bp < Date.now()/1000 && bbcd < Date.now()/1000) {
 				let logs = await getlogs();
-				(logs.logs.games.botopened ?? 0) += 1
-				(logs.logs.games.opened ?? 0) += 1
+				logs.logs.games.botopened += 1
+				logs.logs.games.opened += 1
 				(logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {})
 				(logs.logs.players[`user${interaction.user.id}`].opened ?? 0) += 1
 				const cook = new ButtonBuilder()
