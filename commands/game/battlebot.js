@@ -26,9 +26,11 @@ module.exports = {
 				logs.logs.games.botopened += 1
 				logs.logs.games.opened += 1
 				logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
-				logs.logs.players[`user${interaction.user.id}`].opened = logs.logs.players[`user${interaction.user.id}`].opened ?? {}
+				logs.logs.players[`user${interaction.user.id}`].botopened = logs.logs.players[`user${interaction.user.id}`].botopened ?? 0
+				logs.logs.players[`user${interaction.user.id}`].botopened += 1
+				logs.logs.players[`user${interaction.user.id}`].opened = logs.logs.players[`user${interaction.user.id}`].opened ?? 0
 				logs.logs.players[`user${interaction.user.id}`].opened += 1
-				console.log(logs)
+				await writelogs(logs)
 				const cook = new ButtonBuilder()
 					.setCustomId('battle')
 					.setLabel('Battle!')
@@ -79,6 +81,14 @@ module.exports = {
 					const interaction2 = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 					if (interaction2.customId === 'battle') {
 						await database.set(interaction.user.id + "battlepending",300+Math.floor(Date.now()/1000))
+						let logs = await getlogs();
+						logs.logs.games.botstarted += 1
+						logs.logs.games.started += 1
+						logs.logs.players[`user${interaction.user.id}`].botstarted = logs.logs.players[`user${interaction.user.id}`].botstarted ?? 0
+						logs.logs.players[`user${interaction.user.id}`].botstarted += 1
+						logs.logs.players[`user${interaction.user.id}`].started = logs.logs.players[`user${interaction.user.id}`].started ?? 0
+						logs.logs.players[`user${interaction.user.id}`].started += 1
+						await writelogs(logs)
 						await interaction2.reply(`<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin!\n`)
 						function delay(time) {
 							return new Promise(resolve => setTimeout(resolve, time));
@@ -156,18 +166,62 @@ module.exports = {
 							.addComponents(exportbutton);
 						if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
 							int3 = await interaction2.followUp({components:[row2], content:`🏳️ The match ended in a draw...`})
+							let logs = await getlogs();
+							logs.logs.games.botdraws += 1
+							logs.logs.players[`user${interaction.user.id}`].botdraws = logs.logs.players[`user${interaction.user.id}`].botdraws ?? 0
+							logs.logs.players[`user${interaction.user.id}`].botdraws += 1
+							for (let i = 7; i > -1; i--) {
+								logs.logs.emojis[player2squadarray[i]].botdraws = logs.logs.emojis[player2squadarray[i]].botdraws ?? 0
+								logs.logs.emojis[player2squadarray[i]].botdraws += 1
+							}
+							for (let i = 7; i > -1; i--) {
+								logs.logs.emojis[player1squadarray[i]].botdraws = logs.logs.emojis[player1squadarray[i]].botdraws ?? 0
+								logs.logs.emojis[player1squadarray[i]].botdraws += 1
+							}
+							await writelogs(logs)
 						} else {
 							if (gamedata.squads[1].length == 0) {
 								int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`})
 								await coinschange(interaction.user.id,gamedata.squads[0].length*20)
+								let logs = await getlogs();
+								logs.logs.games.botlosses += 1
+								logs.logs.players[`user${interaction.user.id}`].botwins = logs.logs.players[`user${interaction.user.id}`].botwins ?? 0
+								logs.logs.players[`user${interaction.user.id}`].botwins += 1
+								for (let i = 7; i > -1; i--) {
+									logs.logs.emojis[player1squadarray[i]].botwins = logs.logs.emojis[player1squadarray[i]].botwins ?? 0
+									logs.logs.emojis[player1squadarray[i]].botwins += 1
+								}
+								for (let i = 7; i > -1; i--) {
+									logs.logs.emojis[player2squadarray[i]].botlosses = logs.logs.emojis[player2squadarray[i]].botlosses ?? 0
+									logs.logs.emojis[player2squadarray[i]].botlosses += 1
+								}
+								await writelogs(logs)
 							}
 							if (gamedata.squads[0].length == 0) {
 								int3 = await interaction2.followUp({components:[row2], content:`\`@DojoBot\` is the winner!`})
+								let logs = await getlogs();
+								logs.logs.games.botwins += 1
+								logs.logs.players[`user${interaction.user.id}`].botlosses = logs.logs.players[`user${interaction.user.id}`].botlosses ?? 0
+								logs.logs.players[`user${interaction.user.id}`].botlosses += 1
+								for (let i = 7; i > -1; i--) {
+									logs.logs.emojis[player2squadarray[i]].botwins = logs.logs.emojis[player2squadarray[i]].botwins ?? 0
+									logs.logs.emojis[player2squadarray[i]].botwins += 1
+								}
+								for (let i = 7; i > -1; i--) {
+									logs.logs.emojis[player1squadarray[i]].botlosses = logs.logs.emojis[player1squadarray[i]].botlosses ?? 0
+									logs.logs.emojis[player1squadarray[i]].botlosses += 1
+								}
+								await writelogs(logs)
 							}
 						}
 						const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
 						try {
 							interaction3.reply({flags: 'Ephemeral', files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.txt` }]})
+							let logs = await getlogs();
+							logs.logs.games.botlogsrequested += 1
+							logs.logs.players[`user${interaction.user.id}`].botlogsrequested = logs.logs.players[`user${interaction.user.id}`].botlogsrequested ?? 0
+							logs.logs.players[`user${interaction.user.id}`].botlogsrequested += 1
+							await writelogs(logs)
 						} catch(e) {
 							exportbutton.setDisabled(true)
 							interaction3.editReply({components:[row2]})

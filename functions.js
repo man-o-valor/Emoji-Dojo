@@ -6,11 +6,14 @@ const fs = require('fs');
 const database = new Keyv('sqlite://databases//database.sqlite',{namespace:"userdata"});
 
 async function getlogs() {
-    const logs = await JSON.parse(fs.readFileSync('logs.json', 'utf8'));
+    let logs = await JSON.parse(fs.readFileSync('logs.json', 'utf8'));
+    for (i=logs.logs.emojis.length;i<emojis.length;i++) {
+        logs.logs.emojis.push({})
+    }
     return logs
 }
 
-function writelogs(json) {
+async function writelogs(json) {
     fs.writeFileSync('logs.json', JSON.stringify(json), 'utf8');
 }
 

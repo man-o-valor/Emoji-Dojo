@@ -1,17 +1,25 @@
 {
     "logs":{
         "emojis":[
-            
+
         ],
         "games":{
             "opened":0,
             "started":0,
             "botopened":0,
             "botstarted":0,
+            "botwins":0,
+            "botlosses":0,
+            "botdraws":0,
             "useropened":0,
             "userstarted":0,
+            "userdraws":0,
             "friendlyopened":0,
-            "friendlystarted":0
+            "friendlystarted":0,
+            "friendlydraws":0,
+            "botlogsrequested":0,
+            "userlogsrequested":0,
+            "friendlylogsrequested":0
         },
         "players":{
 
