@@ -2,6 +2,19 @@
     "logs":{
         "emojis":[
             
-        ]
+        ],
+        "games":{
+            "opened":0,
+            "started":0,
+            "botopened":0,
+            "botstarted":0,
+            "useropened":0,
+            "userstarted":0,
+            "friendlyopened":0,
+            "friendlystarted":0
+        },
+        "players":{
+
+        }
     }
 }
