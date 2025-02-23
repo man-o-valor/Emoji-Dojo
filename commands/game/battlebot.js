@@ -25,8 +25,10 @@ module.exports = {
 				let logs = await getlogs();
 				logs.logs.games.botopened += 1
 				logs.logs.games.opened += 1
-				(logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {})
-				(logs.logs.players[`user${interaction.user.id}`].opened ?? 0) += 1
+				logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+				logs.logs.players[`user${interaction.user.id}`].opened = logs.logs.players[`user${interaction.user.id}`].opened ?? {}
+				logs.logs.players[`user${interaction.user.id}`].opened += 1
+				console.log(logs)
 				const cook = new ButtonBuilder()
 					.setCustomId('battle')
 					.setLabel('Battle!')
