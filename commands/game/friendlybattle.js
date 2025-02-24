@@ -1,5 +1,6 @@
 const { SlashCommandBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
-const {getsquad,emojis,playturn,database,trysetupuser} = require('../../data.js')
+const {emojis,database} = require('../../data.js')
+const {getsquad,playturn,database,trysetupuser,getlogs,writelogs} = require('../../functions.js')
 const lodash = require('lodash');
 
 module.exports = {
@@ -26,6 +27,18 @@ module.exports = {
 			await interaction.reply({flags: 'Ephemeral',content:`<@${battleuser.id}> doesn't have a Squad yet! Show them how to use \`/squad\` and then you can battle.`});
 		} else {
 			if (battleuser.globalName != undefined && battleuser.id != interaction.user.id) {
+				let logs = await getlogs();
+					logs.logs.games.friendlyopened += 1
+					logs.logs.games.opened += 1
+					logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+					logs.logs.players[`user${interaction.user.id}`].friendlyopened = logs.logs.players[`user${interaction.user.id}`].friendlyopened ?? 0
+					logs.logs.players[`user${interaction.user.id}`].friendlyopened += 1
+					logs.logs.players[`user${interaction.user.id}`].opened = logs.logs.players[`user${interaction.user.id}`].opened ?? 0
+					logs.logs.players[`user${interaction.user.id}`].opened += 1
+					logs.logs.players[`user${battleuser.id}`] = logs.logs.players[`user${battleuser.id}`] ?? {}
+					logs.logs.players[`user${battleuser.id}`].friendlyrequested = logs.logs.players[`user${battleuser.id}`].friendlyrequested ?? 0
+					logs.logs.players[`user${battleuser.id}`].friendlyrequested += 1
+				await writelogs(logs)
 					const cook = new ButtonBuilder()
 						.setCustomId('battle')
 						.setLabel('Battle!')
@@ -95,6 +108,18 @@ module.exports = {
 								interaction.editReply({content:`<@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you!\n\n\`${interaction.user.globalName.replace(/`/g, '')}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(/`/g, '')}'s\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[0]+1]} \`${battleuser.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[1]+1]}`})
 								await database.set(interaction.user.id + "battlepending",300+Math.floor(Date.now()/1000))
 								await database.set(battleuser.id + "battlepending",300+Math.floor(Date.now()/1000))
+								let logs = await getlogs();
+								logs.logs.games.friendlystarted += 1
+								logs.logs.games.started += 1
+								logs.logs.players[`user${interaction.user.id}`].friendlystarted = logs.logs.players[`user${interaction.user.id}`].friendlystarted ?? 0
+								logs.logs.players[`user${interaction.user.id}`].friendlystarted += 1
+								logs.logs.players[`user${interaction.user.id}`].started = logs.logs.players[`user${interaction.user.id}`].started ?? 0
+								logs.logs.players[`user${interaction.user.id}`].started += 1
+								logs.logs.players[`user${battleuser.id}`].friendlystarted = logs.logs.players[`user${battleuser.id}`].friendlystarted ?? 0
+								logs.logs.players[`user${battleuser.id}`].friendlystarted += 1
+								logs.logs.players[`user${battleuser.id}`].started = logs.logs.players[`user${battleuser.id}`].started ?? 0
+								logs.logs.players[`user${battleuser.id}`].started += 1
+								await writelogs(logs)
 								await interaction2.reply(`<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin!\n`)
 								function delay(time) {
 									return new Promise(resolve => setTimeout(resolve, time));
@@ -173,13 +198,55 @@ module.exports = {
 									.addComponents(exportbutton);
 								if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
 									int3 = await interaction2.followUp({components:[row2], content:`🏳️ The match ended in a draw...`})
+									let logs = await getlogs();
+									logs.logs.games.friendlydraws += 1
+									logs.logs.players[`user${interaction.user.id}`].friendlydraws = logs.logs.players[`user${interaction.user.id}`].friendlydraws ?? 0
+									logs.logs.players[`user${interaction.user.id}`].friendlydraws += 1
+									logs.logs.players[`user${battleuser.id}`].friendlydraws = logs.logs.players[`user${battleuser.id}`].friendlydraws ?? 0
+									logs.logs.players[`user${battleuser.id}`].friendlydraws += 1
+									for (let i = 7; i > -1; i--) {
+										logs.logs.emojis[player2squadarray[i]].friendlydraws = logs.logs.emojis[player2squadarray[i]].friendlydraws ?? 0
+										logs.logs.emojis[player2squadarray[i]].friendlydraws += 1
+									}
+									for (let i = 7; i > -1; i--) {
+										logs.logs.emojis[player1squadarray[i]].friendlydraws = logs.logs.emojis[player1squadarray[i]].friendlydraws ?? 0
+										logs.logs.emojis[player1squadarray[i]].friendlydraws += 1
+									}
+									await writelogs(logs)
 								} else {
 									if (gamedata.squads[1].length == 0) {
 										int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner!`})// +${gamedata.squads[0].length*10} 🪙`)
-										//await coinschange(interaction.user.id,gamedata.squads[0].length*20)
+										let logs = await getlogs();
+										logs.logs.players[`user${interaction.user.id}`].friendlywins = logs.logs.players[`user${interaction.user.id}`].friendlywins ?? 0
+										logs.logs.players[`user${interaction.user.id}`].friendlywins += 1
+										logs.logs.players[`user${battleuser.id}`].friendlylosses = logs.logs.players[`user${battleuser.id}`].friendlylosses ?? 0
+										logs.logs.players[`user${battleuser.id}`].friendlylosses += 1
+										for (let i = 7; i > -1; i--) {
+											logs.logs.emojis[player1squadarray[i]].friendlywins = logs.logs.emojis[player1squadarray[i]].friendlywins ?? 0
+											logs.logs.emojis[player1squadarray[i]].friendlywins += 1
+										}
+										for (let i = 7; i > -1; i--) {
+											logs.logs.emojis[player2squadarray[i]].friendlylosses = logs.logs.emojis[player2squadarray[i]].friendlylosses ?? 0
+											logs.logs.emojis[player2squadarray[i]].friendlylosses += 1
+										}
+										await writelogs(logs)
 									}
 									if (gamedata.squads[0].length == 0) {
 										int3 = await interaction2.followUp({components:[row2], content:`<@${battleuser.id}> is the winner!`})
+										let logs = await getlogs();
+										logs.logs.players[`user${interaction.user.id}`].friendlylosses = logs.logs.players[`user${interaction.user.id}`].friendlylosses ?? 0
+										logs.logs.players[`user${interaction.user.id}`].friendlylosses += 1
+										logs.logs.players[`user${battleuser.id}`].friendlywins = logs.logs.players[`user${battleuser.id}`].friendlywins ?? 0
+										logs.logs.players[`user${battleuser.id}`].friendlywins += 1
+										for (let i = 7; i > -1; i--) {
+											logs.logs.emojis[player1squadarray[i]].friendlylosses = logs.logs.emojis[player1squadarray[i]].friendlylosses ?? 0
+											logs.logs.emojis[player1squadarray[i]].friendlylosses += 1
+										}
+										for (let i = 7; i > -1; i--) {
+											logs.logs.emojis[player2squadarray[i]].friendlywins = logs.logs.emojis[player2squadarray[i]].friendlywins ?? 0
+											logs.logs.emojis[player2squadarray[i]].friendlywins += 1
+										}
+										await writelogs(logs)
 									}
 								}
 								const interaction3 = await int3.awaitMessageComponent({ time: 60000 });

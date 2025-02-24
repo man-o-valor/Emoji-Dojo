@@ -5,3 +5,4 @@ git rm --cached node_modules
 git rm --cached setavatar.js
 git rm --cached databases
 git rm --cached desktop.ini
+git rm --cached logs.json

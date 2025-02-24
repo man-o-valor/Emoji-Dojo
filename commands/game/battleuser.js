@@ -1,6 +1,6 @@
 const { SlashCommandBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
 const {emojis} = require('../../data.js')
-const {getsquad,playturn,database,coinschange,trysetupuser} = require('../../functions.js')
+const {getsquad,playturn,database,coinschange,trysetupuser,getlogs,writelogs} = require('../../functions.js')
 const lodash = require('lodash');
 
 module.exports = {
@@ -35,6 +35,18 @@ module.exports = {
 					await interaction.reply({content:`Both users must have at least 40 🪙 to Battle! Use \`/friendlybattle\` to battle your friends with no money involved, or \`/battlebot\` to fight Dojobot and earn some 🪙!`,flags: 'Ephemeral'})
 				} else {
 					if (bp < Date.now()/1000 && bp2 < Date.now()/1000) {
+						let logs = await getlogs();
+						logs.logs.games.useropened += 1
+						logs.logs.games.opened += 1
+						logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+						logs.logs.players[`user${interaction.user.id}`].useropened = logs.logs.players[`user${interaction.user.id}`].useropened ?? 0
+						logs.logs.players[`user${interaction.user.id}`].useropened += 1
+						logs.logs.players[`user${interaction.user.id}`].opened = logs.logs.players[`user${interaction.user.id}`].opened ?? 0
+						logs.logs.players[`user${interaction.user.id}`].opened += 1
+						logs.logs.players[`user${battleuser.id}`] = logs.logs.players[`user${battleuser.id}`] ?? {}
+						logs.logs.players[`user${battleuser.id}`].userrequested = logs.logs.players[`user${battleuser.id}`].userrequested ?? 0
+						logs.logs.players[`user${battleuser.id}`].userrequested += 1
+						await writelogs(logs)
 						const cook = new ButtonBuilder()
 							.setCustomId('battle')
 							.setLabel('Battle!')
@@ -104,6 +116,18 @@ module.exports = {
 									interaction.editReply({content:`<@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you!\n\n\`${interaction.user.globalName.replace(/`/g, '')}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(/`/g, '')}'s\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[0]+1]} \`${battleuser.globalName.replace(/`/g, '')}\`: ${acceptemojis[accepts[1]+1]}`})
 									await database.set(interaction.user.id + "battlepending",300+Math.floor(Date.now()/1000))
 									await database.set(battleuser.id + "battlepending",300+Math.floor(Date.now()/1000))
+									let logs = await getlogs();
+									logs.logs.games.userstarted += 1
+									logs.logs.games.started += 1
+									logs.logs.players[`user${interaction.user.id}`].userstarted = logs.logs.players[`user${interaction.user.id}`].userstarted ?? 0
+									logs.logs.players[`user${interaction.user.id}`].userstarted += 1
+									logs.logs.players[`user${interaction.user.id}`].started = logs.logs.players[`user${interaction.user.id}`].started ?? 0
+									logs.logs.players[`user${interaction.user.id}`].started += 1
+									logs.logs.players[`user${battleuser.id}`].userstarted = logs.logs.players[`user${battleuser.id}`].userstarted ?? 0
+									logs.logs.players[`user${battleuser.id}`].userstarted += 1
+									logs.logs.players[`user${battleuser.id}`].started = logs.logs.players[`user${battleuser.id}`].started ?? 0
+									logs.logs.players[`user${battleuser.id}`].started += 1
+									await writelogs(logs)
 									await interaction2.reply(`<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin!\n`)
 									function delay(time) {
 										return new Promise(resolve => setTimeout(resolve, time));
@@ -182,24 +206,71 @@ module.exports = {
 										.addComponents(exportbutton);
 									if (gamedata.turn>=200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)) {
 										int3 = await interaction2.followUp({components:[row2], content:`🏳️ The match ended in a draw...`})
+										let logs = await getlogs();
+										logs.logs.games.userdraws += 1
+										logs.logs.players[`user${interaction.user.id}`].userdraws = logs.logs.players[`user${interaction.user.id}`].userdraws ?? 0
+										logs.logs.players[`user${interaction.user.id}`].userdraws += 1
+										logs.logs.players[`user${battleuser.id}`].userdraws = logs.logs.players[`user${battleuser.id}`].userdraws ?? 0
+										logs.logs.players[`user${battleuser.id}`].userdraws += 1
+										for (let i = 7; i > -1; i--) {
+											logs.logs.emojis[player2squadarray[i]].userdraws = logs.logs.emojis[player2squadarray[i]].userdraws ?? 0
+											logs.logs.emojis[player2squadarray[i]].userdraws += 1
+										}
+										for (let i = 7; i > -1; i--) {
+											logs.logs.emojis[player1squadarray[i]].userdraws = logs.logs.emojis[player1squadarray[i]].userdraws ?? 0
+											logs.logs.emojis[player1squadarray[i]].userdraws += 1
+										}
+										await writelogs(logs)
 									} else {
 										if (gamedata.squads[1].length == 0) {
 											diff1 = await coinschange(interaction.user.id,gamedata.squads[0].length*20)
 											diff2 = diff1*-0.25
 											await coinschange(battleuser.id,diff2)
 											int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙\n${battleuser.globalName}: ${diff2} 🪙`})
-											
+											let logs = await getlogs();
+											logs.logs.players[`user${interaction.user.id}`].userwins = logs.logs.players[`user${interaction.user.id}`].userwins ?? 0
+											logs.logs.players[`user${interaction.user.id}`].userwins += 1
+											logs.logs.players[`user${battleuser.id}`].userlosses = logs.logs.players[`user${battleuser.id}`].userlosses ?? 0
+											logs.logs.players[`user${battleuser.id}`].userlosses += 1
+											for (let i = 7; i > -1; i--) {
+												logs.logs.emojis[player1squadarray[i]].userwins = logs.logs.emojis[player1squadarray[i]].userwins ?? 0
+												logs.logs.emojis[player1squadarray[i]].userwins += 1
+											}
+											for (let i = 7; i > -1; i--) {
+												logs.logs.emojis[player2squadarray[i]].userlosses = logs.logs.emojis[player2squadarray[i]].userlosses ?? 0
+												logs.logs.emojis[player2squadarray[i]].userlosses += 1
+											}
+											await writelogs(logs)
 										}
 										if (gamedata.squads[0].length == 0) {
 											diff1 = await coinschange(battleuser.id,gamedata.squads[1].length*20)
 											diff2 = diff1*-0.25
 											await coinschange(interaction.user.id,diff2)
 											int3 = await interaction2.followUp({components:[row2], content:`<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙\n${interaction.user.globalName}: ${diff2} 🪙`})
+											let logs = await getlogs();
+											logs.logs.players[`user${interaction.user.id}`].userlosses = logs.logs.players[`user${interaction.user.id}`].userlosses ?? 0
+											logs.logs.players[`user${interaction.user.id}`].userlosses += 1
+											logs.logs.players[`user${battleuser.id}`].userwins = logs.logs.players[`user${battleuser.id}`].userwins ?? 0
+											logs.logs.players[`user${battleuser.id}`].userwins += 1
+											for (let i = 7; i > -1; i--) {
+												logs.logs.emojis[player1squadarray[i]].userlosses = logs.logs.emojis[player1squadarray[i]].userlosses ?? 0
+												logs.logs.emojis[player1squadarray[i]].userlosses += 1
+											}
+											for (let i = 7; i > -1; i--) {
+												logs.logs.emojis[player2squadarray[i]].userwins = logs.logs.emojis[player2squadarray[i]].userwins ?? 0
+												logs.logs.emojis[player2squadarray[i]].userwins += 1
+											}
+											await writelogs(logs)
 										}
 									}
 									const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
 									try {
 										interaction3.reply({flags: 'Ephemeral', files: [{ attachment: txt, name: `${interaction.user.username} vs ${battleuser.username}.txt` }]})
+										let logs = await getlogs();
+										logs.logs.games.userlogsrequested += 1
+										logs.logs.players[`user${interaction3.user.id}`].userlogsrequested = logs.logs.players[`user${interaction3.user.id}`].userlogsrequested ?? 0
+										logs.logs.players[`user${interaction3.user.id}`].userlogsrequested += 1
+										await writelogs(logs)
 									} catch(e) {
 										exportbutton.setDisabled(true)
 										interaction3.editReply({components:[row2]})

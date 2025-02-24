@@ -219,8 +219,8 @@ module.exports = {
 							interaction3.reply({flags: 'Ephemeral', files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot.txt` }]})
 							let logs = await getlogs();
 							logs.logs.games.botlogsrequested += 1
-							logs.logs.players[`user${interaction.user.id}`].botlogsrequested = logs.logs.players[`user${interaction.user.id}`].botlogsrequested ?? 0
-							logs.logs.players[`user${interaction.user.id}`].botlogsrequested += 1
+							logs.logs.players[`user${interaction3.user.id}`].botlogsrequested = logs.logs.players[`user${interaction3.user.id}`].botlogsrequested ?? 0
+							logs.logs.players[`user${interaction3.user.id}`].botlogsrequested += 1
 							await writelogs(logs)
 						} catch(e) {
 							exportbutton.setDisabled(true)
