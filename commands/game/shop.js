@@ -1,6 +1,6 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,StringSelectMenuBuilder,StringSelectMenuOptionBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
 const {emojis} = require('../../data.js')
-const {database,coinschange,trysetupuser} = require('../../functions.js')
+const {database,coinschange,trysetupuser,getlogs,writelogs} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -107,6 +107,12 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 				.setFooter({ text: `You have ${coincount} 🪙`});
 
 			const message = await interaction.reply({embeds:[shopembed], components:[shop]});
+			let logs = await getlogs()
+			logs.logs.games.shopsviewed += 1
+			logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+			logs.logs.players[`user${interaction.user.id}`].shopsviewed = logs.logs.players[`user${interaction.user.id}`].shopsviewed ?? 0
+			logs.logs.players[`user${interaction.user.id}`].shopsviewed += 1
+			await writelogs(logs)
 
 			const collectorFilter = (i) => {
 				return interaction.user.id == i.user.id && i.isStringSelectMenu();
@@ -204,6 +210,12 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 											}
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
+											let logs = await getlogs()
+											logs.logs.games.randomemojisbought += 1
+											logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+											logs.logs.players[`user${interaction.user.id}`].randomemojisbought = logs.logs.players[`user${interaction.user.id}`].randomemojisbought ?? 0
+											logs.logs.players[`user${interaction.user.id}`].randomemojisbought += modalquantity
+											await writelogs(logs)
 										} else if (shopdata[choice].type=="pack") {
 											await coinschange(interaction.user.id,-1*modalquantity*shopdata[choice].cost)
 											buy.setDisabled(true)
@@ -220,6 +232,12 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 											}
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + emojistoadd)
+											let logs = await getlogs()
+											logs.logs.games.packsbought += 1
+											logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+											logs.logs.players[`user${interaction.user.id}`].packsbought = logs.logs.players[`user${interaction.user.id}`].packsbought ?? 0
+											logs.logs.players[`user${interaction.user.id}`].packsbought += modalquantity
+											await writelogs(logs)
 										} else if (shopdata[choice].type=="premoji") {
 											await coinschange(interaction.user.id,-1*modalquantity*shopdata[choice].cost)
 											buy.setDisabled(true)
@@ -231,6 +249,12 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 											}
 											let tempvault = await database.get(interaction.user.id+"vault")
 											await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
+											let logs = await getlogs()
+											logs.logs.games.prepickedemojisbought += 1
+											logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+											logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought = logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought ?? 0
+											logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought += modalquantity
+											await writelogs(logs)
 										}
 										let emojiString = "";
 										if (emojisbought[0][0] != undefined) {
@@ -264,6 +288,12 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 								console.log(emojilist,emojitoadd)
 								let tempvault = await database.get(interaction.user.id+"vault")
 								await database.set(interaction.user.id+"vault",tempvault + emojitoadd.id + ",")
+								let logs = await getlogs()
+								logs.logs.games.randomemojisbought += 1
+								logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+								logs.logs.players[`user${interaction.user.id}`].randomemojisbought = logs.logs.players[`user${interaction.user.id}`].randomemojisbought ?? 0
+								logs.logs.players[`user${interaction.user.id}`].randomemojisbought += 1
+								await writelogs(logs)
 							} else if (shopdata[choice].type=="pack") {
 								await coinschange(interaction.user.id,-1*shopdata[choice].cost)
 								buy.setDisabled(true)
@@ -278,14 +308,26 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 								}
 								let tempvault = await database.get(interaction.user.id+"vault")
 								await database.set(interaction.user.id+"vault",tempvault + emojistoadd)
+								let logs = await getlogs()
+								logs.logs.games.packsbought += 1
+								logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+								logs.logs.players[`user${interaction.user.id}`].packsbought = logs.logs.players[`user${interaction.user.id}`].packsbought ?? 0
+								logs.logs.players[`user${interaction.user.id}`].packsbought += 1
+								await writelogs(logs)
 							} else if (shopdata[choice].type=="premoji") {
-								await coinschange(interaction.user.id,-1*modalquantity*shopdata[choice].cost)
+								await coinschange(interaction.user.id,-1*shopdata[choice].cost)
 								buy.setDisabled(true)
-								buy.setLabel(`You bought ${modalquantity}`)
+								buy.setLabel(`You bought this`)
 								buy.setStyle(1)
 								let allemojistoadd = shopdata[choice].id + ","
 								let tempvault = await database.get(interaction.user.id+"vault")
 								await database.set(interaction.user.id+"vault",tempvault + allemojistoadd)
+								let logs = await getlogs()
+								logs.logs.games.prepickedemojisbought += 1
+								logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+								logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought = logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought ?? 0
+								logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought += 1
+								await writelogs(logs)
 							}
 							if (newinteraction.customId!="buymore") {
 								let emojiString = "";

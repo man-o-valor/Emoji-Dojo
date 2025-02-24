@@ -19,7 +19,19 @@
             "friendlydraws":0,
             "botlogsrequested":0,
             "userlogsrequested":0,
-            "friendlylogsrequested":0
+            "friendlylogsrequested":0,
+            "coinsviewed":0,
+            "emojisviewed":0,
+            "squadsedited":0,
+            "devotionsmade":0,
+            "emojisdevoted":0,
+            "vaultsviewed":0,
+            "devotionsviewed":0,
+            "shopsviewed":0,
+            "randomemojisbought":0,
+            "packsbought":0,
+            "prepickedemojisbought":0,
+            "squadsviewed":0
         },
         "players":{
 

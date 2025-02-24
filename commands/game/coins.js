@@ -1,5 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
-const {database,trysetupuser} = require('../../functions.js')
+const {database,trysetupuser,getlogs,writelogs} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,6 +26,12 @@ module.exports = {
 			.setTimestamp()
 			.setFooter({ text: `${interaction.user.globalName}'s Coins`});
 		await interaction.reply({embeds:[coinembed]});
+		let logs = await getlogs();
+		logs.logs.games.coinsviewed += 1
+		logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+		logs.logs.players[`user${interaction.user.id}`].coinsviewed = logs.logs.players[`user${interaction.user.id}`].coinsviewed ?? 0
+		logs.logs.players[`user${interaction.user.id}`].coinsviewed += 1
+		await writelogs(logs)
 	},
 };
 

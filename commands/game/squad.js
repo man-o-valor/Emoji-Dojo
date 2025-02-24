@@ -1,6 +1,6 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
 const {emojis} = require('../../data.js')
-const {getsquad,/*getvault,database,*/trysetupuser} = require('../../functions.js')
+const {getsquad,/*getvault,database,*/trysetupuser,getlogs,writelogs} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -27,6 +27,12 @@ module.exports = {
 				.setDescription(` \`🔙\` ${squadtext}`)
 				.setFooter({ text: `This is your Squad. Hover over your Emojis to read their descriptions. Add emojis to your squad with /dojo`});
 			const response = await interaction.reply({embeds:[squadembed],components:[/*row1*/]});
+			let logs = await getlogs()
+			logs.logs.games.squadsviewed += 1
+			logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+			logs.logs.players[`user${interaction.user.id}`].squadsviewed = logs.logs.players[`user${interaction.user.id}`].squadsviewed ?? 0
+			logs.logs.players[`user${interaction.user.id}`].squadsviewed += 1
+			await writelogs(logs)
 			/*
 			const collectorFilter = i => i.user.id === interaction.user.id;
 

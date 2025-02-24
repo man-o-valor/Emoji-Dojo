@@ -252,6 +252,11 @@ module.exports = {
 								const interaction3 = await int3.awaitMessageComponent({ time: 60000 });
 								try {
 									interaction3.reply({flags: 'Ephemeral', files: [{ attachment: txt, name: `${interaction.user.username} vs Dojobot (friendly).txt` }]})
+									let logs = await getlogs();
+									logs.logs.games.friendlylogsrequested += 1
+									logs.logs.players[`user${interaction3.user.id}`].friendlylogsrequested = logs.logs.players[`user${interaction3.user.id}`].friendlylogsrequested ?? 0
+									logs.logs.players[`user${interaction3.user.id}`].friendlylogsrequested += 1
+									await writelogs(logs)
 								} catch(e) {
 									exportbutton.setDisabled(true)
 									interaction3.editReply({components:[row2]})

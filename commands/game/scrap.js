@@ -1,6 +1,6 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder } = require('discord.js');
 const {classes,emojis,devotionhelp} = require('../../data.js')
-const {fetchresearch,trysetupuser} = require('../../functions.js')
+const {fetchresearch,trysetupuser,getlogs,writelogs} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -50,6 +50,12 @@ module.exports = {
 			.setTimestamp()
 			.setFooter({ text: `${interaction.user.globalName}'s Devotions`});
 		const response = await interaction.reply({embeds:[labembed],components:[row1]});
+		let logs = await getlogs()
+		logs.logs.games.devotionsviewed += 1
+		logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+		logs.logs.players[`user${interaction.user.id}`].devotionsviewed = logs.logs.players[`user${interaction.user.id}`].devotionsviewed ?? 0
+		logs.logs.players[`user${interaction.user.id}`].devotionsviewed += 1
+		await writelogs(logs)
 
 		const collectorFilter = i => i.user.id === interaction.user.id;
 

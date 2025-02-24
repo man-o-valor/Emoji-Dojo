@@ -1,6 +1,6 @@
 const { SlashCommandBuilder,EmbedBuilder,ButtonBuilder,ButtonStyle,ActionRowBuilder,ModalBuilder,TextInputBuilder,TextInputStyle } = require('discord.js');
 const {raritycolors,emojis,raritysymbols,raritynames,classes,devotionhelp} = require('../../data.js')
-const {database,getvault,trysetupuser,getsquad,devoteemojis,fetchresearch} = require('../../functions.js')
+const {database,getvault,trysetupuser,getsquad,devoteemojis,fetchresearch,getlogs,writelogs} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -118,6 +118,12 @@ module.exports = {
 						comps.push(devoterow)
 					}
 					const response = await interaction.reply({embeds:[vaultembed],components:comps,});
+					let logs = await getlogs();
+					logs.logs.games.emojisviewed += 1
+					logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+					logs.logs.players[`user${interaction.user.id}`].emojisviewed = logs.logs.players[`user${interaction.user.id}`].emojisviewed ?? 0
+					logs.logs.players[`user${interaction.user.id}`].emojisviewed += 1
+					await writelogs(logs)
 					if (numberfound<numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id
 						let collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 120000 });
@@ -134,6 +140,12 @@ module.exports = {
 										squadtext += `[${emojis[squadarray[i]].emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${emojis[squadarray[i]].names[0]} | ${emojis[squadarray[i]].hp} health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `
 									}
 									await interaction2.reply({flags: 'Ephemeral',content:`Your squad has been saved!\n${squadtext}`})
+									let logs = await getlogs()
+									logs.logs.games.squadsedited += 1
+									logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+									logs.logs.players[`user${interaction.user.id}`].squadedited = logs.logs.players[`user${interaction.user.id}`].squadedited ?? 0
+									logs.logs.players[`user${interaction.user.id}`].squadedited += 1
+									await writelogs(logs)
 								} else {
 									await interaction2.reply({flags: 'Ephemeral',content:`⚠️ You don't have enough ${emojifound.emoji} to add one!`})
 								}
@@ -165,6 +177,15 @@ module.exports = {
 														await database.set(interaction.user.id+"vault",tempvault + emojis[classes[emojifound.class].legendary].id + ",")
 														await interaction3.followUp({ephemeral:false,content:`\`\`\` \`\`\`\n\nYour frequent 🛐 **Devotion** has attracted the attention of ${emojis[classes[emojifound.class].legendary].emoji} **${emojis[classes[emojifound.class].legendary].names[0]}**, master of the art of ${classes[emojifound.class].emoji} **${classes[emojifound.class].name}!**\n\n\`\`\` \`\`\``})
 													}
+													let logs = await getlogs();
+													logs.logs.games.devotionsmade += 1
+													logs.logs.games.emojisdevoted += devoteamt
+													logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+													logs.logs.players[`user${interaction.user.id}`].devotionsmade = logs.logs.players[`user${interaction.user.id}`].devotionsmade ?? 0
+													logs.logs.players[`user${interaction.user.id}`].devotionsmade += 1
+													logs.logs.players[`user${interaction.user.id}`].emojisdevoted = logs.logs.players[`user${interaction.user.id}`].emojisdevoted ?? 0
+													logs.logs.players[`user${interaction.user.id}`].emojisdevoted += devoteamt
+													await writelogs(logs)
 												}
 											} else {
 												await interaction3.reply({flags: 'Ephemeral',content:`⚠️ You don't have enough ${emojifound.emoji} to devote any!`})
@@ -233,6 +254,12 @@ module.exports = {
 					.setTimestamp()
 					.setFooter({ text: `${vaultnumbers[0]} Common${((vaultnumbers[0]==1) ? "" : "s")}, ${vaultnumbers[1]} Rare${((vaultnumbers[1]==1) ? "" : "s")}, ${vaultnumbers[2]} Special${((vaultnumbers[2]==1) ? "" : "s")}${mastermsg}`}); // , ${vaultnumbers[3]} Legendary
 				await interaction.reply({embeds:[vaultembed]});
+				let logs = await getlogs()
+				logs.logs.games.vaultsviewed += 1
+				logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
+				logs.logs.players[`user${interaction.user.id}`].vaultsviewed = logs.logs.players[`user${interaction.user.id}`].vaultsviewed ?? 0
+				logs.logs.players[`user${interaction.user.id}`].vaultsviewed += 1
+				await writelogs(logs)
 			}
 		}
 	},
