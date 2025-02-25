@@ -480,6 +480,10 @@ function playturn(gamedata) {
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 3)
         }
+        if (activeemoji.id == 60) { // mirror
+            basicattackflag = false
+            gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-(gamedata.squads[gamedata.playerturn-1][0].dmg + gamedata.squads[gamedata.playerturn*-1+3][0].dmg*2),"reflected at")
+        }
         if (basicattackflag) {
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg)
         }

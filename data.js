@@ -897,7 +897,20 @@ const emojis = [
             "Spaceship",
             "Ufo"
         ],
+        class:6,
         description:"When defeated, Shuffle the enemy Squad and deal 3 damage to the frontmost enemy Emoji"
+    },
+    {
+        emoji:"🪞",
+        id:60,
+        hp:4,
+        dmg:0,
+        rarity:3,
+        names:[
+            "Mirror",
+        ],
+        class:2,
+        description:"Attacks for as much damage as the frontmost enemy Emoji ×2, plus its own attack power"
     },
 ]
 
