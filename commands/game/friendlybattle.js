@@ -16,6 +16,7 @@ module.exports = {
 			option.setName('speed')
 				.setDescription('The time in seconds between each turn (defaults to 4)')),
 	async execute(interaction) {
+		try {
 		const battleuser = interaction.options.getUser('user')
 		let battlespeed = parseInt(interaction.options.getString("speed") ?? "4")
 		if (battlespeed<1) {
@@ -277,6 +278,9 @@ module.exports = {
 					await interaction.reply({content:`You cannot battle apps!`,flags: 'Ephemeral'})
 				}
 			}
+		}
+		} catch(e) {
+			console.error(e)
 		}
 	},
 };
