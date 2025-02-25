@@ -885,6 +885,20 @@ const emojis = [
         ],
         description:"Before being Shuffled, transforms the Emoji behind it into a 🦠 with identical stats"
     },
+    {
+        emoji:"🛸",
+        id:59,
+        hp:3,
+        dmg:2,
+        rarity:2,
+        names:[
+            "Flying Saucer",
+            "Saucer",
+            "Spaceship",
+            "Ufo"
+        ],
+        description:"When defeated, Shuffle the enemy Squad and deal 3 damage to the frontmost enemy Emoji"
+    },
 ]
 
 module.exports = {healthemojis,dmgemojis,raritycolors,devotionhelp,classes,emojis,raritysymbols,raritynames}

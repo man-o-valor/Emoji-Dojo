@@ -272,6 +272,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",false)
 				}
             }
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 59) { // flying saucer
+                gamedata = shufflesquad(gamedata,squad2)
+                gamedata = alterhp(gamedata,squad2,0,squad,pos,-3,"zapped")
+            }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 55) { // banana
                 const temp = gamedata.squads[squad2-1][0]
                 gamedata.squads[squad2-1].splice(0,1)
@@ -560,13 +564,15 @@ function shufflesquad(gamedata,squad) {
                 gamedata = alterhp(gamedata,squad,0,squad,i,2)
             }
             if (gamedata.squads[squad-1][i].id == 58 && i!=gamedata.squads[squad-1].length-1) { // microbe
-                const tempemj = gamedata.squads[squad-1][i+1].id
-                const temphp = gamedata.squads[squad-1][i+1].hp
-                const tempdmg = gamedata.squads[squad-1][i+1].dmg
-                gamedata.squads[squad-1].splice(i+1,1,lodash.cloneDeep(emojis[58]))
-                gamedata.squads[squad-1][i+1].hp = temphp
-                gamedata.squads[squad-1][i+1].dmg = tempdmg
-                gamedata = richtextadd(gamedata,`\n🦠 ${gamedata.player[squad-1]}'s ${emojis[58].emoji} infected a ${emojis[tempemj].emoji}!`)
+                if (gamedata.squads[squad-1][i+1].id != 58) {
+                    const tempemj = gamedata.squads[squad-1][i+1].id
+                    const temphp = gamedata.squads[squad-1][i+1].hp
+                    const tempdmg = gamedata.squads[squad-1][i+1].dmg
+                    gamedata.squads[squad-1].splice(i+1,1,lodash.cloneDeep(emojis[58]))
+                    gamedata.squads[squad-1][i+1].hp = temphp
+                    gamedata.squads[squad-1][i+1].dmg = tempdmg
+                    gamedata = richtextadd(gamedata,`\n🦠 ${gamedata.player[squad-1]}'s ${emojis[58].emoji} infected a ${emojis[tempemj].emoji}!`)
+                }
             }
         }
 
