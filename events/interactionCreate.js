@@ -16,10 +16,11 @@ module.exports = {
 			await command.execute(interaction);
 		} catch (error) {
 			console.error(error);
+			if (error.toString() != "TypeError: trysetupuser is not a function")
 			if (interaction.replied || interaction.deferred) {
-				await interaction.followUp({ content: `There was an error with this command!\`\`\`${error.toString().replace(/valor/gi, "user")}\`\`\``, ephemeral: true });
+				await interaction.followUp({ content: `There was an error with this command!\`\`\`${error.toString()}\`\`\``, ephemeral: true });
 			} else {
-				await interaction.reply({ content: `There was an error with this command!\`\`\`${error.toString().replace(/valor/gi, "user")}\`\`\``, ephemeral: true });
+				await interaction.reply({ content: `There was an error with this command!\`\`\`${error.toString()}\`\`\``, ephemeral: true });
 			}
 		}
 	},
