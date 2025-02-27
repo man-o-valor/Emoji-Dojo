@@ -240,7 +240,8 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     if ((gamedata.squads[squad-1][i] ?? {id:undefined}).id == 62) {
                         for (j = 0; j < gamedata.squads[squad-1].length; j++) {
                             if (gamedata.squads[squad-1][j].id == gamedata.squads[squad-1][pos].id && gamedata.squads[squad-1][j].hp>0) {
-                                gamedata = alterhp(gamedata,squad,j,squad,i,1)
+                                gamedata = alterhp(gamedata,squad,j,squad,i,1,"",true)
+                                gamedata = richtextadd(gamedata,`\n💗 ${gamedata.player[squad-1]}'s ${emojis[62].emoji} healed all friendly ${gamedata.squads[squad-1][pos].emoji} by 1!`)
                             }
                         }
                     }
@@ -487,6 +488,10 @@ function playturn(gamedata) {
         if (activeemoji.id == 0) { // clap
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-(gamedata.squads[gamedata.playerturn-1][0].dmg + (gamedata.squads[gamedata.playerturn-1].filter(element => element.id == 0).length)),"clapped at")
+        }
+        if (activeemoji.id == 63) { // loud sound
+            basicattackflag = false
+            gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-(gamedata.squads[gamedata.playerturn-1][0].dmg + (gamedata.squads[gamedata.playerturn-1].filter(element => element.id == 14).length)*2),"blasted")
         }
         if ((gamedata.squads[gamedata.playerturn-1][1]  ?? {id:undefined}).id == 12) { // martial arts uniform
             basicattackflag = false

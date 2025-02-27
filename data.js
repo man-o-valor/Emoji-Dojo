@@ -939,6 +939,20 @@ const emojis = [
         class:0,
         description:"When a friendly Emoji dies, heals all friendly copies of it by 1"
     },
+    {
+        emoji:"🔊",
+        id:63,
+        hp:4,
+        dmg:0,
+        rarity:3,
+        names:[
+            "Loud Sound",
+            "Speaker",
+            "Audio"
+        ],
+        class:7,
+        description:"Attacks for as much damage as the number of friendly 🎶 ×2, plus its own attack power"
+    },
 ]
 
 module.exports = {healthemojis,dmgemojis,raritycolors,devotionhelp,classes,emojis,raritysymbols,raritynames}
