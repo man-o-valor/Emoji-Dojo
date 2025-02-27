@@ -272,6 +272,15 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",false)
 				}
             }
+            if (gamedata.squads[squad-1][pos].id != 61) {
+                for (i = gamedata.squads[squad-1].length-1; i > -1; i--) {
+                    if (gamedata.squads[squad-1][i].id == 61) {
+                        gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length-1,0,lodash.cloneDeep(emojis[gamedata.squads[squad-1][pos].id]))
+                        gamedata = alterhp(gamedata,squad,i,squad,i,-1000,"used up",true)
+                        gamedata = richtextadd(gamedata,`\n🌟 ${gamedata.player[squad-1]}'s 🪄 revived the ${gamedata.squads[squad-1][pos].emoji} at the back of the Squad!`)
+                    }
+                }
+            }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 59) { // flying saucer
                 gamedata = shufflesquad(gamedata,squad2)
                 gamedata = alterhp(gamedata,squad2,0,squad,pos,-3,"zapped")

@@ -106,8 +106,8 @@ const devotionhelp = "At any time through `/dojo` you have the ability to 🛐 *
 Class ideas:
 Healing: X-ray
 Damaging: Wolf
-Summoning: Wand?
-Defense: Mirror?
+Summoning: Wand
+Defense: Mirror
 Transforming: Mask
 Shuffling: Volcano
 Musical?
@@ -905,12 +905,24 @@ const emojis = [
         id:60,
         hp:4,
         dmg:0,
-        rarity:3,
+        rarity:3, // Master of Defense
         names:[
             "Mirror",
         ],
         class:2,
         description:"Attacks for as much damage as the frontmost enemy Emoji ×2, plus its own attack power"
+    },
+    {
+        emoji:"🪄",
+        id:61,
+        hp:2,
+        dmg:1,
+        rarity:3, // Master of Summoning
+        names:[
+            "Magic Wand",
+        ],
+        class:3,
+        description:"When the first friendly Emoji is defeated this round, revives it at 2 health at the back of the Squad, and defeats itself"
     },
 ]
 
