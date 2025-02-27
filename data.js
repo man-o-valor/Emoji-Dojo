@@ -920,6 +920,7 @@ const emojis = [
         rarity:3, // Master of Summoning
         names:[
             "Magic Wand",
+            "Wand"
         ],
         class:3,
         description:"When the first friendly Emoji is defeated this round, revives it at 2 health at the back of the Squad, and defeats itself"
