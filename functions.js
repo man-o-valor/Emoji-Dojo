@@ -240,7 +240,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     if ((gamedata.squads[squad-1][i] ?? {id:undefined}).id == 62) {
                         for (j = 0; j < gamedata.squads[squad-1].length; j++) {
                             if (gamedata.squads[squad-1][j].id == gamedata.squads[squad-1][pos].id && gamedata.squads[squad-1][j].hp>0) {
-                                gamedata = alterhp(gamedata,squad,i,squad2,pos,1)
+                                gamedata = alterhp(gamedata,squad,j,squad,i,1)
                             }
                         }
                     }
