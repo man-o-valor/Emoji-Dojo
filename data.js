@@ -925,6 +925,20 @@ const emojis = [
         class:3,
         description:"When the first friendly Emoji is defeated this round, revives it at 2 health at the back of the Squad, and defeats itself"
     },
+    {
+        emoji:"🏙️",
+        id:62,
+        hp:1,
+        dmg:1,
+        rarity:2,
+        names:[
+            "Cityscape",
+            "City",
+            "Skyline"
+        ],
+        class:0,
+        description:"When a friendly Emoji dies, heals all friendly copies of it by 1"
+    },
 ]
 
 module.exports = {healthemojis,dmgemojis,raritycolors,devotionhelp,classes,emojis,raritysymbols,raritynames}

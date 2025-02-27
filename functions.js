@@ -235,6 +235,17 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     }
                 }
             }
+            if (gamedata.squads[squad-1][pos].id != 62) { // skyline
+                for (i = gamedata.squads[squad-1].length-1; i > -1; i--) {
+                    if ((gamedata.squads[squad-1][i] ?? {id:undefined}).id == 62) {
+                        for (j = 0; j < gamedata.squads[squad-1].length; j++) {
+                            if (gamedata.squads[squad-1][j].id == gamedata.squads[squad-1][pos].id && gamedata.squads[squad-1][j].hp>0) {
+                                gamedata = alterhp(gamedata,squad,i,squad2,pos,1)
+                            }
+                        }
+                    }
+                }
+            }
             if ((gamedata.squads[squad2-1][pos2] ?? {id:undefined}).id == 53) { // wolf
                 gamedata = alterhp(gamedata,squad2,pos2,squad2,pos2,1,"",true)
                 gamedata.squads[squad2-1][pos2].dmg += 1
