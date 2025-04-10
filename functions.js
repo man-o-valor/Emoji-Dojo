@@ -2,6 +2,7 @@ const Keyv = require('keyv');
 const lodash = require('lodash');
 const {emojis,healthemojis,dmgemojis} = require('./data.js')
 const fs = require('fs');
+const formatToJson = require('format-to-json');
 
 const database = new Keyv('sqlite://databases//database.sqlite',{namespace:"userdata"});
 
@@ -14,7 +15,7 @@ async function getlogs() {
 }
 
 async function writelogs(json) {
-    fs.writeFileSync('logs.json', JSON.stringify(json), 'utf8');
+    fs.writeFileSync('logs.json', formatToJson(json), 'utf8');
 }
 
 async function getvault(id) {
@@ -91,7 +92,7 @@ async function trysetupuser(user) {
 
 \`\`\`When you're ready, organize them into a Squad optimized to battle others and create the best synergy.\`\`\`
 
-*(Use </squad:1277719095701143681> to view or edit your Squad. You can also edit your squad from the </dojo:1277719095701143680>.)*
+*(Use </squad:1277719095701143681> to view your Squad. You can edit your squad from the </dojo:1277719095701143680>.)*
 
 \`\`\`Finally, you can Battle! Engage your friends in a Battle, or lower the stakes with a Friendly Battle. If there's no one who wants to fight you, you can always battle Dojobot in a Bot Battle!\`\`\`
 
@@ -284,10 +285,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 					gamedata = alterhp(gamedata,squad,1,squad,pos,2,"gave candy to",false)
 				}
             }
-            if (gamedata.squads[squad-1][pos].id != 61) {
+            if (gamedata.squads[squad-1][pos].id != 61) { // wand
                 for (i = gamedata.squads[squad-1].length-1; i > -1; i--) {
                     if (gamedata.squads[squad-1][i].id == 61) {
-                        gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length-1,0,lodash.cloneDeep(emojis[gamedata.squads[squad-1][pos].id]))
+                        gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,lodash.cloneDeep(emojis[gamedata.squads[squad-1][pos].id]))
                         gamedata = alterhp(gamedata,squad,i,squad,i,-1000,"used up",true)
                         gamedata = richtextadd(gamedata,`\n🌟 ${gamedata.player[squad-1]}'s 🪄 revived the ${gamedata.squads[squad-1][pos].emoji} at the back of the Squad!`)
                     }
