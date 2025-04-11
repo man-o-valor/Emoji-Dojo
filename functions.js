@@ -16,9 +16,9 @@ async function getlogs() {
 
 async function writelogs(json) {
     console.log(json)
-    const formattedjson = formatToJson(json)
+    const formattedjson = formatToJson(JSON.stringify(json), { withDetails: true })
     console.log(formattedjson)
-    fs.writeFileSync('logs.json', formattedjson, 'utf8');
+    fs.writeFileSync('logs.json', formattedjson.result, 'utf8');
 }
 
 async function getvault(id) {
