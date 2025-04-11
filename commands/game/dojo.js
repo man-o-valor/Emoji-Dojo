@@ -36,6 +36,12 @@ module.exports = {
 						const data = await database.get(devdata[1]+"vault")
 						await database.set(devdata[1]+"vault",data + allemojistoadd)
 						await interaction.reply({ephemeral:false,content:`Gave <@${devdata[1]}> ${parseInt(devdata[3] ?? "1")}x ${emojis.find(x => x.names.find(y => y.replace(/\s+/g, '_').toLowerCase() == devdata[2].trim().replace(/\s+/g, '_').toLowerCase()) || x.emoji == devdata[2].replace(/\s+/g, '')).emoji}.`})
+					} else if (devdata[0] == "logs") {
+						const json = Buffer.from(fs.readFileSync('logs.json', 'utf8'))
+						const now = new Date();
+						const dateString = now.toDateString();
+						const timeString = now.toLocaleTimeString();
+						await interaction.reply({flags: 'Ephemeral', files: [{ attachment: json, name: `logs (${dateString}, ${timeString}).json` }]})
 					}
 				} else {
 					await interaction.reply({flags: 'Ephemeral',content:`🤓 you're not the admin silly`})
