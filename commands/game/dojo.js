@@ -130,6 +130,8 @@ module.exports = {
 					logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
 					logs.logs.players[`user${interaction.user.id}`].emojisviewed = logs.logs.players[`user${interaction.user.id}`].emojisviewed ?? 0
 					logs.logs.players[`user${interaction.user.id}`].emojisviewed += 1
+					logs.logs.emojis[emojifound.id].emojisviewed = logs.logs.emojis[emojifound.id].emojisviewed ?? 0
+					logs.logs.emojis[emojifound.id].emojisviewed += 1
 					await writelogs(logs)
 					if (numberfound<numberowned) {
 						const collectorFilter = i => i.user.id == interaction.user.id

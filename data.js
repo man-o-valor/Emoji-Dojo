@@ -110,7 +110,7 @@ Summoning: Wand
 Defense: Mirror
 Transforming: Mask
 Shuffling: Volcano
-Musical?
+Musical: Loud Sound
 Movement
 Solar?
 
@@ -944,7 +944,7 @@ const emojis = [
         id:63,
         hp:4,
         dmg:0,
-        rarity:3,
+        rarity:3, // Master of Musical
         names:[
             "Loud Sound",
             "Speaker",
@@ -953,6 +953,34 @@ const emojis = [
         class:7,
         description:"Attacks for as much damage as the number of friendly 🎶 ×2, plus its own attack power"
     },
+    {
+        emoji:"🍄",
+        id:64,
+        hp:7,
+        dmg:2,
+        rarity:0,
+        names:[
+            "Mushroom",
+            "Red Mushroom",
+            "Fungus"
+        ],
+        class:1,
+        description:"After attacking, damages itself by 1"
+    },
+    {
+        emoji:"🆚",
+        id:65,
+        hp:2,
+        dmg:2,
+        rarity:1,
+        names:[
+            "Vs",
+            "Versus",
+            "Versus Button"
+        ],
+        class:3,
+        description:"When defeated, replaces itself with an exact copy of the frontmost enemy Emoji"
+    }
 ]
 
 module.exports = {healthemojis,dmgemojis,raritycolors,devotionhelp,classes,emojis,raritysymbols,raritynames}

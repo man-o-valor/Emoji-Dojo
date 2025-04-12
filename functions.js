@@ -223,6 +223,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
         	gamedata.squads[squad2-1].splice(pos2+1,0,temp)
             gamedata = richtextadd(gamedata,`\n💨 ${gamedata.player[squad2-1]}'s ${emojis[42].emoji} danced behind ${gamedata.squads[squad2-1][pos2].emoji}!`)
 		}
+        if ((gamedata.squads[squad2-1][pos2] ?? {id:undefined}).id == 64) { // mushroom
+            gamedata = alterhp(gamedata,squad2,pos2,squad2,pos2,-1,"",true)
+            gamedata = richtextadd(gamedata,`\n🍄 ${gamedata.player[squad2-1]}'s ${emojis[64].emoji} damaged itself by attacking! (1 damage)`)
+        }    
         if (gamedata.squads[squad-1][pos].hp <= 0) {
             if (!silence) {
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][pos2].emoji} defeated ${gamedata.player[squad-1]}'s ${gamedata.squads[squad-1][pos].emoji}! (${val*-1} damage)`)
@@ -266,6 +270,10 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 			if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 45) { // radio
                 gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,lodash.cloneDeep(emojis[14]))
                 gamedata = richtextadd(gamedata,`\n🎶 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
+            }
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 65) { // vs
+                gamedata.squads[squad-1].splice(0,0,lodash.cloneDeep(gamedata.squads[squad2-1][0]))
+                gamedata = richtextadd(gamedata,`\n👥 ${gamedata.player[squad-1]}'s ${emojis[65].emoji} transformed into an exact replica of ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][0].emoji}!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 10) { // shuffle button
                 gamedata = richtextadd(gamedata,`\n🔀 ${gamedata.player[squad-1]}'s ${emojis[10].emoji} Shuffled ${gamedata.player[squad2-1]}'s Squad!`)
