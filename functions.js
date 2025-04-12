@@ -272,7 +272,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata = richtextadd(gamedata,`\n🎶 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 65) { // vs
-                gamedata.squads[squad-1].splice(0,0,lodash.cloneDeep(gamedata.squads[squad2-1][0]))
+                gamedata.squads[squad-1].splice(1,0,lodash.cloneDeep(gamedata.squads[squad2-1][0]))
                 gamedata = richtextadd(gamedata,`\n👥 ${gamedata.player[squad-1]}'s ${emojis[65].emoji} transformed into an exact replica of ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][0].emoji}!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 10) { // shuffle button
