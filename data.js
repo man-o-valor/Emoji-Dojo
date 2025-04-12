@@ -65,13 +65,13 @@ const classes = [
         id:2,
         name:"Defense",
         emoji:"<:defense:1326215162939576320>",
-        legendary:7
+        legendary:60
     },
     {
         id:3,
         name:"Summoning",
         emoji:"<:summoning:1326215191234351188>",
-        legendary:7
+        legendary:61
     },
     {
         id:4,
@@ -83,19 +83,19 @@ const classes = [
         id:5,
         name:"Transformation",
         emoji:"<:transformation:1326215197131669639>",
-        legendary:7
+        legendary:57
     },
     {
         id:6,
         name:"Shuffling",
         emoji:"<:shuffling:1326215184733179957>",
-        legendary:7
+        legendary:47
     },
     {
         id:7,
         name:"Musical",
         emoji:"<:musical:1326215176294236212>",
-        legendary:7
+        legendary:63
     },
 ]
 
