@@ -223,7 +223,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
         	gamedata.squads[squad2-1].splice(pos2+1,0,temp)
             gamedata = richtextadd(gamedata,`\n💨 ${gamedata.player[squad2-1]}'s ${emojis[42].emoji} danced behind ${gamedata.squads[squad2-1][pos2].emoji}!`)
 		}
-        if ((gamedata.squads[squad2-1][pos2] ?? {id:undefined}).id == 64) { // mushroom
+        if ((gamedata.squads[squad2-1][pos2] ?? {id:undefined}).id == 64 && (squad!=squad2 || pos!=pos2)) { // mushroom
             gamedata = alterhp(gamedata,squad2,pos2,squad2,pos2,-1,"",true)
             gamedata = richtextadd(gamedata,`\n🍄 ${gamedata.player[squad2-1]}'s ${emojis[64].emoji} damaged itself by attacking! (1 damage)`)
         }    
@@ -271,7 +271,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,lodash.cloneDeep(emojis[14]))
                 gamedata = richtextadd(gamedata,`\n🎶 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
             }
-            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 65) { // vs
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 65) { // busts in silhouette
                 gamedata.squads[squad-1].splice(1,0,lodash.cloneDeep(gamedata.squads[squad2-1][0]))
                 gamedata = richtextadd(gamedata,`\n👥 ${gamedata.player[squad-1]}'s ${emojis[65].emoji} transformed into an exact replica of ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][0].emoji}!`)
             }
@@ -282,6 +282,11 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
 	        if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 36) { // bomb
                 gamedata = richtextadd(gamedata,`\n💥 ${gamedata.player[squad-1]}'s ${emojis[36].emoji} exploded, defeating ${gamedata.player[0-squad+2]}'s ${gamedata.squads[0-squad+2][0].emoji}!`)
 		        gamedata = alterhp(gamedata,0-squad+3,0,squad,pos,-1000,"exploded",true)
+            }
+            if ((gamedata.squads[squad-1][pos+1] ?? {id:undefined}).id == 66) { // new
+                gamedata.squads[squad-1].splice(pos+1,0,lodash.cloneDeep(emojis[gamedata.squads[squad-1][pos].id]))
+                gamedata = richtextadd(gamedata,`\n👥 ${gamedata.player[squad-1]}'s ${emojis[66].emoji} summoned a new ${gamedata.squads[squad-1][pos].emoji}, and defeated itself!`)
+                gamedata = alterhp(gamedata,squad,pos+1,squad,pos+1,-1000,"",true)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 57) { // mask
                 gamedata.squads[0-squad+2].splice(0,0,lodash.cloneDeep(emojis[58]))
@@ -441,6 +446,15 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,temp)
                     gamedata = richtextadd(gamedata,`\n💨 ${gamedata.player[squad-1]}'s ${emojis[5].emoji} retreated to the back of the Squad!`)
                     gamedata = alterhp(gamedata,squad,gamedata.squads[squad-1].length-1,squad,gamedata.squads[squad-1].length-1,1)
+                }
+                if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 67) { // locked with ink pen
+                    const tempemj = gamedata.squads[gamedata.playerturn*-1+2][0].emoji
+                    const temphp = gamedata.squads[gamedata.playerturn*-1+2][0].hp
+                    const tempdmg = gamedata.squads[gamedata.playerturn*-1+2][0].dmg + 1
+                    gamedata.squads[gamedata.playerturn*-1+2].splice(0,1,lodash.cloneDeep(emojis[68]))
+                    gamedata.squads[gamedata.playerturn*-1+2][0].hp = temphp
+                    gamedata.squads[gamedata.playerturn*-1+2][0].dmg = tempdmg
+                    gamedata = richtextadd(gamedata,`\n🔒 ${gamedata.player[gamedata.playerturn-1]}'s ${emojis[67].emoji} transformed ${gamedata.player[gamedata.playerturn*-1+2]}'s ${tempemj} into a ${emojis[68].emoji}, and increased its attack power by 1!`)
                 }
                 if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 15) { // fishing pole
                     const temp = gamedata.squads[squad2-1][gamedata.squads[squad2-1].length-1]

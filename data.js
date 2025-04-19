@@ -143,7 +143,7 @@ const emojis = [
             "Kissing"
         ],
         class:0,
-        description:"When attacked, heals the friendly Emoji in front of it by 1"
+        description:"When the friendly Emoji in front of this is attacked, heals it by 1"
     },
     {
         emoji:"😌",
@@ -213,8 +213,8 @@ const emojis = [
     {
         emoji:"😶",
         id:7,
-        hp:1,
-        dmg:1,
+        hp:null,
+        dmg:null,
         rarity:-1,
         names:[
             "No Mouth",
@@ -968,18 +968,59 @@ const emojis = [
         description:"After attacking, damages itself by 1"
     },
     {
-        emoji:"🆚",
+        emoji:"👥",
         id:65,
         hp:2,
         dmg:2,
         rarity:1,
         names:[
-            "Vs",
-            "Versus",
-            "Versus Button"
+            "Busts in Silhouette",
+            "Busts"
         ],
         class:3,
         description:"When defeated, replaces itself with an exact copy of the frontmost enemy Emoji"
+    },
+    {
+        emoji:"🆕",
+        id:66,
+        hp:3,
+        dmg:1,
+        rarity:2,
+        names:[
+            "New",
+            "New Button"
+        ],
+        class:5,
+        description:"When the friendly Emoji in front of this is defeated, restores it to original condition and defeats itself"
+    },
+    {
+        emoji:"🔏",
+        id:67,
+        hp:4,
+        dmg:1,
+        rarity:2,
+        names:[
+            "Lock with Ink Pen",
+            "Lock with Pen",
+            "Locked with Pen",
+            "Lock Pen",
+            "Lock with Nib"
+        ],
+        class:3,
+        description:"When attacked, transforms the frontmost enemy emoji into a 🔒 with identical stats, and increases the frontmost enemy's attack power by 1"
+    },
+    {
+        emoji:"🔒",
+        id:68,
+        hp:null,
+        dmg:null,
+        rarity:-1,
+        names:[
+            "Lock",
+            "Locked"
+        ],
+        class:null,
+        description:"Nothing Special"
     }
 ]
 
