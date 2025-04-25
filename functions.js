@@ -287,7 +287,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
             if ((gamedata.squads[squad-1][pos+1] ?? {id:undefined}).id == 66) { // new
                 gamedata.squads[squad-1].splice(pos+1,0,lodash.cloneDeep(emojis[gamedata.squads[squad-1][pos].id]))
                 gamedata = richtextadd(gamedata,`\n👥 ${gamedata.player[squad-1]}'s ${emojis[66].emoji} summoned a new ${gamedata.squads[squad-1][pos].emoji}, and defeated itself!`)
-                gamedata = alterhp(gamedata,squad,pos+1,squad,pos+1,-1000,"",true)
+                gamedata.squads[squad-1].splice(pos+1,1)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 57) { // mask
                 gamedata.squads[0-squad+2].splice(0,0,lodash.cloneDeep(emojis[58]))
