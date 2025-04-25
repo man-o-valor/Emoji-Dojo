@@ -116,7 +116,7 @@ async function coinschange(id,amt,affectcooldown) {
     const originalamt = amt
     let coinsleft = 0
     if (affectcooldown) {
-        const coincd = await database.get(id + "coincooldown")  ?? "0"
+        const coincd = await database.get(id + "coincooldown") ?? "0"
         if ((Date.now()/1000)-coincd > 86400) {
             await database.set(id + "coincooldown",Math.floor(Date.now()/1000))
             await database.set(id + "coinsleft","200")
@@ -133,14 +133,14 @@ async function coinschange(id,amt,affectcooldown) {
         await database.set(id + "coinsleft",coinsleft)
     }
     if (amt>0 && originalamt>0) {
-        let rawcoins = parseInt(await database.get(id + "coins")  ?? "100")
+        let rawcoins = parseInt(await database.get(id + "coins") ?? "100")
         rawcoins += amt
         await database.set(id + "coins",rawcoins)
         if (affectcooldown) {
             await database.set(id + "coinsleft",coinsleft-amt)
         }
     } else if (amt<0 && originalamt<0){
-        let rawcoins = parseInt(await database.get(id + "coins")  ?? "100")
+        let rawcoins = parseInt(await database.get(id + "coins") ?? "100")
         rawcoins += amt
         await database.set(id + "coins",rawcoins)
     }
@@ -521,15 +521,15 @@ function playturn(gamedata) {
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-(gamedata.squads[gamedata.playerturn-1][0].dmg + (gamedata.squads[gamedata.playerturn-1].filter(element => element.id == 14).length)*2),"blasted")
         }
-        if ((gamedata.squads[gamedata.playerturn-1][1]  ?? {id:undefined}).id == 12) { // martial arts uniform
+        if ((gamedata.squads[gamedata.playerturn-1][1] ?? {id:undefined}).id == 12) { // martial arts uniform
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 1)
         }
-        if ((gamedata.squads[gamedata.playerturn-1][0]  ?? {id:undefined}).id == 13 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // guitar
+        if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:undefined}).id == 13 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // guitar
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 1)
         }
-		if ((gamedata.squads[gamedata.playerturn-1][0]  ?? {id:undefined}).id == 44 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // violin
+		if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:undefined}).id == 44 && gamedata.squads[gamedata.playerturn-1].some(x => x.id == 14)) { // violin
             basicattackflag = false
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg - 3)
         }
@@ -546,7 +546,7 @@ function playturn(gamedata) {
         if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:undefined}).id == 34 && gamedata.squads[gamedata.playerturn*-1+3].length>1) { // zap
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,1,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg,"zapped")
         }
-	if ((gamedata.squads[gamedata.playerturn-1][0]  ?? {id:undefined}).id == 37 && gamedata.turn%4<=2) { // ghost
+	if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:undefined}).id == 37 && gamedata.turn%4<=2) { // ghost
 	        const tempemj = gamedata.squads[gamedata.playerturn*-1+2][0].emoji
 	        const temphp = gamedata.squads[gamedata.playerturn*-1+2][0].hp
 	        const tempdmg = gamedata.squads[gamedata.playerturn*-1+2][0].dmg
