@@ -457,6 +457,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                     gamedata.squads[squad2-1][0].hp = temphp
                     gamedata.squads[squad2-1][0].dmg = tempdmg
                     gamedata = richtextadd(gamedata,`\n🔒 ${gamedata.player[squad-1]}'s ${emojis[67].emoji} transformed ${gamedata.player[squad2-1]}'s ${tempemj} into a ${emojis[68].emoji}, and increased its attack power by 1!`)
+                    console.log(squad,squad2,gamedata.squads[squad2-1][0])
                 }
                 if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 15) { // fishing pole
                     const temp = gamedata.squads[squad2-1][gamedata.squads[squad2-1].length-1]
