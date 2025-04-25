@@ -991,7 +991,7 @@ const emojis = [
             "New Button"
         ],
         class:5,
-        description:"When the friendly Emoji in front of this is defeated, restores it to original condition and defeats itself"
+        description:"When the friendly Emoji in front of this is defeated, restores that Emoji to original condition and defeats itself"
     },
     {
         emoji:"🔏",

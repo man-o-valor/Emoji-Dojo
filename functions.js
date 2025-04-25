@@ -540,10 +540,10 @@ function playturn(gamedata) {
         if (basicattackflag) {
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg)
         }
-        if ((gamedata.squads[gamedata.playerturn-1][1]  ?? {id:undefined}).id == 8) { // handshake
+        if ((gamedata.squads[gamedata.playerturn-1][1] ?? {id:undefined}).id == 8) { // handshake
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,0,gamedata.playerturn,1,0-gamedata.squads[gamedata.playerturn-1][1].dmg)
         }
-        if ((gamedata.squads[gamedata.playerturn-1][0]  ?? {id:undefined}).id == 34) { // zap
+        if ((gamedata.squads[gamedata.playerturn-1][0] ?? {id:undefined}).id == 34 && gamedata.squads[gamedata.playerturn*-1+3].length>1) { // zap
             gamedata = alterhp(gamedata,gamedata.playerturn*-1+3,1,gamedata.playerturn,0,0-gamedata.squads[gamedata.playerturn-1][0].dmg,"zapped")
         }
 	if ((gamedata.squads[gamedata.playerturn-1][0]  ?? {id:undefined}).id == 37 && gamedata.turn%4<=2) { // ghost
