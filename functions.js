@@ -179,6 +179,7 @@ function richtextadd(gamedata,text) {
 }
 
 function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
+    console.log(`position ${pos} of squad ${squad} attacked position ${pos2} of squad ${squad2}, and changed its hp by ${val}! also verb ${verb} silent ${silence}`)
 
     if ((gamedata.squads[squad2-1][pos] ?? {id:undefined}).id == 22 && val < 0) {// rage
         val = 0-Math.min(val + gamedata.squads[squad-1].length,3)
