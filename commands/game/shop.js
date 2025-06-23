@@ -10,7 +10,7 @@ module.exports = {
 		if (await trysetupuser(interaction.user)) {
 			await interaction.reply({flags: 'Ephemeral',content:`Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`});
 		} else {
-			const coincount = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
+			const coincount = parseInt(await database.get(interaction.user.id + "coins") ?? "100")
 
 			let shoprestock = await database.get("shoprestock") ?? "0"
 
@@ -125,7 +125,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 			let choice
 
 			try {dropdownCollector.on('collect', async (interaction) => {
-					const $ = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
+					const $ = parseInt(await database.get(interaction.user.id + "coins") ?? "100")
 					choice = parseInt(interaction.values[0])
 
 					const shopembed = new EmbedBuilder()
@@ -173,7 +173,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 
 					try {buttonCollector.on('collect', async (newinteraction) => {
 
-						const $ = parseInt(await database.get(interaction.user.id + "coins")  ?? "100")
+						const $ = parseInt(await database.get(interaction.user.id + "coins") ?? "100")
 						if ($<shopdata[choice].cost) {
 							newinteraction.reply({content:makemessage("Oops, you don't have enough 🪙 to buy this anymore!",myfood),flags: 'Ephemeral'})
 						} else {
