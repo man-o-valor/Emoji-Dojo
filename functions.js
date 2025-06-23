@@ -275,7 +275,7 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 69) { // urn
                 const commons = emojis.filter(item => item.rarity === 0)
                 const rand = Math.floor(Math.random()*commons.length)
-                gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,lodash.cloneDeep(commons[rand]))
+                gamedata.squads[squad-1].splice(pos+1,0,lodash.cloneDeep(commons[rand]))
                 gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad-1]}'s ${emojis[69].emoji} broke and revealed ${commons[rand].emoji}!`)
             }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 65) { // busts in silhouette
