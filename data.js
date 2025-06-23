@@ -1034,7 +1034,22 @@ const emojis = [
             "Pot"
         ],
         class:3,
-        description:"When defeated, summons a random *️⃣ Common emoji."
+        description:"When defeated, summons a random *️⃣ Common emoji"
+    },
+    {
+        emoji:"🛜",
+        id:70,
+        hp:2,
+        dmg:2,
+        rarity:0,
+        names:[
+            "Wireless",
+            "Internet",
+            "Network",
+            "Signal"
+        ],
+        class:2,
+        description:"At the beginning of the Battle, increases its health by the number of friendly 🛜"
     }
 ]
 
