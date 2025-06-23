@@ -1021,6 +1021,20 @@ const emojis = [
         ],
         class:null,
         description:"Nothing Special"
+    },
+    {
+        emoji:"⚱️",
+        id:69,
+        hp:2,
+        dmg:1,
+        rarity:1,
+        names:[
+            "Urn",
+            "Vase",
+            "Pot"
+        ],
+        class:3,
+        description:"When defeated, summons a random *️⃣ Common emoji."
     }
 ]
 

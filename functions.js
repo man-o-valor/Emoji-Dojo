@@ -272,6 +272,12 @@ function alterhp(gamedata,squad,pos,squad2,pos2,val,verb,silence) {
                 gamedata.squads[squad-1].splice(gamedata.squads[squad-1].length,0,lodash.cloneDeep(emojis[14]))
                 gamedata = richtextadd(gamedata,`\n🎶 ${gamedata.player[squad-1]}'s ${emojis[45].emoji} played a ${emojis[14].emoji} at the back of the Squad!`)
             }
+            if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 69) { // urn
+                const commons = emojis.filter(item => item.rarity === 0)
+                const rand = Math.floor(Math.random()*commons.length)
+                gamedata.squads[squad-1].splice(0,0,lodash.cloneDeep(commons[rand]))
+                gamedata = richtextadd(gamedata,`\n‼️ ${gamedata.player[squad-1]}'s ${emojis[69].emoji} broke and revealed ${commons[rand].emoji}!`)
+            }
             if ((gamedata.squads[squad-1][pos] ?? {id:undefined}).id == 65) { // busts in silhouette
                 gamedata.squads[squad-1].splice(1,0,lodash.cloneDeep(gamedata.squads[squad2-1][0]))
                 gamedata = richtextadd(gamedata,`\n👥 ${gamedata.player[squad-1]}'s ${emojis[65].emoji} transformed into an exact replica of ${gamedata.player[squad2-1]}'s ${gamedata.squads[squad2-1][0].emoji}!`)
