@@ -223,10 +223,16 @@ module.exports = {
 										await writelogs(logs)
 									} else {
 										if (gamedata.squads[1].length == 0) {
-											diff1 = await coinschange(interaction.user.id,gamedata.squads[0].length*20)
+											diff1 = gamedata.squads[0].length*20
+											const coindoubler = await database.get(interaction.user.id + "coindoubler") ?? 0
+											let doublerbonus = Math.min(coindoubler,diff1)
+											await database.set(interaction.user.id + "coindoubler", coindoubler - doublerbonus)
+											diff1 += doublerbonus
+											let bonusmsg = doublerbonus>0 ? ` *(💫 ${doublerbonus})*` : ""
+											await coinschange(interaction.user.id,diff1)
 											diff2 = diff1*-0.25
 											await coinschange(battleuser.id,diff2)
-											int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙\n${battleuser.globalName}: ${diff2} 🪙`})
+											int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙${bonusmsg}\n${battleuser.globalName}: ${diff2} 🪙`})
 											let logs = await getlogs();
 											logs.logs.players[`user${interaction.user.id}`].userwins = logs.logs.players[`user${interaction.user.id}`].userwins ?? 0
 											logs.logs.players[`user${interaction.user.id}`].userwins += 1
@@ -243,10 +249,16 @@ module.exports = {
 											await writelogs(logs)
 										}
 										if (gamedata.squads[0].length == 0) {
-											diff1 = await coinschange(battleuser.id,gamedata.squads[1].length*20)
+											diff1 = gamedata.squads[1].length*20
+											const coindoubler = await database.get(battleuser.id + "coindoubler") ?? 0
+											let doublerbonus = Math.min(coindoubler,diff1)
+											await database.set(battleuser.id + "coindoubler", coindoubler - doublerbonus)
+											diff1 += doublerbonus
+											let bonusmsg = doublerbonus>0 ? ` *(💫 ${doublerbonus})*` : ""
+											await coinschange(battleuser.id,diff1)
 											diff2 = diff1*-0.25
 											await coinschange(interaction.user.id,diff2)
-											int3 = await interaction2.followUp({components:[row2], content:`<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙\n${interaction.user.globalName}: ${diff2} 🪙`})
+											int3 = await interaction2.followUp({components:[row2], content:`<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙${bonusmsg}\n${interaction.user.globalName}: ${diff2} 🪙`})
 											let logs = await getlogs();
 											logs.logs.players[`user${interaction.user.id}`].userlosses = logs.logs.players[`user${interaction.user.id}`].userlosses ?? 0
 											logs.logs.players[`user${interaction.user.id}`].userlosses += 1

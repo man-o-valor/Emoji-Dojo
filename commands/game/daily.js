@@ -37,9 +37,16 @@ module.exports = {
 				await database.set(interaction.user.id+"vault",rawvault + emojitoadd.id + ",")
 				rewardName = `${emojitoadd.emoji} ${emojitoadd.names[0]} Emoji`
 			} else {
-				let amt = 10 + Math.floor(Math.random() * 15)
-				await coinschange(interaction.user.id,amt)
-				rewardName = `🪙 ${amt} Coins`
+				if (Math.random()>0.6) {
+					let amt = 40 + Math.floor(Math.random() * 20)
+					const coindoubler = await database.get(interaction.user.id + "coindoubler") ?? 0
+					await database.set(interaction.user.id + "coindoubler", coindoubler + amt)
+					rewardName = `💫 x${amt} Coin Doubler`
+				} else {
+					let amt = 10 + Math.floor(Math.random() * 15)
+					await coinschange(interaction.user.id,amt)
+					rewardName = `🪙 ${amt} Coins`
+				}
 			}
 			await interaction.reply({content: "<:open_box:1386870856034287717> " + dailyCollect[Math.floor(Math.random()*dailyCollect.length)] + " **" + rewardName + "!**", flags: MessageFlags.Ephemeral})
 

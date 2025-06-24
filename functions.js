@@ -144,9 +144,6 @@ async function coinschange(id,amt,affectcooldown) {
         rawcoins += amt
         await database.set(id + "coins",rawcoins)
     }
-    console.log(originalamt)
-    console.log(amt)
-    console.log(coinsleft)
     return amt
 }
 

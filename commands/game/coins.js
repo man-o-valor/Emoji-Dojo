@@ -19,10 +19,17 @@ module.exports = {
 		if (coincount>=40) {
 			battlemsg = `✅ You have enough 🪙 to battle other users. Challenge your friends with \`/battleuser\`!`
 		}
+
+		const coindoubler = await database.get(interaction.user.id + "coindoubler") ?? 0
+		let coindoublermsg = ""
+		if (coindoubler>0) {
+			coindoublermsg = `\n\n💫 You have x${coindoubler} Coin Doublers! When you win a Battle, you'll get more coins for each Coin Doubler you have!`
+		}
+
 		const coinembed = new EmbedBuilder()
 			.setColor(0xFFAC33)
 			.setTitle(`Coins: ${coincount} 🪙`)
-			.setDescription(`${battlemsg}\n\nUntil <t:${coincd+86400}:t> you can earn up to ${coinsleft} 🪙. Afterwards, your possible 🪙 will refill to 200.`)
+			.setDescription(`${battlemsg}\n\nUntil <t:${coincd+86400}:t> you can earn up to ${coinsleft} 🪙. Afterwards, your possible 🪙 will refill to 200.${coindoublermsg}`)
 			.setTimestamp()
 			.setFooter({ text: `${interaction.user.globalName}'s Coins`});
 		await interaction.reply({embeds:[coinembed]});
