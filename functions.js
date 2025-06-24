@@ -84,8 +84,8 @@ async function trysetupuser(user) {
         const welcomemessage = `# ⛩️😀 Welcome to the Emoji Dojo, <@${user.id}>! 🏯🎋
 **It is here that you will over time hone your skills and master the art of Emoji Battles.**
 
-## <:denver:1303484366520844289>💬 \`Denver\`
-\`\`\`Hello! My name is Denver, and I'm in charge of wrangling these here emojis for you to battle with. Here, I'll give you this selection to start off with.\`\`\`
+## 💁💬 \`Tipping Hand\`
+\`\`\`Hello! My name is Tipping Hand, and I'm in charge of wrangling these here emojis for you to battle with. Here, I'll give you this selection to start off with.\`\`\`
 
 *(You received${allemojitext}!)*
 
@@ -103,7 +103,7 @@ async function trysetupuser(user) {
 
 \`\`\`Once you have enough Coins, you can visit my Emoji Shop! I sell these little guys to aspiring battlers like you. Stop by when you're looking for an emoji!\`\`\`
 
-*(You can use </coins:1277719095701143678> to see how many Coins you have, and </shop:1290417978734678098> to visit Denver's shop.)*`
+*(You can use </coins:1277719095701143678> to see how many Coins you have, and </shop:1290417978734678098> to visit Tipping Hand's shop.)*`
 		await user.send({content:welcomemessage})
         return true
     } else {
