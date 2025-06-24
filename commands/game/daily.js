@@ -31,8 +31,8 @@ module.exports = {
 			if (Math.random()>0.8) {
 				let emojilist = emojis.filter(e => e.rarity == 0)
 				const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
-				const rawvault = await database.get(user.id + "vault")
-				await database.set(user.id+"vault",rawvault + emojitoadd.id + ",")
+				const rawvault = await database.get(interaction.user.id + "vault")
+				await database.set(interaction.user.id+"vault",rawvault + emojitoadd.id + ",")
 				rewardName = `${emojitoadd.emoji} ${emojitoadd} Emoji`
 			} else {
 				let amt = 10 + Math.floor(Math.random() * 15)
