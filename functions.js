@@ -155,7 +155,7 @@ async function getsquad(id) {
     rawsquad = await database.get(id + "squad")
 	let squad = rawsquad.split(',');
 	squad.pop()
-    return squad
+    return squad.slice(0,8)
 }
 
 function allemojisofrarity(rarity) {
