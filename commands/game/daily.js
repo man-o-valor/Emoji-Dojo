@@ -11,9 +11,9 @@ module.exports = {
 		
 		const dailytime = parseInt(await database.get(interaction.user.id + "dailytime") ?? "0")
 		const comeBackLater = [
-			`Your daily reward is still cooking! Come back <t:${dailytime}:R>`,
-			`Your daily reward isn't ready to claim yet! Come back <t:${dailytime}:R>`,
-			`Your daily reward needs a little more time. Come back <t:${dailytime}:R>`
+			`Your daily reward is still cooking! Come back <t:${dailytime + 86400}:R>`,
+			`Your daily reward isn't ready to claim yet! Come back <t:${dailytime + 86400}:R>`,
+			`Your daily reward needs a little more time. Come back <t:${dailytime + 86400}:R>`
 		]
 
 		const dailyCollect = [
@@ -27,6 +27,8 @@ module.exports = {
 		let logs = await getlogs();
 		
 		if (Math.floor(Date.now()/1000) - dailytime > 86400) {
+			await database.set(interaction.user.id + "dailytime", Math.floor(Date.now()/1000))
+
 			let rewardName
 			if (Math.random()>0.8) {
 				let emojilist = emojis.filter(e => e.rarity == 0)
