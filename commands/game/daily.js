@@ -33,7 +33,7 @@ module.exports = {
 				const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
 				const rawvault = await database.get(interaction.user.id + "vault")
 				await database.set(interaction.user.id+"vault",rawvault + emojitoadd.id + ",")
-				rewardName = `${emojitoadd.emoji} ${emojitoadd} Emoji`
+				rewardName = `${emojitoadd.emoji} ${emojitoadd.names[0]} Emoji`
 			} else {
 				let amt = 10 + Math.floor(Math.random() * 15)
 				await coinschange(interaction.user.id,amt)
