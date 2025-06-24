@@ -32,22 +32,22 @@ module.exports = {
 				const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
 				const rawvault = await database.get(user.id + "vault")
 				await database.set(user.id+"vault",rawvault + emojitoadd.id + ",")
-				rewardName =  + `${emojitoadd.emoji} ${emojitoadd} Emoji`
+				rewardName = `${emojitoadd.emoji} ${emojitoadd} Emoji`
 			} else {
 				let amt = 10 + Math.floor(Math.random() * 15)
 				await coinschange(interaction.user.id,amt)
-				rewardName =  + `🪙 ${amt} Coins`
+				rewardName = `🪙 ${amt} Coins`
 			}
 			await interaction.reply({content: "<:open_box:1386870856034287717> " + dailyCollect[Math.floor(Math.random()*dailyCollect.length)] + " **" + rewardName + "!**", flags: MessageFlags.Ephemeral})
 
-			logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + dailysclaimed
+			logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + 1
 			logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
 			logs.logs.players[`user${interaction.user.id}`].dailysclaimed = logs.logs.players[`user${interaction.user.id}`].dailysclaimed ?? 0
 			logs.logs.players[`user${interaction.user.id}`].dailysclaimed += 1
 		} else {
 			await interaction.reply({content: "📦 " + comeBackLater[Math.floor(Math.random()*comeBackLater.length)], flags: MessageFlags.Ephemeral})
 			
-			logs.logs.games.dailysfailed = (logs.logs.games.dailysfailed ?? 0) + dailysfailed
+			logs.logs.games.dailysfailed = (logs.logs.games.dailysfailed ?? 0) + 1
 			logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {}
 			logs.logs.players[`user${interaction.user.id}`].dailysfailed = logs.logs.players[`user${interaction.user.id}`].dailysfailed ?? 0
 			logs.logs.players[`user${interaction.user.id}`].dailysfailed += 1
