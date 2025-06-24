@@ -102,7 +102,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
 			const shopembed = new EmbedBuilder()
 				.setColor(0x4E5058)
 				.setTitle(`The Shop`)
-				.setDescription(`<:denver:1303484366520844289> *${quote}*\n-# Emojis reroll <t:${shoprestock}:R>\n>>> ${marketcontents}\n`)
+				.setDescription(`💁 *${quote}*\n-# Emojis reroll <t:${shoprestock}:R>\n>>> ${marketcontents}\n`)
 				.setTimestamp()
 				.setFooter({ text: `You have ${coincount} 🪙`});
 
