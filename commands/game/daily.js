@@ -1,5 +1,6 @@
 const { SlashCommandBuilder,MessageFlags } = require('discord.js');
-const {emojis,database,trysetupuser,getlogs,writelogs,coinschange} = require('../../functions.js')
+const {emojis} = require('../../data.js')
+const {database,trysetupuser,getlogs,writelogs,coinschange} = require('../../functions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
