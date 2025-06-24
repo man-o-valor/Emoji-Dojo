@@ -1299,7 +1299,7 @@ function shufflesquad(gamedata, squad) {
       .filter((index) => index != -1);
     // pushpin
 
-    const unlockedIndices = squadArr
+    const unlockedIndices = gamedata.squads[squad - 1]
       .map((_, index) => index)
       .filter((index) => !lockedIndices.includes(index));
 
@@ -1308,7 +1308,10 @@ function shufflesquad(gamedata, squad) {
       const j = Math.floor(Math.random() * (i + 1));
       const idx1 = unlockedIndices[i];
       const idx2 = unlockedIndices[j];
-      [squadArr[idx1], squadArr[idx2]] = [squadArr[idx2], squadArr[idx1]];
+      [gamedata.squads[squad - 1][idx1], gamedata.squads[squad - 1][idx2]] = [
+        gamedata.squads[squad - 1][idx2],
+        gamedata.squads[squad - 1][idx1],
+      ];
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
