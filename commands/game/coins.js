@@ -23,7 +23,7 @@ module.exports = {
 		const coindoubler = await database.get(interaction.user.id + "coindoubler") ?? 0
 		let coindoublermsg = ""
 		if (coindoubler>0) {
-			coindoublermsg = `\n\n💫 You have x${coindoubler} Coin Doublers! When you win a Battle, you'll get more coins for each Coin Doubler you have!`
+			coindoublermsg = `\n\n💫 You have x${coindoubler} Coin Doublers! When you win a Battle, you'll get more coins for each Coin Doubler you have.`
 		}
 
 		const coinembed = new EmbedBuilder()

@@ -500,7 +500,7 @@ function playturn(gamedata) {
                     gamedata.squads[0].splice(i,0,lodash.cloneDeep(emojis[26]))
                     i++
                 } else if (gamedata.squads[0][i].id == 70) { // wireless
-                    gamedata.squads[0][i].hp += gamedata.squads[0].filter(element => element.id == 0).length
+                    gamedata.squads[0][i].hp += gamedata.squads[0].filter(element => element.id == 70).length
                 }
             }
             for (i = 0; i < gamedata.squads[1].length; i++) {
@@ -508,7 +508,7 @@ function playturn(gamedata) {
                     gamedata.squads[1].splice(i,0,lodash.cloneDeep(emojis[26]))
                     i++
                 } else if (gamedata.squads[1][i].id == 70) { // wireless
-                    gamedata.squads[1][i].hp += gamedata.squads[1].filter(element => element.id == 0).length
+                    gamedata.squads[1][i].hp += gamedata.squads[1].filter(element => element.id == 70).length
                 }
             }
         }

@@ -186,7 +186,7 @@ module.exports = {
 								let doublerbonus = Math.min(coindoubler,diff1)
 								await database.set(interaction.user.id + "coindoubler", coindoubler - doublerbonus)
 								diff1 += doublerbonus
-								let bonusmsg = doublerbonus>0 ? ` *(💫 ${doublerbonus})*` : ""
+								let bonusmsg = doublerbonus>0 ? ` (💫 ${doublerbonus})` : ""
 								await coinschange(interaction.user.id,diff1)
 								int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner! +${diff1} 🪙${bonusmsg}`})
 								let logs = await getlogs();

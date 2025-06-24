@@ -228,7 +228,7 @@ module.exports = {
 											let doublerbonus = Math.min(coindoubler,diff1)
 											await database.set(interaction.user.id + "coindoubler", coindoubler - doublerbonus)
 											diff1 += doublerbonus
-											let bonusmsg = doublerbonus>0 ? ` *(💫 ${doublerbonus})*` : ""
+											let bonusmsg = doublerbonus>0 ? ` (💫 ${doublerbonus})` : ""
 											await coinschange(interaction.user.id,diff1)
 											diff2 = diff1*-0.25
 											await coinschange(battleuser.id,diff2)
@@ -254,7 +254,7 @@ module.exports = {
 											let doublerbonus = Math.min(coindoubler,diff1)
 											await database.set(battleuser.id + "coindoubler", coindoubler - doublerbonus)
 											diff1 += doublerbonus
-											let bonusmsg = doublerbonus>0 ? ` *(💫 ${doublerbonus})*` : ""
+											let bonusmsg = doublerbonus>0 ? ` (💫 ${doublerbonus})` : ""
 											await coinschange(battleuser.id,diff1)
 											diff2 = diff1*-0.25
 											await coinschange(interaction.user.id,diff2)
