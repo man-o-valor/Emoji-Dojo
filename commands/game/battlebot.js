@@ -181,8 +181,14 @@ module.exports = {
 							await writelogs(logs)
 						} else {
 							if (gamedata.squads[1].length == 0) {
-								int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner! +${gamedata.squads[0].length*20} 🪙`})
-								await coinschange(interaction.user.id,gamedata.squads[0].length*20)
+								let diff1 = gamedata.squads[0].length*20
+								const coindoubler = await database.get(interaction.user.id + "coindoubler") ?? 0
+								let doublerbonus = Math.min(coindoubler,diff1)
+								await database.set(interaction.user.id + "coindoubler", coindoubler - doublerbonus)
+								diff1 += doublerbonus
+								let bonusmsg = doublerbonus>0 ? ` *(💫 ${doublerbonus})*` : ""
+								await coinschange(interaction.user.id,diff1)
+								int3 = await interaction2.followUp({components:[row2], content:`<@${interaction.user.id}> is the winner! +${diff1} 🪙${bonusmsg}`})
 								let logs = await getlogs();
 								logs.logs.games.botlosses += 1
 								logs.logs.players[`user${interaction.user.id}`].botwins = logs.logs.players[`user${interaction.user.id}`].botwins ?? 0
