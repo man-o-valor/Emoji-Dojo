@@ -11,9 +11,9 @@ module.exports = {
 		
 		const dailytime = parseInt(await database.get(interaction.user.id + "dailytime") ?? "0")
 		const comeBackLater = [
-			`Your daily reward is still cooking! Come back <t:${dailytime + 86400}:R>`,
-			`Your daily reward isn't ready to claim yet! Come back <t:${dailytime + 86400}:R>`,
-			`Your daily reward needs a little more time. Come back <t:${dailytime + 86400}:R>`
+			`Your daily reward is still cooking! Come back <t:${dailytime + 86400}:R>.`,
+			`Your daily reward isn't ready to claim yet! Come back <t:${dailytime + 86400}:R>.`,
+			`Your daily reward needs a little more time. Come back <t:${dailytime + 86400}:R>.`
 		]
 
 		const dailyCollect = [
