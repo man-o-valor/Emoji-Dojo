@@ -1039,7 +1039,7 @@ const emojis = [
     {
         emoji:"🛜",
         id:70,
-        hp:0,
+        hp:1,
         dmg:2,
         rarity:0,
         names:[
