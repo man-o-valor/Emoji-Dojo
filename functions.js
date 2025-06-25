@@ -1288,12 +1288,12 @@ function shufflesquad(gamedata, squad) {
       }
     }
 
-    const ids = gamedata.squads[squad - 1].map((item) => item.id);
-
-    const result = [];
-    for (let i = 2; i < ids.length; i++) {
-      if (ids[i] === 73 && ids[i - 2] !== 73) {
-        result.push([ids[i - 2], ids[i - 1]]);
+    // people hugging 1
+    const squadids = gamedata.squads[squad - 1].map((item) => item.id);
+    const hugpairs = [];
+    for (let i = 2; i < squadids.length; i++) {
+      if (squadids[i] === 73 && squadids[i - 2] !== 73) {
+        hugpairs.push([squadids[i - 2], squadids[i - 1]]);
       }
     }
 
@@ -1324,7 +1324,8 @@ function shufflesquad(gamedata, squad) {
       ];
     }
 
-    result.forEach((pair) => {
+    // people hugging 2
+    hugpairs.forEach((pair) => {
       const [fromId, toId] = pair;
       const fromIndices = gamedata.squads[squad - 1]
         .map((item, index) => (item.id === fromId ? index : -1))
