@@ -1,6 +1,5 @@
 git rm config.json
 git rm package-lock.json
-git rm package.json
 git rm node_modules
 git rm setavatar.js
 git rm databases
