@@ -900,6 +900,28 @@ const emojis = [
     description:
       "When your Squad is shuffled, the two friendly Emojis in front of this stay together",
   },
+  {
+    emoji: "🔋",
+    id: 74,
+    hp: 4,
+    dmg: 0,
+    rarity: 2,
+    names: ["Battery", "Full Battery"],
+    class: 1,
+    description:
+      "Attacks for the amount of health it has, plus its own attack power",
+  },
+  {
+    emoji: "🎒",
+    id: 75,
+    hp: 2,
+    dmg: 0,
+    rarity: 1,
+    names: ["Backpack", "Bookbag", "Bag"],
+    class: 1,
+    description:
+      "The friendly Emoji in front of this attacks for 2 more damage",
+  }
 ];
 
 module.exports = {

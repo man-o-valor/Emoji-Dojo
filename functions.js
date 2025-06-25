@@ -1042,11 +1042,26 @@ function playturn(gamedata) {
         gamedata.playerturn,
         0,
         0 -
-          (gamedata.squads[gamedata.playerturn - 1][0].dmg +
+          (activeemoji.dmg +
             gamedata.squads[gamedata.playerturn - 1].filter(
               (element) => element.id == 0
             ).length),
         "clapped at"
+      );
+    }
+    if (activeemoji.id == 0) {
+      // battery
+      basicattackflag = false;
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        0,
+        gamedata.playerturn,
+        0,
+        0 -
+          (activeemoji.dmg +
+            activeemoji.hp),
+        "zapped"
       );
     }
     if (activeemoji.id == 63) {
@@ -1059,7 +1074,7 @@ function playturn(gamedata) {
         gamedata.playerturn,
         0,
         0 -
-          (gamedata.squads[gamedata.playerturn - 1][0].dmg +
+          (activeemoji.dmg +
             gamedata.squads[gamedata.playerturn - 1].filter(
               (element) => element.id == 14
             ).length *
@@ -1079,11 +1094,26 @@ function playturn(gamedata) {
         0,
         gamedata.playerturn,
         0,
-        0 - gamedata.squads[gamedata.playerturn - 1][0].dmg - 1
+        0 - activeemoji.dmg - 1
       );
     }
     if (
-      (gamedata.squads[gamedata.playerturn - 1][0] ?? { id: undefined }).id ==
+      (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
+      75
+    ) {
+      // backpack
+      basicattackflag = false;
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        0,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg - 2
+      );
+    }
+    if (
+      (activeemoji ?? { id: undefined }).id ==
         13 &&
       gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14)
     ) {
@@ -1095,11 +1125,11 @@ function playturn(gamedata) {
         0,
         gamedata.playerturn,
         0,
-        0 - gamedata.squads[gamedata.playerturn - 1][0].dmg - 1
+        0 - activeemoji.dmg - 1
       );
     }
     if (
-      (gamedata.squads[gamedata.playerturn - 1][0] ?? { id: undefined }).id ==
+      (activeemoji ?? { id: undefined }).id ==
         44 &&
       gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14)
     ) {
@@ -1111,7 +1141,7 @@ function playturn(gamedata) {
         0,
         gamedata.playerturn,
         0,
-        0 - gamedata.squads[gamedata.playerturn - 1][0].dmg - 3
+        0 - activeemoji.dmg - 3
       );
     }
     if (activeemoji.id == 60) {
@@ -1124,7 +1154,7 @@ function playturn(gamedata) {
         gamedata.playerturn,
         0,
         0 -
-          (gamedata.squads[gamedata.playerturn - 1][0].dmg +
+          (activeemoji.dmg +
             gamedata.squads[gamedata.playerturn * -1 + 3][0].dmg * 2),
         "reflected at"
       );
@@ -1136,7 +1166,7 @@ function playturn(gamedata) {
         0,
         gamedata.playerturn,
         0,
-        0 - gamedata.squads[gamedata.playerturn - 1][0].dmg
+        0 - activeemoji.dmg
       );
     }
     if (
@@ -1153,7 +1183,7 @@ function playturn(gamedata) {
       );
     }
     if (
-      (gamedata.squads[gamedata.playerturn - 1][0] ?? { id: undefined }).id ==
+      (activeemoji ?? { id: undefined }).id ==
         34 &&
       gamedata.squads[gamedata.playerturn * -1 + 3].length > 1
     ) {
@@ -1164,12 +1194,12 @@ function playturn(gamedata) {
         1,
         gamedata.playerturn,
         0,
-        0 - gamedata.squads[gamedata.playerturn - 1][0].dmg,
+        0 - activeemoji.dmg,
         "zapped"
       );
     }
     if (
-      (gamedata.squads[gamedata.playerturn - 1][0] ?? { id: undefined }).id ==
+      (activeemoji ?? { id: undefined }).id ==
         37 &&
       gamedata.turn % 4 <= 2
     ) {
