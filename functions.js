@@ -383,7 +383,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         );
       }
       if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 69) {
-        // urn
+        // amphora
         const commons = emojis.filter((item) => item.rarity === 0);
         const rand = Math.floor(Math.random() * commons.length);
         gamedata.squads[squad - 1].splice(
@@ -1009,6 +1009,13 @@ function playturn(gamedata) {
           gamedata.squads[0][i].hp += gamedata.squads[0].filter(
             (element) => element.id == 70
           ).length;
+        } else if (
+          gamedata.squads[0][i].id == 76 &&
+          gamedata.squads[0][i - 1] != undefined
+        ) {
+          // fog
+          gamedata.squads[0][i - 1].hp += 4;
+          gamedata.squads[0].splice(i, 1);
         }
       }
       for (i = 0; i < gamedata.squads[1].length; i++) {
@@ -1021,6 +1028,13 @@ function playturn(gamedata) {
           gamedata.squads[1][i].hp += gamedata.squads[1].filter(
             (element) => element.id == 70
           ).length;
+        } else if (
+          gamedata.squads[1][i].id == 76 &&
+          gamedata.squads[1][i - 1] != undefined
+        ) {
+          // fog
+          gamedata.squads[1][i - 1].hp += 4;
+          gamedata.squads[1].splice(i, 1);
         }
       }
     }
@@ -1058,9 +1072,7 @@ function playturn(gamedata) {
         0,
         gamedata.playerturn,
         0,
-        0 -
-          (activeemoji.dmg +
-            activeemoji.hp),
+        0 - (activeemoji.dmg + activeemoji.hp),
         "zapped"
       );
     }
@@ -1113,8 +1125,7 @@ function playturn(gamedata) {
       );
     }
     if (
-      (activeemoji ?? { id: undefined }).id ==
-        13 &&
+      (activeemoji ?? { id: undefined }).id == 13 &&
       gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14)
     ) {
       // guitar
@@ -1129,8 +1140,7 @@ function playturn(gamedata) {
       );
     }
     if (
-      (activeemoji ?? { id: undefined }).id ==
-        44 &&
+      (activeemoji ?? { id: undefined }).id == 44 &&
       gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14)
     ) {
       // violin
@@ -1183,8 +1193,7 @@ function playturn(gamedata) {
       );
     }
     if (
-      (activeemoji ?? { id: undefined }).id ==
-        34 &&
+      (activeemoji ?? { id: undefined }).id == 34 &&
       gamedata.squads[gamedata.playerturn * -1 + 3].length > 1
     ) {
       // zap
@@ -1198,11 +1207,7 @@ function playturn(gamedata) {
         "zapped"
       );
     }
-    if (
-      (activeemoji ?? { id: undefined }).id ==
-        37 &&
-      gamedata.turn % 4 <= 2
-    ) {
+    if ((activeemoji ?? { id: undefined }).id == 37 && gamedata.turn % 4 <= 2) {
       // ghost
       const tempemj = gamedata.squads[gamedata.playerturn * -1 + 2][0].emoji;
       const temphp = gamedata.squads[gamedata.playerturn * -1 + 2][0].hp;

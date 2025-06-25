@@ -847,12 +847,12 @@ const emojis = [
     description: "Nothing Special",
   },
   {
-    emoji: "⚱️",
+    emoji: "🏺",
     id: 69,
     hp: 2,
     dmg: 1,
     rarity: 1,
-    names: ["Urn", "Vase", "Pot"],
+    names: ["Amphora", "Vase", "Pot"],
     class: 3,
     description: "When defeated, summons a random *️⃣ Common emoji",
   },
@@ -921,6 +921,17 @@ const emojis = [
     class: 1,
     description:
       "The friendly Emoji in front of this attacks for 2 more damage",
+  },
+  {
+    emoji: "🌫️",
+    id: 76,
+    hp: 0,
+    dmg: 0,
+    rarity: 1,
+    names: ["Fog", "Mist", "Foggy", "Misty"],
+    class: 0,
+    description:
+      "At the beginning of the Battle, heals the friendly Emoji in front of itself by 4 and defeats itself",
   }
 ];
 
