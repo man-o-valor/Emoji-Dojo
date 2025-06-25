@@ -1288,6 +1288,15 @@ function shufflesquad(gamedata, squad) {
       }
     }
 
+    const ids = gamedata.squads[squad - 1].map((item) => item.id);
+
+    const result = [];
+    for (let i = 2; i < ids.length; i++) {
+      if (ids[i] === 73 && ids[i - 2] !== 73) {
+        result.push([ids[i - 2], ids[i - 1]]);
+      }
+    }
+
     const lockedIndices = gamedata.squads[squad - 1]
       .map((item, index) =>
         item.id == 71 ||
@@ -1314,6 +1323,22 @@ function shufflesquad(gamedata, squad) {
         gamedata.squads[squad - 1][idx1],
       ];
     }
+
+    result.forEach((pair) => {
+      const [fromId, toId] = pair;
+      const fromIndices = gamedata.squads[squad - 1]
+        .map((item, index) => (item.id === fromId ? index : -1))
+        .filter((index) => index !== -1);
+      const toIndices = gamedata.squads[squad - 1]
+        .map((item, index) => (item.id === toId ? index : -1))
+        .filter((index) => index !== -1);
+      if (fromIndices.length === 0 || toIndices.length === 0) return;
+      const toIndex = toIndices[Math.floor(Math.random() * toIndices.length)];
+      const fromIndex =
+        fromIndices[Math.floor(Math.random() * fromIndices.length)];
+      const [itemToMove] = gamedata.squads[squad - 1].splice(toIndex, 1);
+      gamedata.squads[squad - 1].splice(fromIndex, 0, itemToMove);
+    });
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
       if (gamedata.squads[squad - 1][i].id == 28) {

@@ -889,6 +889,17 @@ const emojis = [
     description:
       "When your Squad is shuffled, this and the friendly Emoji in behind it do not get moved",
   },
+  {
+    emoji: "🫂",
+    id: 73,
+    hp: 4,
+    dmg: 1,
+    rarity: 2,
+    names: ["People Hugging", "Hugging", "Hug", "Hug In Silhouette"],
+    class: 6,
+    description:
+      "When your Squad is shuffled, the two friendly Emojis in front of this stay together",
+  },
 ];
 
 module.exports = {
