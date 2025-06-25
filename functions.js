@@ -1303,6 +1303,9 @@ function shufflesquad(gamedata, squad) {
       .map((_, index) => index)
       .filter((index) => !lockedIndices.includes(index));
 
+    console.log(lockedIndices,unlockedIndices)
+    console.log(gamedata.squads[squad - 1])
+
     for (let i = unlockedIndices.length - 1; i > 0; i--) {
       // the shuffling part
       const j = Math.floor(Math.random() * (i + 1));
