@@ -1295,7 +1295,7 @@ function shufflesquad(gamedata, squad) {
     }
 
     const lockedIndices = gamedata.squads[squad - 1]
-      .map((item, index) => (item.id == 71 ? index : -1))
+      .map((item, index) => (item.id == 71 || gamedata.squads[squad - 1][index-1].id == 71 ? index : -1))
       .filter((index) => index != -1);
     // pushpin
 
