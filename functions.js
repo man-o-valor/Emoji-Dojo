@@ -1302,7 +1302,7 @@ function shufflesquad(gamedata, squad) {
         item.id == 71 ||
         (gamedata.squads[squad - 1][index - 1] ?? { id: 0 }).id == 71 ||
         item.id == 72 ||
-        (gamedata.squads[squad - 1][index - 1].id ?? { id: 0 }) == 72
+        (gamedata.squads[squad - 1][index - 1] ?? { id: 0 }).id == 72
           ? index
           : -1
       )
