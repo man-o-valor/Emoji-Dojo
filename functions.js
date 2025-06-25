@@ -1315,6 +1315,7 @@ function shufflesquad(gamedata, squad) {
         gamedata.squads[squad - 1][idx2],
         gamedata.squads[squad - 1][idx1],
       ];
+      console.log(idx1,idx2)
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
