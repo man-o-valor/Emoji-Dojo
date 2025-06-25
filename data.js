@@ -868,15 +868,26 @@ const emojis = [
       "At the beginning of the Battle, increases its health by the number of friendly 🛜",
   },
   {
-    emoji: "📌",
+    emoji: "⚓",
     id: 71,
-    hp: 4,
+    hp: 3,
+    dmg: 2,
+    rarity: 1,
+    names: ["Anchor"],
+    class: 6,
+    description:
+      "When your Squad is shuffled, this and the friendly Emoji in front of it do not get moved",
+  },
+  {
+    emoji: "📌",
+    id: 72,
+    hp: 3,
     dmg: 2,
     rarity: 1,
     names: ["Pushpin", "Pin", "Thumbtack", "Tack"],
     class: 6,
     description:
-      "When your Squad is shuffled, this and the friendly Emoji in front of it do not get moved",
+      "When your Squad is shuffled, this and the friendly Emoji in behind it do not get moved",
   },
 ];
 

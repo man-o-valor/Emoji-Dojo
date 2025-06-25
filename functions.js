@@ -17,11 +17,9 @@ async function getlogs() {
 }
 
 async function writelogs(json) {
-  console.log(json);
   const formattedjson = formatToJson(JSON.stringify(json), {
     withDetails: true,
   });
-  console.log(formattedjson);
   fs.writeFileSync("logs.json", formattedjson.result, "utf8");
 }
 
@@ -183,10 +181,6 @@ function richtextadd(gamedata, text) {
 }
 
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
-  console.log(
-    `position ${pos} of squad ${squad} attacked position ${pos2} of squad ${squad2}, and changed its hp by ${val}! also verb ${verb} silent ${silence}`
-  );
-
   if (
     (gamedata.squads[squad2 - 1][pos] ?? { id: undefined }).id == 22 &&
     val < 0
@@ -1295,16 +1289,20 @@ function shufflesquad(gamedata, squad) {
     }
 
     const lockedIndices = gamedata.squads[squad - 1]
-      .map((item, index) => (item.id == 71 || gamedata.squads[squad - 1][index-1].id == 71 ? index : -1))
+      .map((item, index) =>
+        item.id == 71 ||
+        (gamedata.squads[squad - 1][index - 1] ?? { id: 0 }).id == 71 ||
+        item.id == 72 ||
+        (gamedata.squads[squad - 1][index - 1].id ?? { id: 0 }) == 72
+          ? index
+          : -1
+      )
       .filter((index) => index != -1);
-    // pushpin
+    // pushpin, anchor
 
     const unlockedIndices = gamedata.squads[squad - 1]
       .map((_, index) => index)
       .filter((index) => !lockedIndices.includes(index));
-
-    console.log(lockedIndices,unlockedIndices)
-    console.log(gamedata.squads[squad - 1])
 
     for (let i = unlockedIndices.length - 1; i > 0; i--) {
       // the shuffling part
@@ -1315,7 +1313,6 @@ function shufflesquad(gamedata, squad) {
         gamedata.squads[squad - 1][idx2],
         gamedata.squads[squad - 1][idx1],
       ];
-      console.log(idx1,idx2)
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {

@@ -237,7 +237,6 @@ module.exports = {
             (a, v) => (v == emojifound.id ? a + 1 : a),
             0
           );
-          console.log(emojifound.id, squadarray, numberfound, numberowned);
           if (numberfound < numberowned) {
             comps.push(row1);
             comps.push(row2);

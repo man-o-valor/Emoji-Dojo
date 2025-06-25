@@ -497,7 +497,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   const emojitoadd =
                     emojilist[Math.floor(Math.random() * emojilist.length)];
                   emojisbought[shopdata[choice].id].push(emojitoadd);
-                  console.log(emojilist, emojitoadd);
+
                   let tempvault = await database.get(
                     interaction.user.id + "vault"
                   );
@@ -603,7 +603,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
               }
             });
           } catch (e) {
-            console.log(e);
+            console.error(e);
             interaction.update({
               content: makemessage(
                 `</market:1225095581211557937>\` ➡️ ${shopdata[
