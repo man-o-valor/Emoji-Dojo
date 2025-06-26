@@ -16,14 +16,7 @@ In Emoji Dojo, you build and arrange **Squads** by collecting **Emojis**. Your S
 
 ---
 
-### 👏 Clap
-❤️ Health: **4**  
-⚔️ Attack Power: **0**  
-*️⃣ Rarity: **Common**  
-🟣 Class: **Damaging**  
-Ability:  
-Deals 1 more damage for each other undefeated friendly 👏  
-You have 1
+![Clap Emoji Stats](/assets/readme/emojiexample.png)
 
 ---
 
