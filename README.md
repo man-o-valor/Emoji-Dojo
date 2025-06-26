@@ -82,3 +82,14 @@ If you ever have any Emojis in your Dojo that you'll never need, you can get rid
 `/friendlybattle` *(battle another user with no coins involved)*  
 `/shop` *(visit the Shop)*  
 `/squad` *(view your Squad)*  
+
+## Technical Shenanigans 📟
+If you want to clone or fork Emoji Dojo:  
+- Create a `config.json` file containing something like this:  
+    ```{"token":"when you clone this replace this with your Discord bot's token from the developer portal"}```  
+- Create a database at `databases/database.sqlite`.  
+- Create an empty `logs.json` file.  
+- Finally, install the node packages you need with `npm i` in your terminal.  
+Your version of Emoji Dojo is ready to run with `node dc.js` and `node .` :)  
+
+> psst! this was last updated on june 25, 2025
