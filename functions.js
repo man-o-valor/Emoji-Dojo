@@ -53,7 +53,6 @@ async function fetchresearch(id) {
   const userresearch =
     (await database.get(id + "research")) ?? "0/0/0/0/0/0/0/0";
   let lab = userresearch.split("/");
-  lab.pop();
   while (lab.length < 8) {
     lab.push(0);
   }
