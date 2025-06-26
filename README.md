@@ -1,4 +1,4 @@
-# 😀 Emoji Dojo 🎋
+# 😀 Emoji Dojo 🎋 <!-- no toc -->
 Welcome to Emoji Dojo, a Discord Bot game that I've been working on and off on for about a year! It's not currently available to invite or play yet, but you can follow this repository if you want me to keep you posted :)
 
 In Emoji Dojo, you build and arrange **Squads** by collecting **Emojis**. Your Squad is used to battle directly against other users' Squads in **Battles**. If you win Battles, you earn **Coins**. Then, you can spend your Coins at the **Shop** to get new Emojis and complete your **Dojo**.
@@ -16,7 +16,7 @@ In Emoji Dojo, you build and arrange **Squads** by collecting **Emojis**. Your S
 
 ---
 
-### 👏 Clap
+### 👏 Clap <!-- no toc -->
 ❤️ Health: **4**  
 ⚔️ Attack Power: **0**  
 *️⃣ Rarity: **Common**  
