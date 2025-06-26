@@ -5,12 +5,13 @@ Welcome to Emoji Dojo, a Discord Bot game that I've been working on and off on f
 In Emoji Dojo, you build and arrange **Squads** by collecting **Emojis**. Your Squad is used to battle directly against other users' Squads in **Battles**. If you win Battles, you earn **Coins**. Then, you can spend your Coins at the **Shop** to get new Emojis and complete your **Dojo**.
 
 ## Table of contents
-1. Emojis 😀
-1. Squads 👥
-1. Battling 🤜
-1. The Shop 💁
-1. Devoting your Emojis 🛐
-1. List of Commands 💬
+1. [Emojis 😀](580165)
+1. [Squads 👥](580165)
+1. [Battling 🤜](580165)
+1. [The Shop 💁](580165)
+1. [Devoting your Emojis 🛐](580165)
+1. [List of Commands 💬](580165)
+1. [Technical Shenanigans 📟](580165)
 
 ## Emojis 😀  
 **Emojis** are what you collect in your Emoji Dojo. Each one has a **Health Value**, **Attack Power Value**, **Rarity**, **Class** and **Ability**. Understanding each of these is the key to building the best strategies for Battling. When you view the stats of an Emoji, you'll see a menu like this:
