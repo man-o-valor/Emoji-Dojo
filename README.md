@@ -68,11 +68,15 @@ At the end of each Battle, the winner will recieve Coins based on how many of th
 ## The Shop 💁
 **The Shop** is your main source of getting new Emojis and also, coincidentally, the only way to spend your Coins. The Shop each day is run by Tipping Hand, an NPC who's in charge of wrangling Emojis to sell and trade. You can buy random emojis or random emoji packs if you don't really mind what you get, or if you're looking out for a specific Emoji, you can try to grab it if it's being specially offered. The special offer Emojis refresh every 24 hours. Please note, the random Emoji Packs are not gambling boxes, because the value of the contents of each one is always the same :)
 
+![Shop Example](/assets/readme/shopexample.png)
+
 | You can visit the Shop with the `/shop` command, who would've guessed? |
 | :--- |
 
 ## Devoting your Emojis 🛐
 If you ever have any Emojis in your Dojo that you'll never need, you can get rid of them by ~~sacrificing~~ **Devoting** them! You can Devote Emojis from their stat pages, and each Devotion you make will bring you closer to attracting a Master Emoji. There is one Master Emoji for each Emoji class, and when you Devote an Emoji, it will make progress towards obtaining the Master of the class the Devoted Emoji belongs to. Master Emojis are incredibly powerful, and they can synergize with other emojis of their class to make your Squad extremely powerful!
+
+![Devotion Example](/assets/readme/devotionexample.png)
 
 | You can see your Devoting progress with the `/devotions` command, or Devote your emojis with the `/dojo [emoji name]` command. |
 | :--- |
