@@ -1,3 +1,4 @@
+<!-- no toc -->
 # 😀 Emoji Dojo 🎋
 Welcome to Emoji Dojo, a Discord Bot game that I've been working on and off on for about a year! It's not currently available to invite or play yet, but you can follow this repository if you want me to keep you posted :)
 
