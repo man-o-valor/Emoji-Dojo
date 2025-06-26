@@ -91,5 +91,7 @@ If you want to clone or fork Emoji Dojo:
 - Create an empty `logs.json` file.  
 - Finally, install the node packages you need with `npm i` in your terminal.  
 Your version of Emoji Dojo is ready to run with `node dc.js` and `node .` :)  
+  
+---
 
 > psst! this was last updated on june 25, 2025
