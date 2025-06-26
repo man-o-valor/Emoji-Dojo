@@ -29,6 +29,8 @@ Your **Dojo** is the complete list of every Emoji you own, even ones that you ar
 
 ## Squads 👥
 Your **Squad** is like your toolbar of Emojis, the ones you're "using" right now. Only 8 Emojis can fit in your Squad at a time, so pick your favorites wisely! Squads always go into battle from *front to back*, or *index 1 through index 8*, so organizing the order of them matters. Some Emojis' abilities will make use of positions of the Emoji in the Squad, so thought should be put into the order of the Emojis as well as which ones you pick. In Battles, the only the frontmost emoji will attack until it is defeated, and then the rest of the Squad moves forward and then new frontmost starts attacking.
+
+![Squad Example](/assets/readme/squadexample.png)
   
 | You can view your Squad with the `/squad` command, and switch out Emojis in it with the `/dojo [emoji name]` command. |
 | :--- |
@@ -55,6 +57,10 @@ Each Emoji has its own health and attack power displayed above them, which start
 At the beginning of the Battle, a random Sqaud attacks first, affecting the frontmost enemy Emoji's health value and resolving any effects. When an Emoji is reduced to 0 or lower health, it is defeated.
 
 At the end of each Battle, the winner will recieve Coins based on how many of their Emojis are undefeated. The loser will lose coins based on how many of the winner's Emojis are undefeated, but the loser loses less coins than the winner gains. Battles can result in a draw if they take too many turns to finish or if they are trapped in an infinite loop.
+
+![Battle Start Example](/assets/readme/battlestartexample.png)
+
+![Battle Demo](/assets/readme/battledemo.png)
 
 | You can Battle a fellow user with the `/battleuser` command, or Battle DojoBot with the `/battlebot` command. |
 | :--- |
