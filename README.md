@@ -41,6 +41,8 @@ Your **Squad** is like your toolbar of Emojis, the ones you're "using" right now
 ## Battling 🤜
 **Battling** is the real action that happens in Emoji Dojo. When you Battle, you put your Sqaud up against your opponent's Squad and watch them fight until one Squad is completely defeated. You can battle against a fellow user, or if you're short on Coins (or friends), DojoBot. Additonally, Battles happen completely autonomously with no interaction from either player. Battles look like this:
 
+---
+
 ❤️❤️❤️❤️❤️❤️❤️❤️ | ❤️❤️❤️❤️❤️❤️❤️❤️  
 ⚔️⚔️⚔️⚔️⚔️⚔️⚔️⚔️ | ⚔️⚔️⚔️⚔️⚔️⚔️⚔️⚔️  
 🟢🟢🟢🟢🟢🟢🟢🟩 | 🟥🔴🔴🔴🔴🔴🔴🔴  
@@ -48,6 +50,8 @@ Your **Squad** is like your toolbar of Emojis, the ones you're "using" right now
 🟢 = Your Squad ("friendly" Emojis)  
 🔴 = Opponent Squad ("enemy" Emojis)  
 ⬜ = "frontmost" Emojis  
+
+---
 
 The "frontmost" Emojis of each Squad deal damage to each other in turns until one of them is defeated. When an emoji is defeated, it is removed from the game and the rest of the Squad moves up, making the Emoji directly behind the old frontmost emoji the new frontmost emoji.  
 
