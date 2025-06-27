@@ -196,6 +196,16 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     val = Math.min(val + 1, -1);
   }
   if (
+    (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 79 &&
+    val < 0 &&
+    (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
+      gamedata.squads[gamedata.playerturn - 1][pos + 2].id == 77)
+  ) {
+    // drum
+    val = Math.min(val + 1, -1);
+  }
+
+  if (
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 35 &&
     val < 0
   ) {
@@ -276,6 +286,23 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       );
     }
     if (gamedata.squads[squad - 1][pos].hp <= 0) {
+      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 82) {
+        // dove
+        gamedata.squads[squad2 - 1].splice(
+          0,
+          0,
+          lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
+        );
+        gamedata = richtextadd(
+          gamedata,
+          `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
+            emojis[82].emoji
+          } made peace with ${gamedata.player[squad - 1]}'s ${
+            gamedata.squads[squad - 1][pos].id
+          }!`
+        );
+        silence = true;
+      }
       if (!silence) {
         gamedata = richtextadd(
           gamedata,
@@ -299,6 +326,16 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
             emojis[20].emoji
           } was promoted to a ${emojis[21].emoji}!`
+        );
+      }
+      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 80) {
+        // fax
+        gamedata.squads[squad2 - 1].splice(0, 0, lodash.cloneDeep(emojis[81]));
+        gamedata = richtextadd(
+          gamedata,
+          `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
+            emojis[80].emoji
+          } printed out a ${emojis[81].emoji}!`
         );
       }
       if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 52) {
@@ -861,6 +898,15 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           gamedata = alterhp(gamedata, squad, pos, squad, pos + 1, 1, "kissed");
         }
         if (
+          (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 78 &&
+          (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
+            gamedata.squads[gamedata.playerturn - 1][pos + 2].id == 77)
+        ) {
+          // saxophone
+          gamedata = alterhp(gamedata, squad, pos, squad, pos + 1, 1, "jazzed");
+        }
+
+        if (
           (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 3 &&
           gamedata.squads[squad - 1].length > 1
         ) {
@@ -1089,7 +1135,9 @@ function playturn(gamedata) {
             gamedata.squads[gamedata.playerturn - 1].filter(
               (element) => element.id == 14
             ).length *
-              2),
+              2) +
+          gamedata.squads[gamedata.playerturn - 1][1].id ==
+          77,
         "blasted"
       );
     }
@@ -1125,7 +1173,8 @@ function playturn(gamedata) {
     }
     if (
       (activeemoji ?? { id: undefined }).id == 13 &&
-      gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14)
+      (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
+        gamedata.squads[gamedata.playerturn - 1][1].id == 77)
     ) {
       // guitar
       basicattackflag = false;
@@ -1140,7 +1189,8 @@ function playturn(gamedata) {
     }
     if (
       (activeemoji ?? { id: undefined }).id == 44 &&
-      gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14)
+      (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
+        gamedata.squads[gamedata.playerturn - 1][1].id == 77)
     ) {
       // violin
       basicattackflag = false;

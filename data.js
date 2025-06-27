@@ -71,7 +71,7 @@ const classes = [
     id: 4,
     name: "Movement",
     emoji: "<:movement:1326215169973682230>",
-    legendary: 7,
+    legendary: 82,
   },
   {
     id: 5,
@@ -99,14 +99,14 @@ const devotionhelp =
 /*
 
 Class ideas:
-Healing: X-ray
-Damaging: Wolf
-Summoning: Wand
-Defense: Mirror
-Transforming: Mask
-Shuffling: Volcano
-Musical: Loud Sound
-Movement
+Healing: X-ray | 11 emojis
+Damaging: Wolf | 15 emojis
+Summoning: Wand | 6 emojis
+Defense: Mirror | 10 emojis
+Transforming: Mask | 8 emojis
+Shuffling: Volcano | 8 emojis
+Musical: Loud Sound | 8 emojis
+Movement | 9 emojis
 Solar?
 
 */
@@ -258,7 +258,7 @@ const emojis = [
     names: ["Guitar"],
     class: 7,
     description:
-      "If you have at least one undefeated 🎶 on your squad, deal 1 more damage",
+      "If there is at least one undefeated friendly 🎶, deal 1 more damage",
   },
   {
     emoji: "🎶",
@@ -331,7 +331,7 @@ const emojis = [
     rarity: 0,
     names: ["Chess Pawn", "Pawn"],
     class: 5,
-    description: "When this defeats an Emoji, become a 👑",
+    description: "When this defeats an Emoji, it becomes a 👑",
   },
   {
     emoji: "👑",
@@ -509,7 +509,7 @@ const emojis = [
     names: ["Ghost"],
     class: 5,
     description:
-      "Every other round when attacking, turns the frontmost enemy Emoji into a 😶 with identical stats",
+      "Every other round when attacking, transforms the frontmost enemy Emoji into a 😶 with identical stats",
   },
   {
     emoji: "✨",
@@ -575,7 +575,7 @@ const emojis = [
   {
     emoji: "🎻",
     id: 44,
-    hp: 3,
+    hp: 2,
     dmg: 2,
     rarity: 0,
     names: ["Violin", "Cello"],
@@ -832,7 +832,7 @@ const emojis = [
       "Lock Pen",
       "Lock with Nib",
     ],
-    class: 3,
+    class: 5,
     description:
       "When attacked, transforms the frontmost enemy emoji into a 🔒 with identical stats, and increases the frontmost enemy's attack power by 1",
   },
@@ -853,7 +853,7 @@ const emojis = [
     dmg: 1,
     rarity: 1,
     names: ["Amphora", "Vase", "Pot"],
-    class: 3,
+    class: 5,
     description: "When defeated, summons a random *️⃣ Common emoji",
   },
   {
@@ -863,7 +863,7 @@ const emojis = [
     dmg: 2,
     rarity: 0,
     names: ["Wireless", "Internet", "Network", "Signal"],
-    class: 2,
+    class: 1,
     description:
       "At the beginning of the Battle, increases its health by the number of friendly 🛜",
   },
@@ -874,7 +874,7 @@ const emojis = [
     dmg: 2,
     rarity: 1,
     names: ["Anchor"],
-    class: 6,
+    class: 2,
     description:
       "When your Squad is shuffled, this and the friendly Emoji in front of it do not get moved",
   },
@@ -885,7 +885,7 @@ const emojis = [
     dmg: 2,
     rarity: 1,
     names: ["Pushpin", "Pin", "Thumbtack", "Tack"],
-    class: 6,
+    class: 2,
     description:
       "When your Squad is shuffled, this and the friendly Emoji in behind it do not get moved",
   },
@@ -896,7 +896,7 @@ const emojis = [
     dmg: 1,
     rarity: 2,
     names: ["People Hugging", "Hugging", "Hug", "Hug In Silhouette"],
-    class: 6,
+    class: 2,
     description:
       "When your Squad is shuffled, the two friendly Emojis in front of this stay together",
   },
@@ -932,7 +932,72 @@ const emojis = [
     class: 0,
     description:
       "At the beginning of the Battle, heals the friendly Emoji in front of itself by 4 and defeats itself",
-  }
+  },
+  {
+    emoji: "🎧",
+    id: 77,
+    hp: 5,
+    dmg: 2,
+    rarity: 1,
+    names: ["Headphones", "Earbuds"],
+    class: 7,
+    description:
+      "Friendly Emojis in front of this act as if this was a 🎶 emoji",
+  },
+  {
+    emoji: "🎷",
+    id: 78,
+    hp: 6,
+    dmg: 3,
+    rarity: 1,
+    names: ["Saxophone", "Sax"],
+    class: 7,
+    description:
+      "If there is at least one undefeated friendly 🎶, heals the friendly Emoji in front of itself by 1 when it is attacked",
+  },
+  {
+    emoji: "🥁",
+    id: 79,
+    hp: 5,
+    dmg: 3,
+    rarity: 1,
+    names: ["Drum", "Drum with Drumsticks"],
+    class: 7,
+    description:
+      "If there is at least one undefeated friendly 🎶, takes 1 less damage from every attack to a minimum of 1",
+  },
+  {
+    emoji: "📠",
+    id: 80,
+    hp: 4,
+    dmg: 3,
+    rarity: 2,
+    names: ["Fax", "Fax Machine", "Receipt Printer"],
+    class: 3,
+    description:
+      "When this defeats an Emoji, it summons 📃 at the front of the Squad",
+  },
+  {
+    emoji: "📃",
+    id: 81,
+    hp: 1,
+    dmg: 2,
+    rarity: -1,
+    names: ["Page with Curl"],
+    class: null,
+    description: "Nothing Special",
+  },
+  {
+    emoji: "🕊️",
+    id: 82,
+    hp: 4,
+    dmg: 2,
+    rarity: 3,
+    names: ["Dove"],
+    class: 4,
+    description:
+      "When this would defeat an emoji, converts it to the friendly team, heals it to full health, and moves it to the front of the Squad",
+  },
 ];
 
 module.exports = {
