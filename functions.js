@@ -1108,7 +1108,7 @@ function playturn(gamedata) {
         "clapped at"
       );
     }
-    if (activeemoji.id == 0) {
+    if (activeemoji.id == 74) {
       // battery
       basicattackflag = false;
       gamedata = alterhp(
