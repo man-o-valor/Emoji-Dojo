@@ -905,7 +905,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata.squads[gamedata.playerturn - 1][pos + 2] ?? {
                 id: undefined,
               }
-            ).id == 77)
+            ).id == 78)
         ) {
           // saxophone
           gamedata = alterhp(gamedata, squad, pos, squad, pos + 1, 1, "jazzed");
