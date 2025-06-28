@@ -131,6 +131,8 @@ module.exports = {
 
         closeviewemoji = closestMatch(viewemoji, allnames);
 
+        console.log(viewemoji,closeviewemoji);
+        
         const emojifound = emojis.find(
           (x) =>
             x.names.find(
