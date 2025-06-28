@@ -131,8 +131,11 @@ module.exports = {
 
         closeviewemoji = closestMatch(viewemoji, allnames);
 
-        console.log(viewemoji,closeviewemoji);
-        
+        let redirecttext = "";
+        if (viewemoji != closeviewemoji) {
+          redirecttext = `-# redirected from "${viewemoji}"`;
+        }
+
         const emojifound = emojis.find(
           (x) =>
             x.names.find(
@@ -262,6 +265,7 @@ module.exports = {
           const response = await interaction.reply({
             embeds: [vaultembed],
             components: comps,
+            content: redirecttext,
           });
           let logs = await getlogs();
           logs.logs.games.emojisviewed += 1;
