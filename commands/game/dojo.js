@@ -27,6 +27,7 @@ const {
   writelogs,
 } = require("../../functions.js");
 const fs = require("fs");
+const { closestMatch } = require("closest-match");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -118,13 +119,26 @@ module.exports = {
           });
         }
       } else if (viewemoji) {
+        let closeviewemoji = viewemoji;
+        let didyoumean = "";
+
+        const allnames = [];
+        for (let i = 0; i < emojis.length; i++) {
+          allnames.push(...emojis[i].names);
+        }
+
+        closeviewemoji = closestMatch(viewemoji, allnames);
+        if (closeviewemoji != viewemoji) {
+          didyoumean = `-# redirected from "${viewemoji}"`;
+        }
+
         const emojifound = emojis.find(
           (x) =>
             x.names.find(
               (y) =>
                 y.replace(/\s+/g, "_").toLowerCase() ==
-                viewemoji.trim().replace(/\s+/g, "_").toLowerCase()
-            ) || x.emoji == viewemoji.replace(/\s+/g, "")
+                closeviewemoji.trim().replace(/\s+/g, "_").toLowerCase()
+            ) || x.emoji == closeviewemoji.replace(/\s+/g, "")
         );
         const viewemojiid = vaultarray.find(
           (x) => emojis[x].id == (emojifound ?? { id: undefined }).id
@@ -247,6 +261,7 @@ module.exports = {
           const response = await interaction.reply({
             embeds: [vaultembed],
             components: comps,
+            content: didyoumean,
           });
           let logs = await getlogs();
           logs.logs.games.emojisviewed += 1;
@@ -457,7 +472,7 @@ module.exports = {
           }
         } else {
           await interaction.reply({
-            content: `You don't have the "${viewemoji}" emoji, or it doesn't exist.`,
+            content: `I'm not quite sure what you meant by "${viewemoji}".`,
             flags: "Ephemeral",
           });
         }
