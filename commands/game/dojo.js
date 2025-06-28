@@ -120,17 +120,14 @@ module.exports = {
         }
       } else if (viewemoji) {
         let closeviewemoji = viewemoji;
-        let didyoumean = "";
 
         const allnames = [];
         for (let i = 0; i < emojis.length; i++) {
           allnames.push(...emojis[i].names);
+          allnames.push(emojis[i].emoji);
         }
 
         closeviewemoji = closestMatch(viewemoji, allnames);
-        if (closeviewemoji != viewemoji) {
-          didyoumean = `-# redirected from "${viewemoji}"`;
-        }
 
         const emojifound = emojis.find(
           (x) =>
@@ -261,7 +258,6 @@ module.exports = {
           const response = await interaction.reply({
             embeds: [vaultembed],
             components: comps,
-            content: didyoumean,
           });
           let logs = await getlogs();
           logs.logs.games.emojisviewed += 1;
