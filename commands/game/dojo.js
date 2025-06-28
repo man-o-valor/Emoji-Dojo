@@ -123,7 +123,7 @@ module.exports = {
 
         const allnames = [];
         for (let i = 0; i < emojis.length; i++) {
-          allnames.push(...emojis[i].names);
+          allnames.push(...emojis[i].names.map(name => name.toLowerCase()));
           allnames.push(emojis[i].emoji);
         }
 
