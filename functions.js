@@ -292,7 +292,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         gamedata.squads[squad2 - 1].splice(
           0,
           0,
-          lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
+          lodash.cloneDeep(gamedata.squads[squad - 1][pos])
         );
         gamedata = richtextadd(
           gamedata,

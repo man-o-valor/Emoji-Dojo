@@ -936,7 +936,7 @@ const emojis = [
   {
     emoji: "🎧",
     id: 77,
-    hp: 5,
+    hp: 4,
     dmg: 2,
     rarity: 1,
     names: ["Headphones", "Earbuds"],
@@ -947,8 +947,8 @@ const emojis = [
   {
     emoji: "🎷",
     id: 78,
-    hp: 6,
-    dmg: 3,
+    hp: 5,
+    dmg: 2,
     rarity: 1,
     names: ["Saxophone", "Sax"],
     class: 7,
@@ -958,7 +958,7 @@ const emojis = [
   {
     emoji: "🥁",
     id: 79,
-    hp: 5,
+    hp: 4,
     dmg: 3,
     rarity: 1,
     names: ["Drum", "Drum with Drumsticks"],
@@ -969,8 +969,8 @@ const emojis = [
   {
     emoji: "📠",
     id: 80,
-    hp: 4,
-    dmg: 3,
+    hp: 3,
+    dmg: 2,
     rarity: 2,
     names: ["Fax", "Fax Machine", "Receipt Printer"],
     class: 3,
@@ -996,7 +996,7 @@ const emojis = [
     names: ["Dove"],
     class: 4,
     description:
-      "When this would defeat an emoji, converts it to the friendly team, heals it to full health, and moves it to the front of the Squad",
+      "When this would defeat an emoji, converts it to the friendly team and moves it to the front of the Squad",
   },
 ];
 
