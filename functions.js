@@ -199,7 +199,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 79 &&
     val < 0 &&
     (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-      gamedata.squads[gamedata.playerturn - 1][pos + 2].id == 77)
+      (gamedata.squads[gamedata.playerturn - 1][pos + 2] ?? { id: undefined })
+        .id == 77)
   ) {
     // drum
     val = Math.min(val + 1, -1);
@@ -900,7 +901,11 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         if (
           (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 78 &&
           (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-            gamedata.squads[gamedata.playerturn - 1][pos + 2].id == 77)
+            (
+              gamedata.squads[gamedata.playerturn - 1][pos + 2] ?? {
+                id: undefined,
+              }
+            ).id == 77)
         ) {
           // saxophone
           gamedata = alterhp(gamedata, squad, pos, squad, pos + 1, 1, "jazzed");
@@ -1174,7 +1179,8 @@ function playturn(gamedata) {
     if (
       (activeemoji ?? { id: undefined }).id == 13 &&
       (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-        gamedata.squads[gamedata.playerturn - 1][1].id == 77)
+        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
+          77)
     ) {
       // guitar
       basicattackflag = false;
@@ -1190,7 +1196,8 @@ function playturn(gamedata) {
     if (
       (activeemoji ?? { id: undefined }).id == 44 &&
       (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-        gamedata.squads[gamedata.playerturn - 1][1].id == 77)
+        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
+          77)
     ) {
       // violin
       basicattackflag = false;
