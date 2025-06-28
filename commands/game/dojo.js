@@ -124,9 +124,9 @@ module.exports = {
         const allnames = [];
         for (let i = 0; i < vaultarray.length; i++) {
           allnames.push(
-            ...emojis[vaultarray[i].id].names.map((name) => name.toLowerCase())
+            ...emojis[vaultarray[i]].names.map((name) => name.toLowerCase())
           );
-          allnames.push(emojis[vaultarray[i].id].emoji);
+          allnames.push(emojis[vaultarray[i]].emoji);
         }
 
         closeviewemoji = closestMatch(viewemoji, allnames);
