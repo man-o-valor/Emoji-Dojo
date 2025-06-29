@@ -4,6 +4,7 @@ const {
   trysetupuser,
   getlogs,
   writelogs,
+  dailyrewardremind,
 } = require("../../functions.js");
 
 module.exports = {

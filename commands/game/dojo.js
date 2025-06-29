@@ -25,6 +25,7 @@ const {
   fetchresearch,
   getlogs,
   writelogs,
+  dailyrewardremind,
 } = require("../../functions.js");
 const fs = require("fs");
 const { closestMatch } = require("closest-match");

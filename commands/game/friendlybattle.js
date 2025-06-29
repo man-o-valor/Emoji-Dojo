@@ -12,6 +12,7 @@ const {
   trysetupuser,
   getlogs,
   writelogs,
+  dailyrewardremind,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
