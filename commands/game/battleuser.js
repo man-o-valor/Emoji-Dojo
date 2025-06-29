@@ -166,6 +166,7 @@ module.exports = {
                 acceptemojis[accepts[1] + 1]
               }`,
             });
+            await dailyrewardremind(interaction);
 
             const collectorFilter = (i) =>
               i.user.id == interaction.user.id || i.user.id == battleuser.id;

@@ -267,6 +267,7 @@ module.exports = {
             components: comps,
             content: redirecttext,
           });
+          await dailyrewardremind(interaction);
           let logs = await getlogs();
           logs.logs.games.emojisviewed += 1;
           logs.logs.players[`user${interaction.user.id}`] =
@@ -535,6 +536,7 @@ module.exports = {
             } Special${vaultnumbers[2] == 1 ? "" : "s"}${mastermsg}`,
           }); // , ${vaultnumbers[3]} Legendary
         await interaction.reply({ embeds: [vaultembed] });
+        await dailyrewardremind(interaction);
         let logs = await getlogs();
         logs.logs.games.vaultsviewed += 1;
         logs.logs.players[`user${interaction.user.id}`] =

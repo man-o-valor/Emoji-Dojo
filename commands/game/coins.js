@@ -52,6 +52,7 @@ module.exports = {
       .setTimestamp()
       .setFooter({ text: `${interaction.user.globalName}'s Coins` });
     await interaction.reply({ embeds: [coinembed] });
+    await dailyrewardremind(interaction);
     let logs = await getlogs();
     logs.logs.games.coinsviewed += 1;
     logs.logs.players[`user${interaction.user.id}`] =

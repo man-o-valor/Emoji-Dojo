@@ -50,6 +50,7 @@ module.exports = {
           /*row1*/
         ],
       });
+      await dailyrewardremind(interaction);
       let logs = await getlogs();
       logs.logs.games.squadsviewed += 1;
       logs.logs.players[`user${interaction.user.id}`] =

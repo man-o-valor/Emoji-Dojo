@@ -126,6 +126,7 @@ module.exports = {
             ""
           )}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`DojoBot's\` \`\`\` \`\`\``,
         });
+        await dailyrewardremind(interaction);
 
         const collectorFilter = (i) => i.user.id === interaction.user.id;
 

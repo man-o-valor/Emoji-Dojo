@@ -94,6 +94,7 @@ module.exports = {
       embeds: [labembed],
       components: [row1],
     });
+    await dailyrewardremind(interaction);
     let logs = await getlogs();
     logs.logs.games.devotionsviewed += 1;
     logs.logs.players[`user${interaction.user.id}`] =

@@ -225,6 +225,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
         embeds: [shopembed],
         components: [shop],
       });
+      await dailyrewardremind(interaction);
       let logs = await getlogs();
       logs.logs.games.shopsviewed += 1;
       logs.logs.players[`user${interaction.user.id}`] =

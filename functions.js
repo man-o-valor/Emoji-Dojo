@@ -23,6 +23,19 @@ async function writelogs(json) {
   fs.writeFileSync("logs.json", formattedjson.result, "utf8");
 }
 
+async function dailyrewardremind(interaction) {
+  const dailytime = parseInt(
+    (await database.get(interaction.user.id + "dailytime")) ?? "0"
+  );
+  if (Math.floor(Date.now() / 1000) - dailytime > 86400) {
+    interaction.followUp({
+      content:
+        "📦 Your **daily reward** is ready to claim! Claim it now with </daily:1386876634270929048>!",
+      flags: MessageFlags.Ephemeral,
+    });
+  }
+}
+
 async function getvault(id) {
   //await database.set(id+"vault","0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,22,23,0,1,2,3,4,5,6,8,")
   const rawvault = await database.get(id + "vault");
@@ -1564,4 +1577,5 @@ module.exports = {
   trysetupuser,
   fetchresearch,
   syncresearch,
+  dailyrewardremind,
 };
