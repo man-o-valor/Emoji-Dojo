@@ -3,6 +3,7 @@ const lodash = require("lodash");
 const { emojis, healthemojis, dmgemojis } = require("./data.js");
 const fs = require("fs");
 const formatToJson = require("format-to-json");
+const { MessageFlags } = require("discord.js");
 
 const database = new Keyv("sqlite://databases//database.sqlite", {
   namespace: "userdata",
