@@ -129,12 +129,12 @@ module.exports = {
           );
           allnames.push(emojis[vaultarray[i]].emoji);
         }
-        allnames.push(
+        /*allnames.push(
           ...emojis
-            .filter((emoji) => emoji.rarity === -1)
+            .filter((x) => x.rarity == -1)
             .names.map((name) => name.toLowerCase())
-        );
-        allnames.push(...emojis.filter((emoji) => emoji.rarity === -1).emoji);
+        );*/
+        allnames.push(...emojis.filter((x) => x.rarity == -1).emoji);
 
         console.log(allnames);
 
