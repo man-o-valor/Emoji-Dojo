@@ -28,6 +28,7 @@ async function userboop(id) {
   let logs = await getlogs();
   logs.logs.players[`user${id}`] = logs.logs.players[`user${id}`] ?? {};
   logs.logs.players[`user${id}`].lastboop = Math.floor(Date.now() / 1000);
+  logs.logs.games.lastboop = Math.floor(Date.now() / 1000);
   await writelogs(logs);
 }
 
