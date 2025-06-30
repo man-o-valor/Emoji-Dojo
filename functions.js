@@ -90,6 +90,9 @@ async function trysetupuser(user) {
   const rawsquad = await database.get(user.id + "squad");
   await userboop(user.id);
   if (rawvault == undefined || rawsquad == undefined) {
+    let logs = await getlogs();
+    logs.logs.players[`user${id}`].joindate = Math.floor(Date.now() / 1000);
+    await writelogs(logs);
     let emojilist = emojis.filter((e) => e.rarity == 0);
     let allemojistoadd = "";
     let allemojitext = "";

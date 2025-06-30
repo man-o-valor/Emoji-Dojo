@@ -129,6 +129,14 @@ module.exports = {
           );
           allnames.push(emojis[vaultarray[i]].emoji);
         }
+        allnames.push(
+          ...emojis
+            .filter((emoji) => emoji.rarity === -1)
+            .names.map((name) => name.toLowerCase())
+        );
+        allnames.push(...emojis.filter((emoji) => emoji.rarity === -1).emoji);
+
+        console.log(allnames);
 
         closeviewemoji = closestMatch(viewemoji, allnames);
 

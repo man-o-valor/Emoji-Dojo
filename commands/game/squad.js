@@ -3,6 +3,7 @@ const {
   EmbedBuilder,
   ButtonBuilder,
   ButtonStyle,
+  ActionRowBuilder
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -33,11 +34,12 @@ module.exports = {
           emojis[squadarray[i]].description
         }\") `;
       }
-      const edit = new ButtonBuilder()
-        .setCustomId("edit")
-        .setLabel("Edit")
-        .setEmoji("✏️")
-        .setStyle(ButtonStyle.Secondary);
+      const save = new ButtonBuilder()
+        .setCustomId("save")
+        .setLabel("Save")
+        .setEmoji("🔖")
+        .setStyle(ButtonStyle.Success);
+      const row1 = new ActionRowBuilder().addComponents(save);
       const squadembed = new EmbedBuilder()
         .setColor(0x226699)
         .setTitle(`${interaction.user.globalName}'s Squad 👥`)
