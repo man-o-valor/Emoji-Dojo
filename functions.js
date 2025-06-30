@@ -24,6 +24,13 @@ async function writelogs(json) {
   fs.writeFileSync("logs.json", formattedjson.result, "utf8");
 }
 
+async function userboop(id) {
+  let logs = await getlogs();
+  logs.logs.players[`user${id}`] = logs.logs.players[`user${id}`] ?? {};
+  logs.logs.players[`user${id}`].lastboop = Math.floor(Date.now() / 1000);
+  await writelogs(logs)
+}
+
 async function dailyrewardremind(interaction) {
   const dailytime = parseInt(
     (await database.get(interaction.user.id + "dailytime")) ?? "0"
@@ -80,6 +87,7 @@ async function syncresearch(id, lab) {
 async function trysetupuser(user) {
   const rawvault = await database.get(user.id + "vault");
   const rawsquad = await database.get(user.id + "squad");
+  await userboop()
   if (rawvault == undefined || rawsquad == undefined) {
     let emojilist = emojis.filter((e) => e.rarity == 0);
     let allemojistoadd = "";
@@ -1579,4 +1587,5 @@ module.exports = {
   fetchresearch,
   syncresearch,
   dailyrewardremind,
+  userboop
 };
