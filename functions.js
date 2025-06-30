@@ -28,7 +28,7 @@ async function userboop(id) {
   let logs = await getlogs();
   logs.logs.players[`user${id}`] = logs.logs.players[`user${id}`] ?? {};
   logs.logs.players[`user${id}`].lastboop = Math.floor(Date.now() / 1000);
-  await writelogs(logs)
+  await writelogs(logs);
 }
 
 async function dailyrewardremind(interaction) {
@@ -87,7 +87,7 @@ async function syncresearch(id, lab) {
 async function trysetupuser(user) {
   const rawvault = await database.get(user.id + "vault");
   const rawsquad = await database.get(user.id + "squad");
-  await userboop()
+  await userboop(user.id);
   if (rawvault == undefined || rawsquad == undefined) {
     let emojilist = emojis.filter((e) => e.rarity == 0);
     let allemojistoadd = "";
@@ -1587,5 +1587,5 @@ module.exports = {
   fetchresearch,
   syncresearch,
   dailyrewardremind,
-  userboop
+  userboop,
 };
