@@ -131,11 +131,11 @@ module.exports = {
         }
         for (let i = 0; i < emojis.filter((x) => x.rarity == -1).length; i++) {
           allnames.push(
-            ...emojis[emojis.filter((x) => x.rarity == -1)[i]].names.map(
-              (name) => name.toLowerCase()
-            )
+            ...emojis
+              .filter((x) => x.rarity == -1)
+              [i].names.map((name) => name.toLowerCase())
           );
-          allnames.push(emojis[emojis.filter((x) => x.rarity == -1)[i]].emoji);
+          allnames.push(emojis.filter((x) => x.rarity == -1)[i].emoji);
         }
         /*allnames.push(
           ...emojis
