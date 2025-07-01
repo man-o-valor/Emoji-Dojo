@@ -42,8 +42,7 @@ module.exports = {
       }
       const bp =
         (await database.get(interaction.user.id + "battlepending")) ?? "0";
-      const bbcd = "0"; //await database.get(interaction.user.id + "botbattlecooldown") ?? "0"
-      // UNCOMMENT THIS WHEN RELEASING
+      const bbcd = await database.get(interaction.user.id + "botbattlecooldown") ?? "0"
       if (bp < Date.now() / 1000 && bbcd < Date.now() / 1000) {
         let logs = await getlogs();
         logs.logs.games.botopened += 1;
