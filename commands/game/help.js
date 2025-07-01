@@ -37,10 +37,12 @@ module.exports = {
         "https://gist.github.com/man-o-valor/69fbcaf911e3c2f0c700502576e68854"
       )
       .setStyle(ButtonStyle.Link);
-    const row1 = new ActionRowBuilder().addComponents(guide, terms, privacy);
+    const row1 = new ActionRowBuilder().addComponents(guide);
+    const row2 = new ActionRowBuilder().addComponents(terms);
+    const row3 = new ActionRowBuilder().addComponents(privacy);
     await interaction.reply({
       embeds: [helpembed],
-      components: [row1],
+      components: [row1,row2,row3],
       flags: MessageFlags.Ephemeral,
     });
   },
