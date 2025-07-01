@@ -64,7 +64,7 @@ module.exports = {
       const creditsembed = new EmbedBuilder()
         .setColor(0xfa743e)
         .setTitle(`<a:emojidojo:1389431944852537345> Emoji Dojo Credits`)
-        .setDescription(`Emoji Dojo was developed by [Man-o-Valor](https://github.com/man-o-valor)!\nAlso, all custom emoji designs and iconography was made by him.\n\nThank you to [Twemoji](https://github.com/twitter/twemoji), the Emoji set that made most of the designs for Discord's Emojis\n\nAnd finally, thank you for playing :^)`);
+        .setDescription(`Emoji Dojo was developed by [Man-o-Valor](https://github.com/man-o-valor)!\nAlso, all custom emoji designs and iconography were made by him.\n\nThank you to [Twemoji](https://github.com/twitter/twemoji), the Emoji set that made most of the designs for Discord's Emojis.\n\nAnd finally, thank you for playing :^)`);
       await confirmation.reply({
         embeds: [creditsembed],
         flags: MessageFlags.Ephemeral,
