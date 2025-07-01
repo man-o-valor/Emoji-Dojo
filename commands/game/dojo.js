@@ -137,12 +137,6 @@ module.exports = {
           );
           allnames.push(emojis.filter((x) => x.rarity == -1)[i].emoji);
         }
-        /*allnames.push(
-          ...emojis
-            .filter((x) => x.rarity == -1)
-            .names.map((name) => name.toLowerCase())
-        );
-        allnames.push(...emojis.filter((x) => x.rarity == -1).emoji);*/
 
         console.log(allnames);
 

@@ -365,6 +365,16 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           } printed out a ${emojis[81].emoji}!`
         );
       }
+      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83) {
+        // innocent
+        gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -3, "", true);
+        gamedata = richtextadd(
+          gamedata,
+          `\n😳 ${gamedata.player[squad2 - 1]}'s ${
+            emojis[83].emoji
+          } was hurt by its violence! (3 damage)`
+        );
+      }
       if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 52) {
         // night with stars
         for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
@@ -1243,7 +1253,7 @@ function playturn(gamedata) {
         0,
         0 -
           (activeemoji.dmg +
-            gamedata.squads[gamedata.playerturn * -1 + 3][0].dmg * 2),
+            gamedata.squads[gamedata.playerturn * -1 + 3][0].dmg),
         "reflected at"
       );
     }

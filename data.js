@@ -746,13 +746,13 @@ const emojis = [
   {
     emoji: "🪞",
     id: 60,
-    hp: 4,
-    dmg: 0,
+    hp: 5,
+    dmg: 1,
     rarity: 3, // Master of Defense
     names: ["Mirror"],
     class: 2,
     description:
-      "Attacks for as much damage as the frontmost enemy Emoji ×2, plus its own attack power",
+      "Attacks for as much damage as the frontmost enemy Emoji, plus its own attack power",
   },
   {
     emoji: "🪄",
@@ -996,7 +996,18 @@ const emojis = [
     names: ["Dove"],
     class: 4,
     description:
-      "When this would defeat an emoji, converts it to the friendly team and moves it to the front of the Squad",
+      "When this would defeat an Emoji, converts it to the friendly team and moves it to the front of the Squad",
+  },
+  {
+    emoji: "😇",
+    id: 83,
+    hp: 8,
+    dmg: 4,
+    rarity: 1,
+    names: ["Innocent", "Halo", "Holy", "Angel Face", "Smiling Face with Halo"],
+    class: 2,
+    description:
+      "When this defeats an Emoji, attacks itself for 3",
   },
 ];
 
