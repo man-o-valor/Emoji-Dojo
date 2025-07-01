@@ -71,7 +71,7 @@ module.exports = {
       });
     } catch {
       credits.setDisabled(true);
-      await interaction.editReply();
+      await interaction.update();
     }
   },
 };
