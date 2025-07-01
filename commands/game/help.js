@@ -60,7 +60,7 @@ module.exports = {
 
     try {
       const confirmation =
-        await response.resource.message.awaitMessageComponent({ time: 60_000 });
+        await response.awaitMessageComponent({ time: 60_000 });
       const creditsembed = new EmbedBuilder()
         .setColor(0xfa743e)
         .setTitle(`<a:emojidojo:1389431944852537345> Emoji Dojo Credits`)
