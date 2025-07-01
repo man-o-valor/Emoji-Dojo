@@ -69,9 +69,8 @@ module.exports = {
         embeds: [creditsembed],
         flags: MessageFlags.Ephemeral,
       });
-    } catch {
-      credits.setDisabled(true);
-      await interaction.update();
+    } catch(e) {
+      console.error(e)
     }
   },
 };
