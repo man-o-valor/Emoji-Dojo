@@ -43,7 +43,7 @@ module.exports = {
     if (await trysetupuser(interaction.user)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `Greetings, <@${interaction.user.id}>! 😀 Run \`/squad\` first to set up your Squad.`,
+        content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
       });
     } else {
       const vaultarray = await getvault(interaction.user.id);
