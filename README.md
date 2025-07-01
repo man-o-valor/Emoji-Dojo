@@ -89,6 +89,7 @@ If you ever have any Emojis in your Dojo that you'll never need, you can get rid
 `/devotions` *(view your Devoting progress)*  
 `/dojo` *(see the Emojis you currently own or details about one)*  
 `/friendlybattle` *(battle another user with no coins involved)*  
+`/help` *(get help about Emoji Dojo)*  
 `/shop` *(visit the Shop)*  
 `/squad` *(view your Squad)*  
 
