@@ -37,13 +37,41 @@ module.exports = {
         "https://gist.github.com/man-o-valor/69fbcaf911e3c2f0c700502576e68854"
       )
       .setStyle(ButtonStyle.Link);
+    const credits = new ButtonBuilder()
+      .setCustomId("credits")
+      .setLabel("Credits")
+      .setEmoji("👀")
+      .setStyle(ButtonStyle.Secondary);
+    const server = new ButtonBuilder()
+      .setLabel("Join the server!")
+      .setEmoji("👋")
+      .setURL("https://discord.gg/eMwnjAY4ad")
+      .setStyle(ButtonStyle.Link);
     const row1 = new ActionRowBuilder().addComponents(guide);
     const row2 = new ActionRowBuilder().addComponents(terms);
     const row3 = new ActionRowBuilder().addComponents(privacy);
-    await interaction.reply({
+    const row4 = new ActionRowBuilder().addComponents(credits);
+    const row5 = new ActionRowBuilder().addComponents(server);
+    const response = await interaction.reply({
       embeds: [helpembed],
-      components: [row1,row2,row3],
+      components: [row1, row2, row3, row4, row5],
       flags: MessageFlags.Ephemeral,
     });
+
+    try {
+      const confirmation =
+        await response.resource.message.awaitMessageComponent({ time: 60_000 });
+      const creditsembed = new EmbedBuilder()
+        .setColor(0xfa743e)
+        .setTitle(`<a:emojidojo:1389431944852537345> Emoji Dojo Credits`)
+        .setDescription(`Emoji Dojo was developed by [Man-o-Valor](https://github.com/man-o-valor)!\nAlso, all custom emoji designs and iconography was made by him.\n\nThank you to [Twemoji](https://github.com/twitter/twemoji), the Emoji set that made most of the designs for Discord's Emojis\n\nAnd finally, thank you for playing :^)`);
+      await confirmation.reply({
+        embeds: [creditsembed],
+        flags: MessageFlags.Ephemeral,
+      });
+    } catch {
+      credits.setDisabled(true);
+      await interaction.editReply();
+    }
   },
 };
