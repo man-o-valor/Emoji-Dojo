@@ -26,9 +26,7 @@ module.exports = {
       for (let i = 7; i > -1; i--) {
         squadtext += `[${
           emojis[squadarray[i]].emoji
-        }](https://discord.com/channels/${interaction.guild.id}/${
-          interaction.channel.id
-        } \"${emojis[squadarray[i]].names[0]} | ${
+        }](${interaction.channel.url} \"${emojis[squadarray[i]].names[0]} | ${
           emojis[squadarray[i]].hp
         } health, ${emojis[squadarray[i]].dmg} attack power. ${
           emojis[squadarray[i]].description

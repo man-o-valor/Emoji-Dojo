@@ -120,7 +120,7 @@ const emojis = [
     rarity: 0,
     names: ["Clap", "Clapping", "Clapping Hands"],
     class: 1,
-    description: "Deals 1 more damage for each other undefeated friendly 👏",
+    description: "Deals 1 more damage for each undefeated friendly 👏",
   },
   {
     emoji: "😘",
@@ -311,7 +311,7 @@ const emojis = [
     rarity: 1,
     names: ["Skull"],
     class: 0,
-    description: "When an enemy Emoji is killed, heals itself by 1",
+    description: "When an enemy Emoji is defeated, heals itself by 1",
   },
   {
     emoji: "🥴",
@@ -381,7 +381,7 @@ const emojis = [
     names: ["Skull Crossbones", "Skull and Crossbones", "Jolly Roger"],
     class: 0,
     description:
-      "When an enemy Emoji is killed, heals the friendly Emoji behind it by 1",
+      "When an enemy Emoji is defeated, heals the friendly Emoji behind it by 1",
   },
   {
     emoji: "🍒",
