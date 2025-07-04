@@ -91,7 +91,9 @@ async function trysetupuser(user) {
   await userboop(user.id);
   if (rawvault == undefined || rawsquad == undefined) {
     let logs = await getlogs();
-    logs.logs.players[`user${user.id}`].joindate = Math.floor(Date.now() / 1000);
+    logs.logs.players[`user${user.id}`].joindate = Math.floor(
+      Date.now() / 1000
+    );
     await writelogs(logs);
     let emojilist = emojis.filter((e) => e.rarity == 0);
     let allemojistoadd = "";
@@ -211,7 +213,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     val < 0
   ) {
     // rage
-    val = 0 - Math.min(val + gamedata.squads[squad - 1].length, 3);
+    val = 0 - Math.min(val + gamedata.squads[squad - 1].length, val + 3);
   }
   // protection buffs start here
   if (
@@ -688,7 +690,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         }
       }
       for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
-        if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 11 && (gamedata.squads[squad - 1][i] ?? { id: undefined }).hp > 0) {
+        if (
+          (gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 11 &&
+          (gamedata.squads[squad - 1][i] ?? { id: undefined }).hp > 0
+        ) {
           // headstone
           gamedata = alterhp(gamedata, squad, i, squad, i, 1);
         }
