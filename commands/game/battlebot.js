@@ -22,7 +22,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("battlebot")
     .setDescription(
-      "Battle DojoBot, with no chance of losing coins (You can reject Dojobot every 60 minutes)"
+      "Battle DojoBot, with no chance of losing coins (You can reject Dojobot every 10 minutes)"
     )
     .addStringOption((option) =>
       option
@@ -42,7 +42,8 @@ module.exports = {
       }
       const bp =
         (await database.get(interaction.user.id + "battlepending")) ?? "0";
-      const bbcd = await database.get(interaction.user.id + "botbattlecooldown") ?? "0"
+      const bbcd =
+        (await database.get(interaction.user.id + "botbattlecooldown")) ?? "0";
       if (bp < Date.now() / 1000 && bbcd < Date.now() / 1000) {
         let logs = await getlogs();
         logs.logs.games.botopened += 1;
@@ -63,7 +64,7 @@ module.exports = {
           .setStyle(ButtonStyle.Success);
         const nah = new ButtonBuilder()
           .setCustomId("nah")
-          .setLabel("Nah (Wait 1 hour)")
+          .setLabel("Nah (Wait 10 minutes)")
           .setEmoji("🕐")
           .setStyle(ButtonStyle.Danger);
         const row1 = new ActionRowBuilder().addComponents(cook, nah);
@@ -331,7 +332,7 @@ module.exports = {
               }
             }
             const interaction3 = await int3.awaitMessageComponent({
-              time: 60000,
+              time: 600000,
             });
             try {
               interaction3.reply({
@@ -361,7 +362,7 @@ module.exports = {
           } else {
             await database.set(
               interaction.user.id + "botbattlecooldown",
-              3600 + Math.floor(Date.now() / 1000)
+              600 + Math.floor(Date.now() / 1000)
             );
             await interaction.editReply({
               components: [],
@@ -378,7 +379,7 @@ module.exports = {
           await database.set(interaction.user.id + "battlepending", "0");
           await database.set(
             interaction.user.id + "botbattlecooldown",
-            3600 + Math.floor(Date.now() / 1000)
+            600 + Math.floor(Date.now() / 1000)
           );
           await interaction.editReply({
             components: [],

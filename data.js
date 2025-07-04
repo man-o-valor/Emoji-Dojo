@@ -533,7 +533,7 @@ const emojis = [
   {
     emoji: "🃏",
     id: 40,
-    hp: 8,
+    hp: 5,
     dmg: 2,
     rarity: 0,
     names: ["Black Joker", "Joker", "Joker Card"],

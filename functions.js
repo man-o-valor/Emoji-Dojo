@@ -688,7 +688,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         }
       }
       for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
-        if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 11) {
+        if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 11 && (gamedata.squads[squad - 1][i] ?? { id: undefined }).hp > 0) {
           // tombstone
           gamedata = alterhp(gamedata, squad, i, squad, i, 1);
         }

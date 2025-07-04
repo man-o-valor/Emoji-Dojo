@@ -440,6 +440,9 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         let allemojistoadd = "";
                         for (let i = 0; i < modalquantity; i++) {
                           allemojistoadd += shopdata[choice].id + ",";
+                          emojisbought[emojis[shopdata[choice].id].rarity].push(
+                            emojis[shopdata[choice].id]
+                          );
                         }
                         let tempvault = await database.get(
                           interaction.user.id + "vault"

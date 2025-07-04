@@ -477,7 +477,7 @@ module.exports = {
                     }
                   }
                   const interaction3 = await int3.awaitMessageComponent({
-                    time: 60000,
+                    time: 600000,
                   });
                   try {
                     interaction3.reply({
