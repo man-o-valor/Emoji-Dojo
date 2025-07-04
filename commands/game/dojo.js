@@ -274,8 +274,10 @@ module.exports = {
             addto7.setLabel("Move");
             addto8.setLabel("Move");
           }
-          comps.push(row1);
-          comps.push(row2);
+          if (emojifound.rarity > -1) {
+            comps.push(row1);
+            comps.push(row2);
+          }
           if (emojifound.rarity >= 0 && emojifound.rarity <= 2) {
             comps.push(devoterow);
           }
