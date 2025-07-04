@@ -213,7 +213,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     val < 0
   ) {
     // rage
-    val = 0 - Math.min(val + gamedata.squads[squad - 1].length, val + 3);
+    val = 0 - Math.min(val + gamedata.squads[squad - 1].length, 0 - val + 3);
   }
   // protection buffs start here
   if (
