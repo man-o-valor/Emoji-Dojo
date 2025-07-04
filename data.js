@@ -223,7 +223,7 @@ const emojis = [
     hp: 1,
     dmg: 0,
     rarity: 0,
-    names: ["Twisted Rightwards Arrows", "Shuffle", "Shuffle Button"],
+    names: ["Twisted Rightwards Arrows", "Shuffle", "Shuffle Button", "TRWA"],
     class: 6,
     description:
       "When attacked or defeated, Shuffles the enemy Squad and defeats itself",

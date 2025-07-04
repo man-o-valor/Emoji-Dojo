@@ -239,16 +239,16 @@ module.exports = {
             .setStyle(ButtonStyle.Danger)
             .setEmoji("❔");
           const row1 = new ActionRowBuilder().addComponents(
-            addto1,
-            addto2,
-            addto3,
-            addto4
+            addto8,
+            addto7,
+            addto6,
+            addto5
           );
           const row2 = new ActionRowBuilder().addComponents(
-            addto5,
-            addto6,
-            addto7,
-            addto8
+            addto4,
+            addto3,
+            addto2,
+            addto1
           );
           const devoterow = new ActionRowBuilder().addComponents(
             devote,
