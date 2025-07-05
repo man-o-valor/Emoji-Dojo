@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, MessageFlags } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
   database,
@@ -79,7 +79,6 @@ module.exports = {
           " **" +
           rewardName +
           "!**",
-        flags: MessageFlags.Ephemeral,
       });
 
       logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + 1;
@@ -93,7 +92,6 @@ module.exports = {
         content:
           "📦 " +
           comeBackLater[Math.floor(Math.random() * comeBackLater.length)],
-        flags: MessageFlags.Ephemeral,
       });
 
       logs.logs.games.dailysfailed = (logs.logs.games.dailysfailed ?? 0) + 1;
