@@ -402,7 +402,7 @@ const emojis = [
     names: ["Cyclone", "Hurricane", "Spiral"],
     class: 6,
     description:
-      "When your Squad is Shuffled, Shuffles the opponent Squad and defeats itself (Only one takes effect if multiple are undefeated)",
+      "When your Squad is Shuffled, Shuffles the enemy Squad and defeats itself (Only one takes effect if multiple are undefeated)",
   },
   {
     emoji: "🛻",
@@ -859,7 +859,7 @@ const emojis = [
   {
     emoji: "🛜",
     id: 70,
-    hp: 1,
+    hp: 3,
     dmg: 2,
     rarity: 0,
     names: ["Wireless", "Internet", "Network", "Signal"],
@@ -876,7 +876,7 @@ const emojis = [
     names: ["Anchor"],
     class: 2,
     description:
-      "When your Squad is shuffled, this and the friendly Emoji in front of it do not get moved",
+      "When your Squad is Shuffled, this and the friendly Emoji in front of it do not get moved",
   },
   {
     emoji: "📌",
@@ -887,7 +887,7 @@ const emojis = [
     names: ["Pushpin", "Pin", "Thumbtack", "Tack"],
     class: 2,
     description:
-      "When your Squad is shuffled, this and the friendly Emoji in behind it do not get moved",
+      "When your Squad is Shuffled, this and the friendly Emoji in behind it do not get moved",
   },
   {
     emoji: "🫂",
@@ -898,7 +898,7 @@ const emojis = [
     names: ["People Hugging", "Hugging", "Hug", "Hug In Silhouette"],
     class: 2,
     description:
-      "When your Squad is shuffled, the two friendly Emojis in front of this stay together",
+      "When your Squad is Shuffled, the two friendly Emojis in front of this stay together",
   },
   {
     emoji: "🔋",
@@ -1001,8 +1001,8 @@ const emojis = [
   {
     emoji: "😇",
     id: 83,
-    hp: 8,
-    dmg: 4,
+    hp: 6,
+    dmg: 3,
     rarity: 1,
     names: ["Innocent", "Halo", "Holy", "Angel Face", "Smiling Face with Halo"],
     class: 2,

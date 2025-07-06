@@ -279,532 +279,171 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   }
 
   alter: {
-    if (
-      gamedata.squads[squad - 1][pos].hp == undefined ||
-      gamedata.squads[squad - 1][pos].hp < 0
-    ) {
-      gamedata.squads[squad - 1][pos].hp = 0;
-    }
-    gamedata.squads[squad - 1][pos].hp += val;
-    if (
-      (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 42 &&
-      gamedata.squads[squad2 - 1].length > 1
-    ) {
-      // dancer
-      const temp = gamedata.squads[squad2 - 1][pos2];
-      gamedata.squads[squad2 - 1].splice(pos2, 1);
-      gamedata.squads[squad2 - 1].splice(pos2 + 1, 0, temp);
-      gamedata = richtextadd(
-        gamedata,
-        `\n💨 ${gamedata.player[squad2 - 1]}'s ${
-          emojis[42].emoji
-        } danced behind ${gamedata.squads[squad2 - 1][pos2].emoji}!`
-      );
-    }
-    if (
-      (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 64 &&
-      squad != squad2
-    ) {
-      // mushroom
-      gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -1, "", true);
-      gamedata = richtextadd(
-        gamedata,
-        `\n🍄 ${gamedata.player[squad2 - 1]}'s ${
-          emojis[64].emoji
-        } damaged itself by attacking! (1 damage)`
-      );
-    }
-    if (gamedata.squads[squad - 1][pos].hp <= 0) {
-      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 82) {
-        // dove
-        gamedata.squads[squad2 - 1].splice(
-          0,
-          0,
-          lodash.cloneDeep(gamedata.squads[squad - 1][pos])
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
-            emojis[82].emoji
-          } made peace with ${gamedata.player[squad - 1]}'s ${
-            gamedata.squads[squad - 1][pos].id
-          }!`
-        );
-        silence = true;
+    if (gamedata.squads[squad - 1][pos]) {
+      if (
+        gamedata.squads[squad - 1][pos].hp == undefined ||
+        gamedata.squads[squad - 1][pos].hp < 0
+      ) {
+        gamedata.squads[squad - 1][pos].hp = 0;
       }
-      if (!silence) {
-        gamedata = richtextadd(
-          gamedata,
-          `\n💥 ${gamedata.player[squad2 - 1]}'s ${
-            gamedata.squads[squad2 - 1][pos2].emoji
-          } defeated ${gamedata.player[squad - 1]}'s ${
-            gamedata.squads[squad - 1][pos].emoji
-          }! (${val * -1} damage)`
-        );
-      }
-      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 20) {
-        // chess pawn
+      gamedata.squads[squad - 1][pos].hp += val;
+      if (
+        (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 42 &&
+        gamedata.squads[squad2 - 1].length > 1
+      ) {
+        // dancer
+        const temp = gamedata.squads[squad2 - 1][pos2];
         gamedata.squads[squad2 - 1].splice(pos2, 1);
-        gamedata.squads[squad2 - 1].splice(
-          pos2,
-          0,
-          lodash.cloneDeep(emojis[21])
-        );
+        gamedata.squads[squad2 - 1].splice(pos2 + 1, 0, temp);
         gamedata = richtextadd(
           gamedata,
-          `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
-            emojis[20].emoji
-          } was promoted to a ${emojis[21].emoji}!`
-        );
-      }
-      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 80) {
-        // fax
-        gamedata.squads[squad2 - 1].splice(0, 0, lodash.cloneDeep(emojis[81]));
-        gamedata = richtextadd(
-          gamedata,
-          `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
-            emojis[80].emoji
-          } printed out a ${emojis[81].emoji}!`
+          `\n💨 ${gamedata.player[squad2 - 1]}'s ${
+            emojis[42].emoji
+          } danced behind ${gamedata.squads[squad2 - 1][pos2].emoji}!`
         );
       }
       if (
-        (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
-        !pos2 == pos &&
-        squad2 == squad
+        (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 64 &&
+        squad != squad2
       ) {
-        // innocent
-        gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -3, "", true);
+        // mushroom
+        gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -1, "", true);
         gamedata = richtextadd(
           gamedata,
-          `\n😳 ${gamedata.player[squad2 - 1]}'s ${
-            emojis[83].emoji
-          } was hurt by its violence! (3 damage)`
+          `\n🍄 ${gamedata.player[squad2 - 1]}'s ${
+            emojis[64].emoji
+          } damaged itself by attacking! (1 damage)`
         );
       }
-      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 52) {
-        // night with stars
-        for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
-          if (
-            gamedata.squads[squad - 1][i].id ==
-              gamedata.squads[squad - 1][pos].id &&
-            gamedata.squads[squad - 1][i].hp > 0
-          ) {
-            gamedata = alterhp(gamedata, squad, i, squad2, pos, -1);
+      if (gamedata.squads[squad - 1][pos].hp <= 0) {
+        if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 82) {
+          // dove
+          gamedata.squads[squad2 - 1].splice(
+            0,
+            0,
+            lodash.cloneDeep(gamedata.squads[squad - 1][pos])
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
+              emojis[82].emoji
+            } made peace with ${gamedata.player[squad - 1]}'s ${
+              gamedata.squads[squad - 1][pos].id
+            }!`
+          );
+          silence = true;
+        }
+        if (!silence) {
+          gamedata = richtextadd(
+            gamedata,
+            `\n💥 ${gamedata.player[squad2 - 1]}'s ${
+              gamedata.squads[squad2 - 1][pos2].emoji
+            } defeated ${gamedata.player[squad - 1]}'s ${
+              gamedata.squads[squad - 1][pos].emoji
+            }! (${val * -1} damage)`
+          );
+        }
+        if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 20) {
+          // chess pawn
+          gamedata.squads[squad2 - 1].splice(pos2, 1);
+          gamedata.squads[squad2 - 1].splice(
+            pos2,
+            0,
+            lodash.cloneDeep(emojis[21])
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
+              emojis[20].emoji
+            } was promoted to a ${emojis[21].emoji}!`
+          );
+        }
+        if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 80) {
+          // fax
+          gamedata.squads[squad2 - 1].splice(
+            0,
+            0,
+            lodash.cloneDeep(emojis[81])
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
+              emojis[80].emoji
+            } printed out a ${emojis[81].emoji}!`
+          );
+        }
+        if (
+          (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
+          !pos2 == pos &&
+          !squad2 == squad
+        ) {
+          // innocent
+          gamedata = alterhp(
+            gamedata,
+            squad2,
+            pos2,
+            squad2,
+            pos2,
+            -3,
+            "",
+            true
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n😳 ${gamedata.player[squad2 - 1]}'s ${
+              emojis[83].emoji
+            } was hurt by its violence! (3 damage)`
+          );
+        }
+        if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 52) {
+          // night with stars
+          for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
+            if (
+              gamedata.squads[squad - 1][i].id ==
+                gamedata.squads[squad - 1][pos].id &&
+              gamedata.squads[squad - 1][i].hp > 0
+            ) {
+              gamedata = alterhp(gamedata, squad, i, squad2, pos, -1);
+            }
           }
         }
-      }
-      if (gamedata.squads[squad - 1][pos].id != 62) {
-        // skyline
-        for (i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-          if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 62) {
-            for (j = 0; j < gamedata.squads[squad - 1].length; j++) {
-              if (
-                gamedata.squads[squad - 1][j].id ==
-                  gamedata.squads[squad - 1][pos].id &&
-                gamedata.squads[squad - 1][j].hp > 0
-              ) {
-                gamedata = alterhp(gamedata, squad, j, squad, i, 1, "", true);
-                gamedata = richtextadd(
-                  gamedata,
-                  `\n💗 ${gamedata.player[squad - 1]}'s ${
-                    emojis[62].emoji
-                  } healed all friendly ${
-                    gamedata.squads[squad - 1][pos].emoji
-                  } by 1!`
-                );
+        if (gamedata.squads[squad - 1][pos].id != 62) {
+          // skyline
+          for (i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
+            if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 62) {
+              for (j = 0; j < gamedata.squads[squad - 1].length; j++) {
+                if (
+                  gamedata.squads[squad - 1][j].id ==
+                    gamedata.squads[squad - 1][pos].id &&
+                  gamedata.squads[squad - 1][j].hp > 0
+                ) {
+                  gamedata = alterhp(gamedata, squad, j, squad, i, 1, "", true);
+                  gamedata = richtextadd(
+                    gamedata,
+                    `\n💗 ${gamedata.player[squad - 1]}'s ${
+                      emojis[62].emoji
+                    } healed all friendly ${
+                      gamedata.squads[squad - 1][pos].emoji
+                    } by 1!`
+                  );
+                }
               }
             }
           }
         }
-      }
-      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 53) {
-        // wolf
-        gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, 1, "", true);
-        gamedata.squads[squad2 - 1][pos2].dmg += 1;
-        gamedata = richtextadd(
-          gamedata,
-          `\n🩸 ${gamedata.player[squad2 - 1]}'s ${
-            gamedata.squads[squad2 - 1][pos2].emoji
-          } strengthened itself! (+1 attack, +1 health)`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 9) {
-        // mortar board
-        for (i = 0; i < 3; i++) {
-          gamedata.squads[squad - 1].splice(
-            pos + 1,
-            0,
-            lodash.cloneDeep(emojis[0])
-          );
-          gamedata.squads[squad - 1][pos + 1].hp = 1;
-        }
-        gamedata = richtextadd(
-          gamedata,
-          `\n‼️ ${gamedata.player[squad - 1]}'s ${
-            emojis[9].emoji
-          } sparked a standing ovation and summoned ${emojis[0].emoji}${
-            emojis[0].emoji
-          }${emojis[0].emoji}!`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 45) {
-        // radio
-        gamedata.squads[squad - 1].splice(
-          gamedata.squads[squad - 1].length,
-          0,
-          lodash.cloneDeep(emojis[14])
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n🎶 ${gamedata.player[squad - 1]}'s ${emojis[45].emoji} played a ${
-            emojis[14].emoji
-          } at the back of the Squad!`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 69) {
-        // amphora
-        const commons = emojis.filter((item) => item.rarity === 0);
-        const rand = Math.floor(Math.random() * commons.length);
-        gamedata.squads[squad - 1].splice(
-          pos + 1,
-          0,
-          lodash.cloneDeep(commons[rand])
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n‼️ ${gamedata.player[squad - 1]}'s ${
-            emojis[69].emoji
-          } broke and revealed ${commons[rand].emoji}!`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 65) {
-        // busts in silhouette
-        gamedata.squads[squad - 1].splice(
-          1,
-          0,
-          lodash.cloneDeep(gamedata.squads[squad2 - 1][0])
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n👥 ${gamedata.player[squad - 1]}'s ${
-            emojis[65].emoji
-          } transformed into an exact replica of ${
-            gamedata.player[squad2 - 1]
-          }'s ${gamedata.squads[squad2 - 1][0].emoji}!`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 10) {
-        // shuffle button
-        gamedata = richtextadd(
-          gamedata,
-          `\n🔀 ${gamedata.player[squad - 1]}'s ${emojis[10].emoji} Shuffled ${
-            gamedata.player[squad2 - 1]
-          }'s Squad!`
-        );
-        gamedata = shufflesquad(gamedata, squad2);
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 36) {
-        // bomb
-        gamedata = richtextadd(
-          gamedata,
-          `\n💥 ${gamedata.player[squad - 1]}'s ${
-            emojis[36].emoji
-          } exploded, defeating ${gamedata.player[0 - squad + 2]}'s ${
-            gamedata.squads[0 - squad + 2][0].emoji
-          }!`
-        );
-        gamedata = alterhp(
-          gamedata,
-          0 - squad + 3,
-          0,
-          squad,
-          pos,
-          -1000,
-          "exploded",
-          true
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 66) {
-        // new
-        gamedata.squads[squad - 1].splice(pos, 1);
-        gamedata.squads[squad - 1].splice(
-          pos + 1,
-          0,
-          lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n👥 ${gamedata.player[squad - 1]}'s ${
-            emojis[66].emoji
-          } summoned a new ${
-            gamedata.squads[squad - 1][pos].emoji
-          }, and defeated itself!`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 57) {
-        // mask
-        gamedata.squads[0 - squad + 2].splice(
-          0,
-          0,
-          lodash.cloneDeep(emojis[58])
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n🦠 ${gamedata.player[squad - 1]}'s ${emojis[57].emoji} infected ${
-            gamedata.player[0 - squad + 2]
-          }'s Squad with a ${emojis[58].emoji}!`
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n🔀 ${gamedata.player[squad - 1]}'s ${emojis[57].emoji} Shuffled ${
-            gamedata.player[squad2 - 1]
-          }'s Squad!`
-        );
-        gamedata = shufflesquad(gamedata, squad2);
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 43) {
-        // pinata
-        gamedata = richtextadd(
-          gamedata,
-          `\n💥 ${gamedata.player[squad - 1]}'s ${emojis[43].emoji} shattered!`
-        );
-        gamedata = alterhp(
-          gamedata,
-          0 - squad + 3,
-          0,
-          squad,
-          pos,
-          -2,
-          "threw candy at",
-          false
-        );
-        if (gamedata.squads[squad - 1].length > 1) {
-          gamedata = alterhp(
-            gamedata,
-            squad,
-            1,
-            squad,
-            pos,
-            2,
-            "gave candy to",
-            false
-          );
-        }
-      }
-      if (gamedata.squads[squad - 1][pos].id != 61) {
-        // wand
-        for (i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-          if (gamedata.squads[squad - 1][i].id == 61) {
-            gamedata.squads[squad - 1].splice(
-              gamedata.squads[squad - 1].length,
-              0,
-              lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
-            );
-            gamedata = alterhp(
-              gamedata,
-              squad,
-              i,
-              squad,
-              i,
-              -1000,
-              "used up",
-              true
-            );
-            gamedata = richtextadd(
-              gamedata,
-              `\n🌟 ${gamedata.player[squad - 1]}'s 🪄 revived the ${
-                gamedata.squads[squad - 1][pos].emoji
-              } at the back of the Squad!`
-            );
-          }
-        }
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 59) {
-        // flying saucer
-        gamedata = shufflesquad(gamedata, squad2);
-        gamedata = richtextadd(
-          gamedata,
-          `\n🔀 ${gamedata.player[squad - 1]}'s ${emojis[59].emoji} Shuffled ${
-            gamedata.player[squad2 - 1]
-          }'s Squad!`
-        );
-        gamedata = alterhp(gamedata, squad2, 0, squad, pos, -3, "zapped");
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 55) {
-        // banana
-        const temp = gamedata.squads[squad2 - 1][0];
-        gamedata.squads[squad2 - 1].splice(0, 1);
-        gamedata.squads[squad2 - 1].splice(
-          gamedata.squads[squad2 - 1].length,
-          0,
-          temp
-        );
-        gamedata = alterhp(
-          gamedata,
-          squad2,
-          gamedata.squads[squad2 - 1].length - 1,
-          squad,
-          pos,
-          -2,
-          "",
-          true
-        );
-        gamedata = richtextadd(
-          gamedata,
-          `\n‼️ ${gamedata.player[squad2 - 1]}'s ${temp.emoji} slipped on ${
-            gamedata.player[squad - 1]
-          }'s ${emojis[55].emoji}!`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 56) {
-        // magnet
-        const temp =
-          gamedata.squads[squad2 - 1][gamedata.squads[squad2 - 1].length - 1];
-        gamedata.squads[squad2 - 1].splice(
-          gamedata.squads[squad2 - 1].length - 1,
-          1
-        );
-        gamedata.squads[squad2 - 1].splice(0, 0, temp);
-        gamedata = alterhp(gamedata, squad2, 0, squad, pos, -2, "", true);
-        gamedata = richtextadd(
-          gamedata,
-          `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
-            temp.emoji
-          } was pulled to the front of the Squad by ${
-            gamedata.player[squad - 1]
-          }'s ${emojis[56].emoji}!`
-        );
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 46) {
-        // fire
-        if (
-          gamedata.squads[squad - 1].length > 1 &&
-          gamedata.squads[squad - 1][1].id != 46
-        ) {
-          gamedata = alterhp(
-            gamedata,
-            squad,
-            1,
-            squad,
-            pos,
-            -2,
-            "burned",
-            false
-          );
-        }
-      }
-      for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
-        if (
-          (gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 11 &&
-          (gamedata.squads[squad - 1][i] ?? { id: undefined }).hp > 0
-        ) {
-          // headstone
-          gamedata = alterhp(gamedata, squad, i, squad, i, 1);
-        }
-        if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 51) {
-          // xray
-          for (j = i + 1; j < gamedata.squads[squad - 1].length; j++) {
-            gamedata = alterhp(gamedata, squad, j, squad, i, 1, "healed", true);
-          }
+        if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 53) {
+          // wolf
+          gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, 1, "", true);
+          gamedata.squads[squad2 - 1][pos2].dmg += 1;
           gamedata = richtextadd(
             gamedata,
-            `\n💗 ${gamedata.player[squad - 1]}'s ${
-              emojis[51].emoji
-            } healed all Emojis behind itself by 1!`
-          );
-        }
-      }
-      for (i = 0; i < gamedata.squads[squad2 - 1].length - 1; i++) {
-        if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 25) {
-          // skull and crossbones
-          gamedata = alterhp(gamedata, squad2, i + 1, squad2, i, 1);
-        }
-        if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 18) {
-          // skull
-          gamedata = alterhp(gamedata, squad2, i, squad2, i, 1);
-        }
-        if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 48) {
-          // tada
-          gamedata = alterhp(
-            gamedata,
-            squad2,
-            1,
-            squad2,
-            pos,
-            1,
-            "congratulated"
-          );
-        }
-      }
-      if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 41) {
-        // tornado
-        gamedata = richtextadd(
-          gamedata,
-          `\n🔀 ${gamedata.player[squad - 1]}'s ${emojis[41].emoji} Shuffled ${
-            gamedata.player[squad2 - 1]
-          }'s Squad!`
-        );
-        gamedata = shufflesquad(gamedata, squad2);
-      }
-      gamedata.squads[squad - 1].splice(pos, 1);
-    } else {
-      if (val > 0) {
-        if (!silence) {
-          if (squad == squad2 && pos == pos2) {
-            gamedata = richtextadd(
-              gamedata,
-              `\n💗 ${gamedata.player[squad2 - 1]}'s ${
-                gamedata.squads[squad2 - 1][pos2].emoji
-              } ${verb ?? "healed"} itself. (${val} health)`
-            );
-          } else {
-            gamedata = richtextadd(
-              gamedata,
-              `\n💗 ${gamedata.player[squad2 - 1]}'s ${
-                gamedata.squads[squad2 - 1][pos2].emoji
-              } ${verb ?? "healed"} ${gamedata.player[squad - 1]}'s ${
-                gamedata.squads[squad - 1][pos].emoji
-              }. (${val} health)`
-            );
-          }
-        }
-        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 50) {
-          // track next
-          gamedata = shufflesquad(gamedata, squad);
-          gamedata = richtextadd(
-            gamedata,
-            `\n🔀 ${gamedata.player[squad - 1]}'s ${
-              emojis[50].emoji
-            } Shuffled ${gamedata.player[squad - 1]}'s Squad!`
-          );
-        }
-      } else if (val == 0) {
-        if (!silence) {
-          gamedata = richtextadd(
-            gamedata,
-            `\n🤜 ${gamedata.player[squad2 - 1]}'s ${
+            `\n🩸 ${gamedata.player[squad2 - 1]}'s ${
               gamedata.squads[squad2 - 1][pos2].emoji
-            } ${verb ?? "tried to attack"} ${gamedata.player[squad - 1]}'s ${
-              gamedata.squads[squad - 1][pos].emoji
-            }... but it did nothing.`
+            } strengthened itself! (+1 attack, +1 health)`
           );
         }
-        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 10) {
-          // shuffle button (2)
-          gamedata.squads[squad - 1].splice(pos, 1);
-          gamedata = shufflesquad(gamedata, squad2);
-          gamedata = richtextadd(
-            gamedata,
-            `\n🔀 ${gamedata.player[squad - 1]}'s ${
-              emojis[10].emoji
-            } Shuffled ${
-              gamedata.player[squad2 - 1]
-            }'s Squad, and defeated itself!`
-          );
-        }
-        if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 9) {
-          // mortar board (2)
-          gamedata.squads[squad - 1].splice(pos, 1);
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 9) {
+          // mortar board
           for (i = 0; i < 3; i++) {
             gamedata.squads[squad - 1].splice(
               pos + 1,
@@ -819,222 +458,200 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               emojis[9].emoji
             } sparked a standing ovation and summoned ${emojis[0].emoji}${
               emojis[0].emoji
-            }${emojis[0].emoji}, and defeated itself!`
+            }${emojis[0].emoji}!`
           );
         }
-        if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 36) {
-          // bomb (2)
-          gamedata = alterhp(
-            gamedata,
-            0 - squad + 3,
-            0,
-            squad,
-            pos,
-            -1000,
-            "exploded"
-          );
-          gamedata.squads[squad - 1].splice(pos, 1);
-          gamedata = richtextadd(
-            gamedata,
-            `\n💥 ${gamedata.player[squad - 1]}'s ${emojis[36].emoji} exploded!`
-          );
-        }
-        if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 41) {
-          // tornado (2)
-          gamedata = richtextadd(
-            gamedata,
-            `\n🔀 ${gamedata.player[squad - 1]}'s ${
-              emojis[41].emoji
-            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
-          );
-          gamedata = shufflesquad(gamedata, squad2);
-        }
-      } else {
-        if (!silence) {
-          gamedata = richtextadd(
-            gamedata,
-            `\n🤜 ${gamedata.player[squad2 - 1]}'s ${
-              gamedata.squads[squad2 - 1][pos2].emoji
-            } ${verb ?? "attacked"} ${gamedata.player[squad - 1]}'s ${
-              gamedata.squads[squad - 1][pos].emoji
-            }. (${val * -1} damage)`
-          );
-        }
-        if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 10) {
-          // shuffle button (3)
-          gamedata.squads[squad - 1].splice(pos, 1);
-          gamedata = shufflesquad(gamedata, squad2);
-          gamedata = richtextadd(
-            gamedata,
-            `\n🔀 ${gamedata.player[squad - 1]}'s ${
-              emojis[10].emoji
-            } Shuffled ${
-              gamedata.player[squad2 - 1]
-            }'s Squad, and defeated itself!`
-          );
-        }
-        if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 9) {
-          // mortar board (3)
-          gamedata.squads[squad - 1].splice(pos, 1);
-          for (i = 0; i < 3; i++) {
-            gamedata.squads[squad - 1].splice(
-              pos + 1,
-              0,
-              lodash.cloneDeep(emojis[0])
-            );
-            gamedata.squads[squad - 1][pos + 1].hp = 1;
-          }
-          gamedata = richtextadd(
-            gamedata,
-            `\n‼️ ${gamedata.player[squad - 1]}'s ${
-              emojis[9].emoji
-            } sparked a standing ovation and summoned ${emojis[0].emoji}${
-              emojis[0].emoji
-            }${emojis[0].emoji}, and defeated itself!`
-          );
-        }
-        if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 36) {
-          // bomb (3)
-          gamedata = alterhp(
-            gamedata,
-            0 - squad + 3,
-            0,
-            squad,
-            pos,
-            -1000,
-            "exploded"
-          );
-          gamedata.squads[squad - 1].splice(pos, 1);
-          gamedata = richtextadd(
-            gamedata,
-            `\n💥 ${gamedata.player[squad - 1]}'s ${emojis[36].emoji} exploded!`
-          );
-        }
-        if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 41) {
-          // tornado (3)
-          gamedata = richtextadd(
-            gamedata,
-            `\n🔀 ${gamedata.player[squad - 1]}'s ${
-              emojis[41].emoji
-            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
-          );
-          gamedata = shufflesquad(gamedata, squad2);
-        }
-        if (
-          (gamedata.squads[squad2 - 1][pos2].id ?? { id: undefined }) == 6 &&
-          gamedata.squads[squad2 - 1][pos2].hp > 2
-        ) {
-          // speaking head
-          if (gamedata.squads[squad - 1][pos].dmg > 0) {
-            gamedata.squads[squad - 1][pos].dmg -= 1;
-            gamedata = richtextadd(
-              gamedata,
-              `\n🚧 ${gamedata.player[squad2 - 1]}'s ${
-                gamedata.squads[squad2 - 1][pos2].emoji
-              } weakened ${gamedata.player[squad - 1]}'s ${
-                gamedata.squads[squad - 1][pos].emoji
-              }! (-1 attack)`
-            );
-          }
-        }
-        if (
-          (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 1
-        ) {
-          // kissing heart face
-          gamedata = alterhp(gamedata, squad, pos, squad, pos + 1, 1, "kissed");
-        }
-        if (
-          (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 78 &&
-          (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
-            (gamedata.squads[squad - 1][pos + 2] ?? { id: undefined }).id == 77)
-        ) {
-          // saxophone
-          gamedata = alterhp(gamedata, squad, pos, squad, pos + 1, 1, "jazzed");
-        }
-
-        if (
-          (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 3 &&
-          gamedata.squads[squad - 1].length > 1
-        ) {
-          // cold sweat face
-          const temp = gamedata.squads[squad - 1][pos];
-          gamedata.squads[squad - 1].splice(pos, 1);
-          gamedata.squads[squad - 1].splice(pos + 1, 0, temp);
-          gamedata = richtextadd(
-            gamedata,
-            `\n💨 ${gamedata.player[squad - 1]}'s ${
-              emojis[3].emoji
-            } retreated behind ${gamedata.squads[squad - 1][pos].emoji}!`
-          );
-        }
-        if (
-          (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 5 &&
-          gamedata.squads[squad - 1].length > 1
-        ) {
-          // turtle
-          const temp = gamedata.squads[squad - 1][pos];
-          gamedata.squads[squad - 1].splice(pos, 1);
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 45) {
+          // radio
           gamedata.squads[squad - 1].splice(
             gamedata.squads[squad - 1].length,
             0,
-            temp
+            lodash.cloneDeep(emojis[14])
           );
           gamedata = richtextadd(
             gamedata,
-            `\n💨 ${gamedata.player[squad - 1]}'s ${
-              emojis[5].emoji
-            } retreated to the back of the Squad!`
+            `\n🎶 ${gamedata.player[squad - 1]}'s ${
+              emojis[45].emoji
+            } played a ${emojis[14].emoji} at the back of the Squad!`
+          );
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 69) {
+          // amphora
+          const commons = emojis.filter((item) => item.rarity === 0);
+          const rand = Math.floor(Math.random() * commons.length);
+          gamedata.squads[squad - 1].splice(
+            pos + 1,
+            0,
+            lodash.cloneDeep(commons[rand])
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n‼️ ${gamedata.player[squad - 1]}'s ${
+              emojis[69].emoji
+            } broke and revealed ${commons[rand].emoji}!`
+          );
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 65) {
+          // busts in silhouette
+          gamedata.squads[squad - 1].splice(
+            1,
+            0,
+            lodash.cloneDeep(gamedata.squads[squad2 - 1][0])
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n👥 ${gamedata.player[squad - 1]}'s ${
+              emojis[65].emoji
+            } transformed into an exact replica of ${
+              gamedata.player[squad2 - 1]
+            }'s ${gamedata.squads[squad2 - 1][0].emoji}!`
+          );
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 10) {
+          // shuffle button
+          gamedata = richtextadd(
+            gamedata,
+            `\n🔀 ${gamedata.player[squad - 1]}'s ${
+              emojis[10].emoji
+            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
+          );
+          gamedata = shufflesquad(gamedata, squad2);
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 36) {
+          // bomb
+          gamedata = richtextadd(
+            gamedata,
+            `\n💥 ${gamedata.player[squad - 1]}'s ${
+              emojis[36].emoji
+            } exploded, defeating ${gamedata.player[0 - squad + 2]}'s ${
+              gamedata.squads[0 - squad + 2][0].emoji
+            }!`
           );
           gamedata = alterhp(
             gamedata,
-            squad,
-            gamedata.squads[squad - 1].length - 1,
-            squad,
-            gamedata.squads[squad - 1].length - 1,
-            1
-          );
-        }
-        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 67) {
-          // lock with ink pen
-          const tempemj = gamedata.squads[squad2 - 1][0].emoji;
-          const temphp = gamedata.squads[squad2 - 1][0].hp;
-          const tempdmg = gamedata.squads[squad2 - 1][0].dmg + 1;
-          gamedata.squads[squad2 - 1].splice(
+            0 - squad + 3,
             0,
-            1,
-            lodash.cloneDeep(emojis[68])
-          );
-          gamedata.squads[squad2 - 1][0].hp = temphp;
-          gamedata.squads[squad2 - 1][0].dmg = tempdmg;
-          gamedata = richtextadd(
-            gamedata,
-            `\n🔒 ${gamedata.player[squad - 1]}'s ${
-              emojis[67].emoji
-            } transformed ${gamedata.player[squad2 - 1]}'s ${tempemj} into a ${
-              emojis[68].emoji
-            }, and increased its attack power by 1!`
+            squad,
+            pos,
+            -1000,
+            "exploded",
+            true
           );
         }
-        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 15) {
-          // fishing pole
-          const temp =
-            gamedata.squads[squad2 - 1][gamedata.squads[squad2 - 1].length - 1];
-          gamedata.squads[squad2 - 1].splice(
-            gamedata.squads[squad2 - 1].length - 1,
-            1
+        if (
+          (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 66
+        ) {
+          // new
+          gamedata.squads[squad - 1].splice(pos, 1);
+          gamedata.squads[squad - 1].splice(
+            pos + 1,
+            0,
+            lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
           );
-          gamedata.squads[squad2 - 1].splice(0, 0, temp);
           gamedata = richtextadd(
             gamedata,
-            `\n‼️ ${gamedata.player[squad - 1]}'s ${emojis[15].emoji} pulled ${
-              gamedata.player[squad2 - 1]
-            }'s ${
-              gamedata.squads[squad2 - 1][0].emoji
-            } to the front of their Squad!`
+            `\n👥 ${gamedata.player[squad - 1]}'s ${
+              emojis[66].emoji
+            } summoned a new ${
+              gamedata.squads[squad - 1][pos].emoji
+            }, and defeated itself!`
           );
         }
-        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 16) {
-          // golf
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 57) {
+          // mask
+          gamedata.squads[0 - squad + 2].splice(
+            0,
+            0,
+            lodash.cloneDeep(emojis[58])
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n🦠 ${gamedata.player[squad - 1]}'s ${
+              emojis[57].emoji
+            } infected ${gamedata.player[0 - squad + 2]}'s Squad with a ${
+              emojis[58].emoji
+            }!`
+          );
+          gamedata = richtextadd(
+            gamedata,
+            `\n🔀 ${gamedata.player[squad - 1]}'s ${
+              emojis[57].emoji
+            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
+          );
+          gamedata = shufflesquad(gamedata, squad2);
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 43) {
+          // pinata
+          gamedata = richtextadd(
+            gamedata,
+            `\n💥 ${gamedata.player[squad - 1]}'s ${
+              emojis[43].emoji
+            } shattered!`
+          );
+          gamedata = alterhp(
+            gamedata,
+            0 - squad + 3,
+            0,
+            squad,
+            pos,
+            -2,
+            "threw candy at",
+            false
+          );
+          if (gamedata.squads[squad - 1].length > 1) {
+            gamedata = alterhp(
+              gamedata,
+              squad,
+              1,
+              squad,
+              pos,
+              2,
+              "gave candy to",
+              false
+            );
+          }
+        }
+        if (gamedata.squads[squad - 1][pos].id != 61) {
+          // wand
+          for (i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
+            if (gamedata.squads[squad - 1][i].id == 61) {
+              gamedata.squads[squad - 1].splice(
+                gamedata.squads[squad - 1].length,
+                0,
+                lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
+              );
+              gamedata = alterhp(
+                gamedata,
+                squad,
+                i,
+                squad,
+                i,
+                -1000,
+                "used up",
+                true
+              );
+              gamedata = richtextadd(
+                gamedata,
+                `\n🌟 ${gamedata.player[squad - 1]}'s 🪄 revived the ${
+                  gamedata.squads[squad - 1][pos].emoji
+                } at the back of the Squad!`
+              );
+            }
+          }
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 59) {
+          // flying saucer
+          gamedata = shufflesquad(gamedata, squad2);
+          gamedata = richtextadd(
+            gamedata,
+            `\n🔀 ${gamedata.player[squad - 1]}'s ${
+              emojis[59].emoji
+            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
+          );
+          gamedata = alterhp(gamedata, squad2, 0, squad, pos, -3, "zapped");
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 55) {
+          // banana
           const temp = gamedata.squads[squad2 - 1][0];
           gamedata.squads[squad2 - 1].splice(0, 1);
           gamedata.squads[squad2 - 1].splice(
@@ -1042,45 +659,494 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             0,
             temp
           );
+          gamedata = alterhp(
+            gamedata,
+            squad2,
+            gamedata.squads[squad2 - 1].length - 1,
+            squad,
+            pos,
+            -2,
+            "",
+            true
+          );
           gamedata = richtextadd(
             gamedata,
-            `\n‼️ ${gamedata.player[squad - 1]}'s ${emojis[16].emoji} whacked ${
-              gamedata.player[squad2 - 1]
-            }'s ${
-              gamedata.squads[squad2 - 1][
-                gamedata.squads[squad2 - 1].length - 1
-              ].emoji
-            } to the back of their Squad!`
+            `\n‼️ ${gamedata.player[squad2 - 1]}'s ${temp.emoji} slipped on ${
+              gamedata.player[squad - 1]
+            }'s ${emojis[55].emoji}!`
           );
         }
-        if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 49) {
-          // flying disc
-          if (gamedata.squads[squad2 - 1].length > 2) {
-            gamedata = alterhp(gamedata, squad2, 1, squad, pos, -1, "whacked");
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 56) {
+          // magnet
+          const temp =
+            gamedata.squads[squad2 - 1][gamedata.squads[squad2 - 1].length - 1];
+          gamedata.squads[squad2 - 1].splice(
+            gamedata.squads[squad2 - 1].length - 1,
+            1
+          );
+          gamedata.squads[squad2 - 1].splice(0, 0, temp);
+          gamedata = alterhp(gamedata, squad2, 0, squad, pos, -2, "", true);
+          gamedata = richtextadd(
+            gamedata,
+            `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
+              temp.emoji
+            } was pulled to the front of the Squad by ${
+              gamedata.player[squad - 1]
+            }'s ${emojis[56].emoji}!`
+          );
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 46) {
+          // fire
+          if (
+            gamedata.squads[squad - 1].length > 1 &&
+            gamedata.squads[squad - 1][1].id != 46
+          ) {
+            gamedata = alterhp(
+              gamedata,
+              squad,
+              1,
+              squad,
+              pos,
+              -2,
+              "burned",
+              false
+            );
           }
         }
-      }
-      if (
-        gamedata.squads[0].length == 1 &&
-        (gamedata.squads[0][0] ?? { id: undefined }).id == 23
-      ) {
-        // lizard / dragon
-        gamedata.squads[0].splice(0, 1, lodash.cloneDeep(emojis[24]));
-        gamedata = richtextadd(
-          gamedata,
-          `\n⏫ ${gamedata.player[0]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
-        );
-      }
-      if (
-        gamedata.squads[1].length == 1 &&
-        (gamedata.squads[1][0] ?? { id: undefined }).id == 23
-      ) {
-        // lizard / dragon
-        gamedata.squads[1].splice(0, 1, lodash.cloneDeep(emojis[24]));
-        gamedata = richtextadd(
-          gamedata,
-          `\n⏫ ${gamedata.player[1]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
-        );
+        for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
+          if (
+            (gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 11 &&
+            (gamedata.squads[squad - 1][i] ?? { id: undefined }).hp > 0
+          ) {
+            // headstone
+            gamedata = alterhp(gamedata, squad, i, squad, i, 1);
+          }
+          if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 51) {
+            // xray
+            for (j = i + 1; j < gamedata.squads[squad - 1].length; j++) {
+              gamedata = alterhp(
+                gamedata,
+                squad,
+                j,
+                squad,
+                i,
+                1,
+                "healed",
+                true
+              );
+            }
+            gamedata = richtextadd(
+              gamedata,
+              `\n💗 ${gamedata.player[squad - 1]}'s ${
+                emojis[51].emoji
+              } healed all Emojis behind itself by 1!`
+            );
+          }
+        }
+        for (i = 0; i < gamedata.squads[squad2 - 1].length - 1; i++) {
+          if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 25) {
+            // skull and crossbones
+            gamedata = alterhp(gamedata, squad2, i + 1, squad2, i, 1);
+          }
+          if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 18) {
+            // skull
+            gamedata = alterhp(gamedata, squad2, i, squad2, i, 1);
+          }
+          if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 48) {
+            // tada
+            gamedata = alterhp(
+              gamedata,
+              squad2,
+              1,
+              squad2,
+              pos,
+              1,
+              "congratulated"
+            );
+          }
+        }
+        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 41) {
+          // tornado
+          gamedata = richtextadd(
+            gamedata,
+            `\n🔀 ${gamedata.player[squad - 1]}'s ${
+              emojis[41].emoji
+            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
+          );
+          gamedata = shufflesquad(gamedata, squad2);
+        }
+        gamedata.squads[squad - 1].splice(pos, 1);
+      } else {
+        if (val > 0) {
+          if (!silence) {
+            if (squad == squad2 && pos == pos2) {
+              gamedata = richtextadd(
+                gamedata,
+                `\n💗 ${gamedata.player[squad2 - 1]}'s ${
+                  gamedata.squads[squad2 - 1][pos2].emoji
+                } ${verb ?? "healed"} itself. (${val} health)`
+              );
+            } else {
+              gamedata = richtextadd(
+                gamedata,
+                `\n💗 ${gamedata.player[squad2 - 1]}'s ${
+                  gamedata.squads[squad2 - 1][pos2].emoji
+                } ${verb ?? "healed"} ${gamedata.player[squad - 1]}'s ${
+                  gamedata.squads[squad - 1][pos].emoji
+                }. (${val} health)`
+              );
+            }
+          }
+          if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 50) {
+            // track next
+            gamedata = shufflesquad(gamedata, squad);
+            gamedata = richtextadd(
+              gamedata,
+              `\n🔀 ${gamedata.player[squad - 1]}'s ${
+                emojis[50].emoji
+              } Shuffled ${gamedata.player[squad - 1]}'s Squad!`
+            );
+          }
+        } else if (val == 0) {
+          if (!silence) {
+            gamedata = richtextadd(
+              gamedata,
+              `\n🤜 ${gamedata.player[squad2 - 1]}'s ${
+                gamedata.squads[squad2 - 1][pos2].emoji
+              } ${verb ?? "tried to attack"} ${gamedata.player[squad - 1]}'s ${
+                gamedata.squads[squad - 1][pos].emoji
+              }... but it did nothing.`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 10) {
+            // shuffle button (2)
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata = shufflesquad(gamedata, squad2);
+            gamedata = richtextadd(
+              gamedata,
+              `\n🔀 ${gamedata.player[squad - 1]}'s ${
+                emojis[10].emoji
+              } Shuffled ${
+                gamedata.player[squad2 - 1]
+              }'s Squad, and defeated itself!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 9) {
+            // mortar board (2)
+            gamedata.squads[squad - 1].splice(pos, 1);
+            for (i = 0; i < 3; i++) {
+              gamedata.squads[squad - 1].splice(
+                pos + 1,
+                0,
+                lodash.cloneDeep(emojis[0])
+              );
+              gamedata.squads[squad - 1][pos + 1].hp = 1;
+            }
+            gamedata = richtextadd(
+              gamedata,
+              `\n‼️ ${gamedata.player[squad - 1]}'s ${
+                emojis[9].emoji
+              } sparked a standing ovation and summoned ${emojis[0].emoji}${
+                emojis[0].emoji
+              }${emojis[0].emoji}, and defeated itself!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 36) {
+            // bomb (2)
+            gamedata = alterhp(
+              gamedata,
+              0 - squad + 3,
+              0,
+              squad,
+              pos,
+              -1000,
+              "exploded"
+            );
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata = richtextadd(
+              gamedata,
+              `\n💥 ${gamedata.player[squad - 1]}'s ${
+                emojis[36].emoji
+              } exploded!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 41) {
+            // tornado (2)
+            gamedata = richtextadd(
+              gamedata,
+              `\n🔀 ${gamedata.player[squad - 1]}'s ${
+                emojis[41].emoji
+              } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
+            );
+            gamedata = shufflesquad(gamedata, squad2);
+          }
+        } else {
+          if (!silence) {
+            gamedata = richtextadd(
+              gamedata,
+              `\n🤜 ${gamedata.player[squad2 - 1]}'s ${
+                gamedata.squads[squad2 - 1][pos2].emoji
+              } ${verb ?? "attacked"} ${gamedata.player[squad - 1]}'s ${
+                gamedata.squads[squad - 1][pos].emoji
+              }. (${val * -1} damage)`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 10) {
+            // shuffle button (3)
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata = shufflesquad(gamedata, squad2);
+            gamedata = richtextadd(
+              gamedata,
+              `\n🔀 ${gamedata.player[squad - 1]}'s ${
+                emojis[10].emoji
+              } Shuffled ${
+                gamedata.player[squad2 - 1]
+              }'s Squad, and defeated itself!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 9) {
+            // mortar board (3)
+            gamedata.squads[squad - 1].splice(pos, 1);
+            for (i = 0; i < 3; i++) {
+              gamedata.squads[squad - 1].splice(
+                pos + 1,
+                0,
+                lodash.cloneDeep(emojis[0])
+              );
+              gamedata.squads[squad - 1][pos + 1].hp = 1;
+            }
+            gamedata = richtextadd(
+              gamedata,
+              `\n‼️ ${gamedata.player[squad - 1]}'s ${
+                emojis[9].emoji
+              } sparked a standing ovation and summoned ${emojis[0].emoji}${
+                emojis[0].emoji
+              }${emojis[0].emoji}, and defeated itself!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 36) {
+            // bomb (3)
+            gamedata = alterhp(
+              gamedata,
+              0 - squad + 3,
+              0,
+              squad,
+              pos,
+              -1000,
+              "exploded"
+            );
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata = richtextadd(
+              gamedata,
+              `\n💥 ${gamedata.player[squad - 1]}'s ${
+                emojis[36].emoji
+              } exploded!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 41) {
+            // tornado (3)
+            gamedata = richtextadd(
+              gamedata,
+              `\n🔀 ${gamedata.player[squad - 1]}'s ${
+                emojis[41].emoji
+              } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
+            );
+            gamedata = shufflesquad(gamedata, squad2);
+          }
+          if (
+            (gamedata.squads[squad2 - 1][pos2].id ?? { id: undefined }) == 6 &&
+            gamedata.squads[squad2 - 1][pos2].hp > 2
+          ) {
+            // speaking head
+            if (gamedata.squads[squad - 1][pos].dmg > 0) {
+              gamedata.squads[squad - 1][pos].dmg -= 1;
+              gamedata = richtextadd(
+                gamedata,
+                `\n🚧 ${gamedata.player[squad2 - 1]}'s ${
+                  gamedata.squads[squad2 - 1][pos2].emoji
+                } weakened ${gamedata.player[squad - 1]}'s ${
+                  gamedata.squads[squad - 1][pos].emoji
+                }! (-1 attack)`
+              );
+            }
+          }
+          if (
+            (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 1
+          ) {
+            // kissing heart face
+            gamedata = alterhp(
+              gamedata,
+              squad,
+              pos,
+              squad,
+              pos + 1,
+              1,
+              "kissed"
+            );
+          }
+          if (
+            (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id ==
+              78 &&
+            (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
+              (gamedata.squads[squad - 1][pos + 2] ?? { id: undefined }).id ==
+                77)
+          ) {
+            // saxophone
+            gamedata = alterhp(
+              gamedata,
+              squad,
+              pos,
+              squad,
+              pos + 1,
+              1,
+              "jazzed"
+            );
+          }
+
+          if (
+            (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 3 &&
+            gamedata.squads[squad - 1].length > 1
+          ) {
+            // cold sweat face
+            const temp = gamedata.squads[squad - 1][pos];
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata.squads[squad - 1].splice(pos + 1, 0, temp);
+            gamedata = richtextadd(
+              gamedata,
+              `\n💨 ${gamedata.player[squad - 1]}'s ${
+                emojis[3].emoji
+              } retreated behind ${gamedata.squads[squad - 1][pos].emoji}!`
+            );
+          }
+          if (
+            (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 5 &&
+            gamedata.squads[squad - 1].length > 1
+          ) {
+            // turtle
+            const temp = gamedata.squads[squad - 1][pos];
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata.squads[squad - 1].splice(
+              gamedata.squads[squad - 1].length,
+              0,
+              temp
+            );
+            gamedata = richtextadd(
+              gamedata,
+              `\n💨 ${gamedata.player[squad - 1]}'s ${
+                emojis[5].emoji
+              } retreated to the back of the Squad!`
+            );
+            gamedata = alterhp(
+              gamedata,
+              squad,
+              gamedata.squads[squad - 1].length - 1,
+              squad,
+              gamedata.squads[squad - 1].length - 1,
+              1
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 67) {
+            // lock with ink pen
+            const tempemj = gamedata.squads[squad2 - 1][0].emoji;
+            const temphp = gamedata.squads[squad2 - 1][0].hp;
+            const tempdmg = gamedata.squads[squad2 - 1][0].dmg + 1;
+            gamedata.squads[squad2 - 1].splice(
+              0,
+              1,
+              lodash.cloneDeep(emojis[68])
+            );
+            gamedata.squads[squad2 - 1][0].hp = temphp;
+            gamedata.squads[squad2 - 1][0].dmg = tempdmg;
+            gamedata = richtextadd(
+              gamedata,
+              `\n🔒 ${gamedata.player[squad - 1]}'s ${
+                emojis[67].emoji
+              } transformed ${
+                gamedata.player[squad2 - 1]
+              }'s ${tempemj} into a ${
+                emojis[68].emoji
+              }, and increased its attack power by 1!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 15) {
+            // fishing pole
+            const temp =
+              gamedata.squads[squad2 - 1][
+                gamedata.squads[squad2 - 1].length - 1
+              ];
+            gamedata.squads[squad2 - 1].splice(
+              gamedata.squads[squad2 - 1].length - 1,
+              1
+            );
+            gamedata.squads[squad2 - 1].splice(0, 0, temp);
+            gamedata = richtextadd(
+              gamedata,
+              `\n‼️ ${gamedata.player[squad - 1]}'s ${
+                emojis[15].emoji
+              } pulled ${gamedata.player[squad2 - 1]}'s ${
+                gamedata.squads[squad2 - 1][0].emoji
+              } to the front of their Squad!`
+            );
+          }
+          if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 16) {
+            // golf
+            const temp = gamedata.squads[squad2 - 1][0];
+            gamedata.squads[squad2 - 1].splice(0, 1);
+            gamedata.squads[squad2 - 1].splice(
+              gamedata.squads[squad2 - 1].length,
+              0,
+              temp
+            );
+            gamedata = richtextadd(
+              gamedata,
+              `\n‼️ ${gamedata.player[squad - 1]}'s ${
+                emojis[16].emoji
+              } whacked ${gamedata.player[squad2 - 1]}'s ${
+                gamedata.squads[squad2 - 1][
+                  gamedata.squads[squad2 - 1].length - 1
+                ].emoji
+              } to the back of their Squad!`
+            );
+          }
+          if (
+            (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 49
+          ) {
+            // flying disc
+            if (gamedata.squads[squad2 - 1].length > 2) {
+              gamedata = alterhp(
+                gamedata,
+                squad2,
+                1,
+                squad,
+                pos,
+                -1,
+                "whacked"
+              );
+            }
+          }
+        }
+        if (
+          gamedata.squads[0].length == 1 &&
+          (gamedata.squads[0][0] ?? { id: undefined }).id == 23
+        ) {
+          // lizard / dragon
+          gamedata.squads[0].splice(0, 1, lodash.cloneDeep(emojis[24]));
+          gamedata = richtextadd(
+            gamedata,
+            `\n⏫ ${gamedata.player[0]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
+          );
+        }
+        if (
+          gamedata.squads[1].length == 1 &&
+          (gamedata.squads[1][0] ?? { id: undefined }).id == 23
+        ) {
+          // lizard / dragon
+          gamedata.squads[1].splice(0, 1, lodash.cloneDeep(emojis[24]));
+          gamedata = richtextadd(
+            gamedata,
+            `\n⏫ ${gamedata.player[1]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
+          );
+        }
       }
     }
   }
@@ -1504,7 +1570,10 @@ function shufflesquad(gamedata, squad) {
     });
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
-      if (gamedata.squads[squad - 1][i].id == 28) {
+      if (
+        gamedata.squads[squad - 1][i].id == 28 &&
+        i < gamedata.squads[squad - 1].length - 1
+      ) {
         // pickup truck
         const temp = gamedata.squads[squad - 1][i];
         gamedata.squads[squad - 1].splice(i, 1);
