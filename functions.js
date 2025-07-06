@@ -367,7 +367,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           } printed out a ${emojis[81].emoji}!`
         );
       }
-      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83) {
+      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 && (!pos2 == pos && squad2 == squad)) {
         // innocent
         gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -3, "", true);
         gamedata = richtextadd(

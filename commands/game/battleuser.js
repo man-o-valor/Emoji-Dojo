@@ -329,14 +329,22 @@ module.exports = {
                     }
                   } catch (e) {
                     console.error(e);
-                    await interaction2.editReply(
-                      `<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` +
+                    const txt = Buffer.from(gamedata.logfile);
+                    await interaction2.editReply({
+                      content:
+                        `<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` +
                         gamedata.emojitext +
                         "\n\n" +
                         "🤒 An error has ocurred and the Battle cannot continue.```" +
                         e +
-                        "```"
-                    );
+                        "```",
+                      files: [
+                        {
+                          attachment: txt,
+                          name: `${interaction.user.username} vs ${battleuser.username} [error].txt`,
+                        },
+                      ],
+                    });
                   }
                   await database.set(
                     interaction.user.id + "battlepending",
