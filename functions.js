@@ -367,7 +367,11 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           } printed out a ${emojis[81].emoji}!`
         );
       }
-      if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 && (!pos2 == pos && squad2 == squad)) {
+      if (
+        (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
+        !pos2 == pos &&
+        squad2 == squad
+      ) {
         // innocent
         gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -3, "", true);
         gamedata = richtextadd(
@@ -1101,7 +1105,14 @@ function playturn(gamedata) {
           gamedata.squads[0][i - 1] != undefined
         ) {
           // fog
-          gamedata.squads[0][i - 1].hp += 4;
+          gamedata.squads[0][i - 1].hp += 3;
+          gamedata.squads[0].splice(i, 1);
+        } else if (
+          gamedata.squads[0][i].id == 85 &&
+          gamedata.squads[0][i - 1] != undefined
+        ) {
+          // syringe
+          gamedata.squads[0][i - 1].dmg += 1;
           gamedata.squads[0].splice(i, 1);
         }
       }
@@ -1120,7 +1131,14 @@ function playturn(gamedata) {
           gamedata.squads[1][i - 1] != undefined
         ) {
           // fog
-          gamedata.squads[1][i - 1].hp += 4;
+          gamedata.squads[1][i - 1].hp += 3;
+          gamedata.squads[1].splice(i, 1);
+        } else if (
+          gamedata.squads[1][i].id == 85 &&
+          gamedata.squads[1][i - 1] != undefined
+        ) {
+          // syringe
+          gamedata.squads[1][i - 1].dmg += 1;
           gamedata.squads[1].splice(i, 1);
         }
       }
@@ -1261,6 +1279,22 @@ function playturn(gamedata) {
             gamedata.squads[gamedata.playerturn * -1 + 3][0].dmg),
         "reflected at"
       );
+    }
+    if (
+      (activeemoji ?? { id: undefined }).id == 84 &&
+      gamedata.squads[gamedata.playerturn * -1 + 3].length > 1
+    ) {
+      // bow and arrow
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        1,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg,
+        "shot"
+      );
+      basicattackflag = false;
     }
     if (basicattackflag) {
       gamedata = alterhp(
