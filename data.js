@@ -931,7 +931,7 @@ const emojis = [
     names: ["Fog", "Mist", "Foggy", "Misty"],
     class: 0,
     description:
-      "At the beginning of the Battle, heals the friendly Emoji in front of itself by 4 and defeats itself",
+      "At the beginning of the Battle, heals the friendly Emoji in front of itself by 3 and defeats itself",
   },
   {
     emoji: "🎧",
@@ -1006,8 +1006,29 @@ const emojis = [
     rarity: 1,
     names: ["Innocent", "Halo", "Holy", "Angel Face", "Smiling Face with Halo"],
     class: 2,
+    description: "When this defeats an Emoji, attacks itself for 3",
+  },
+  {
+    emoji: "🏹",
+    id: 84,
+    hp: 5,
+    dmg: 2,
+    rarity: 1,
+    names: ["Bow and Arrow", "Archery", "Bow", "Crossbow"],
+    class: 1,
     description:
-      "When this defeats an Emoji, attacks itself for 3",
+      "Attacks the Emoji behind the frontmost enemy Emoji, if possible",
+  },
+  {
+    emoji: "💉",
+    id: 85,
+    hp: 0,
+    dmg: 0,
+    rarity: 1,
+    names: ["Syringe", "Shot", "Steroids"],
+    class: 1,
+    description:
+      "At the beginning of the Battle, increases the attack power of friendly Emoji in front of itself by 1 and defeats itself",
   },
 ];
 
