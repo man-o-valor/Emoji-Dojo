@@ -374,7 +374,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         }
         if (
           (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
-          !pos2 == pos &&
+          !pos2 == pos ||
           !squad2 == squad
         ) {
           // innocent
