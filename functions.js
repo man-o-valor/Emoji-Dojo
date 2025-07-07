@@ -210,7 +210,7 @@ function richtextadd(gamedata, text) {
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (
     (gamedata.squads[squad2 - 1][pos] ?? { id: undefined }).id == 22 &&
-    val < 0
+    val <= 0
   ) {
     // rage
     val = val - Math.min(gamedata.squads[squad - 1].length, 3);
@@ -1569,7 +1569,7 @@ function shufflesquad(gamedata, squad) {
       gamedata.squads[squad - 1].splice(fromIndex, 0, itemToMove);
     });
 
-    for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
+    for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (
         gamedata.squads[squad - 1][i].id == 28 &&
         i < gamedata.squads[squad - 1].length - 1
@@ -1585,7 +1585,7 @@ function shufflesquad(gamedata, squad) {
       }
       if (gamedata.squads[squad - 1][i].id == 30) {
         // bus
-        for (let j = gamedata.squads[squad - 1].length - 1; j > 0; j--) {
+        for (let j = gamedata.squads[squad - 1].length - 1; j > -1; j--) {
           if (gamedata.squads[squad - 1][j].id == 29) {
             // bus stop
             const temp = gamedata.squads[squad - 1][i];
@@ -1607,21 +1607,21 @@ function shufflesquad(gamedata, squad) {
       }
     }
 
-    for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
+    for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (gamedata.squads[squad - 1][i].id == 29) {
         // bus stop
         gamedata = alterhp(gamedata, squad, i + 1, squad, i, 2);
       }
     }
 
-    for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
+    for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (gamedata.squads[squad - 1][i].id == 19) {
         // dizzy face
         gamedata = alterhp(gamedata, squad, i, squad, i, 1);
       }
     }
 
-    for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
+    for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (gamedata.squads[squad - 1][i].id == 47) {
         // volcano
         gamedata.squads[0 - squad + 2].splice(
@@ -1640,7 +1640,7 @@ function shufflesquad(gamedata, squad) {
       }
     }
 
-    for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
+    for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (gamedata.squads[squad - 1][i].id == 27) {
         // cyclone
         gamedata.squads[squad - 1].splice(i, 1);
@@ -1655,7 +1655,7 @@ function shufflesquad(gamedata, squad) {
       }
     }
 
-    for (let i = gamedata.squads[squad - 1].length - 1; i > 0; i--) {
+    for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (gamedata.squads[squad - 1][i].id == 31) {
         // popcorn
         gamedata = alterhp(gamedata, squad, 0, squad, i, 2);

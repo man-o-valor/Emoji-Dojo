@@ -790,7 +790,7 @@ const emojis = [
   {
     emoji: "🍄",
     id: 64,
-    hp: 7,
+    hp: 6,
     dmg: 2,
     rarity: 0,
     names: ["Mushroom", "Red Mushroom", "Fungus"],
