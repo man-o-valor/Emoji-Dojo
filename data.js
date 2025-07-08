@@ -849,7 +849,7 @@ const emojis = [
   {
     emoji: "🏺",
     id: 69,
-    hp: 2,
+    hp: 1,
     dmg: 1,
     rarity: 1,
     names: ["Amphora", "Vase", "Pot"],

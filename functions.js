@@ -333,7 +333,11 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           silence = true;
         }
-        if (!silence && gamedata.squads[squad2 - 1][pos2] && gamedata.squads[squad - 1][pos]) {
+        if (
+          !silence &&
+          gamedata.squads[squad2 - 1][pos2] &&
+          gamedata.squads[squad - 1][pos]
+        ) {
           gamedata = richtextadd(
             gamedata,
             `\n💥 ${gamedata.player[squad2 - 1]}'s ${
@@ -373,8 +377,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
         }
         if (
-          (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
-          !pos2 == pos ||
+          ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
+            !pos2 == pos) ||
           !squad2 == squad
         ) {
           // innocent
@@ -1348,7 +1352,7 @@ function playturn(gamedata) {
     }
     if (
       (activeemoji ?? { id: undefined }).id == 84 &&
-      gamedata.squads[gamedata.playerturn * -1 + 3].length > 1
+      (gamedata.squads[gamedata.playerturn * -1 + 3] ?? []).length > 1
     ) {
       // bow and arrow
       gamedata = alterhp(

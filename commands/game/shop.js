@@ -440,9 +440,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         let allemojistoadd = "";
                         for (let i = 0; i < modalquantity; i++) {
                           allemojistoadd += shopdata[choice].id + ",";
-                          emojisbought[emojis[shopdata[choice].id].rarity].push(
-                            emojis[shopdata[choice].id]
-                          );
+                          emojisbought[shopdata[choice].id].push(shopdata[choice]);
                         }
                         let tempvault = await database.get(
                           interaction.user.id + "vault"
@@ -466,19 +464,19 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         await writelogs(logs);
                       }
                       let emojiString = "";
-                      if (emojisbought[0][0] != undefined) {
+                      if (emojisbought[0][0]) {
                         for (const e of emojisbought[0]) {
                           emojiString += e.emoji + " ";
                         }
                         emojiString += "\n";
                       }
-                      if (emojisbought[1][0] != undefined) {
+                      if (emojisbought[1][0]) {
                         for (const e of emojisbought[1]) {
                           emojiString += e.emoji + " ";
                         }
                         emojiString += "\n";
                       }
-                      if (emojisbought[2][0] != undefined) {
+                      if (emojisbought[2][0]) {
                         for (const e of emojisbought[2]) {
                           emojiString += e.emoji + " ";
                         }
