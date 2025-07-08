@@ -333,7 +333,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           silence = true;
         }
-        if (!silence) {
+        if (!silence && gamedata.squads[squad2 - 1][pos2] && gamedata.squads[squad - 1][pos]) {
           gamedata = richtextadd(
             gamedata,
             `\n💥 ${gamedata.player[squad2 - 1]}'s ${

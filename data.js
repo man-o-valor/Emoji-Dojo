@@ -157,10 +157,10 @@ const emojis = [
   {
     emoji: "😀",
     id: 4,
-    hp: 6,
+    hp: 5,
     dmg: 3,
     rarity: 0,
-    names: ["Grinning"],
+    names: ["Grinning", "Smile"],
     class: 1,
     description: "Nothing special",
   },
