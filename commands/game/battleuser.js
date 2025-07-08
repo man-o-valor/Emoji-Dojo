@@ -40,15 +40,16 @@ module.exports = {
     if (battlespeed < 1) {
       battlespeed = 1;
     }
+    const othervault = await database.get(battleuser.id + "vault");
     if (await trysetupuser(interaction.user)) {
       await interaction.reply({
         flags: "Ephemeral",
         content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
       });
-    } else if (await trysetupuser(battleuser.id)) {
+    } else if (!othervault) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `<@${battleuser.id}> doesn't have a Squad yet! Show them how to use \`/squad\` and then you can battle.`,
+        content: `<@${battleuser.id}> doesn't have a Squad yet! Show them how to play and then you can Battle.`,
       });
     } else {
       if (
@@ -395,20 +396,11 @@ module.exports = {
                   } else {
                     if (gamedata.squads[1].length == 0) {
                       diff1 = gamedata.squads[0].length * 20;
-                      const coindoubler =
-                        (await database.get(
-                          interaction.user.id + "coindoubler"
-                        )) ?? 0;
-                      let doublerbonus = Math.min(coindoubler, diff1);
-                      await database.set(
-                        interaction.user.id + "coindoubler",
-                        coindoubler - doublerbonus
-                      );
-                      diff1 += doublerbonus;
-                      let bonusmsg =
-                        doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
-                      await coinschange(interaction.user.id, diff1);
                       diff2 = diff1 * -0.25;
+                      coinsdata = await coinschange(interaction.user.id, diff1);
+                      diff1 = coinsdata[0];
+                      doublerbonus = coinsdata[1];
+                      let bonusmsg = doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
                       await coinschange(battleuser.id, diff2);
                       int3 = await interaction2.followUp({
                         components: [row2],

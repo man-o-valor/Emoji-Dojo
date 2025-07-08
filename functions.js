@@ -144,39 +144,43 @@ async function trysetupuser(user) {
 }
 
 async function coinschange(id, amt, affectcooldown) {
+  let coinrestock = (await database.get(id + "coinrestock")) ?? "0";
+
+  if (parseInt(coinrestock) < Date.now() / 1000) {
+    let now = new Date();
+    let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let noonToday = startOfDay.getTime() / 1000 + 43200;
+    let timestamp = startOfDay / 1000 + 43200;
+    if (Date.now() / 1000 < noonToday) {
+      timestamp = noonToday;
+    } else {
+      timestamp = noonToday + 24 * 60 * 60;
+    }
+    await database.set(id + "coinmod", "20");
+    await database.set(id + "coinrestock", timestamp);
+  }
   affectcooldown = affectcooldown ?? true;
   const originalamt = amt;
-  let coinsleft = 0;
+  let coinmod = 0;
+  let doublerbonus = 0;
   if (affectcooldown) {
-    const coincd = (await database.get(id + "coincooldown")) ?? "0";
-    if (Date.now() / 1000 - coincd > 86400) {
-      await database.set(id + "coincooldown", Math.floor(Date.now() / 1000));
-      await database.set(id + "coinsleft", "200");
-    }
-    coinsleft = parseInt((await database.get(id + "coinsleft")) ?? "200");
+    coinmod = parseInt((await database.get(id + "coinmod")) ?? "20");
     if (amt > 0) {
-      if (coinsleft - amt < 0) {
-        amt = coinsleft;
-        coinsleft = 0;
-      } else {
-        coinsleft -= amt;
-      }
+      amt = Math.floor((amt / 20) * coinmod);
+      const coindoubler = (await database.get(id + "coindoubler")) ?? 0;
+      doublerbonus = Math.min(coindoubler, amt);
+      await database.set(id + "coindoubler", coindoubler - doublerbonus);
+      amt += doublerbonus;
     }
-    await database.set(id + "coinsleft", coinsleft);
-  }
-  if (amt > 0 && originalamt > 0) {
-    let rawcoins = parseInt((await database.get(id + "coins")) ?? "100");
-    rawcoins += amt;
-    await database.set(id + "coins", rawcoins);
-    if (affectcooldown) {
-      await database.set(id + "coinsleft", coinsleft - amt);
+    if (coinmod > 0) {
+      coinmod -= 2;
     }
-  } else if (amt < 0 && originalamt < 0) {
-    let rawcoins = parseInt((await database.get(id + "coins")) ?? "100");
-    rawcoins += amt;
-    await database.set(id + "coins", rawcoins);
+    await database.set(id + "coinmod", coinmod);
   }
-  return amt;
+  let rawcoins = parseInt((await database.get(id + "coins")) ?? "100");
+  rawcoins += amt;
+  await database.set(id + "coins", rawcoins);
+  return [amt, doublerbonus];
 }
 
 async function getsquad(id) {

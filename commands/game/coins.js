@@ -18,38 +18,24 @@ module.exports = {
     const coincount = parseInt(
       (await database.get(interaction.user.id + "coins")) ?? "100"
     );
-    let coincd = parseInt(
-      (await database.get(interaction.user.id + "coincooldown")) ??
-        Math.floor(Date.now() / 1000)
-    );
-    if (coincd - Math.floor(Date.now() / 1000) > 86400) {
-      coincd = Math.floor(Date.now() / 1000);
-    }
-    const coinsleft = parseInt(
-      (await database.get(interaction.user.id + "coinsleft")) ?? 200
-    );
     let battlemsg = `❎ You need ${
       40 - coincount
     } more 🪙 to battle other users. Use \`/battlebot\` to earn some!`;
     if (coincount >= 40) {
-      battlemsg = `✅ You have enough 🪙 to battle other users. Challenge your friends with \`/battleuser\`!`;
+      battlemsg = `✅ You have enough **Coins** to battle other users. Challenge your friends with \`/battleuser\`!`;
     }
 
     const coindoubler =
       (await database.get(interaction.user.id + "coindoubler")) ?? 0;
     let coindoublermsg = "";
     if (coindoubler > 0) {
-      coindoublermsg = `\n\n💫 You have x${coindoubler} Coin Doublers! When you win a Battle, you'll get more coins for each Coin Doubler you have.`;
+      coindoublermsg = `\n\n💫 You have x${coindoubler} **Coin Doublers**! When you win a Battle, you'll get more coins for each Coin Doubler you have.`;
     }
 
     const coinembed = new EmbedBuilder()
       .setColor(0xffac33)
       .setTitle(`Coins: ${coincount} 🪙`)
-      .setDescription(
-        `${battlemsg}\n\nUntil <t:${
-          coincd + 86400
-        }:t> you can earn up to ${coinsleft} 🪙. Afterwards, your possible 🪙 will refill to 200.${coindoublermsg}`
-      )
+      .setDescription(battlemsg + coindoublermsg)
       .setTimestamp()
       .setFooter({ text: `${interaction.user.globalName}'s Coins` });
     await interaction.reply({ embeds: [coinembed] });

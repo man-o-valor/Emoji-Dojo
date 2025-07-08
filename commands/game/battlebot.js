@@ -283,17 +283,10 @@ module.exports = {
             } else {
               if (gamedata.squads[1].length == 0) {
                 let diff1 = gamedata.squads[0].length * 20;
-                const coindoubler =
-                  (await database.get(interaction.user.id + "coindoubler")) ??
-                  0;
-                let doublerbonus = Math.min(coindoubler, diff1);
-                await database.set(
-                  interaction.user.id + "coindoubler",
-                  coindoubler - doublerbonus
-                );
-                diff1 += doublerbonus;
+                coinsdata = await coinschange(interaction.user.id, diff1);
+                diff1 = coinsdata[0]
+                doublerbonus = coinsdata[1]
                 let bonusmsg = doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
-                await coinschange(interaction.user.id, diff1);
                 int3 = await interaction2.followUp({
                   components: [row2],
                   content: `<@${interaction.user.id}> is the winner! +${diff1} 🪙${bonusmsg}`,
