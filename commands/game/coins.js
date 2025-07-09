@@ -35,8 +35,8 @@ module.exports = {
       } else {
         timestamp = noonToday + 24 * 60 * 60;
       }
-      await database.set(id + "coinmod", "20");
-      await database.set(id + "coinrestock", timestamp);
+      await database.set(interaction.user.id + "coinmod", "20");
+      await database.set(interaction.user.id + "coinrestock", timestamp);
       restocktime = timestamp
     }
 
