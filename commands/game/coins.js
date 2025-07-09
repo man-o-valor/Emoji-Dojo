@@ -18,12 +18,16 @@ module.exports = {
     const coincount = parseInt(
       (await database.get(interaction.user.id + "coins")) ?? "100"
     );
+    const mod = await database.get(id + "coinmod");
+    const restocktime = await database.get(id + "coinrestock");
     let battlemsg = `❎ You need ${
       40 - coincount
     } more 🪙 to battle other users. Use \`/battlebot\` to earn some!`;
     if (coincount >= 40) {
       battlemsg = `✅ You have enough **Coins** to battle other users. Challenge your friends with \`/battleuser\`!`;
     }
+
+    const modmsg = `\n\nYour **Coin Modifier** is currently **x${mod}**. When you win a Battle, you will get this much times how many Emojis you have undefeated. It will reset back to 20 at <t:${restocktime}:t>.`
 
     const coindoubler =
       (await database.get(interaction.user.id + "coindoubler")) ?? 0;
@@ -35,7 +39,7 @@ module.exports = {
     const coinembed = new EmbedBuilder()
       .setColor(0xffac33)
       .setTitle(`Coins: ${coincount} 🪙`)
-      .setDescription(battlemsg + coindoublermsg)
+      .setDescription(battlemsg + modmsg + coindoublermsg)
       .setTimestamp()
       .setFooter({ text: `${interaction.user.globalName}'s Coins` });
     await interaction.reply({ embeds: [coinembed] });

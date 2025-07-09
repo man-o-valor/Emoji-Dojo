@@ -324,16 +324,17 @@ module.exports = {
                     squadarray.join(",") + ","
                   );
                   let squadtext = "";
+                  let url =
+                    interaction?.channel?.url ||
+                    (interaction?.channelId && interaction.guildId
+                      ? `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}`
+                      : "https://discord.com/channels/@me");
                   for (let i = 7; i > -1; i--) {
-                    squadtext += `[${
-                      emojis[squadarray[i]].emoji
-                    }](https://discord.com/channels/${interaction.guild.id}/${
-                      interaction.channel.id
-                    } \"${emojis[squadarray[i]].names[0]} | ${
-                      emojis[squadarray[i]].hp
-                    } health, ${emojis[squadarray[i]].dmg} attack power. ${
-                      emojis[squadarray[i]].description
-                    }\") `;
+                    squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${
+                      emojis[squadarray[i]].names[0]
+                    } | ${emojis[squadarray[i]].hp} health, ${
+                      emojis[squadarray[i]].dmg
+                    } attack power. ${emojis[squadarray[i]].description}\") `;
                   }
                   await interaction2.reply({
                     flags: "Ephemeral",
@@ -363,16 +364,17 @@ module.exports = {
                     squadarray.join(",") + ","
                   );
                   let squadtext = "";
+                  let url =
+                    interaction?.channel?.url ||
+                    (interaction?.channelId && interaction.guildId
+                      ? `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}`
+                      : "https://discord.com/channels/@me");
                   for (let i = 7; i > -1; i--) {
-                    squadtext += `[${
-                      emojis[squadarray[i]].emoji
-                    }](https://discord.com/channels/${interaction.guild.id}/${
-                      interaction.channel.id
-                    } \"${emojis[squadarray[i]].names[0]} | ${
-                      emojis[squadarray[i]].hp
-                    } health, ${emojis[squadarray[i]].dmg} attack power. ${
-                      emojis[squadarray[i]].description
-                    }\") `;
+                    squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${
+                      emojis[squadarray[i]].names[0]
+                    } | ${emojis[squadarray[i]].hp} health, ${
+                      emojis[squadarray[i]].dmg
+                    } attack power. ${emojis[squadarray[i]].description}\") `;
                   }
                   await interaction2.reply({
                     flags: "Ephemeral",

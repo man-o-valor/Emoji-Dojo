@@ -588,7 +588,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           gamedata = shufflesquad(gamedata, squad2);
         }
-        if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 43) {
+        if (
+          (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 43 &&
+          !(gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 43
+        ) {
           // pinata
           gamedata = richtextadd(
             gamedata,

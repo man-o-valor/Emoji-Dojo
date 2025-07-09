@@ -284,8 +284,8 @@ module.exports = {
               if (gamedata.squads[1].length == 0) {
                 let diff1 = gamedata.squads[0].length * 20;
                 coinsdata = await coinschange(interaction.user.id, diff1);
-                diff1 = coinsdata[0]
-                doublerbonus = coinsdata[1]
+                diff1 = coinsdata[0];
+                doublerbonus = coinsdata[1];
                 let bonusmsg = doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
                 int3 = await interaction2.followUp({
                   components: [row2],
@@ -372,7 +372,7 @@ module.exports = {
               }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
                 /`/g,
                 ""
-              )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`DojoBot's\`\nYou turned down DojoBot's Squad. You can battle DojoBot again in an hour.`,
+              )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`DojoBot's\`\nYou turned down DojoBot's Squad. You can battle DojoBot again in 10 minutes.`,
             });
           }
         } catch (e) {

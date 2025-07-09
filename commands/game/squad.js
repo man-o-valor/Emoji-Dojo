@@ -3,7 +3,7 @@ const {
   EmbedBuilder,
   ButtonBuilder,
   ButtonStyle,
-  ActionRowBuilder
+  ActionRowBuilder,
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -23,14 +23,17 @@ module.exports = {
       await trysetupuser(interaction.user);
       let squadarray = await getsquad(interaction.user.id);
       let squadtext = "";
+      let url =
+        interaction?.channel?.url ||
+        (interaction?.channelId && interaction.guildId
+          ? `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}`
+          : "https://discord.com/channels/@me");
       for (let i = 7; i > -1; i--) {
-        squadtext += `[${
-          emojis[squadarray[i]].emoji
-        }](${interaction.channel.url} \"${emojis[squadarray[i]].names[0]} | ${
-          emojis[squadarray[i]].hp
-        } health, ${emojis[squadarray[i]].dmg} attack power. ${
-          emojis[squadarray[i]].description
-        }\") `;
+        squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${
+          emojis[squadarray[i]].names[0]
+        } | ${emojis[squadarray[i]].hp} health, ${
+          emojis[squadarray[i]].dmg
+        } attack power. ${emojis[squadarray[i]].description}\") `;
       }
       const save = new ButtonBuilder()
         .setCustomId("save")
