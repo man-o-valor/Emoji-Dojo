@@ -281,6 +281,13 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       verb = "tried to heal";
     }
   }
+  if (
+    (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 12 &&
+    val <= 0
+  ) {
+    // martial arts uniform
+    val -= 1;
+  }
 
   alter: {
     if (gamedata.squads[squad - 1][pos]) {
@@ -1276,21 +1283,6 @@ function playturn(gamedata) {
           gamedata.squads[gamedata.playerturn - 1][1].id ==
           77,
         "blasted"
-      );
-    }
-    if (
-      (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
-      12
-    ) {
-      // martial arts uniform
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg - 1
       );
     }
     if (
