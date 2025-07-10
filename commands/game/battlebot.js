@@ -72,7 +72,8 @@ module.exports = {
 
         let player1squadarray = await getsquad(interaction.user.id);
 
-        let player2squadarray = await makesquad(player1squadarray, 2);
+        let player2squadarray = await makesquad(player1squadarray, 20);
+        
         if (player2squadarray == "error") {
           await interaction.reply({
             content: "🤒 Something went wrong with picking DojoBot's Squad.",
