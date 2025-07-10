@@ -96,7 +96,7 @@ async function makesquad(player1squadarray, tries) {
     } else if (gamedata.squads[0].length == 0) {
       player2squadarray = lodash.cloneDeep(player3squadarray);
     }
-    console.log(player2squadarray)
+    console.log(player2squadarray);
   }
   return player2squadarray;
 }
@@ -303,6 +303,15 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     // martial arts uniform
     val -= 1;
   }
+  if (
+    (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 13 &&
+    val <= 0 &&
+    (gamedata.squads[squad2 - 1].some((x) => x.id == 14) ||
+      (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 77)
+  ) {
+    // guitar
+    val -= 1;
+  }
   // protection buffs start here
   if (
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 2 &&
@@ -314,9 +323,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 79 &&
     val < 0 &&
-    (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-      (gamedata.squads[gamedata.playerturn - 1][pos + 2] ?? { id: undefined })
-        .id == 77)
+    (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
+      (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 77)
   ) {
     // drum
     val = Math.min(val + 1, -1);
@@ -1375,23 +1383,6 @@ function playturn(gamedata) {
         gamedata.playerturn,
         0,
         0 - activeemoji.dmg - 2
-      );
-    }
-    if (
-      (activeemoji ?? { id: undefined }).id == 13 &&
-      (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
-          77)
-    ) {
-      // guitar
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg - 1
       );
     }
     if (
