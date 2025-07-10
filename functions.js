@@ -24,6 +24,83 @@ async function writelogs(json) {
   fs.writeFileSync("logs.json", formattedjson.result, "utf8");
 }
 
+async function makesquad(player1squadarray, tries) {
+  let player2squadarray = [];
+  for (let i = 0; i < 8; i++) {
+    const possibleemojis = allemojisofrarity(
+      emojis[player1squadarray[i]].rarity
+    );
+    player2squadarray.splice(
+      Math.floor(Math.random() * (player2squadarray.length + 1)),
+      0,
+      possibleemojis[Math.floor(Math.random() * possibleemojis.length)]
+    );
+  }
+  for (let j = 0; j < tries; j++) {
+    let player3squadarray = [];
+    for (let i = 0; i < 8; i++) {
+      const possibleemojis = allemojisofrarity(
+        emojis[player1squadarray[i]].rarity
+      );
+      player3squadarray.splice(
+        Math.floor(Math.random() * (player3squadarray.length + 1)),
+        0,
+        possibleemojis[Math.floor(Math.random() * possibleemojis.length)]
+      );
+    }
+    let gamedata = {
+      squads: [[], []],
+      emojitext: "",
+      richtext: [],
+      turn: 0,
+      player: ["DojoBot", "DojoBot"],
+      playerturn: Math.floor(Math.random() * 2) + 1,
+      newlines: 0,
+      logfile: `Dojobot vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`,
+    };
+    for (let i = 0; i < 8; i++) {
+      gamedata.squads[0].push(lodash.cloneDeep(emojis[player2squadarray[i]]));
+    }
+    for (let i = 0; i < 8; i++) {
+      gamedata.squads[1].push(lodash.cloneDeep(emojis[player3squadarray[i]]));
+    }
+    let prevturn = lodash.cloneDeep(gamedata.squads);
+    try {
+      while (
+        gamedata.turn < 200 &&
+        gamedata.squads[0][0] != null &&
+        gamedata.squads[1][0] != null
+      ) {
+        if (gamedata.turn % 5 == 0) {
+          prevturn = lodash.cloneDeep(gamedata.squads);
+        }
+        gamedata = playturn(gamedata);
+        if (
+          gamedata.turn % 5 == 0 &&
+          lodash.isEqual(gamedata.squads, prevturn)
+        ) {
+          gamedata.turn = 999;
+          break;
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    if (
+      gamedata.turn >= 200 ||
+      (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)
+    ) {
+      if (Math.random() > 0.5) {
+        player2squadarray = lodash.cloneDeep(player3squadarray);
+      }
+    } else if (gamedata.squads[0].length == 0) {
+      player2squadarray = lodash.cloneDeep(player3squadarray);
+    }
+    console.log(player2squadarray)
+  }
+  return player2squadarray;
+}
+
 async function userboop(id) {
   let logs = await getlogs();
   logs.logs.players[`user${id}`] = logs.logs.players[`user${id}`] ?? {};
@@ -219,6 +296,13 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     // rage
     val = val - Math.min(gamedata.squads[squad - 1].length, 3);
   }
+  if (
+    (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 12 &&
+    val <= 0
+  ) {
+    // martial arts uniform
+    val -= 1;
+  }
   // protection buffs start here
   if (
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 2 &&
@@ -280,13 +364,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       val = 0;
       verb = "tried to heal";
     }
-  }
-  if (
-    (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 12 &&
-    val <= 0
-  ) {
-    // martial arts uniform
-    val -= 1;
   }
 
   alter: {
@@ -922,7 +999,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               }'s Squad, and defeated itself!`
             );
           }
-          if ((gamedata.squads[squad - 1][pos].id ?? { id: undefined }) == 9) {
+          if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 9) {
             // mortar board (3)
             gamedata.squads[squad - 1].splice(pos, 1);
             for (i = 0; i < 3; i++) {
@@ -1713,4 +1790,5 @@ module.exports = {
   syncresearch,
   dailyrewardremind,
   userboop,
+  makesquad,
 };

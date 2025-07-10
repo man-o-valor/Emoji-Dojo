@@ -198,7 +198,7 @@ const emojis = [
   {
     emoji: "🤝",
     id: 8,
-    hp: 4,
+    hp: 3,
     dmg: 1,
     rarity: 1,
     names: ["Handshake"],
@@ -862,7 +862,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 0,
-    names: ["Wireless", "Internet", "Network", "Signal"],
+    names: ["Wireless", "Internet", "Network", "Signal", "Wifi"],
     class: 1,
     description:
       "At the beginning of the Battle, increases its health by the number of friendly 🛜",

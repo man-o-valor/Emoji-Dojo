@@ -402,9 +402,11 @@ module.exports = {
                       doublerbonus = coinsdata[1];
                       let bonusmsg = doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
                       await coinschange(battleuser.id, diff2);
+                      let restocktime = await database.get(interaction.user.id + "coinrestock");
+                      let nocoinsmsg = diff1 > 0 ? "" : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`
                       int3 = await interaction2.followUp({
                         components: [row2],
-                        content: `<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙${bonusmsg}\n${battleuser.globalName}: ${diff2} 🪙`,
+                        content: `<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n${battleuser.globalName}: ${diff2} 🪙`,
                       });
                       let logs = await getlogs();
                       logs.logs.players[`user${interaction.user.id}`].userwins =
@@ -446,9 +448,11 @@ module.exports = {
                       await coinschange(battleuser.id, diff1);
                       diff2 = diff1 * -0.25;
                       await coinschange(interaction.user.id, diff2);
+                      let restocktime = await database.get(battleuser.id + "coinrestock");
+                      let nocoinsmsg = diff1 > 0 ? "" : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`
                       int3 = await interaction2.followUp({
                         components: [row2],
-                        content: `<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙${bonusmsg}\n${interaction.user.globalName}: ${diff2} 🪙`,
+                        content: `<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n${interaction.user.globalName}: ${diff2} 🪙`,
                       });
                       let logs = await getlogs();
                       logs.logs.players[
