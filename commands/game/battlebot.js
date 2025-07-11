@@ -45,6 +45,7 @@ module.exports = {
         (await database.get(interaction.user.id + "battlepending")) ?? "0";
       const bbcd =
         (await database.get(interaction.user.id + "botbattlecooldown")) ?? "0";
+      let battleover = true;
       if (bp < Date.now() / 1000 && bbcd < Date.now() / 1000) {
         let logs = await getlogs();
         logs.logs.games.botopened += 1;
@@ -246,6 +247,7 @@ module.exports = {
                 });
               }
               await database.set(interaction.user.id + "battlepending", "0");
+              battleover = true;
               const txt = Buffer.from(gamedata.logfile);
               let int3;
               const exportbutton = new ButtonBuilder()
@@ -287,8 +289,13 @@ module.exports = {
                   doublerbonus = coinsdata[1];
                   let bonusmsg =
                     doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
-                  let restocktime = await database.get(interaction.user.id + "coinrestock");
-                  let nocoinsmsg = diff1 > 0 ? "" : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`
+                  let restocktime = await database.get(
+                    interaction.user.id + "coinrestock"
+                  );
+                  let nocoinsmsg =
+                    diff1 > 0
+                      ? ""
+                      : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`;
                   int3 = await interaction2.followUp({
                     components: [row2],
                     content: `<@${interaction.user.id}> is the winner! +${diff1} 🪙${bonusmsg}${nocoinsmsg}`,
@@ -366,10 +373,12 @@ module.exports = {
                 interaction3.editReply({ components: [row2] });
               }
             } else {
-              await database.set(
-                interaction.user.id + "botbattlecooldown",
-                600 + Math.floor(Date.now() / 1000)
-              );
+              if (!battleover) {
+                await database.set(
+                  interaction.user.id + "botbattlecooldown",
+                  600 + Math.floor(Date.now() / 1000)
+                );
+              }
               await interaction.editReply({
                 components: [],
                 content: `\`@DojoBot\`, <@${
@@ -382,11 +391,13 @@ module.exports = {
             }
           } catch (e) {
             console.error(e);
-            await database.set(interaction.user.id + "battlepending", "0");
-            await database.set(
-              interaction.user.id + "botbattlecooldown",
-              600 + Math.floor(Date.now() / 1000)
-            );
+            if (!battleover) {
+              await database.set(interaction.user.id + "battlepending", "0");
+              await database.set(
+                interaction.user.id + "botbattlecooldown",
+                600 + Math.floor(Date.now() / 1000)
+              );
+            }
             await interaction.editReply({
               components: [],
               content: `\`@DojoBot\`, <@${

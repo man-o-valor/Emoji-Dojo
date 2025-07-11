@@ -55,7 +55,7 @@ module.exports = {
       const squadembed = new EmbedBuilder()
         .setColor(0x226699)
         .setTitle(`${interaction.user.globalName}'s Squad 👥`)
-        .setDescription(`# \`🔙\`  ${squadtext}`)
+        .setDescription(`## \` 🔙 \` ${squadtext}`)
         .setFooter({
           text: `This is your Squad. Hover over your Emojis to read their descriptions. Add emojis to your squad with /dojo or import a squad by copying it and pasting it with the button below`,
         });
@@ -152,7 +152,7 @@ module.exports = {
                         1
                       );
                       datainput = objectalternative.id + "," + datainput;
-                      emojiinput += `[${objectalternative.emoji}](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id} \"${objectalternative.names[0]} | ${objectalternative.hp} health, ${objectalternative.dmg} attack power. ${objectalternative.description}\") `;
+                      emojiinput += `[${objectalternative.emoji}](${url} \"${objectalternative.names[0]} | ${objectalternative.hp} health, ${objectalternative.dmg} attack power. ${objectalternative.description}\") `;
                     } else {
                       emojimissing = inputarr[i].segment;
 

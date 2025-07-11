@@ -303,6 +303,13 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     val -= 1;
   }
   if (
+    (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 75 &&
+    val <= 0
+  ) {
+    // backpack
+    val -= 2;
+  }
+  if (
     (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 13 &&
     val <= 0 &&
     (gamedata.squads[squad2 - 1].some((x) => x.id == 14) ||
@@ -1379,21 +1386,6 @@ function playturn(gamedata) {
           gamedata.squads[gamedata.playerturn - 1][1].id ==
           77,
         "blasted"
-      );
-    }
-    if (
-      (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
-      75
-    ) {
-      // backpack
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg - 2
       );
     }
     if (
