@@ -1047,7 +1047,7 @@ const emojis = [
     hp: 5,
     dmg: 2,
     rarity: -1,
-    names: ["Dinosaur", "Dino", "T-Rex", "Trex"],
+    names: ["T Rex", "Dinosaur", "Dino", "T-Rex", "Trex"],
     class: null,
     description: "Nothing Special (evolved from 🦴)",
   },
