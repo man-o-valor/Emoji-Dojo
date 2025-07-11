@@ -1,6 +1,7 @@
-git rm config.json
-git rm package-lock.json
-git rm node_modules
-git rm databases
-git rm desktop.ini
-git rm logs.json
+config.json
+package-lock.json
+node_modules
+databases
+desktop.ini
+logs.json
+
