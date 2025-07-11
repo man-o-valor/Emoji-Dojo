@@ -96,7 +96,6 @@ async function makesquad(player1squadarray, tries) {
     } else if (gamedata.squads[0].length == 0) {
       player2squadarray = lodash.cloneDeep(player3squadarray);
     }
-    console.log(player2squadarray);
   }
   return player2squadarray;
 }
@@ -411,6 +410,18 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           } damaged itself by attacking! (1 damage)`
         );
       }
+      if (
+        (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 86 &&
+        gamedata.squads[squad - 1][pos].hp <= 0
+      ) {
+        gamedata.squads[squad - 1].splice(pos, 1, lodash.cloneDeep(emojis[87]));
+        gamedata = richtextadd(
+          gamedata,
+          `\n‼️ Instead of being defeated, ${gamedata.player[squad - 1]}'s ${
+            emojis[86].emoji
+          } evolved into a ${emojis[87].emoji}!`
+        );
+      }
       if (gamedata.squads[squad - 1][pos].hp <= 0) {
         if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 82) {
           // dove
@@ -608,7 +619,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
         }
         if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 10) {
-          // shuffle button
+          // shuffle button/twisted rightwards arrows
           gamedata = richtextadd(
             gamedata,
             `\n🔀 ${gamedata.player[squad - 1]}'s ${

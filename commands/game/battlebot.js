@@ -73,7 +73,7 @@ module.exports = {
         let player1squadarray = await getsquad(interaction.user.id);
 
         let player2squadarray = await makesquad(player1squadarray, 20);
-        
+
         if (player2squadarray == "error") {
           await interaction.reply({
             content: "🤒 Something went wrong with picking DojoBot's Squad.",
@@ -377,7 +377,7 @@ module.exports = {
                 }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
                   /`/g,
                   ""
-                )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`DojoBot's\`\nYou turned down DojoBot's Squad. You can battle DojoBot again in 10 minutesy.`,
+                )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`DojoBot's\`\nYou turned down DojoBot's Squad. You can battle DojoBot again in 10 minutes.`,
               });
             }
           } catch (e) {

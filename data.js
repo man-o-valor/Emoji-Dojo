@@ -184,7 +184,7 @@ const emojis = [
     names: ["Speaking Head", "Speaking"],
     class: 5,
     description:
-      "When attacking at more than 2 health, lowers the enemy Emoji's attack power by 1 to a minumum of 0",
+      "When attacking at more than 2 health, lowers the enemy Emoji's attack power by 1 to a minimum of 0",
   },
   {
     emoji: "😶",
@@ -193,7 +193,7 @@ const emojis = [
     dmg: null,
     rarity: -1,
     names: ["No Mouth", "Blank"],
-    description: "Nothing special",
+    description: "Nothing special (spooked by 👻)",
   },
   {
     emoji: "🤝",
@@ -268,7 +268,8 @@ const emojis = [
     rarity: 0,
     names: ["Notes", "Music", "Musical Notes", "Music Notes", "Music Note"],
     class: 7,
-    description: "Nothing special",
+    description:
+      "Nothing special (makes many music-related Emojis more powerful)",
   },
   {
     emoji: "🎣",
@@ -340,7 +341,7 @@ const emojis = [
     dmg: 3,
     rarity: -1,
     names: ["Crown"],
-    description: "Nothing special",
+    description: "Nothing special (starts as ♟️)",
   },
   {
     emoji: "😡",
@@ -370,7 +371,7 @@ const emojis = [
     dmg: 5,
     rarity: -1,
     names: ["Dragon Face", "Dragon"],
-    description: "Nothing special",
+    description: "Nothing special (starts as 🦎)",
   },
   {
     emoji: "☠️",
@@ -518,7 +519,7 @@ const emojis = [
     dmg: -1,
     rarity: -1,
     names: ["Sparkles", "Sparkle"],
-    description: "Nothing special",
+    description: "Nothing special (scattered by 🦄)",
   },
   {
     emoji: "🦄",
@@ -844,7 +845,7 @@ const emojis = [
     rarity: -1,
     names: ["Lock", "Locked"],
     class: null,
-    description: "Nothing Special",
+    description: "Nothing Special (secured by 🔏)",
   },
   {
     emoji: "🏺",
@@ -985,7 +986,7 @@ const emojis = [
     rarity: -1,
     names: ["Page with Curl"],
     class: null,
-    description: "Nothing Special",
+    description: "Nothing Special (printed by 📠)",
   },
   {
     emoji: "🕊️",
@@ -1029,6 +1030,26 @@ const emojis = [
     class: 1,
     description:
       "At the beginning of the Battle, increases the attack power of friendly Emoji in front of itself by 1 and defeats itself",
+  },
+  {
+    emoji: "🦴",
+    id: 86,
+    hp: 2,
+    dmg: 0,
+    rarity: 1,
+    names: ["Bone", "Fossil"],
+    class: 5,
+    description: "When this would be defeated, instead transforms into 🦖",
+  },
+  {
+    emoji: "🦖",
+    id: 87,
+    hp: 5,
+    dmg: 2,
+    rarity: -1,
+    names: ["Dinosaur", "Dino", "T-Rex", "Trex"],
+    class: null,
+    description: "Nothing Special (evolved from 🦴)",
   },
 ];
 
