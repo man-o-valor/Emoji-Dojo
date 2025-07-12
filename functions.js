@@ -483,17 +483,26 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             0,
             lodash.cloneDeep(emojis[81])
           );
+          gamedata = alterhp(
+            gamedata,
+            squad2,
+            pos2,
+            squad2,
+            pos2,
+            -1,
+            "",
+            true
+          );
           gamedata = richtextadd(
             gamedata,
             `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
               emojis[80].emoji
-            } printed out a ${emojis[81].emoji}!`
+            } printed out a ${emojis[81].emoji}, and damaged itself!`
           );
         }
         if (
-          ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
-            !pos2 == pos) ||
-          !squad2 == squad
+          (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
+          !(squad2 == squad && pos2 == pos)
         ) {
           // innocent
           gamedata = alterhp(
@@ -981,7 +990,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               squad,
               pos,
               -1000,
-              "exploded"
+              "exploded",
+              true
             );
             gamedata.squads[squad - 1].splice(pos, 1);
             gamedata = richtextadd(
@@ -1054,7 +1064,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               squad,
               pos,
               -1000,
-              "exploded"
+              "exploded",
+              true
             );
             gamedata.squads[squad - 1].splice(pos, 1);
             gamedata = richtextadd(
@@ -1287,14 +1298,16 @@ function playturn(gamedata) {
           gamedata.squads[0][i].hp += gamedata.squads[0].filter(
             (element) => element.id == 70
           ).length;
-        } else if (
+        }
+        if (
           gamedata.squads[0][i].id == 76 &&
           gamedata.squads[0][i - 1] != undefined
         ) {
           // fog
           gamedata.squads[0][i - 1].hp += 3;
           gamedata.squads[0].splice(i, 1);
-        } else if (
+        }
+        if (
           gamedata.squads[0][i].id == 85 &&
           gamedata.squads[0][i - 1] != undefined
         ) {
@@ -1313,14 +1326,16 @@ function playturn(gamedata) {
           gamedata.squads[1][i].hp += gamedata.squads[1].filter(
             (element) => element.id == 70
           ).length;
-        } else if (
+        }
+        if (
           gamedata.squads[1][i].id == 76 &&
           gamedata.squads[1][i - 1] != undefined
         ) {
           // fog
           gamedata.squads[1][i - 1].hp += 3;
           gamedata.squads[1].splice(i, 1);
-        } else if (
+        }
+        if (
           gamedata.squads[1][i].id == 85 &&
           gamedata.squads[1][i - 1] != undefined
         ) {
@@ -1461,7 +1476,7 @@ function playturn(gamedata) {
     }
     if (
       (activeemoji ?? { id: undefined }).id == 34 &&
-      gamedata.squads[gamedata.playerturn * -1 + 3].length > 1
+      gamedata.squads[gamedata.playerturn * -1 + 3][1] != undefined
     ) {
       // zap
       gamedata = alterhp(

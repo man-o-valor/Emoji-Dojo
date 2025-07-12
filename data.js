@@ -125,8 +125,8 @@ const emojis = [
   {
     emoji: "😘",
     id: 1,
-    hp: 4,
-    dmg: 2,
+    hp: 3,
+    dmg: 1,
     rarity: 0,
     names: [
       "Kissing Heart",
@@ -146,7 +146,7 @@ const emojis = [
   {
     emoji: "😌",
     id: 1,
-    hp: 4,
+    hp: 3,
     dmg: 2,
     rarity: 0,
     names: ["Relieved", "Calm", "Relaxed"],
@@ -403,7 +403,7 @@ const emojis = [
     names: ["Rage", "Angry", "Mad", "Fury", "Furious", "Enraged"],
     class: 1,
     description:
-      "Attacks for the number of undefeated enemy Emojis to a maximum of 3",
+      "Attacks for half the number of undefeated enemy Emojis (rounded up), plus its attack power",
   },
   {
     emoji: "🦎",
@@ -1133,7 +1133,7 @@ const emojis = [
   {
     emoji: "🎷",
     id: 78,
-    hp: 5,
+    hp: 3,
     dmg: 2,
     rarity: 1,
     names: ["Saxophone", "Sax"],
@@ -1155,21 +1155,21 @@ const emojis = [
   {
     emoji: "📠",
     id: 80,
-    hp: 3,
+    hp: 2,
     dmg: 2,
     rarity: 2,
     names: ["Fax", "Fax Machine", "Receipt Printer", "Printer"],
     class: 3,
     description:
-      "When this defeats an Emoji, it summons 📃 at the front of the Squad",
+      "When this defeats an Emoji, it summons 📃 at the front of the Squad and attacks itself for 1 damage",
   },
   {
     emoji: "📃",
     id: 81,
     hp: 1,
-    dmg: 2,
+    dmg: 1,
     rarity: -1,
-    names: ["Page with Curl", "Page"],
+    names: ["Page with Curl", "Page", "Wall Of Text"],
     class: null,
     description: "Nothing Special (printed by 📠)",
   },
