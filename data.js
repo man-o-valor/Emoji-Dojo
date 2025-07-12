@@ -145,7 +145,7 @@ const emojis = [
   },
   {
     emoji: "😌",
-    id: 1,
+    id: 2,
     hp: 3,
     dmg: 2,
     rarity: 0,
