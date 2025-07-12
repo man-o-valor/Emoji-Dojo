@@ -293,7 +293,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     val <= 0
   ) {
     // rage
-    val = val - Math.min(gamedata.squads[squad - 1].length, 3);
+    val = val - Math.ceil(gamedata.squads[squad - 1].length/2)
   }
   if (
     (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 12 &&
