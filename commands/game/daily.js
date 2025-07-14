@@ -58,7 +58,7 @@ module.exports = {
         rewardName = `${emojitoadd.emoji} ${emojitoadd.names[0]} Emoji`;
       } else {
         if (Math.random() > 0.6) {
-          let amt = 40 + Math.floor(Math.random() * 20);
+          let amt = 60 + Math.floor(Math.random() * 20);
           const coindoubler =
             (await database.get(interaction.user.id + "coindoubler")) ?? 0;
           await database.set(
@@ -67,7 +67,7 @@ module.exports = {
           );
           rewardName = `💫 x${amt} Coin Doubler`;
         } else {
-          let amt = 10 + Math.floor(Math.random() * 15);
+          let amt = 40 + Math.floor(Math.random() * 30);
           await coinschange(interaction.user.id, amt);
           rewardName = `🪙 ${amt} Coins`;
         }
