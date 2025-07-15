@@ -67,7 +67,7 @@ module.exports = {
 
         embeddescription += `${classes[i].emoji} **${classes[i].name}:** ${
           userlab[i] % 40
-        }/40 | Reward: ${rewardemoji}\n${progressbar}\n<:divider1:1327378203156676810><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider3:1327378225512316938>\n`;
+        }/40 | Reward: ${rewardemoji}\n${progressbar}\n<:divider1:1327378203156676810>${"<:divider2:1327378216540962869>".repeat(8)}<:divider3:1327378225512316938>\n`;
       }
     }
 
@@ -86,7 +86,7 @@ module.exports = {
       .setColor(0x9266cc)
       .setTitle(`Devotions 🛐`)
       .setDescription(
-        "<:divider1:1327378203156676810><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider2:1327378216540962869><:divider3:1327378225512316938>\n" +
+        "<:divider1:1327378203156676810>" + "<:divider2:1327378216540962869>".repeat(8) + "<:divider3:1327378225512316938>\n" +
           embeddescription
       )
       .setTimestamp()
