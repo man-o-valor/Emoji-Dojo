@@ -480,16 +480,16 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         if ((gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 80) {
           // fax
           gamedata.squads[squad2 - 1].splice(
-            0,
+            pos2,
             0,
             lodash.cloneDeep(emojis[81])
           );
           gamedata = alterhp(
             gamedata,
             squad2,
-            pos2,
+            pos2+1,
             squad2,
-            pos2,
+            pos2+1,
             -1,
             "",
             true
