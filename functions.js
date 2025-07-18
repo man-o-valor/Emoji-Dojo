@@ -288,8 +288,11 @@ function richtextadd(gamedata, text) {
 }
 
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
+  if (gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 && squad != squad2) {
+    pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 89);
+  }
   if (
-    (gamedata.squads[squad2 - 1][pos] ?? { id: undefined }).id == 22 &&
+    (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 22 &&
     val <= 0
   ) {
     // rage
@@ -487,9 +490,9 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           gamedata = alterhp(
             gamedata,
             squad2,
-            pos2+1,
+            pos2 + 1,
             squad2,
-            pos2+1,
+            pos2 + 1,
             -1,
             "",
             true
@@ -1492,9 +1495,7 @@ function playturn(gamedata) {
       );
       basicattackflag = false;
     }
-    if (
-      (activeemoji ?? { id: undefined }).id == 88
-    ) {
+    if ((activeemoji ?? { id: undefined }).id == 88) {
       // back
       gamedata = alterhp(
         gamedata,
@@ -1502,7 +1503,7 @@ function playturn(gamedata) {
         (gamedata.squads[gamedata.playerturn - 1] ?? []).length,
         gamedata.playerturn,
         0,
-        0 - activeemoji.dmg,
+        0 - activeemoji.dmg
       );
       basicattackflag = false;
     }

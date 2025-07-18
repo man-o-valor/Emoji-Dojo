@@ -1028,7 +1028,7 @@ const emojis = [
     hp: 1,
     dmg: 1,
     rarity: 1,
-    names: ["Amphora", "Vase", "Pot", "Clay Pot"],
+    names: ["Amphora", "Vase", "Pot", "Clay Pot", "Urn"],
     class: 5,
     description: "When defeated, summons a random *️⃣ Common emoji",
   },
@@ -1244,6 +1244,16 @@ const emojis = [
     names: ["Back", "Back Arrow", "Back Sign"],
     class: 1,
     description: "Attacks the Emoji at the back of the enemy Squad instead of the front",
+  },
+  {
+    emoji: "🎯",
+    id: 89,
+    hp: 6,
+    dmg: 1,
+    rarity: 1,
+    names: ["Dart", "Direct Hit", "Target", "Bullseye"],
+    class: 2,
+    description: "All enemy attacks are redirected towards this, regardless of the aggressor's position",
   },
 ];
 
