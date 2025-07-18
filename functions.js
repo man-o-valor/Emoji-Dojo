@@ -1492,6 +1492,20 @@ function playturn(gamedata) {
       );
       basicattackflag = false;
     }
+    if (
+      (activeemoji ?? { id: undefined }).id == 88
+    ) {
+      // back
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        (gamedata.squads[gamedata.playerturn - 1] ?? []).length,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg,
+      );
+      basicattackflag = false;
+    }
     if (basicattackflag) {
       gamedata = alterhp(
         gamedata,

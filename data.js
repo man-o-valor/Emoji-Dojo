@@ -1196,8 +1196,8 @@ const emojis = [
   {
     emoji: "🏹",
     id: 84,
-    hp: 5,
-    dmg: 2,
+    hp: 4,
+    dmg: 3,
     rarity: 1,
     names: ["Bow and Arrow", "Archery", "Bow", "Crossbow"],
     class: 1,
@@ -1234,6 +1234,16 @@ const emojis = [
     names: ["T Rex", "Dinosaur", "Dino", "T-Rex", "Trex", "Rex"],
     class: null,
     description: "Nothing Special (evolved from 🦴)",
+  },
+  {
+    emoji: "🔙",
+    id: 88,
+    hp: 3,
+    dmg: 3,
+    rarity: 1,
+    names: ["Back", "Back Arrow", "Back Sign"],
+    class: 1,
+    description: "Attacks the Emoji at the back of the enemy Squad instead of the front",
   },
 ];
 
