@@ -336,7 +336,7 @@ module.exports = {
                         `<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` +
                         gamedata.emojitext +
                         "\n\n" +
-                        "🤒 An error has ocurred and the Battle cannot continue.```" +
+                        "🤒 An error has occurred and the Battle cannot continue.```" +
                         e +
                         "```",
                       files: [

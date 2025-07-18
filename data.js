@@ -107,7 +107,6 @@ Transforming: Mask | 8 emojis
 Shuffling: Volcano | 8 emojis
 Musical: Loud Sound | 8 emojis
 Movement | 9 emojis
-Solar?
 
 */
 
@@ -777,7 +776,7 @@ const emojis = [
     id: 52,
     hp: 3,
     dmg: 2,
-    rarity: 2,
+    rarity: 1,
     names: [
       "Night with Stars",
       "Night",
@@ -1123,8 +1122,8 @@ const emojis = [
     emoji: "🎧",
     id: 77,
     hp: 4,
-    dmg: 2,
-    rarity: 1,
+    dmg: 3,
+    rarity: 0,
     names: ["Headphones", "Earbuds"],
     class: 7,
     description:
