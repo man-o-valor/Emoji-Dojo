@@ -19,7 +19,7 @@ module.exports = {
       (await database.get(interaction.user.id + "dailytime")) ?? "0"
     );
     let dailystreak = parseInt(
-      (await database.get(interaction.user.id + "dailystreak")) ?? "0"
+      (await database.get(interaction.user.id + "dailystreak")) ?? "1"
     );
     const comeBackLater = [
       `Your daily reward is still cooking! Come back <t:${
@@ -87,7 +87,7 @@ module.exports = {
           dailyCollect[Math.floor(Math.random() * dailyCollect.length)] +
           " **" +
           rewardName +
-          `!**${dailystreak > 0 ? ` *(❤️‍🔥 ${dailystreak + 1} day streak)*` : (dailystreak == 0 ? ` *(streak lost)*` : "")}`,
+          `!**${dailystreak > 0 ? ` *(❤️‍🔥 ${dailystreak + 1} day streak)*` : (Math.floor(Date.now() / 1000) - dailytime > 86400*2 ? ` *(streak lost)*` : "")}`,
       });
 
       logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + 1;
