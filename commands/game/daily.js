@@ -18,6 +18,9 @@ module.exports = {
     const dailytime = parseInt(
       (await database.get(interaction.user.id + "dailytime")) ?? "0"
     );
+    let dailystreak = parseInt(
+      (await database.get(interaction.user.id + "dailystreak")) ?? "0"
+    );
     const comeBackLater = [
       `Your daily reward is still cooking! Come back <t:${
         dailytime + 86400
@@ -58,7 +61,8 @@ module.exports = {
         rewardName = `${emojitoadd.emoji} ${emojitoadd.names[0]} Emoji`;
       } else {
         if (Math.random() > 0.6) {
-          let amt = 60 + Math.floor(Math.random() * 20);
+          let amt =
+            40 + 10 * Math.min(dailystreak, 5) + Math.floor(Math.random() * 20);
           const coindoubler =
             (await database.get(interaction.user.id + "coindoubler")) ?? 0;
           await database.set(
@@ -67,18 +71,23 @@ module.exports = {
           );
           rewardName = `💫 x${amt} Coin Doubler`;
         } else {
-          let amt = 40 + Math.floor(Math.random() * 30);
+          let amt =
+            20 + 10 * Math.min(dailystreak, 5) + Math.floor(Math.random() * 30);
           await coinschange(interaction.user.id, amt);
           rewardName = `🪙 ${amt} Coins`;
         }
       }
+      if (Math.floor(Date.now() / 1000) - dailytime > 86400*2) {
+        dailystreak = 0
+      }
+      await database.set(interaction.user.id + "dailystreak", dailystreak + 1);
       await interaction.reply({
         content:
           "<:open_box:1386870856034287717> " +
           dailyCollect[Math.floor(Math.random() * dailyCollect.length)] +
           " **" +
           rewardName +
-          "!**",
+          `!**${dailystreak > 0 ? ` *(❤️‍🔥 ${dailystreak + 1} day streak)*` : (dailystreak == 0 ? ` *(streak lost)*` : "")}`,
       });
 
       logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + 1;
