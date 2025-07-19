@@ -263,6 +263,20 @@ module.exports = {
             flags: "Ephemeral",
             content: `🏆 Strongest emoji in all battles: ${emojis[bestindex].emoji} (${bestwins}/${bestlosses})\n❌ Weakest emoji in all battles: ${emojis[worstindex].emoji} (${worstwins}/${worstlosses})\n\n🤖🏆 Strongest emoji in bot battles: ${emojis[bestbotindex].emoji} (${bestbotwins}/${bestbotlosses})\n🤖❌ Weakest emoji in bot battles: ${emojis[worstbotindex].emoji} (${worstbotwins}/${worstbotlosses})\n\n👤🏆 Strongest emoji in user battles: ${emojis[bestuserindex].emoji} (${bestuserwins}/${bestuserlosses})\n👤❌ Weakest emoji in user battles: ${emojis[worstuserindex].emoji} (${worstuserwins}/${worstuserlosses})\n\n💕🏆 Strongest emoji in friendly battles: ${emojis[bestfriendlyindex].emoji} (${bestfriendlywins}/${bestfriendlylosses})\n💕❌ Weakest emoji in friendly battles: ${emojis[worstfriendlyindex].emoji} (${worstfriendlywins}/${worstfriendlylosses})\n\n👀 Most viewed emoji: ${emojis[mostviewedindex].emoji} (${mostviewedtimes})`,
           });
+        } else if (devdata[0] == "names") {
+          let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
+          let names = "Last 40 players to join Emoji Dojo:";
+          for (
+            let i = Object.values(logs.logs.players).length - 1;
+            i > Object.values(logs.logs.players).length - 41;
+            i--
+          ) {
+            names += "\n<@" + Object.keys(logs.logs.players)[i].slice(4) + ">";
+          }
+          await interaction.reply({
+            flags: "Ephemeral",
+            content: names,
+          });
         }
       } else {
         await interaction.reply({
