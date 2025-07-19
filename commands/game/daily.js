@@ -55,7 +55,7 @@ module.exports = {
           interaction.user.id + "vault",
           rawvault + emojitoadd.id + ","
         );
-        rewardName = `${emojitoadd.emoji} ${emojitoadd.names[0]} Emoji`;
+        rewardName = `a ${emojitoadd.emoji} ${emojitoadd.names[0]} Emoji`;
       } else {
         if (Math.random() > 0.6) {
           let amt = 60 + Math.floor(Math.random() * 20);
