@@ -42,7 +42,10 @@ module.exports = {
   async execute(interaction) {
     const viewemoji = interaction.options.getString("emoji");
     if ((viewemoji ?? "").startsWith("%dev")) {
-      if (interaction.user.id == "1013096732147597412") {
+      if (
+        interaction.user.id == "1013096732147597412" ||
+        interaction.user.id == "1146557659349270639"
+      ) {
         devdata = viewemoji.split(" ");
         devdata.shift();
         if (devdata[0] == "read") {
