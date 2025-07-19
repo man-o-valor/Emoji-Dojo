@@ -107,7 +107,6 @@ Transforming: Mask | 8 emojis
 Shuffling: Volcano | 8 emojis
 Musical: Loud Sound | 8 emojis
 Movement | 9 emojis
-Solar?
 
 */
 
@@ -777,7 +776,7 @@ const emojis = [
     id: 52,
     hp: 3,
     dmg: 2,
-    rarity: 2,
+    rarity: 1,
     names: [
       "Night with Stars",
       "Night",
@@ -1029,7 +1028,7 @@ const emojis = [
     hp: 1,
     dmg: 1,
     rarity: 1,
-    names: ["Amphora", "Vase", "Pot", "Clay Pot"],
+    names: ["Amphora", "Vase", "Pot", "Clay Pot", "Urn"],
     class: 5,
     description: "When defeated, summons a random *️⃣ Common emoji",
   },
@@ -1123,8 +1122,8 @@ const emojis = [
     emoji: "🎧",
     id: 77,
     hp: 4,
-    dmg: 2,
-    rarity: 1,
+    dmg: 3,
+    rarity: 0,
     names: ["Headphones", "Earbuds"],
     class: 7,
     description:
@@ -1197,8 +1196,8 @@ const emojis = [
   {
     emoji: "🏹",
     id: 84,
-    hp: 5,
-    dmg: 2,
+    hp: 4,
+    dmg: 3,
     rarity: 1,
     names: ["Bow and Arrow", "Archery", "Bow", "Crossbow"],
     class: 1,
@@ -1235,6 +1234,26 @@ const emojis = [
     names: ["T Rex", "Dinosaur", "Dino", "T-Rex", "Trex", "Rex"],
     class: null,
     description: "Nothing Special (evolved from 🦴)",
+  },
+  {
+    emoji: "🔙",
+    id: 88,
+    hp: 3,
+    dmg: 3,
+    rarity: 1,
+    names: ["Back", "Back Arrow", "Back Sign"],
+    class: 1,
+    description: "Attacks the Emoji at the back of the enemy Squad instead of the front",
+  },
+  {
+    emoji: "🎯",
+    id: 89,
+    hp: 6,
+    dmg: 1,
+    rarity: 1,
+    names: ["Dart", "Direct Hit", "Target", "Bullseye"],
+    class: 2,
+    description: "All enemy attacks are redirected towards this, regardless of the aggressor's position",
   },
 ];
 

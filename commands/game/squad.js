@@ -55,7 +55,7 @@ module.exports = {
       const squadembed = new EmbedBuilder()
         .setColor(0x226699)
         .setTitle(`${interaction.user.globalName}'s Squad 👥`)
-        .setDescription(`## \` 🔙 \` ${squadtext}`)
+        .setDescription(`## ${squadtext}`)
         .setFooter({
           text: `This is your Squad. Hover over your Emojis to read their descriptions. Add emojis to your squad with /dojo or import a squad by copying it and pasting it with the button below`,
         });

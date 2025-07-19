@@ -73,7 +73,7 @@ module.exports = {
 
         let player1squadarray = await getsquad(interaction.user.id);
 
-        let player2squadarray = await makesquad(player1squadarray, 20);
+        let player2squadarray = await makesquad(player1squadarray, 50);
 
         if (player2squadarray == "error") {
           await interaction.reply({
@@ -235,7 +235,7 @@ module.exports = {
                     `<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` +
                     gamedata.emojitext +
                     "\n\n" +
-                    "🤒 An error has ocurred and the Battle cannot continue.```" +
+                    "🤒 An error has occurred and the Battle cannot continue.```" +
                     e +
                     "```",
                   files: [
