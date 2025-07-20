@@ -919,7 +919,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata = alterhp(
               gamedata,
               squad2,
-              1,
+              0,
               squad2,
               i,
               1,

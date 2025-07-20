@@ -463,7 +463,7 @@ const emojis = [
   {
     emoji: "🛻",
     id: 28,
-    hp: 4,
+    hp: 3,
     dmg: 3,
     rarity: 1,
     names: ["Pickup Truck", "Truck", "Pickup"],
