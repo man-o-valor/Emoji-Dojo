@@ -288,7 +288,10 @@ function richtextadd(gamedata, text) {
 }
 
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
-  if (gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 && squad != squad2) {
+  if (
+    gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 &&
+    squad != squad2
+  ) {
     pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 89);
   }
   if (
@@ -487,6 +490,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             0,
             lodash.cloneDeep(emojis[81])
           );
+          gamedata.squads[squad - 1].splice(pos, 1);
           gamedata = alterhp(
             gamedata,
             squad2,
@@ -503,6 +507,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               emojis[80].emoji
             } printed out a ${emojis[81].emoji}, and damaged itself!`
           );
+          kill = false;
         }
         if (
           (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
@@ -1500,7 +1505,7 @@ function playturn(gamedata) {
       gamedata = alterhp(
         gamedata,
         gamedata.playerturn * -1 + 3,
-        (gamedata.squads[gamedata.playerturn - 1] ?? []).length,
+        (gamedata.squads[gamedata.playerturn - 1 + 3] ?? []).length,
         gamedata.playerturn,
         0,
         0 - activeemoji.dmg
