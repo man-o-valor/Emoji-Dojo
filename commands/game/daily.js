@@ -77,8 +77,8 @@ module.exports = {
           rewardName = `🪙 ${amt} Coins`;
         }
       }
-      if (Math.floor(Date.now() / 1000) - dailytime > 86400*2) {
-        dailystreak = 0
+      if (Math.floor(Date.now() / 1000) - dailytime > 86400 * 2) {
+        dailystreak = 0;
       }
       await database.set(interaction.user.id + "dailystreak", dailystreak + 1);
       await interaction.reply({
@@ -87,7 +87,13 @@ module.exports = {
           dailyCollect[Math.floor(Math.random() * dailyCollect.length)] +
           " **" +
           rewardName +
-          `!**${dailystreak > 0 ? ` *(❤️‍🔥 ${dailystreak + 1} day streak)*` : (Math.floor(Date.now() / 1000) - dailytime > 86400*2 ? ` *(streak lost)*` : "")}`,
+          `!**${
+            dailystreak > 0
+              ? ` *(❤️‍🔥 ${dailystreak + 1} day streak)*`
+              : Math.floor(Date.now() / 1000) - dailytime > 86400 * 2
+              ? ` *(streak lost)*`
+              : ""
+          }`,
       });
 
       logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + 1;

@@ -400,10 +400,16 @@ module.exports = {
                       coinsdata = await coinschange(interaction.user.id, diff1);
                       diff1 = coinsdata[0];
                       doublerbonus = coinsdata[1];
-                      let bonusmsg = doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
+                      let bonusmsg =
+                        doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
                       await coinschange(battleuser.id, diff2);
-                      let restocktime = await database.get(interaction.user.id + "coinrestock");
-                      let nocoinsmsg = diff1 > 0 ? "" : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`
+                      let restocktime = await database.get(
+                        interaction.user.id + "coinrestock"
+                      );
+                      let nocoinsmsg =
+                        diff1 > 0
+                          ? ""
+                          : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`;
                       int3 = await interaction2.followUp({
                         components: [row2],
                         content: `<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n${battleuser.globalName}: ${diff2} 🪙`,
@@ -448,8 +454,13 @@ module.exports = {
                       await coinschange(battleuser.id, diff1);
                       diff2 = diff1 * -0.25;
                       await coinschange(interaction.user.id, diff2);
-                      let restocktime = await database.get(battleuser.id + "coinrestock");
-                      let nocoinsmsg = diff1 > 0 ? "" : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`
+                      let restocktime = await database.get(
+                        battleuser.id + "coinrestock"
+                      );
+                      let nocoinsmsg =
+                        diff1 > 0
+                          ? ""
+                          : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`;
                       int3 = await interaction2.followUp({
                         components: [row2],
                         content: `<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n${interaction.user.globalName}: ${diff2} 🪙`,
@@ -480,34 +491,36 @@ module.exports = {
                       await writelogs(logs);
                     }
                   }
-                  const interaction3 = await int3.awaitMessageComponent({
-                    time: 600000,
+                  let collector = int3.createMessageComponentCollector({
+                    time: 1200000,
                   });
-                  try {
-                    interaction3.reply({
-                      flags: "Ephemeral",
-                      files: [
-                        {
-                          attachment: txt,
-                          name: `${interaction.user.username} vs ${battleuser.username}.txt`,
-                        },
-                      ],
-                    });
-                    let logs = await getlogs();
-                    logs.logs.games.userlogsrequested += 1;
-                    logs.logs.players[
-                      `user${interaction3.user.id}`
-                    ].userlogsrequested =
-                      logs.logs.players[`user${interaction3.user.id}`]
-                        .userlogsrequested ?? 0;
-                    logs.logs.players[
-                      `user${interaction3.user.id}`
-                    ].userlogsrequested += 1;
-                    await writelogs(logs);
-                  } catch (e) {
-                    exportbutton.setDisabled(true);
-                    interaction3.editReply({ components: [row2] });
-                  }
+                  collector.on("collect", async (interaction3) => {
+                    try {
+                      interaction3.reply({
+                        flags: "Ephemeral",
+                        files: [
+                          {
+                            attachment: txt,
+                            name: `${interaction.user.username} vs ${battleuser.username}.txt`,
+                          },
+                        ],
+                      });
+                      let logs = await getlogs();
+                      logs.logs.games.userlogsrequested += 1;
+                      logs.logs.players[
+                        `user${interaction3.user.id}`
+                      ].userlogsrequested =
+                        logs.logs.players[`user${interaction3.user.id}`]
+                          .userlogsrequested ?? 0;
+                      logs.logs.players[
+                        `user${interaction3.user.id}`
+                      ].userlogsrequested += 1;
+                      await writelogs(logs);
+                    } catch (e) {
+                      exportbutton.setDisabled(true);
+                      interaction3.editReply({ components: [row2] });
+                    }
+                  });
                 } else {
                   interaction2.update({
                     content: `<@${battleuser.id}>, <@${

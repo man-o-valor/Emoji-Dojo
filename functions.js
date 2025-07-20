@@ -490,24 +490,12 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             0,
             lodash.cloneDeep(emojis[81])
           );
-          gamedata.squads[squad - 1].splice(pos, 1);
-          gamedata = alterhp(
-            gamedata,
-            squad2,
-            pos2 + 1,
-            squad2,
-            pos2 + 1,
-            -1,
-            "",
-            true
-          );
           gamedata = richtextadd(
             gamedata,
             `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
               emojis[80].emoji
-            } printed out a ${emojis[81].emoji}, and damaged itself!`
+            } printed out a ${emojis[81].emoji}!`
           );
-          kill = false;
         }
         if (
           (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 83 &&
@@ -804,14 +792,18 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         }
         if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 59) {
           // flying saucer
+          gamedata.squads[squad - 1].splice(pos, 1);
           gamedata = shufflesquad(gamedata, squad2);
           gamedata = richtextadd(
             gamedata,
             `\n🔀 ${gamedata.player[squad - 1]}'s ${
               emojis[59].emoji
-            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
+            } Shuffled ${gamedata.player[squad2 - 1]}'s Squad, and zapped ${
+              gamedata.squads[squad2 - 1][0].emoji
+            } for 3 damage!`
           );
-          gamedata = alterhp(gamedata, squad2, 0, squad, pos, -3, "zapped");
+          gamedata = alterhp(gamedata, squad2, 0, squad, pos, -3, "zapped", true);
+          kill = false;
         }
         if (
           (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 55 &&

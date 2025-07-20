@@ -1160,7 +1160,7 @@ const emojis = [
     names: ["Fax", "Fax Machine", "Receipt Printer", "Printer"],
     class: 3,
     description:
-      "When this defeats an Emoji, it summons 📃 at the front of the Squad and attacks itself for 1 damage",
+      "When this defeats an Emoji, it summons 📃 at the front of the Squad",
   },
   {
     emoji: "📃",
@@ -1254,6 +1254,16 @@ const emojis = [
     names: ["Dart", "Direct Hit", "Target", "Bullseye"],
     class: 2,
     description: "All enemy attacks are redirected towards this, regardless of the aggressor's position",
+  },
+  {
+    emoji: "💰",
+    id: 90,
+    hp: 1,
+    dmg: 0,
+    rarity: -1,
+    names: ["Moneybag", "Money Bag", "Marigold", "Sack"],
+    class: null,
+    description: "When this survives a Battle without being defeated, give you more money idk",
   },
 ];
 

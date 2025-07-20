@@ -444,34 +444,36 @@ module.exports = {
                     await writelogs(logs);
                   }
                 }
-                const interaction3 = await int3.awaitMessageComponent({
-                  time: 600000,
+                let collector = int3.createMessageComponentCollector({
+                  time: 1200000,
                 });
-                try {
-                  interaction3.reply({
-                    flags: "Ephemeral",
-                    files: [
-                      {
-                        attachment: txt,
-                        name: `${interaction.user.username} vs Dojobot (friendly).txt`,
-                      },
-                    ],
-                  });
-                  let logs = await getlogs();
-                  logs.logs.games.friendlylogsrequested += 1;
-                  logs.logs.players[
-                    `user${interaction3.user.id}`
-                  ].friendlylogsrequested =
-                    logs.logs.players[`user${interaction3.user.id}`]
-                      .friendlylogsrequested ?? 0;
-                  logs.logs.players[
-                    `user${interaction3.user.id}`
-                  ].friendlylogsrequested += 1;
-                  await writelogs(logs);
-                } catch (e) {
-                  exportbutton.setDisabled(true);
-                  interaction3.editReply({ components: [row2] });
-                }
+                collector.on("collect", async (interaction3) => {
+                  try {
+                    interaction3.reply({
+                      flags: "Ephemeral",
+                      files: [
+                        {
+                          attachment: txt,
+                          name: `${interaction.user.username} vs Dojobot (friendly).txt`,
+                        },
+                      ],
+                    });
+                    let logs = await getlogs();
+                    logs.logs.games.friendlylogsrequested += 1;
+                    logs.logs.players[
+                      `user${interaction3.user.id}`
+                    ].friendlylogsrequested =
+                      logs.logs.players[`user${interaction3.user.id}`]
+                        .friendlylogsrequested ?? 0;
+                    logs.logs.players[
+                      `user${interaction3.user.id}`
+                    ].friendlylogsrequested += 1;
+                    await writelogs(logs);
+                  } catch (e) {
+                    exportbutton.setDisabled(true);
+                    interaction3.editReply({ components: [row2] });
+                  }
+                });
               } else {
                 interaction2.update({
                   content: `<@${battleuser.id}>, <@${
