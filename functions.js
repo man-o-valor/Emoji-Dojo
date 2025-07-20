@@ -802,7 +802,16 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata.squads[squad2 - 1][0].emoji
             } for 3 damage!`
           );
-          gamedata = alterhp(gamedata, squad2, 0, squad, pos, -3, "zapped", true);
+          gamedata = alterhp(
+            gamedata,
+            squad2,
+            0,
+            squad,
+            pos,
+            -3,
+            "zapped",
+            true
+          );
           kill = false;
         }
         if (
@@ -905,7 +914,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             );
           }
         }
-        for (i = 0; i < gamedata.squads[squad2 - 1].length - 1; i++) {
+        for (i = 0; i < gamedata.squads[squad2 - 1].length; i++) {
           if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 25) {
             // skull and crossbones
             gamedata = alterhp(gamedata, squad2, i + 1, squad2, i, 1);
@@ -1298,27 +1307,37 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }
           }
         }
-        if (
-          gamedata.squads[0].length == 1 &&
-          (gamedata.squads[0][0] ?? { id: undefined }).id == 23
-        ) {
-          // lizard / dragon
-          gamedata.squads[0].splice(0, 1, lodash.cloneDeep(emojis[24]));
-          gamedata = richtextadd(
-            gamedata,
-            `\n⏫ ${gamedata.player[0]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
-          );
+        if (gamedata.squads[0].length == 1) {
+          if ((gamedata.squads[0][0] ?? { id: undefined }).id == 23) {
+            // lizard / dragon
+            gamedata.squads[0].splice(0, 1, lodash.cloneDeep(emojis[24]));
+            gamedata = richtextadd(
+              gamedata,
+              `\n⏫ ${gamedata.player[0]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
+            );
+          } else if ((gamedata.squads[0][0] ?? { id: undefined }).id == 91) {
+            gamedata.squads[0].splice(0, 0, lodash.cloneDeep(emojis[92]));
+            gamedata = richtextadd(
+              gamedata,
+              `\n‼️ ${gamedata.player[0]}'s ${emojis[91].emoji} called in a ${emojis[92].emoji}`
+            );
+          }
         }
-        if (
-          gamedata.squads[1].length == 1 &&
-          (gamedata.squads[1][0] ?? { id: undefined }).id == 23
-        ) {
-          // lizard / dragon
-          gamedata.squads[1].splice(0, 1, lodash.cloneDeep(emojis[24]));
-          gamedata = richtextadd(
-            gamedata,
-            `\n⏫ ${gamedata.player[1]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
-          );
+        if (gamedata.squads[1].length == 1) {
+          if ((gamedata.squads[1][0] ?? { id: undefined }).id == 23) {
+            // lizard / dragon
+            gamedata.squads[1].splice(0, 1, lodash.cloneDeep(emojis[24]));
+            gamedata = richtextadd(
+              gamedata,
+              `\n⏫ ${gamedata.player[1]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
+            );
+          } else if ((gamedata.squads[1][0] ?? { id: undefined }).id == 91) {
+            gamedata.squads[1].splice(0, 0, lodash.cloneDeep(emojis[92]));
+            gamedata = richtextadd(
+              gamedata,
+              `\n‼️ ${gamedata.player[1]}'s ${emojis[91].emoji} called in a ${emojis[92].emoji}`
+            );
+          }
         }
       }
     }

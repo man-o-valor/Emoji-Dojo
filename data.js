@@ -1243,7 +1243,8 @@ const emojis = [
     rarity: 1,
     names: ["Back", "Back Arrow", "Back Sign"],
     class: 1,
-    description: "Attacks the Emoji at the back of the enemy Squad instead of the front",
+    description:
+      "Attacks the Emoji at the back of the enemy Squad instead of the front",
   },
   {
     emoji: "🎯",
@@ -1253,7 +1254,8 @@ const emojis = [
     rarity: 1,
     names: ["Dart", "Direct Hit", "Target", "Bullseye"],
     class: 2,
-    description: "All enemy attacks are redirected towards this, regardless of the aggressor's position",
+    description:
+      "All enemy attacks are redirected towards this, regardless of the aggressor's position",
   },
   {
     emoji: "💰",
@@ -1263,7 +1265,30 @@ const emojis = [
     rarity: -1,
     names: ["Moneybag", "Money Bag", "Marigold", "Sack"],
     class: null,
-    description: "When this survives a Battle without being defeated, give you more money idk",
+    description:
+      "When this survives a Battle without being defeated, give you more money idk",
+  },
+  {
+    emoji: "🚨",
+    id: 91,
+    hp: 2,
+    dmg: 2,
+    rarity: 0,
+    names: ["Rotating Light", "Alarm", "Police Light", "Siren"],
+    class: 3,
+    description:
+      "If this is the only undefeated friendly Emoji, summon 🚓 at the front of the Squad",
+  },
+  {
+    emoji: "🚓",
+    id: 92,
+    hp: 3,
+    dmg: 4,
+    rarity: -1,
+    names: ["Police Car", "Police", "Cop", "Cops"],
+    class: null,
+    description:
+      "Nothing Special (called in by 🚨)",
   },
 ];
 
