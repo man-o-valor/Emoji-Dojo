@@ -91,24 +91,17 @@ const classes = [
     emoji: "<:musical:1326215176294236212>",
     legendary: 63,
   },
+  {
+    id: 8,
+    name: "Teamup",
+    emoji: "<:teamup:1396899478069317712>",
+    legendary: 95,
+  },
 ];
 
 const devotionhelp =
   'At any time through `/dojo` you have the ability to 🛐 **Devote** any amount of Emojis to the art of their class, permanently losing them in exchange for **"devotion points"** correlated to their rarity. You can view your devotion progress at any time by running `/devotions`.\n\nWhen you collect a total of **40** devotion points for a single class, you will be awarded the <:master:1325987682941145259> **Master** of that class to be used in your own Squad. The bar will roll back to 0, and you are able to get more of the same <:master:1325987682941145259> **Master**s. These <:master:1325987682941145259> **Master** Emojis are quite powerful, synergizing with their class like no other Emoji can.';
 
-/*
-
-Class ideas:
-Healing: X-ray | 11 emojis
-Damaging: Wolf | 15 emojis
-Summoning: Wand | 6 emojis
-Defense: Mirror | 10 emojis
-Transforming: Mask | 8 emojis
-Shuffling: Volcano | 8 emojis
-Musical: Loud Sound | 8 emojis
-Movement | 9 emojis
-
-*/
 
 const emojis = [
   {
@@ -118,7 +111,7 @@ const emojis = [
     dmg: 0,
     rarity: 0,
     names: ["Clap", "Clapping", "Clapping Hands", "Boi"],
-    class: 1,
+    class: 8,
     description: "Deals 1 more damage for each undefeated friendly 👏",
   },
   {
@@ -229,7 +222,7 @@ const emojis = [
     dmg: 1,
     rarity: 1,
     names: ["Handshake", "Hand Shake", "Shake", "Hands", "Hand"],
-    class: 1,
+    class: 8,
     description:
       "Will also attack if there is one friendly Emoji in front of it",
   },
@@ -278,7 +271,7 @@ const emojis = [
     dmg: 2,
     rarity: 0,
     names: ["Martial Arts Uniform", "Gi", "Kung Fu", "Kungfu", "Kung-fu"],
-    class: 1,
+    class: 8,
     description:
       "The friendly Emoji in front of this attacks for 1 more damage",
   },
@@ -923,7 +916,7 @@ const emojis = [
       "Skyscrapers",
       "Skyscraper",
     ],
-    class: 0,
+    class: 8,
     description:
       "When a friendly Emoji dies, heals all friendly copies of it by 1",
   },
@@ -1048,7 +1041,7 @@ const emojis = [
       "Data",
       "Connection",
     ],
-    class: 1,
+    class: 8,
     description:
       "At the beginning of the Battle, increases its health by the number of friendly 🛜",
   },
@@ -1059,7 +1052,7 @@ const emojis = [
     dmg: 2,
     rarity: 1,
     names: ["Anchor"],
-    class: 2,
+    class: 8,
     description:
       "When your Squad is Shuffled, this and the friendly Emoji in front of it do not get moved",
   },
@@ -1070,7 +1063,7 @@ const emojis = [
     dmg: 2,
     rarity: 1,
     names: ["Pushpin", "Pin", "Thumbtack", "Tack"],
-    class: 2,
+    class: 8,
     description:
       "When your Squad is Shuffled, this and the friendly Emoji in behind it do not get moved",
   },
@@ -1081,7 +1074,7 @@ const emojis = [
     dmg: 1,
     rarity: 2,
     names: ["People Hugging", "Hugging", "Hug", "Hug In Silhouette"],
-    class: 2,
+    class: 8,
     description:
       "When your Squad is Shuffled, the two friendly Emojis in front of this stay together",
   },
@@ -1103,7 +1096,7 @@ const emojis = [
     dmg: 0,
     rarity: 1,
     names: ["Backpack", "Bookbag", "Bag"],
-    class: 1,
+    class: 8,
     description:
       "The friendly Emoji in front of this attacks for 2 more damage",
   },
@@ -1285,10 +1278,43 @@ const emojis = [
     hp: 3,
     dmg: 4,
     rarity: -1,
-    names: ["Police Car", "Police", "Cop", "Cops"],
+    names: ["Police Car", "Police", "Cop", "Cops", "Opps"],
     class: null,
     description:
       "Nothing Special (called in by 🚨)",
+  },
+  {
+    emoji: "🐝",
+    id: 93,
+    hp: 2,
+    dmg: 1,
+    rarity: 0,
+    names: ["Bee", "Bumblebee"],
+    class: 8,
+    description:
+      "When attacking, all friendly 🐝 also attack regardless of position.",
+  },
+  {
+    emoji: "🪡",
+    id: 94,
+    hp: 3,
+    dmg: 3,
+    rarity: 1,
+    names: ["Sewing Needle", "Needle"],
+    class: 1,
+    description:
+      "When attacking, attacks the first X emojis in the enemy Squad for 1 damage, where X is its attack power.",
+  },
+  {
+    emoji: "👪",
+    id: 95,
+    hp: 2,
+    dmg: 0,
+    rarity: 3, // Master of Teamup
+    names: ["Family"],
+    class: 8,
+    description:
+      "At the beginning of the Battle, increases its health and attack power by the number of friendly Teamup class emojis",
   },
 ];
 

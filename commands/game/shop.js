@@ -136,9 +136,9 @@ module.exports = {
         }
       } else {
         if (dailyPack_isBig) {
-          dailyPack_description += `:asterisk: :asterisk: Common ${classes[dailyPack_class].name} x2\n<:randomclass:1393742783604326432>: :asterisk: :asterisk: Random Common x2`;
+          dailyPack_description += `:asterisk: :asterisk: Common ${classes[dailyPack_class].name} x2\n<:randomclass:1396899395970269184>: :asterisk: :asterisk: Random Common x2`;
         } else {
-          dailyPack_description += `:asterisk: :asterisk: Common ${classes[dailyPack_class].name} x2\n<:randomclass:1393742783604326432>: :asterisk: Random Common x1`;
+          dailyPack_description += `:asterisk: :asterisk: Common ${classes[dailyPack_class].name} x2\n<:randomclass:1396899395970269184>: :asterisk: Random Common x1`;
         }
       }
       if (dailyPack_hasSpecial) {
