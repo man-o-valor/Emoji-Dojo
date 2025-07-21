@@ -652,11 +652,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // bomb
           gamedata = richtextadd(
             gamedata,
-            `\n💥 ${gamedata.player[squad - 1]}'s ${
-              emojis[36].emoji
-            } exploded, defeating ${gamedata.player[0 - squad + 2]}'s ${
-              gamedata.squads[0 - squad + 2][0].emoji
-            }!`
+            `\n💥 ${gamedata.player[squad - 1]}'s ${emojis[36].emoji} exploded!`
           );
           gamedata.squads[squad - 1].splice(pos, 1);
           gamedata = alterhp(
@@ -664,7 +660,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             0 - squad + 3,
             0,
             squad,
-            pos,
+            -1,
             -1000,
             "exploded",
             true
@@ -808,7 +804,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             squad2,
             0,
             squad,
-            pos,
+            -1,
             -3,
             "zapped",
             true
@@ -833,7 +829,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             squad2,
             gamedata.squads[squad2 - 1].length - 1,
             squad,
-            pos,
+            -1,
             -2,
             "",
             true
@@ -856,7 +852,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           gamedata.squads[squad2 - 1].splice(0, 0, temp);
           gamedata.squads[squad - 1].splice(pos, 1);
-          gamedata = alterhp(gamedata, squad2, 0, squad, pos, -2, "", true);
+          gamedata = alterhp(gamedata, squad2, 0, squad, -1, -2, "", true);
           gamedata = richtextadd(
             gamedata,
             `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
@@ -1644,7 +1640,8 @@ function playturn(gamedata) {
       (activeemoji ?? { id: undefined }).id == 96 &&
       gamedata.squads[gamedata.playerturn * -1 + 2][1] &&
       (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id == 77)
+        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
+          77)
     ) {
       // accordion
       gamedata = alterhp(
@@ -1653,7 +1650,7 @@ function playturn(gamedata) {
         1,
         gamedata.playerturn,
         0,
-        0 - activeemoji.dmg,
+        0 - activeemoji.dmg
       );
     }
     if ((activeemoji ?? { id: undefined }).id == 37 && gamedata.turn % 4 <= 2) {
