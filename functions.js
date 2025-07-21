@@ -138,9 +138,6 @@ async function devoteemojis(id, emojiid, amount) {
       if (matches.length == amount) break;
     }
   }
-  console.log(JSON.stringify(vaultarray));
-  console.log(emojiid);
-  console.log(matches);
   for (let i of matches) {
     vaultarray.splice(i, 1);
   }
