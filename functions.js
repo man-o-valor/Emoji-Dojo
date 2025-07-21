@@ -124,21 +124,25 @@ async function dailyrewardremind(interaction) {
 async function getvault(id) {
   //await database.set(id+"vault","0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,22,23,0,1,2,3,4,5,6,8,")
   const rawvault = await database.get(id + "vault");
-  let vault = rawvault.split(",");
+  let vault = rawvault.split(",").map((str) => parseInt(str));
   vault.pop();
   return vault;
 }
 
 async function devoteemojis(id, emojiid, amount) {
   let vaultarray = await getvault(id);
-  let indexToRemove;
-  for (let j = 0; j < amount; j++) {
-    for (let i = vaultarray.length - 1; i > -1; i--) {
-      if (vaultarray[i].id == emojiid) {
-        indexToRemove = i;
-      }
+  let matches = [];
+  for (let i = vaultarray.length - 1; i >= 0; i--) {
+    if (vaultarray[i] == emojiid) {
+      matches.push(i);
+      if (matches.length == amount) break;
     }
-    vaultarray.splice(indexToRemove, 1);
+  }
+  console.log(JSON.stringify(vaultarray));
+  console.log(emojiid);
+  console.log(matches);
+  for (let i of matches) {
+    vaultarray.splice(i, 1);
   }
   await database.set(id + "vault", vaultarray.join(",") + ",");
   let lab = await fetchresearch(id);
@@ -149,9 +153,9 @@ async function devoteemojis(id, emojiid, amount) {
 
 async function fetchresearch(id) {
   const userresearch =
-    (await database.get(id + "research")) ?? "0/0/0/0/0/0/0/0";
+    (await database.get(id + "research")) ?? "0/0/0/0/0/0/0/0/0";
   let lab = userresearch.split("/");
-  while (lab.length < 8) {
+  while (lab.length < 9) {
     lab.push(0);
   }
   return lab.map(Number);
@@ -765,7 +769,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id != 61) {
           // wand
           for (i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-            if (gamedata.squads[squad - 1][i].id == 61) {
+            if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 61) {
               gamedata.squads[squad - 1].splice(
                 gamedata.squads[squad - 1].length,
                 0,
@@ -1358,6 +1362,14 @@ function playturn(gamedata) {
           gamedata.squads[0][i].hp += gamedata.squads[0].filter(
             (element) => element.id == 70
           ).length;
+        } else if (gamedata.squads[0][i].id == 95) {
+          // family
+          gamedata.squads[0][i].hp += gamedata.squads[0].filter(
+            (element) => element.class == 8
+          ).length;
+          gamedata.squads[0][i].dmg += gamedata.squads[0].filter(
+            (element) => element.class == 8
+          ).length;
         }
         if (
           (gamedata.squads[0][i] ?? { id: undefined }).id == 76 &&
@@ -1385,6 +1397,14 @@ function playturn(gamedata) {
           // wireless
           gamedata.squads[1][i].hp += gamedata.squads[1].filter(
             (element) => element.id == 70
+          ).length;
+        } else if (gamedata.squads[1][i].id == 95) {
+          // family
+          gamedata.squads[1][i].hp += gamedata.squads[1].filter(
+            (element) => element.class == 8
+          ).length;
+          gamedata.squads[1][i].dmg += gamedata.squads[1].filter(
+            (element) => element.class == 8
           ).length;
         }
         if (
@@ -1429,6 +1449,68 @@ function playturn(gamedata) {
             ).length),
         "clapped at"
       );
+    }
+    if (activeemoji.id == 93) {
+      // bee
+      basicattackflag = false;
+      gamedata = richtextadd(
+        gamedata,
+        `\n🐝 ${gamedata.player[gamedata.playerturn - 1]}'s ${
+          gamedata.squads[gamedata.playerturn - 1].filter(
+            (element) => element.id == 93
+          ).length < 2
+            ? "(lonely) "
+            : ""
+        }swarm of ${
+          gamedata.squads[gamedata.playerturn - 1].filter(
+            (element) => element.id == 93
+          ).length
+        } ${emojis[93].emoji} attacked!`
+      );
+      for (i = 0; i < gamedata.squads[gamedata.playerturn - 1].length; i++) {
+        if (gamedata.squads[gamedata.playerturn - 1][i].id == 93) {
+          gamedata = alterhp(
+            gamedata,
+            gamedata.playerturn * -1 + 3,
+            0,
+            gamedata.playerturn,
+            0,
+            0 - gamedata.squads[gamedata.playerturn - 1][i].dmg,
+            "stung",
+            true
+          );
+        }
+      }
+    }
+    if (activeemoji.id == 94 && activeemoji.dmg > 1) {
+      // needle
+      basicattackflag = false;
+      gamedata = richtextadd(
+        gamedata,
+        `\n‼️ ${gamedata.player[gamedata.playerturn - 1]}'s ${
+          emojis[94].emoji
+        } attacked the front ${activeemoji.dmg} enemy Emojis!`
+      );
+      for (
+        let i =
+          Math.min(
+            gamedata.squads[gamedata.playerturn * -1 + 2].length,
+            activeemoji.dmg
+          ) - 1;
+        i > -1;
+        i--
+      ) {
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          i,
+          gamedata.playerturn,
+          0,
+          -1,
+          "poked",
+          true
+        );
+      }
     }
     if (activeemoji.id == 74) {
       // battery
