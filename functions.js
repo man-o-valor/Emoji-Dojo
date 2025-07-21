@@ -1643,8 +1643,8 @@ function playturn(gamedata) {
     if (
       (activeemoji ?? { id: undefined }).id == 96 &&
       gamedata.squads[gamedata.playerturn * -1 + 2][1] &&
-      (gamedata.squads[squad2 - 1].some((x) => x.id == 14) ||
-        (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 77)
+      (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
+        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id == 77)
     ) {
       // accordion
       gamedata = alterhp(
