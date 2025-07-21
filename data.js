@@ -1316,6 +1316,17 @@ const emojis = [
     description:
       "At the beginning of the Battle, increases its health and attack power by the number of friendly Teamup class emojis",
   },
+  {
+    emoji: "🪗",
+    id: 96,
+    hp: 3,
+    dmg: 3,
+    rarity: 2,
+    names: ["Accordion"],
+    class: 7,
+    description:
+      "If there is at least one undefeated friendly 🎶, attacks the 2 frontmost enemy emojis at once",
+  },
 ];
 
 module.exports = {

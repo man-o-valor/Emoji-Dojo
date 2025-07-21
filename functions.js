@@ -1643,6 +1643,22 @@ function playturn(gamedata) {
         "zapped"
       );
     }
+    if (
+      (activeemoji ?? { id: undefined }).id == 96 &&
+      gamedata.squads[gamedata.playerturn * -1 + 2][1] &&
+      (gamedata.squads[squad2 - 1].some((x) => x.id == 14) ||
+        (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 77)
+    ) {
+      // accordion
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        1,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg,
+      );
+    }
     if ((activeemoji ?? { id: undefined }).id == 37 && gamedata.turn % 4 <= 2) {
       // ghost
       const tempemj = gamedata.squads[gamedata.playerturn * -1 + 2][0].emoji;
