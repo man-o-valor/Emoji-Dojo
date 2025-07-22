@@ -387,7 +387,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     }
   }
   if (
-    (gamedata.squads[squad * -1 + 2][0] ?? { id: undefined }).id == 97 ||
+    (gamedata.squads[squad * -1 + 2][0] ?? { id: undefined }).id == 97 &&
     pos == 0
   ) {
     // adhesive bandage
