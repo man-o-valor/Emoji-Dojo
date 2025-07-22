@@ -102,7 +102,6 @@ const classes = [
 const devotionhelp =
   'At any time through `/dojo` you have the ability to 🛐 **Devote** any amount of Emojis to the art of their class, permanently losing them in exchange for **"devotion points"** correlated to their rarity. You can view your devotion progress at any time by running `/devotions`.\n\nWhen you collect a total of **40** devotion points for a single class, you will be awarded the <:master:1325987682941145259> **Master** of that class to be used in your own Squad. The bar will roll back to 0, and you are able to get more of the same <:master:1325987682941145259> **Master**s. These <:master:1325987682941145259> **Master** Emojis are quite powerful, synergizing with their class like no other Emoji can.';
 
-
 const emojis = [
   {
     emoji: "👏",
@@ -119,7 +118,7 @@ const emojis = [
     id: 1,
     hp: 3,
     dmg: 1,
-    rarity: 0,
+    rarity: 1,
     names: [
       "Kissing Heart",
       "Kiss",
@@ -1280,8 +1279,7 @@ const emojis = [
     rarity: -1,
     names: ["Police Car", "Police", "Cop", "Cops", "Opps"],
     class: null,
-    description:
-      "Nothing Special (called in by 🚨)",
+    description: "Nothing Special (called in by 🚨)",
   },
   {
     emoji: "🐝",
@@ -1326,6 +1324,16 @@ const emojis = [
     class: 7,
     description:
       "If there is at least one undefeated friendly 🎶, attacks the 2 frontmost enemy emojis at once",
+  },
+  {
+    emoji: "🩹",
+    id: 97,
+    hp: 5,
+    dmg: 3,
+    rarity: 2,
+    names: ["Adhesive Bandage", "Bandaid", "Bandage", "Band-aid"],
+    class: 1,
+    description: "Enemy Emojis directly in front of this cannot be healed",
   },
 ];
 

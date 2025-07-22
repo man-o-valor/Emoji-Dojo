@@ -364,7 +364,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         val + gamedata.squads[squad - 1].filter((x) => x.id == 2).length,
         -1
       );
-    } else {
+    } else if (val > 0) {
       val = 0;
       verb = "tried to heal";
     }
@@ -381,6 +381,16 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 54
   ) {
     // bricks, bubbles
+    if (val > 0) {
+      val = 0;
+      verb = "tried to heal";
+    }
+  }
+  if (
+    (gamedata.squads[squad * -1 + 2][0] ?? { id: undefined }).id == 97 ||
+    pos == 0
+  ) {
+    // adhesive bandage
     if (val > 0) {
       val = 0;
       verb = "tried to heal";
