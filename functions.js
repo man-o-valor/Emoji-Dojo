@@ -1019,7 +1019,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata.squads[squad - 1].splice(pos, 1);
             for (i = 0; i < 3; i++) {
               gamedata.squads[squad - 1].splice(
-                pos + 1,
+                pos,
                 0,
                 lodash.cloneDeep(emojis[0])
               );
@@ -1095,7 +1095,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata.squads[squad - 1].splice(pos, 1);
             for (i = 0; i < 3; i++) {
               gamedata.squads[squad - 1].splice(
-                pos + 1,
+                pos,
                 0,
                 (lodash.cloneDeep(emojis[0]).hp = 1)
               );
@@ -1157,7 +1157,9 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }
           }
           if (
-            (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 1
+            (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id ==
+              1 &&
+            val < -1
           ) {
             // kissing heart face
             gamedata = alterhp(
@@ -1938,23 +1940,20 @@ function shufflesquad(gamedata, squad) {
 
 customemojis: {
   function renderhemoji(value) {
-    if (value < 0) {
-      return healthemojis[0];
-    } else if (healthemojis.length > value) {
-      return healthemojis[value + 1];
-    } else {
-      return healthemojis[healthemojis.length - 1];
-    }
+    const index = Math.max(
+      0,
+      Math.min(Math.floor(Number(value)) + 1, healthemojis.length - 1)
+    );
+    return healthemojis[index];
   }
 
   function renderdemoji(value) {
-    if (value < -3) {
-      return dmgemojis[0];
-    } else if (dmgemojis.length > value) {
-      return dmgemojis[value + 4];
-    } else {
-      return dmgemojis[dmgemojis.length - 1];
-    }
+    const index =
+      Math.max(
+        -4,
+        Math.min(Math.floor(Number(value)) + 1, dmgemojis.length - 1)
+      ) + 3;
+    return dmgemojis[index];
   }
 }
 

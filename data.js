@@ -132,7 +132,7 @@ const emojis = [
     ],
     class: 0,
     description:
-      "When the friendly Emoji in front of this is attacked, heals it by 1",
+      "When the friendly Emoji in front of this is attacked for more than 1 damage, heals it by 1",
   },
   {
     emoji: "😌",
