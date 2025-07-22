@@ -82,7 +82,7 @@ const classes = [
   {
     id: 6,
     name: "Shuffling",
-    emoji: "<:shuffling:1326215184733179957>",
+    emoji: "<:1f500:1397251831159062739>",
     legendary: 47,
   },
   {
