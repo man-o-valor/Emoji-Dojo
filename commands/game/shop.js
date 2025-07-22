@@ -296,7 +296,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
         .setColor(0x4e5058)
         .setTitle(`The Shop`)
         .setDescription(
-          `💁 *${quote}*\n-# Emojis reroll <t:${shoprestock}:R>\n>>> ${marketcontents}\n`
+          `💁 *${quote}*\n-# Emojis reroll <t:${shoprestock}:R>\n${marketcontents}\n`
         )
         .setTimestamp()
         .setFooter({ text: `You have ${coincount} 🪙` });
