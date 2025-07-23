@@ -1269,7 +1269,7 @@ const emojis = [
     names: ["Rotating Light", "Alarm", "Police Light", "Siren"],
     class: 3,
     description:
-      "If this is the only undefeated friendly Emoji, summon 🚓 at the front of the Squad",
+      "If this is the only undefeated friendly Emoji, summon 🚓 at the back of the Squad",
   },
   {
     emoji: "🚓",

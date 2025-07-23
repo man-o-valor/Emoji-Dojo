@@ -1325,7 +1325,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               `\n⏫ ${gamedata.player[0]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
             );
           } else if ((gamedata.squads[0][0] ?? { id: undefined }).id == 91) {
-            gamedata.squads[0].splice(0, 0, lodash.cloneDeep(emojis[92]));
+            // rotating light
+            gamedata.squads[0].splice(1, 0, lodash.cloneDeep(emojis[92]));
             gamedata = richtextadd(
               gamedata,
               `\n‼️ ${gamedata.player[0]}'s ${emojis[91].emoji} called in a ${emojis[92].emoji}`
