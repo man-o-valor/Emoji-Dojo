@@ -37,6 +37,7 @@ module.exports = {
         content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
       });
     } else {
+      await interaction.deferReply()
       let battlespeed = parseInt(interaction.options.getString("speed") ?? "4");
       if (battlespeed < 1) {
         battlespeed = 1;
@@ -84,7 +85,7 @@ module.exports = {
         );
 
         if (player2squadarray == "error") {
-          await interaction.reply({
+          await interaction.editReply({
             content: "🤒 Something went wrong with picking DojoBot's Squad.",
             flags: MessageFlags.Ephemeral,
           });
@@ -125,7 +126,7 @@ module.exports = {
 
           gamedata.playerturn = Math.floor(Math.random() * 2) + 1;
 
-          const response = await interaction.reply({
+          const response = await interaction.editReply({
             components: [row1],
             content: `\`@DojoBot\`, <@${
               interaction.user.id
