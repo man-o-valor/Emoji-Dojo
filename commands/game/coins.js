@@ -49,7 +49,7 @@ module.exports = {
       battlemsg = `✅ You have enough **Coins** to battle other users. Challenge your friends with \`/battleuser\`!`;
     }
 
-    const modmsg = `\n\nYour **Coin Modifier** is currently **x${mod}**. When you win a Battle, you will get this much times how many Emojis you have undefeated. It will reset back to 20 at <t:${restocktime}:t>.`;
+    const modmsg = `\n\nYour **Coin Modifier** is currently **x${mod}**. When you win a Battle, you will get this much times how many Emojis you have undefeated. It will reset back to 16 at <t:${restocktime}:t>.`;
 
     const coindoubler =
       (await database.get(interaction.user.id + "coindoubler")) ?? 0;
