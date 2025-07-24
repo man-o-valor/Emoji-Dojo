@@ -80,7 +80,7 @@ module.exports = {
 
         let player2squadarray = await makesquad(
           player1squadarray,
-          50,
+          100,
           cursed == 1
         );
 
