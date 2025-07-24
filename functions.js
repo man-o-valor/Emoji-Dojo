@@ -361,7 +361,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     // shield
     if (val < 0) {
       val = Math.min(
-        val + gamedata.squads[squad - 1].filter((x) => x.id == 2).length,
+        val + gamedata.squads[squad - 1].filter((x) => x.class == 2).length,
         -1
       );
     } else if (val > 0) {

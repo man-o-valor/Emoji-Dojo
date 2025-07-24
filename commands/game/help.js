@@ -59,18 +59,21 @@ module.exports = {
     });
 
     try {
-      const confirmation =
-        await response.awaitMessageComponent({ time: 60_000 });
+      const confirmation = await response.awaitMessageComponent({
+        time: 60_000,
+      });
       const creditsembed = new EmbedBuilder()
         .setColor(0xfa743e)
         .setTitle(`<a:emojidojo:1389431944852537345> Emoji Dojo Credits`)
-        .setDescription(`Emoji Dojo was developed by [Man-o-Valor](https://github.com/man-o-valor)!\nAlso, all custom emoji designs and iconography were made by him.\n\nThank you to [Twemoji](https://github.com/twitter/twemoji), the Emoji set that made most of the designs for Discord's Emojis.\n\nAnd finally, thank you for playing :^)`);
+        .setDescription(
+          `Emoji Dojo was developed by [Man-o-Valor](https://github.com/man-o-valor)!\nAlso, all custom emoji designs and iconography were made by him.\n\nThank you to [Twemoji](https://github.com/twitter/twemoji), the Emoji set that made most of the designs for Discord's Emojis.\n\nSome functions of Emoji Dojo were inspired by [Siglings](<https://www.cocrea.world/@Outrunfungus43/Siglings>) by Outrunfungus43. Give it a try if you like Emoji Dojo but you're looking for a roguelike round-based experience :)\n\nAnd finally, thank you for playing :^)`
+        );
       await confirmation.reply({
         embeds: [creditsembed],
         flags: MessageFlags.Ephemeral,
       });
-    } catch(e) {
-      console.error(e)
+    } catch (e) {
+      console.error(e);
     }
   },
 };

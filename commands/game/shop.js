@@ -10,10 +10,7 @@ const {
   TextInputBuilder,
   TextInputStyle,
 } = require("discord.js");
-const {
-  emojis,
-  classes
-} = require("../../data.js");  
+const { emojis, classes } = require("../../data.js");
 const {
   database,
   coinschange,
@@ -30,7 +27,7 @@ const dailyPack_prices = {
   common: 80,
   rare: 180,
   special: 475,
-}
+};
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -76,36 +73,41 @@ module.exports = {
           emojis.filter((e) => e.rarity == 2),
         ];
         const newstring =
-        emojilist[0][Math.floor(Math.random() * emojilist[0].length)].id +
-        "," +
-        emojilist[1][Math.floor(Math.random() * emojilist[1].length)].id +
-        "," +
-        emojilist[2][Math.floor(Math.random() * emojilist[2].length)].id +
-        ",";
+          emojilist[0][Math.floor(Math.random() * emojilist[0].length)].id +
+          "," +
+          emojilist[1][Math.floor(Math.random() * emojilist[1].length)].id +
+          "," +
+          emojilist[2][Math.floor(Math.random() * emojilist[2].length)].id +
+          ",";
         await database.set("shopoffers", newstring);
-        
+
         let dailyPack_class = Math.floor(Math.random() * classes.length);
         let dailyPack_isRare = Math.random() <= 0.35; // 35% for rare
         let dailyPack_isBig = Math.random() <= 0.35; // 35% for big
         let dailyPack_hasSpecial = Math.random() <= 0.25; // 25% to have special
-        let dailyPack_price = dailyPack_prices.base + (dailyPack_hasSpecial ? dailyPack_prices.special : 0);
-        dailyPack_price += Math.round((Math.random()*2-1) * (dailyPack_prices.variance))*dailyPack_prices.variance_increment; // price variance
+        let dailyPack_price =
+          dailyPack_prices.base +
+          (dailyPack_hasSpecial ? dailyPack_prices.special : 0);
+        dailyPack_price +=
+          Math.round((Math.random() * 2 - 1) * dailyPack_prices.variance) *
+          dailyPack_prices.variance_increment; // price variance
         if (dailyPack_isRare) {
           dailyPack_price += dailyPack_prices.rare * (dailyPack_isBig ? 3 : 2);
         } else {
-          dailyPack_price += dailyPack_prices.common * (dailyPack_isBig ? 4 : 3);
+          dailyPack_price +=
+            dailyPack_prices.common * (dailyPack_isBig ? 4 : 3);
         }
         const packstring =
-        dailyPack_class +
-        "," +
-        dailyPack_isRare +
-        "," +
-        dailyPack_isBig +
-        "," +
-        dailyPack_hasSpecial +
-        "," +
-        dailyPack_price +
-        ",";
+          dailyPack_class +
+          "," +
+          dailyPack_isRare +
+          "," +
+          dailyPack_isBig +
+          "," +
+          dailyPack_hasSpecial +
+          "," +
+          dailyPack_price +
+          ",";
 
         await database.set("dailypack", packstring);
       }
@@ -117,7 +119,8 @@ module.exports = {
       dailyemojis[1] = parseInt(dailyemojis[1]);
       dailyemojis[2] = parseInt(dailyemojis[2]);
 
-      let dailypack = await database.get("dailypack") ?? "0,false,false,false,9999,";
+      let dailypack =
+        (await database.get("dailypack")) ?? "0,false,false,false,9999,";
       let dailyPack_info = dailypack.split(",");
       dailyPack_info.pop();
       let dailyPack_class = parseInt(dailyPack_info[0]);
@@ -126,7 +129,9 @@ module.exports = {
       let dailyPack_hasSpecial = dailyPack_info[3] == "true";
       let dailyPack_price = parseInt(dailyPack_info[4]);
 
-      let dailyPack_name = `${dailyPack_isRare ? "Rare" : "Mixed"} ${dailyPack_isBig ? "Deluxe " : ""}${classes[dailyPack_class].name} Pack`;
+      let dailyPack_name = `${dailyPack_isRare ? "Rare" : "Mixed"} ${
+        dailyPack_isBig ? "Deluxe " : ""
+      }${classes[dailyPack_class].name} Pack`;
       let dailyPack_description = `Contains:\n>>> ${classes[dailyPack_class].emoji}: `;
       if (dailyPack_isRare) {
         if (dailyPack_isBig) {
@@ -144,9 +149,6 @@ module.exports = {
       if (dailyPack_hasSpecial) {
         dailyPack_description += `\n ${classes[dailyPack_class].emoji}: ⚛️ Special ${classes[dailyPack_class].name} x1`;
       }
-
-
-
 
       const quotes = [
         "Need some emojis? This is the place!",
@@ -167,7 +169,9 @@ module.exports = {
 ${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].names[0]}** (200 🪙)
 ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙)
 
-🎁${classes[dailyPack_class].emoji} **${dailyPack_name}** (${dailyPack_price} 🪙)
+🎁${
+        classes[dailyPack_class].emoji
+      } **${dailyPack_name}** (${dailyPack_price} 🪙)
 
 :asterisk: **Random Common Emoji** (75 🪙)
 ✳️ **Random Rare Emoji** (150 🪙)
@@ -388,10 +392,8 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
               );
               if ($ < shopdata[choice].cost) {
                 newinteraction.reply({
-                  content: makemessage(
+                  content:
                     "Oops, you don't have enough 🪙 to buy this anymore!",
-                    myfood
-                  ),
                   flags: "Ephemeral",
                 });
               } else {
@@ -543,7 +545,6 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                           `user${interaction.user.id}`
                         ].prepickedemojisbought += modalquantity;
                         await writelogs(logs);
-                        
                       } else if (shopdata[choice].type == "dailypack") {
                         await coinschange(
                           interaction.user.id,
@@ -553,22 +554,32 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         buy.setLabel(`You bought this`);
                         buy.setStyle(1);
                         let emojistoadd = "";
-                        
+
                         for (let i = 0; i < modalquantity; i++) {
                           if (dailyPack_isRare) {
                             if (dailyPack_isBig) {
                               for (let i = 0; i < 3; i++) {
-                                const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                                const emojilist = emojis.filter(
+                                  (e) =>
+                                    e.rarity == 1 && e.class == dailyPack_class
+                                );
                                 let thisemoji =
-                                  emojilist[Math.floor(Math.random() * emojilist.length)];
+                                  emojilist[
+                                    Math.floor(Math.random() * emojilist.length)
+                                  ];
                                 emojistoadd += thisemoji.id + ",";
                                 emojisbought[1].push(thisemoji);
                               }
                             } else {
                               for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                                const emojilist = emojis.filter(
+                                  (e) =>
+                                    e.rarity == 1 && e.class == dailyPack_class
+                                );
                                 let thisemoji =
-                                  emojilist[Math.floor(Math.random() * emojilist.length)];
+                                  emojilist[
+                                    Math.floor(Math.random() * emojilist.length)
+                                  ];
                                 emojistoadd += thisemoji.id + ",";
                                 emojisbought[1].push(thisemoji);
                               }
@@ -576,40 +587,62 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                           } else {
                             if (dailyPack_isBig) {
                               for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                                const emojilist = emojis.filter(
+                                  (e) =>
+                                    e.rarity == 0 && e.class == dailyPack_class
+                                );
                                 let thisemoji =
-                                  emojilist[Math.floor(Math.random() * emojilist.length)];
+                                  emojilist[
+                                    Math.floor(Math.random() * emojilist.length)
+                                  ];
                                 emojistoadd += thisemoji.id + ",";
                                 emojisbought[0].push(thisemoji);
                               }
                               for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter((e) => e.rarity == 0);
+                                const emojilist = emojis.filter(
+                                  (e) => e.rarity == 0
+                                );
                                 let thisemoji =
-                                  emojilist[Math.floor(Math.random() * emojilist.length)];
+                                  emojilist[
+                                    Math.floor(Math.random() * emojilist.length)
+                                  ];
                                 emojistoadd += thisemoji.id + ",";
                                 emojisbought[0].push(thisemoji);
                               }
                             } else {
                               for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                                const emojilist = emojis.filter(
+                                  (e) =>
+                                    e.rarity == 0 && e.class == dailyPack_class
+                                );
                                 let thisemoji =
-                                  emojilist[Math.floor(Math.random() * emojilist.length)];
+                                  emojilist[
+                                    Math.floor(Math.random() * emojilist.length)
+                                  ];
                                 emojistoadd += thisemoji.id + ",";
                                 emojisbought[0].push(thisemoji);
                               }
                               // for (let i = 0; i < 1; i++) {
-                                const emojilist = emojis.filter((e) => e.rarity == 0);
-                                let thisemoji =
-                                  emojilist[Math.floor(Math.random() * emojilist.length)];
-                                emojistoadd += thisemoji.id + ",";
-                                emojisbought[0].push(thisemoji);
+                              const emojilist = emojis.filter(
+                                (e) => e.rarity == 0
+                              );
+                              let thisemoji =
+                                emojilist[
+                                  Math.floor(Math.random() * emojilist.length)
+                                ];
+                              emojistoadd += thisemoji.id + ",";
+                              emojisbought[0].push(thisemoji);
                               // }
                             }
                           }
                           if (dailyPack_hasSpecial) {
-                            const emojilist = emojis.filter((e) => e.rarity == 2 && e.class == dailyPack_class);
+                            const emojilist = emojis.filter(
+                              (e) => e.rarity == 2 && e.class == dailyPack_class
+                            );
                             let thisemoji =
-                              emojilist[Math.floor(Math.random() * emojilist.length)];
+                              emojilist[
+                                Math.floor(Math.random() * emojilist.length)
+                              ];
                             emojistoadd += thisemoji.id + ",";
                             emojisbought[2].push(thisemoji);
                           }
@@ -661,7 +694,8 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                       });
                       interaction.editReply({ components: [buyrow] });
                     });
-                } else if (shopdata[choice].type == "emoji") { // BUY ONE ################################
+                } else if (shopdata[choice].type == "emoji") {
+                  // BUY ONE ################################
                   await coinschange(
                     interaction.user.id,
                     -1 * shopdata[choice].cost
@@ -760,31 +794,35 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                     `user${interaction.user.id}`
                   ].prepickedemojisbought += 1;
                   await writelogs(logs);
-
                 } else if (shopdata[choice].type == "dailypack") {
-                  await coinschange(
-                    interaction.user.id,
-                    -1 * dailyPack_price
-                  );
+                  await coinschange(interaction.user.id, -1 * dailyPack_price);
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
                   let emojistoadd = "";
-                  
+
                   if (dailyPack_isRare) {
                     if (dailyPack_isBig) {
                       for (let i = 0; i < 3; i++) {
-                        const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                        const emojilist = emojis.filter(
+                          (e) => e.rarity == 1 && e.class == dailyPack_class
+                        );
                         let thisemoji =
-                          emojilist[Math.floor(Math.random() * emojilist.length)];
+                          emojilist[
+                            Math.floor(Math.random() * emojilist.length)
+                          ];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[1].push(thisemoji);
                       }
                     } else {
                       for (let i = 0; i < 2; i++) {
-                        const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                        const emojilist = emojis.filter(
+                          (e) => e.rarity == 1 && e.class == dailyPack_class
+                        );
                         let thisemoji =
-                          emojilist[Math.floor(Math.random() * emojilist.length)];
+                          emojilist[
+                            Math.floor(Math.random() * emojilist.length)
+                          ];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[1].push(thisemoji);
                       }
@@ -792,38 +830,50 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   } else {
                     if (dailyPack_isBig) {
                       for (let i = 0; i < 2; i++) {
-                        const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                        const emojilist = emojis.filter(
+                          (e) => e.rarity == 0 && e.class == dailyPack_class
+                        );
                         let thisemoji =
-                          emojilist[Math.floor(Math.random() * emojilist.length)];
+                          emojilist[
+                            Math.floor(Math.random() * emojilist.length)
+                          ];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[0].push(thisemoji);
                       }
                       for (let i = 0; i < 2; i++) {
                         const emojilist = emojis.filter((e) => e.rarity == 0);
                         let thisemoji =
-                          emojilist[Math.floor(Math.random() * emojilist.length)];
+                          emojilist[
+                            Math.floor(Math.random() * emojilist.length)
+                          ];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[0].push(thisemoji);
                       }
                     } else {
                       for (let i = 0; i < 2; i++) {
-                        const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                        const emojilist = emojis.filter(
+                          (e) => e.rarity == 0 && e.class == dailyPack_class
+                        );
                         let thisemoji =
-                          emojilist[Math.floor(Math.random() * emojilist.length)];
+                          emojilist[
+                            Math.floor(Math.random() * emojilist.length)
+                          ];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[0].push(thisemoji);
                       }
                       // for (let i = 0; i < 1; i++) {
-                        const emojilist = emojis.filter((e) => e.rarity == 0);
-                        let thisemoji =
-                          emojilist[Math.floor(Math.random() * emojilist.length)];
-                        emojistoadd += thisemoji.id + ",";
-                        emojisbought[0].push(thisemoji);
+                      const emojilist = emojis.filter((e) => e.rarity == 0);
+                      let thisemoji =
+                        emojilist[Math.floor(Math.random() * emojilist.length)];
+                      emojistoadd += thisemoji.id + ",";
+                      emojisbought[0].push(thisemoji);
                       // }
                     }
                   }
                   if (dailyPack_hasSpecial) {
-                    const emojilist = emojis.filter((e) => e.rarity == 2 && e.class == dailyPack_class);
+                    const emojilist = emojis.filter(
+                      (e) => e.rarity == 2 && e.class == dailyPack_class
+                    );
                     let thisemoji =
                       emojilist[Math.floor(Math.random() * emojilist.length)];
                     emojistoadd += thisemoji.id + ",";
@@ -879,16 +929,6 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
             });
           } catch (e) {
             console.error(e);
-            interaction.update({
-              content: makemessage(
-                `</market:1225095581211557937>\` ➡️ ${shopdata[
-                  choice
-                ].label.toLowerCase()}\` <:market:1208215514917117952>`,
-                myfood
-              ),
-              embeds: [shopembed],
-              components: [],
-            });
           }
         });
       } catch (e) {
