@@ -160,6 +160,8 @@ const emojis = [
       "Horror",
       "Mortified",
       "Scared",
+      "Sweating",
+      "Sweat",
     ],
     class: 4,
     description:
