@@ -1702,7 +1702,7 @@ function playturn(gamedata) {
         0 - activeemoji.dmg
       );
     }
-    if ((activeemoji ?? { id: undefined }).id == 37 && gamedata.turn % 4 <= 2) {
+    if ((activeemoji ?? { id: undefined }).id == 37 && gamedata.turn % 4 <= 2 && gamedata.squads[gamedata.playerturn * -1 + 2][0]) {
       // ghost
       const tempemj = gamedata.squads[gamedata.playerturn * -1 + 2][0].emoji;
       const temphp = gamedata.squads[gamedata.playerturn * -1 + 2][0].hp;

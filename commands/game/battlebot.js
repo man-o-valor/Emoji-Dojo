@@ -423,7 +423,7 @@ module.exports = {
           }
         }
       } else {
-        await interaction.reply({
+        await interaction.editReply({
           content: `You cannot battle DojoBot right now! Come back <t:${Math.max(
             bp,
             bbcd
