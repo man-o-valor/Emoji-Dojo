@@ -1137,7 +1137,7 @@ const emojis = [
     names: ["Saxophone", "Sax"],
     class: 7,
     description:
-      "If there is at least one undefeated friendly 🎶, heals the friendly Emoji in front of itself by 1 when it is attacked",
+      "If there is at least one undefeated friendly 🎶, heals the friendly Emoji in front of itself by 1 when it is attacked for more than 1 damage.",
   },
   {
     emoji: "🥁",

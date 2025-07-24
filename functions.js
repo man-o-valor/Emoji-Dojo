@@ -24,19 +24,27 @@ async function writelogs(json) {
   fs.writeFileSync("logs.json", formattedjson.result, "utf8");
 }
 
-async function makesquad(player1squadarray, tries) {
-  let player2squadarray = [];
-  for (let i = 0; i < 8; i++) {
-    const possibleemojis = allemojisofrarity(
-      emojis[player1squadarray[i]].rarity
-    );
-    player2squadarray.splice(
-      Math.floor(Math.random() * (player2squadarray.length + 1)),
-      0,
-      possibleemojis[Math.floor(Math.random() * possibleemojis.length)]
-    );
+async function makesquad(player1squadarray, tries, evil) {
+  let player2squadarray;
+  let wins = [];
+  let squads = [];
+  if (evil) {
+    player2squadarray = player1squadarray;
+  } else {
+    player2squadarray = [];
+    for (let i = 0; i < 8; i++) {
+      const possibleemojis = allemojisofrarity(
+        emojis[player1squadarray[i]].rarity
+      );
+      player2squadarray.splice(
+        Math.floor(Math.random() * (player2squadarray.length + 1)),
+        0,
+        possibleemojis[Math.floor(Math.random() * possibleemojis.length)]
+      );
+    }
   }
   for (let j = 0; j < tries; j++) {
+    wins.push(0);
     let player3squadarray = [];
     for (let i = 0; i < 8; i++) {
       const possibleemojis = allemojisofrarity(
@@ -48,6 +56,7 @@ async function makesquad(player1squadarray, tries) {
         possibleemojis[Math.floor(Math.random() * possibleemojis.length)]
       );
     }
+    squads.push(lodash.cloneDeep(player3squadarray));
     let gamedata = {
       squads: [[], []],
       emojitext: "",
@@ -64,40 +73,63 @@ async function makesquad(player1squadarray, tries) {
     for (let i = 0; i < 8; i++) {
       gamedata.squads[1].push(lodash.cloneDeep(emojis[player3squadarray[i]]));
     }
-    let prevturn = lodash.cloneDeep(gamedata.squads);
-    try {
-      while (
-        gamedata.turn < 200 &&
-        gamedata.squads[0][0] != null &&
-        gamedata.squads[1][0] != null
-      ) {
-        if (gamedata.turn % 5 == 0) {
-          prevturn = lodash.cloneDeep(gamedata.squads);
-        }
-        gamedata = playturn(gamedata);
-        if (
-          gamedata.turn % 5 == 0 &&
-          lodash.isEqual(gamedata.squads, prevturn)
-        ) {
-          gamedata.turn = 999;
-          break;
-        }
-      }
-    } catch (e) {
-      console.error(e);
+    let oldgamedata;
+    if (evil) {
+      oldgamedata = lodash.cloneDeep(gamedata);
     }
-    if (
-      gamedata.turn >= 200 ||
-      (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)
-    ) {
-      if (Math.random() > 0.5) {
-        player2squadarray = lodash.cloneDeep(player3squadarray);
+
+    for (let i = 0; i < 1 + 24 * Number(evil); i++) {
+      let prevturn = lodash.cloneDeep(gamedata.squads);
+      try {
+        while (
+          gamedata.turn < 200 &&
+          gamedata.squads[0][0] != null &&
+          gamedata.squads[1][0] != null
+        ) {
+          if (gamedata.turn % 5 == 0) {
+            prevturn = lodash.cloneDeep(gamedata.squads);
+          }
+          gamedata = playturn(gamedata);
+          if (
+            gamedata.turn % 5 == 0 &&
+            lodash.isEqual(gamedata.squads, prevturn)
+          ) {
+            gamedata.turn = 999;
+            break;
+          }
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } else if (gamedata.squads[0].length == 0) {
-      player2squadarray = lodash.cloneDeep(player3squadarray);
+      if (!evil) {
+        if (
+          gamedata.turn >= 200 ||
+          (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)
+        ) {
+          if (Math.random() > 0.5) {
+            player2squadarray = lodash.cloneDeep(player3squadarray);
+          }
+        } else if (gamedata.squads[0].length == 0) {
+          player2squadarray = lodash.cloneDeep(player3squadarray);
+        }
+      } else {
+        if (gamedata.squads[0].length == 0) {
+          wins[j] += 1;
+        }
+        gamedata = lodash.cloneDeep(oldgamedata);
+      }
     }
   }
-  return player2squadarray;
+  if (evil) {
+    const bestSquadindex = wins.reduce(
+      (maxIdx, currentVal, currentIdx, arr) =>
+        currentVal > arr[maxIdx] ? currentIdx : maxIdx,
+      0
+    );
+    return squads[bestSquadindex];
+  } else {
+    return player2squadarray;
+  }
 }
 
 async function userboop(id) {
@@ -221,27 +253,30 @@ async function trysetupuser(user) {
 }
 
 async function coinschange(id, amt, affectcooldown) {
-  let coinrestock = (await database.get(id + "coinrestock")) ?? "0";
+  let restocktime = await database.get(interaction.user.id + "coinrestock");
 
-  if (parseInt(coinrestock) < Date.now() / 1000) {
+  if (parseInt(restocktime) < Date.now() / 1000) {
     let now = new Date();
-    let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    let noonToday = startOfDay.getTime() / 1000 + 43200;
-    let timestamp = startOfDay / 1000 + 43200;
-    if (Date.now() / 1000 < noonToday) {
-      timestamp = noonToday;
+    let startofday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let midnighttoday = startofday.getTime() / 1000;
+    let noontoday = midnighttoday + 43200;
+    let nextreset;
+    if (Date.now() / 1000 < noontoday) {
+      nextreset = noontoday;
     } else {
-      timestamp = noonToday + 24 * 60 * 60;
+      nextreset = midnighttoday + 86400;
     }
-    await database.set(id + "coinmod", "20");
-    await database.set(id + "coinrestock", timestamp);
+
+    await database.set(interaction.user.id + "coinmod", "16");
+    await database.set(interaction.user.id + "coinrestock", nextreset);
+    restocktime = nextreset;
   }
   affectcooldown = affectcooldown ?? true;
   const originalamt = amt;
   let coinmod = 0;
   let doublerbonus = 0;
   if (affectcooldown) {
-    coinmod = parseInt((await database.get(id + "coinmod")) ?? "20");
+    coinmod = parseInt((await database.get(id + "coinmod")) ?? "16");
     if (amt > 0) {
       amt = Math.floor((amt / 20) * coinmod);
       const coindoubler = (await database.get(id + "coindoubler")) ?? 0;
@@ -1177,7 +1212,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               78 &&
             (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
               (gamedata.squads[squad - 1][pos + 2] ?? { id: undefined }).id ==
-                77)
+                77) &&
+            val < -1
           ) {
             // saxophone
             gamedata = alterhp(

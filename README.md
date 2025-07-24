@@ -36,7 +36,7 @@ Your **Squad** is like your toolbar of Emojis, the ones you're "using" right now
 | :--- |
 
 ## Battling 🤜
-**Battling** is the real action that happens in Emoji Dojo. When you Battle, you put your Sqaud up against your opponent's Squad and watch them fight until one Squad is completely defeated. You can battle against a fellow user, or if you're short on Coins (or friends), DojoBot. Additonally, Battles happen completely autonomously with no interaction from either player. Battles look like this:
+**Battling** is the real action that happens in Emoji Dojo. When you Battle, you put your Squad up against your opponent's Squad and watch them fight until one Squad is completely defeated. You can battle against a fellow user, or if you're short on Coins (or friends), DojoBot. Additonally, Battles happen completely autonomously with no interaction from either player. Battles look like this:
 
 ---
 
@@ -54,7 +54,7 @@ The "frontmost" Emojis of each Squad deal damage to each other in turns until on
 
 Each Emoji has its own health and attack power displayed above them, which start at their base health and attack power values. During the Battle, they will be altered by attacks and abilities, but those changes are only reflected during that Battle. New Emojis can be brought into the Battle by abilities as well, and it is possible to have any number of Emojis in your Squad during a Battle.
 
-At the beginning of the Battle, a random Sqaud attacks first, affecting the frontmost enemy Emoji's health value and resolving any effects. When an Emoji is reduced to 0 or lower health, it is defeated.
+At the beginning of the Battle, a random Squad attacks first, affecting the frontmost enemy Emoji's health value and resolving any effects. When an Emoji is reduced to 0 or lower health, it is defeated.
 
 At the end of each Battle, the winner will recieve Coins based on how many of their Emojis are undefeated. The loser will lose coins based on how many of the winner's Emojis are undefeated, but the loser loses less coins than the winner gains. Battles can result in a draw if they take too many turns to finish or if they are trapped in an infinite loop.
 

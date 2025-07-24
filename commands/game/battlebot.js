@@ -71,9 +71,17 @@ module.exports = {
           .setStyle(ButtonStyle.Danger);
         const row1 = new ActionRowBuilder().addComponents(cook, nah);
 
+        cursed = parseInt(
+          (await database.get(interaction.user.id + "curse")) ?? "0"
+        );
+
         let player1squadarray = await getsquad(interaction.user.id);
 
-        let player2squadarray = await makesquad(player1squadarray, 50);
+        let player2squadarray = await makesquad(
+          player1squadarray,
+          50,
+          cursed == 1
+        );
 
         if (player2squadarray == "error") {
           await interaction.reply({
@@ -121,7 +129,9 @@ module.exports = {
             components: [row1],
             content: `\`@DojoBot\`, <@${
               interaction.user.id
-            }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
+            }> wants to battle with you!${
+              cursed == 1 ? " 👺" : ""
+            }\n\n\`${interaction.user.globalName.replace(
               /`/g,
               ""
             )}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`DojoBot's\` \`\`\` \`\`\``,

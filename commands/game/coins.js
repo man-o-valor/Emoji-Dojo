@@ -18,26 +18,28 @@ module.exports = {
     const coincount = parseInt(
       (await database.get(interaction.user.id + "coins")) ?? "100"
     );
-    let mod = await database.get(interaction.user.id + "coinmod");
+    let mod = (await database.get(interaction.user.id + "coinmod")) ?? "16";
     let restocktime = await database.get(interaction.user.id + "coinrestock");
 
     if (parseInt(restocktime) < Date.now() / 1000) {
       let now = new Date();
-      let startOfDay = new Date(
+      let startofday = new Date(
         now.getFullYear(),
         now.getMonth(),
         now.getDate()
       );
-      let noonToday = startOfDay.getTime() / 1000 + 43200;
-      let timestamp = startOfDay / 1000 + 43200;
-      if (Date.now() / 1000 < noonToday) {
-        timestamp = noonToday;
+      let midnighttoday = startofday.getTime() / 1000;
+      let noontoday = midnighttoday + 43200;
+      let nextreset;
+      if (Date.now() / 1000 < noontoday) {
+        nextreset = noontoday;
       } else {
-        timestamp = noonToday + 24 * 60 * 60;
+        nextreset = midnighttoday + 86400;
       }
-      await database.set(interaction.user.id + "coinmod", "20");
-      await database.set(interaction.user.id + "coinrestock", timestamp);
-      restocktime = timestamp
+
+      await database.set(interaction.user.id + "coinmod", "16");
+      await database.set(interaction.user.id + "coinrestock", nextreset);
+      restocktime = nextreset;
     }
 
     let battlemsg = `❎ You need ${
