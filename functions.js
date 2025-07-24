@@ -253,7 +253,7 @@ async function trysetupuser(user) {
 }
 
 async function coinschange(id, amt, affectcooldown) {
-  let restocktime = await database.get(interaction.user.id + "coinrestock");
+  let restocktime = await database.get(id + "coinrestock");
 
   if (parseInt(restocktime) < Date.now() / 1000) {
     let now = new Date();
