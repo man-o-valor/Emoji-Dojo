@@ -983,7 +983,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             squad2,
             0,
             squad2,
-            i,
+            gamedata.squads[squad2 - 1].length - 1,
             1,
             "congratulated"
           );
