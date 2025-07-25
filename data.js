@@ -725,7 +725,7 @@ const emojis = [
     ],
     class: 0,
     description:
-      "When an enemy Emoji is defeated, heals the frontmost friendly Emoji for 1",
+      "When an enemy Emoji is defeated and this is at the back of the Squad, heals the frontmost friendly Emoji for 1",
   },
   {
     emoji: "🥏",
@@ -1336,7 +1336,7 @@ const emojis = [
     emoji: "🩹",
     id: 97,
     hp: 5,
-    dmg: 3,
+    dmg: 2,
     rarity: 2,
     names: ["Adhesive Bandage", "Bandaid", "Bandage", "Band-aid"],
     class: 1,

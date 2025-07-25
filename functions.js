@@ -257,19 +257,23 @@ async function coinschange(id, amt, affectcooldown) {
 
   if (parseInt(restocktime) < Date.now() / 1000) {
     let now = new Date();
-    let startofday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    let midnighttoday = startofday.getTime() / 1000;
-    let noontoday = midnighttoday + 43200;
-    let nextreset;
-    if (Date.now() / 1000 < noontoday) {
-      nextreset = noontoday;
+    let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let midnight = startOfDay.getTime() / 1000;
+    let noon = midnight + 43200;
+    let nextReset;
+
+    let currentTime = Date.now() / 1000;
+    if (currentTime < noon) {
+      nextReset = noon;
+    } else if (currentTime < midnight + 86400) {
+      nextReset = midnight + 86400;
     } else {
-      nextreset = midnighttoday + 86400;
+      nextReset = midnight + 129600;
     }
 
     await database.set(id + "coinmod", "16");
-    await database.set(id + "coinrestock", nextreset);
-    restocktime = nextreset;
+    await database.set(id + "coinrestock", nextReset);
+    restocktime = nextReset;
   }
   affectcooldown = affectcooldown ?? true;
   const originalamt = amt;
@@ -965,18 +969,24 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             // skull
             gamedata = alterhp(gamedata, squad2, i, squad2, i, 1);
           }
-          if ((gamedata.squads[squad2 - 1][i] ?? { id: undefined }).id == 48) {
-            // tada
-            gamedata = alterhp(
-              gamedata,
-              squad2,
-              0,
-              squad2,
-              i,
-              1,
-              "congratulated"
-            );
-          }
+        }
+        if (
+          (
+            gamedata.squads[squad2 - 1][
+              gamedata.squads[squad2 - 1].length - 1
+            ] ?? { id: undefined }
+          ).id == 48
+        ) {
+          // tada
+          gamedata = alterhp(
+            gamedata,
+            squad2,
+            0,
+            squad2,
+            i,
+            1,
+            "congratulated"
+          );
         }
         if ((gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 41) {
           // tornado
@@ -1702,7 +1712,11 @@ function playturn(gamedata) {
         0 - activeemoji.dmg
       );
     }
-    if ((activeemoji ?? { id: undefined }).id == 37 && gamedata.turn % 4 <= 2 && gamedata.squads[gamedata.playerturn * -1 + 2][0]) {
+    if (
+      (activeemoji ?? { id: undefined }).id == 37 &&
+      gamedata.turn % 4 <= 2 &&
+      gamedata.squads[gamedata.playerturn * -1 + 2][0]
+    ) {
       // ghost
       const tempemj = gamedata.squads[gamedata.playerturn * -1 + 2][0].emoji;
       const temphp = gamedata.squads[gamedata.playerturn * -1 + 2][0].hp;

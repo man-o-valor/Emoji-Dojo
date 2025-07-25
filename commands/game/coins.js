@@ -23,23 +23,27 @@ module.exports = {
 
     if (parseInt(restocktime) < Date.now() / 1000) {
       let now = new Date();
-      let startofday = new Date(
+      let startOfDay = new Date(
         now.getFullYear(),
         now.getMonth(),
         now.getDate()
       );
-      let midnighttoday = startofday.getTime() / 1000;
-      let noontoday = midnighttoday + 43200;
-      let nextreset;
-      if (Date.now() / 1000 < noontoday) {
-        nextreset = noontoday;
+      let midnight = startOfDay.getTime() / 1000;
+      let noon = midnight + 43200;
+      let nextReset;
+
+      let currentTime = Date.now() / 1000;
+      if (currentTime < noon) {
+        nextReset = noon;
+      } else if (currentTime < midnight + 86400) {
+        nextReset = midnight + 86400;
       } else {
-        nextreset = midnighttoday + 86400;
+        nextReset = midnight + 129600;
       }
 
       await database.set(interaction.user.id + "coinmod", "16");
-      await database.set(interaction.user.id + "coinrestock", nextreset);
-      restocktime = nextreset;
+      await database.set(interaction.user.id + "coinrestock", nextReset);
+      restocktime = nextReset;
     }
 
     let battlemsg = `❎ You need ${
