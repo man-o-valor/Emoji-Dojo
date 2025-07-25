@@ -267,8 +267,8 @@ async function coinschange(id, amt, affectcooldown) {
       nextreset = midnighttoday + 86400;
     }
 
-    await database.set(interaction.user.id + "coinmod", "16");
-    await database.set(interaction.user.id + "coinrestock", nextreset);
+    await database.set(id + "coinmod", "16");
+    await database.set(id + "coinrestock", nextreset);
     restocktime = nextreset;
   }
   affectcooldown = affectcooldown ?? true;
