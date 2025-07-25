@@ -575,12 +575,12 @@ module.exports = {
       } else {
         if (interaction.user.id == battleuser.id) {
           await interaction.reply({
-            content: `You cannot battle yourself!`,
+            content: `You can't battle yourself!`,
             flags: "Ephemeral",
           });
         } else {
           await interaction.reply({
-            content: `You cannot battle apps!`,
+            content: `You can't battle apps!`,
             flags: "Ephemeral",
           });
         }
