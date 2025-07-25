@@ -11,6 +11,8 @@ const {
   database,
   getvault,
   dailyrewardremind,
+  writelogs,
+  getlogs,
 } = require("../../functions.js");
 
 module.exports = {
@@ -90,6 +92,23 @@ module.exports = {
                 (theiremojifound ?? { rarity: NaN }).rarity
               ) {
                 //yay we can actually trade
+                let logs = await getlogs();
+                logs.logs.games.tradesopened =
+                  logs.logs.games.tradesopened ?? 0;
+                logs.logs.games.tradesopened += 1;
+                logs.logs.players[`user${interaction.user.id}`] =
+                  logs.logs.players[`user${interaction.user.id}`] ?? {};
+                logs.logs.players[`user${interaction.user.id}`].tradesopened =
+                  logs.logs.players[`user${interaction.user.id}`]
+                    .tradesopened ?? 0;
+                logs.logs.players[`user${interaction.user.id}`].useropened += 1;
+                logs.logs.players[`user${tradeuser.id}`] =
+                  logs.logs.players[`user${tradeuser.id}`] ?? {};
+                logs.logs.players[`user${tradeuser.id}`].tradesrequested =
+                  logs.logs.players[`user${tradeuser.id}`].tradesrequested ?? 0;
+                logs.logs.players[`user${tradeuser.id}`].tradesrequested += 1;
+                await writelogs(logs);
+
                 const yay = new ButtonBuilder()
                   .setCustomId("yay")
                   .setLabel("Yay")
@@ -226,6 +245,31 @@ module.exports = {
                         interaction2.reply({
                           content: `**Success!** ${theiremojifound.emoji} ⇄ ${myemojifound.emoji}`,
                         });
+                        let logs = await getlogs();
+                        logs.logs.games.tradescompleted =
+                          logs.logs.games.tradescompleted ?? 0;
+                        logs.logs.games.tradescompleted += 1;
+                        logs.logs.players[`user${interaction.user.id}`] =
+                          logs.logs.players[`user${interaction.user.id}`] ?? {};
+                        logs.logs.players[
+                          `user${interaction.user.id}`
+                        ].tradescompleted =
+                          logs.logs.players[`user${interaction.user.id}`]
+                            .tradescompleted ?? 0;
+                        logs.logs.players[
+                          `user${interaction.user.id}`
+                        ].useropened += 1;
+                        logs.logs.players[`user${tradeuser.id}`] =
+                          logs.logs.players[`user${tradeuser.id}`] ?? {};
+                        logs.logs.players[
+                          `user${tradeuser.id}`
+                        ].tradescompleted =
+                          logs.logs.players[`user${tradeuser.id}`]
+                            .tradescompleted ?? 0;
+                        logs.logs.players[
+                          `user${tradeuser.id}`
+                        ].tradescompleted += 1;
+                        await writelogs(logs);
                       } else {
                         interaction2.reply({
                           content: "This trade can't be completed anymore!",
@@ -237,28 +281,8 @@ module.exports = {
                   });
                 } catch (e) {
                   console.error(e);
-                  await database.set(
-                    interaction.user.id + "battlepending",
-                    "0"
-                  );
-                  await interaction.editReply({
+                  interaction.editReply({
                     components: [],
-                    content: `<@${battleuser.id}>, <@${
-                      interaction.user.id
-                    }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
-                      /`/g,
-                      ""
-                    )}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
-                      /`/g,
-                      ""
-                    )}\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(
-                      /`/g,
-                      ""
-                    )}\`: ${
-                      acceptemojis[accepts[0] - 1]
-                    } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                      acceptemojis[accepts[1] - 1]
-                    }`,
                   });
                 }
               } else {
