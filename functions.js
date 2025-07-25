@@ -1003,7 +1003,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         }
       } else {
         if (val > 0) {
-          if (!silence) {
+          if (!silence && gamedata.squads[squad2 - 1][pos2]) {
             if (squad == squad2 && pos == pos2) {
               gamedata = richtextadd(
                 gamedata,
