@@ -1615,13 +1615,13 @@ function playturn(gamedata) {
         0,
         0 -
           (activeemoji.dmg +
-            gamedata.squads[gamedata.playerturn * -1 + 3][0].dmg),
+            gamedata.squads[gamedata.playerturn * -1 + 2][0].dmg),
         "reflected at"
       );
     }
     if (
       (activeemoji ?? { id: undefined }).id == 84 &&
-      (gamedata.squads[gamedata.playerturn - 1] ?? []).length > 1
+      (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length > 1
     ) {
       // bow and arrow
       gamedata = alterhp(
