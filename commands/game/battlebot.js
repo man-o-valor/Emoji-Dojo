@@ -37,7 +37,7 @@ module.exports = {
         content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
       });
     } else {
-      await interaction.deferReply()
+      await interaction.deferReply();
       let battlespeed = parseInt(interaction.options.getString("speed") ?? "4");
       if (battlespeed < 1) {
         battlespeed = 1;
@@ -80,7 +80,7 @@ module.exports = {
 
         let player2squadarray = await makesquad(
           player1squadarray,
-          100,
+          50 + 50 * cursed,
           cursed == 1
         );
 
