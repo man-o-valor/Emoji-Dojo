@@ -112,6 +112,7 @@ module.exports = {
         await database.set("dailypack", packstring);
       }
 
+      // Fetch daily emoji IDs
       let shopoffers = (await database.get("shopoffers")) ?? "7,7,7,";
       let dailyemojis = shopoffers.split(",");
       dailyemojis.pop();
@@ -119,6 +120,7 @@ module.exports = {
       dailyemojis[1] = parseInt(dailyemojis[1]);
       dailyemojis[2] = parseInt(dailyemojis[2]);
 
+      // Fetch daily pack info
       let dailypack =
         (await database.get("dailypack")) ?? "0,false,false,false,9999,";
       let dailyPack_info = dailypack.split(",");
@@ -129,9 +131,10 @@ module.exports = {
       let dailyPack_hasSpecial = dailyPack_info[3] == "true";
       let dailyPack_price = parseInt(dailyPack_info[4]);
 
-      let dailyPack_name = `${dailyPack_isRare ? "Rare" : "Mixed"} ${
-        dailyPack_isBig ? "Deluxe " : ""
-      }${classes[dailyPack_class].name} Pack`;
+      // Determine daily pack name
+      let dailyPack_name = `${dailyPack_isBig ? "Big " : ""}${dailyPack_isRare ? "Rare " : "Common "}${dailyPack_hasSpecial ? "Spectral " : ""}${classes[dailyPack_class].name} Pack`;
+
+      // Daily pack description
       let dailyPack_description = `Contains:\n>>> ${classes[dailyPack_class].emoji}: `;
       if (dailyPack_isRare) {
         if (dailyPack_isBig) {
@@ -156,29 +159,63 @@ module.exports = {
         "A new caravan of emojis just joined my crew! Looking to trade?",
         "Herding these guys is hard work, but it sure is profitable!",
         "Say hi to Lennon for me!",
-        `I've got extra ${classes[dailyPack_class].name} emojis in the Daily Pack!`,
+        `I've got extra ${classes[dailyPack_class].name} emojis in today's Daily Pack!`,
       ];
+      // Rare quotes
+      if (dailyPack_hasSpecial && (dailyPack_isRare || dailyPack_isBig)) {
+        quotes.push("Don't miss out; today's Daily Pack is extra special!");
+      }
+      if (dailyPack_isRare && !dailyPack_hasSpecial) {
+        quotes.push(`Today's Daily Pack is perfect for ${classes[dailyPack_class].name} Devotees!`);
+      }
+      // Daily pack class quotes
+      switch (dailyPack_class) {
+        case 0: // Healing
+          quotes.push("Keep your emojis in the fight with my Healing Pack!");
+          break;
+        case 1: // Damaging
+          quotes.push("Swiftly defeat your enemies with my Damaging Pack!");
+          break;
+        case 2: // Defense
+          quotes.push("Take advantange of your enemies with my Defense Pack!");
+          break;
+        case 3: // Summoning
+          quotes.push("Overwhelm your enemies with my Summoning Pack!");
+          break;
+        case 4: // Movement
+          quotes.push("Evade your enemy's attacks with my Movement Pack!");
+          break;
+        case 5: // Transformation
+          quotes.push("Unleash your potential with my Transformation Pack!");
+          break;
+        case 6: // Shuffling
+          quotes.push("Disrupt your enemy's ranks with my Shuffling Pack!");
+          break;
+        case 7: // Musical
+          quotes.push("Powerful synergies await in my Musical Pack!");
+          break;
+        case 8: // Teamup
+          quotes.push("Bring your emojis together with my Teamup Pack!");
+          break;
+      }
 
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
       let marketcontents;
 
-      marketcontents = `\n${emojis[dailyemojis[0]].emoji} **${
-        emojis[dailyemojis[0]].names[0]
-      }** (100 🪙)
+      marketcontents = `
+${emojis[dailyemojis[0]].emoji} **${emojis[dailyemojis[0]].names[0]}** (100 🪙)
 ${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].names[0]}** (200 🪙)
 ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙)
 
-🎁${
-        classes[dailyPack_class].emoji
-      } **${dailyPack_name}** (${dailyPack_price} 🪙)
+🎁${classes[dailyPack_class].emoji} **${dailyPack_name}** (${dailyPack_price} 🪙)
 
 :asterisk: **Random Common Emoji** (75 🪙)
 ✳️ **Random Rare Emoji** (150 🪙)
 ⚛️ **Random Special Emoji** (450 🪙)
 
 🎁:asterisk: **Common Emoji Pack** (300 🪙)
-🎁✳️ **Rare Emoji Pack** (1000 🪙)\n‎`;
+🎁✳️ **Rare Emoji Pack** (1000 🪙)\n‎`; // ZWJ so Discord doesn't truncate whitespace
 
       let shopdata;
 
@@ -300,7 +337,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
         .setColor(0x4e5058)
         .setTitle(`The Shop`)
         .setDescription(
-          `💁 *${quote}*\n-# Emojis reroll <t:${shoprestock}:R>\n${marketcontents}\n`
+          `💁 *${quote}*\n-# Daily offerings reroll <t:${shoprestock}:R>\n${marketcontents}`
         )
         .setTimestamp()
         .setFooter({ text: `You have ${coincount} 🪙` });
