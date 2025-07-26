@@ -31,7 +31,7 @@ async function issquadinvalid(id) {
   let datainput = [];
   let emojimissing = false;
   for (let i = 0; i < 8; i++) {
-    if (vaultarray.find((x) => x == inputarr[i])) {
+    if (vaultarray.find((x) => x == inputarr[i])!=undefined) {
       vaultarray.splice(
         vaultarray.findIndex((x) => x == inputarr[i]),
         1
@@ -519,7 +519,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             `\n‼️ ${gamedata.player[squad2 - 1]}'s ${
               emojis[82].emoji
             } made peace with ${gamedata.player[squad - 1]}'s ${
-              gamedata.squads[squad - 1][pos].id
+              gamedata.squads[squad - 1][pos].emojis
             }!`
           );
           silence = true;
@@ -1374,8 +1374,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
                 gamedata,
                 squad2,
                 1,
-                squad,
-                pos,
+                squad2,
+                pos2,
                 -1,
                 "whacked"
               );
