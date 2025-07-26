@@ -58,11 +58,9 @@ module.exports = {
         let noonToday = startOfDay.getTime() / 1000 + 43200;
         let timestamp = startOfDay / 1000 + 43200;
         if (Date.now() / 1000 < noonToday) {
-          // If it's before 12:00 PM, set timestamp to 12:00 PM today
           timestamp = noonToday;
         } else {
-          // If it's after 12:00 PM, set timestamp to 12:00 PM tomorrow
-          timestamp = noonToday + 24 * 60 * 60; // Add 24 hours to noonToday
+          timestamp = noonToday + 24 * 60 * 60;
         }
         await database.set("shoprestock", timestamp);
         shoprestock = timestamp;
@@ -132,7 +130,11 @@ module.exports = {
       let dailyPack_price = parseInt(dailyPack_info[4]);
 
       // Determine daily pack name
-      let dailyPack_name = `${dailyPack_isBig ? "Big " : ""}${dailyPack_isRare ? "Rare " : "Common "}${dailyPack_hasSpecial ? "Spectral " : ""}${classes[dailyPack_class].name} Pack`;
+      let dailyPack_name = `${dailyPack_isBig ? "Large " : ""}${
+        dailyPack_isRare ? "Rare " : "Common "
+      }${dailyPack_hasSpecial ? "Special " : ""}${
+        classes[dailyPack_class].name
+      } Pack`;
 
       // Daily pack description
       let dailyPack_description = `Contains:\n>>> ${classes[dailyPack_class].emoji}: `;
@@ -166,7 +168,9 @@ module.exports = {
         quotes.push("Don't miss out; today's Daily Pack is extra special!");
       }
       if (dailyPack_isRare && !dailyPack_hasSpecial) {
-        quotes.push(`Today's Daily Pack is perfect for ${classes[dailyPack_class].name} Devotees!`);
+        quotes.push(
+          `Today's Daily Pack is great if you're looking to attract the Master of ${classes[dailyPack_class].name}!`
+        );
       }
       // Daily pack class quotes
       switch (dailyPack_class) {
@@ -177,7 +181,7 @@ module.exports = {
           quotes.push("Swiftly defeat your enemies with my Damaging Pack!");
           break;
         case 2: // Defense
-          quotes.push("Take advantange of your enemies with my Defense Pack!");
+          quotes.push("Protect your Squad from your enemies with my Defense Pack!");
           break;
         case 3: // Summoning
           quotes.push("Overwhelm your enemies with my Summoning Pack!");
@@ -208,14 +212,16 @@ ${emojis[dailyemojis[0]].emoji} **${emojis[dailyemojis[0]].names[0]}** (100 🪙
 ${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].names[0]}** (200 🪙)
 ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙)
 
-🎁${classes[dailyPack_class].emoji} **${dailyPack_name}** (${dailyPack_price} 🪙)
+🎁${
+        classes[dailyPack_class].emoji
+      } **${dailyPack_name}** (${dailyPack_price} 🪙)
 
 :asterisk: **Random Common Emoji** (75 🪙)
 ✳️ **Random Rare Emoji** (150 🪙)
 ⚛️ **Random Special Emoji** (450 🪙)
 
 🎁:asterisk: **Common Emoji Pack** (300 🪙)
-🎁✳️ **Rare Emoji Pack** (1000 🪙)\n‎`; // ZWJ so Discord doesn't truncate whitespace
+🎁✳️ **Rare Emoji Pack** (1000 🪙)\n​`; // ZWS so Discord doesn't truncate whitespace
 
       let shopdata;
 
@@ -337,7 +343,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
         .setColor(0x4e5058)
         .setTitle(`The Shop`)
         .setDescription(
-          `💁 *${quote}*\n-# Daily offerings reroll <t:${shoprestock}:R>\n${marketcontents}`
+          `💁 *${quote}*\n-# Daily offers reroll <t:${shoprestock}:R>\n${marketcontents}`
         )
         .setTimestamp()
         .setFooter({ text: `You have ${coincount} 🪙` });
