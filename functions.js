@@ -24,6 +24,27 @@ async function writelogs(json) {
   fs.writeFileSync("logs.json", formattedjson.result, "utf8");
 }
 
+async function issquadinvalid(id) {
+  let inputarr = await getsquad(id);
+  inputarr = inputarr.map((str) => parseInt(str));
+  let vaultarray = await getvault(id);
+  let datainput = [];
+  let emojimissing = false;
+  for (let i = 0; i < 8; i++) {
+    if (vaultarray.find((x) => x == inputarr[i])) {
+      vaultarray.splice(
+        vaultarray.findIndex((x) => x == inputarr[i]),
+        1
+      );
+      datainput = inputarr[i] + "," + datainput;
+    } else {
+      emojimissing = inputarr[i];
+      break;
+    }
+  }
+  return emojimissing;
+}
+
 async function makesquad(player1squadarray, tries, evil) {
   let player2squadarray;
   let wins = [];
@@ -306,7 +327,6 @@ async function getsquad(id) {
   }
   rawsquad = await database.get(id + "squad");
   let squad = rawsquad.split(",");
-  squad.pop();
   return squad.slice(0, 8);
 }
 
@@ -2024,4 +2044,5 @@ module.exports = {
   dailyrewardremind,
   userboop,
   makesquad,
+  issquadinvalid,
 };

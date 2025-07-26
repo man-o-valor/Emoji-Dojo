@@ -16,6 +16,7 @@ const {
   writelogs,
   dailyrewardremind,
   makesquad,
+  issquadinvalid,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -35,6 +36,11 @@ module.exports = {
       await interaction.reply({
         flags: "Ephemeral",
         content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
+      });
+    } else if (await issquadinvalid(interaction.user.id)) {
+      await interaction.reply({
+        flags: "Ephemeral",
+        content: `Your squad seems to have some Emojis that aren't in your Dojo.`,
       });
     } else {
       await interaction.deferReply();

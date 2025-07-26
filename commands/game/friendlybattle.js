@@ -13,6 +13,7 @@ const {
   getlogs,
   writelogs,
   dailyrewardremind,
+  issquadinvalid,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -47,6 +48,16 @@ module.exports = {
         await interaction.reply({
           flags: "Ephemeral",
           content: `<@${battleuser.id}> doesn't have a Squad yet! Show them how to use \`/squad\` and then you can battle.`,
+        });
+      } else if (await issquadinvalid(interaction.user.id)) {
+        await interaction.reply({
+          flags: "Ephemeral",
+          content: `Your squad seems to have some Emojis that aren't in your Dojo.`,
+        });
+      } else if (await issquadinvalid(battleuser.id)) {
+        await interaction.reply({
+          flags: "Ephemeral",
+          content: `<@${battleuser.id}>'s squad seems to have some Emojis that aren't in their Dojo.`,
         });
       } else {
         if (
