@@ -338,7 +338,7 @@ module.exports = {
                 if (gamedata.squads[0].length == 0) {
                   int3 = await interaction2.followUp({
                     components: [row2],
-                    content: `\`@DojoBot\` is the winner!`,
+                    content: `\`@DojoBot\` is the winner! ||<@${interaction.user.id}>||S`,
                   });
                   let logs = await getlogs();
                   logs.logs.games.botwins += 1;

@@ -480,8 +480,8 @@ const emojis = [
   {
     emoji: "🚌",
     id: 30,
-    hp: 4,
-    dmg: 2,
+    hp: 5,
+    dmg: 4,
     rarity: 2,
     names: ["Bus", "Trolley", "Tram", "Train"],
     class: 4,
@@ -730,7 +730,7 @@ const emojis = [
   {
     emoji: "🥏",
     id: 49,
-    hp: 7,
+    hp: 6,
     dmg: 3,
     rarity: 2,
     names: ["Flying Disc", "Disc", "Frisbee"],
@@ -1304,7 +1304,7 @@ const emojis = [
     id: 94,
     hp: 3,
     dmg: 3,
-    rarity: 1,
+    rarity: 2,
     names: ["Sewing Needle", "Needle"],
     class: 1,
     description:

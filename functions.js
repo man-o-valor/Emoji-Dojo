@@ -31,7 +31,7 @@ async function issquadinvalid(id) {
   let datainput = [];
   let emojimissing = false;
   for (let i = 0; i < 8; i++) {
-    if (vaultarray.find((x) => x == inputarr[i])!=undefined) {
+    if (vaultarray.find((x) => x == inputarr[i]) != undefined) {
       vaultarray.splice(
         vaultarray.findIndex((x) => x == inputarr[i]),
         1
@@ -1670,7 +1670,7 @@ function playturn(gamedata) {
       gamedata = alterhp(
         gamedata,
         gamedata.playerturn * -1 + 3,
-        (gamedata.squads[gamedata.playerturn - 1 + 2] ?? []).length,
+        (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length,
         gamedata.playerturn,
         0,
         0 - activeemoji.dmg
