@@ -9,6 +9,10 @@ const database = new Keyv("sqlite://databases//database.sqlite", {
   namespace: "userdata",
 });
 
+function cloneWithEdit(obj, edits) {
+  return { ...lodash.cloneDeep(obj), ...edits };
+}
+
 async function getlogs() {
   let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
   for (i = logs.logs.emojis.length; i < emojis.length; i++) {
@@ -642,9 +646,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata.squads[squad - 1].splice(
               pos + 1,
               0,
-              lodash.cloneDeep(emojis[0])
+              cloneWithEdit(emojis[0], { hp: 1 })
             );
-            gamedata.squads[squad - 1][pos + 1].hp = 1;
           }
           gamedata = richtextadd(
             gamedata,
@@ -1086,9 +1089,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata.squads[squad - 1].splice(
                 pos,
                 0,
-                lodash.cloneDeep(emojis[0])
+                cloneWithEdit(emojis[0], { hp: 1 })
               );
-              gamedata.squads[squad - 1][pos + 1].hp = 1;
             }
             gamedata = richtextadd(
               gamedata,
@@ -1162,7 +1164,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata.squads[squad - 1].splice(
                 pos,
                 0,
-                (lodash.cloneDeep(emojis[0]).hp = 1)
+                cloneWithEdit(emojis[0], { hp: 1 })
               );
             }
             gamedata = richtextadd(
