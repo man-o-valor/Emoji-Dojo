@@ -1672,7 +1672,7 @@ function playturn(gamedata) {
       gamedata = alterhp(
         gamedata,
         gamedata.playerturn * -1 + 3,
-        (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length,
+        (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length-1,
         gamedata.playerturn,
         0,
         0 - activeemoji.dmg
