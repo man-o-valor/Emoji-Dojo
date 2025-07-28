@@ -1368,7 +1368,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             );
           }
           if (
-            (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 49
+            (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 49 && squad2 != squad
           ) {
             // flying disc
             if (gamedata.squads[squad2 - 1].length > 2) {

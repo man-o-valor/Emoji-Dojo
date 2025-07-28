@@ -46,7 +46,7 @@ client.login(token)
     .then(() => {
         client.user.setPresence({
             activities: [{
-                name: 'users Battle! 😀',
+                name: 'users Battle! 🗣️🔥',
                 type: ActivityType.Watching,
                 url: 'http://tinyurl.com/foodtruckdiscordbot'
             }],

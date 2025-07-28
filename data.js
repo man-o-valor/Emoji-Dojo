@@ -204,7 +204,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 2,
-    names: ["Speaking Head", "Speaking", "Facts", "Spitting"],
+    names: ["Speaking Head", "Speaking", "Facts", "Spitting", "Shout"],
     class: 5,
     description:
       "When attacking at more than 2 health, lowers the enemy Emoji's attack power by 1 to a minimum of 0",
