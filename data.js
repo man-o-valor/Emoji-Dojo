@@ -1342,6 +1342,16 @@ const emojis = [
     class: 1,
     description: "Enemy Emojis directly in front of this cannot be healed",
   },
+  {
+    emoji: "🤫",
+    id: 98,
+    hp: 3,
+    dmg: 2,
+    rarity: 2,
+    names: ["Shushing Face", "Shh", "Shush", "Shushing"],
+    class: 7,
+    description: "Enemy Emojis that benefit from 🎶 do not recieve their benefits",
+  },
 ];
 
 module.exports = {

@@ -13,6 +13,14 @@ function cloneWithEdit(obj, edits) {
   return { ...lodash.cloneDeep(obj), ...edits };
 }
 
+function musicaltrigger(gamedata, squad) {
+  return (
+    (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
+      (gamedata.squads[squad - 1][1] ?? { id: undefined }).id == 77) &&
+    !gamedata.squads[squad * -1 + 2].some((x) => x.id == 98)
+  );
+}
+
 async function getlogs() {
   let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
   for (i = logs.logs.emojis.length; i < emojis.length; i++) {
@@ -382,8 +390,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (
     (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 13 &&
     val <= 0 &&
-    (gamedata.squads[squad2 - 1].some((x) => x.id == 14) ||
-      (gamedata.squads[squad2 - 1][pos2 + 1] ?? { id: undefined }).id == 77)
+    musicaltrigger(gamedata, gamedata.playerturn)
   ) {
     // guitar
     val -= 1;
@@ -399,8 +406,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 79 &&
     val < 0 &&
-    (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
-      (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 77)
+    musicaltrigger(gamedata, gamedata.playerturn)
   ) {
     // drum
     val = Math.min(val + 1, -1);
@@ -743,10 +749,9 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id == 66
         ) {
           // new
-          gamedata.squads[squad - 1].splice(pos, 1);
           gamedata.squads[squad - 1].splice(
-            pos + 1,
-            0,
+            pos,
+            1,
             lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
           );
           gamedata = richtextadd(
@@ -1242,9 +1247,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           if (
             (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id ==
               78 &&
-            (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
-              (gamedata.squads[squad - 1][pos + 2] ?? { id: undefined }).id ==
-                77) &&
+            musicaltrigger(gamedata, gamedata.playerturn) &&
             val < -1
           ) {
             // saxophone
@@ -1368,7 +1371,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             );
           }
           if (
-            (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 49 && squad2 != squad
+            (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 49 &&
+            squad2 != squad
           ) {
             // flying disc
             if (gamedata.squads[squad2 - 1].length > 2) {
@@ -1599,7 +1603,10 @@ function playturn(gamedata) {
         "zapped"
       );
     }
-    if (activeemoji.id == 63) {
+    if (
+      activeemoji.id == 63 &&
+      !gamedata.squads[gamedata.playerturn * -1 + 2].some((x) => x.id == 98)
+    ) {
       // loud sound
       basicattackflag = false;
       gamedata = alterhp(
@@ -1621,9 +1628,7 @@ function playturn(gamedata) {
     }
     if (
       (activeemoji ?? { id: undefined }).id == 44 &&
-      (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
-          77)
+      musicaltrigger(gamedata, gamedata.playerturn)
     ) {
       // violin
       basicattackflag = false;
@@ -1672,12 +1677,42 @@ function playturn(gamedata) {
       gamedata = alterhp(
         gamedata,
         gamedata.playerturn * -1 + 3,
-        (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length-1,
+        (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length - 1,
         gamedata.playerturn,
         0,
         0 - activeemoji.dmg
       );
       basicattackflag = false;
+    }
+    if (
+      (activeemoji ?? { id: undefined }).id == 34 &&
+      gamedata.squads[gamedata.playerturn * -1 + 2][1]
+    ) {
+      // zap
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        1,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg,
+        "zapped"
+      );
+    }
+    if (
+      (activeemoji ?? { id: undefined }).id == 96 &&
+      gamedata.squads[gamedata.playerturn * -1 + 2][1] &&
+      musicaltrigger(gamedata, gamedata.playerturn)
+    ) {
+      // accordion
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        1,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg
+      );
     }
     if (basicattackflag) {
       gamedata = alterhp(
@@ -1702,38 +1737,7 @@ function playturn(gamedata) {
         0 - gamedata.squads[gamedata.playerturn - 1][1].dmg
       );
     }
-    if (
-      (activeemoji ?? { id: undefined }).id == 34 &&
-      gamedata.squads[gamedata.playerturn * -1 + 2][1]
-    ) {
-      // zap
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        1,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg,
-        "zapped"
-      );
-    }
-    if (
-      (activeemoji ?? { id: undefined }).id == 96 &&
-      gamedata.squads[gamedata.playerturn * -1 + 2][1] &&
-      (gamedata.squads[gamedata.playerturn - 1].some((x) => x.id == 14) ||
-        (gamedata.squads[gamedata.playerturn - 1][1] ?? { id: undefined }).id ==
-          77)
-    ) {
-      // accordion
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        1,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-    }
+
     if (
       (activeemoji ?? { id: undefined }).id == 37 &&
       gamedata.turn % 4 <= 2 &&
