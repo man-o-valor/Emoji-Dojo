@@ -620,7 +620,7 @@ const emojis = [
     emoji: "💃",
     id: 42,
     hp: 3,
-    dmg: 1,
+    dmg: 2,
     rarity: 1,
     names: [
       "Dancer",
@@ -1096,12 +1096,12 @@ const emojis = [
       "Attacks for the amount of health it has, plus its own attack power",
   },
   {
-    emoji: "🎒",
+    emoji: "💢",
     id: 75,
     hp: 2,
     dmg: 0,
     rarity: 1,
-    names: ["Backpack", "Bookbag", "Bag"],
+    names: ["Anger", "Anger Symbol", "Angry", "Backpack"],
     class: 8,
     description:
       "The friendly Emoji in front of this attacks for 2 more damage",
@@ -1121,7 +1121,7 @@ const emojis = [
     emoji: "🎧",
     id: 77,
     hp: 4,
-    dmg: 3,
+    dmg: 2,
     rarity: 0,
     names: ["Headphones", "Earbuds"],
     class: 7,
@@ -1180,7 +1180,7 @@ const emojis = [
     names: ["Dove", "Bird"],
     class: 4,
     description:
-      "When this would defeat an Emoji, converts it to the friendly team and moves it to the front of the Squad",
+      "When this would defeat an Emoji, converts it to the friendly team and moves it to the front of the Squad with 1 health",
   },
   {
     emoji: "😇",

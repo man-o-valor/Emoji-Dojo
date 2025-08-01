@@ -19,7 +19,7 @@ const lodash = require("lodash");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("friendlybattle")
+    .setName("battlefriendly")
     .setDescription("Battle another user, with no coins at stake.")
     .addUserOption((option) =>
       option
@@ -334,7 +334,7 @@ module.exports = {
                     files: [
                       {
                         attachment: txt,
-                        name: `${interaction.user.username} vs Dojobot (friendly) [error].txt`,
+                        name: `${interaction.user.username} vs ${battleuser.username} (friendly) [error].txt`,
                       },
                     ],
                   });
@@ -356,7 +356,7 @@ module.exports = {
                 ) {
                   int3 = await interaction2.followUp({
                     components: [row2],
-                    content: `🏳️ The match ended in a draw...`,
+                    content: `🏳️ The match ended in a draw... ||<@${interaction.user.id}><@${battleuser.id}>||`,
                   });
                   let logs = await getlogs();
                   logs.logs.games.friendlydraws += 1;
@@ -465,7 +465,7 @@ module.exports = {
                       files: [
                         {
                           attachment: txt,
-                          name: `${interaction.user.username} vs Dojobot (friendly).txt`,
+                          name: `${interaction.user.username} vs ${battleuser.username} (friendly).txt`,
                         },
                       ],
                     });

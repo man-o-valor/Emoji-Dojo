@@ -380,7 +380,7 @@ module.exports = {
                   ) {
                     int3 = await interaction2.followUp({
                       components: [row2],
-                      content: `🏳️ The match ended in a draw...`,
+                      content: `🏳️ The match ended in a draw... ||<@${interaction.user.id}><@${battleuser.id}>||`,
                     });
                     let logs = await getlogs();
                     logs.logs.games.userdraws += 1;
