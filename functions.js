@@ -380,7 +380,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     // anger
     val -= 2;
   }
-  if (gamedata.squads[squad2 - 1][pos2].id == 94 && val < 0) {
+  if (
+    (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 94 &&
+    val < 0
+  ) {
     val = -1;
   }
   if (
