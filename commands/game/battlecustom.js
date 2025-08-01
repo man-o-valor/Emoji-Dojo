@@ -3,20 +3,13 @@ const {
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
-  MessageFlags,
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
-  getsquad,
   playturn,
-  database,
-  coinschange,
-  trysetupuser,
   getlogs,
   writelogs,
   dailyrewardremind,
-  makesquad,
-  issquadinvalid,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
