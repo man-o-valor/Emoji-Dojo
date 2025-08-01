@@ -1537,7 +1537,7 @@ function playturn(gamedata) {
         "clapped at"
       );
     }
-    if (activeemoji.id == 22 && val <= 0) {
+    if (activeemoji.id == 22) {
       // rage
       basicattackflag = false;
       gamedata = alterhp(
