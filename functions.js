@@ -389,7 +389,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (
     (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 13 &&
     val <= 0 &&
-    musicaltrigger(gamedata, gamedata.playerturn, pos2)
+    musicaltrigger(gamedata, squad2, pos2)
   ) {
     // guitar
     val -= 1;
@@ -397,7 +397,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (
     (gamedata.squads[squad2 - 1][pos2] ?? { id: undefined }).id == 44 &&
     val <= 0 &&
-    musicaltrigger(gamedata, gamedata.playerturn, pos2)
+    musicaltrigger(gamedata, squad2, pos2)
   ) {
     // violin
     val -= 3;
@@ -413,7 +413,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (
     (gamedata.squads[squad - 1][pos] ?? { id: undefined }).id == 79 &&
     val < 0 &&
-    musicaltrigger(gamedata, gamedata.playerturn, pos)
+    musicaltrigger(gamedata, squad, pos)
   ) {
     // drum
     val = Math.min(val + 1, -1);
@@ -973,6 +973,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           ) {
             // headstone
             gamedata = alterhp(gamedata, squad, i, squad, i, 1);
+          }
+          if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 103) {
+            // bouquet
+            gamedata.squads[squad - 1][i].atk += 1;
           }
           if ((gamedata.squads[squad - 1][i] ?? { id: undefined }).id == 51) {
             // xray
@@ -1540,6 +1544,44 @@ function playturn(gamedata) {
         "clapped at"
       );
     }
+    if (activeemoji.id == 100) {
+      // mag
+      basicattackflag = false;
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        gamedata.squads[gamedata.playerturn * -1 + 3].reduce(
+          (maxi, current, currenti, array) => {
+            return (current?.hp ?? -Infinity) > (array[maxi]?.hp ?? -Infinity)
+              ? currenti
+              : maxi;
+          },
+          0
+        ),
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg
+      );
+    }
+    if (activeemoji.id == 101) {
+      // top
+      basicattackflag = false;
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        gamedata.squads[gamedata.playerturn * -1 + 3].reduce(
+          (mini, current, currenti, array) => {
+            return (current?.hp ?? -Infinity) < (array[mini]?.hp ?? -Infinity)
+              ? currenti
+              : mini;
+          },
+          0
+        ),
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg
+      );
+    }
     if (activeemoji.id == 22) {
       // rage
       basicattackflag = false;
@@ -1549,7 +1591,8 @@ function playturn(gamedata) {
         0,
         gamedata.playerturn,
         0,
-        activeemoji.dmg -
+        0 -
+          activeemoji.dmg -
           Math.ceil(gamedata.squads[gamedata.playerturn - 1].length / 2)
       );
     }
@@ -1736,6 +1779,17 @@ function playturn(gamedata) {
         0 - activeemoji.dmg
       );
     }
+    if (activeemoji.id == 102) {
+      // socks
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        0,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg
+      );
+    }
     if (basicattackflag) {
       gamedata = alterhp(
         gamedata,
@@ -1847,7 +1901,7 @@ function playturn(gamedata) {
 
 function shufflesquad(gamedata, squad) {
   if (!gamedata.squads[squad - 1].find((i) => i.id == 32)) {
-    // deciduous tree
+    // ice cube
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (gamedata.squads[squad - 1][i].id == 33) {
@@ -1880,58 +1934,70 @@ function shufflesquad(gamedata, squad) {
       }
     }
 
-    // people hugging 1
-    const squadids = gamedata.squads[squad - 1].map((item) => item.id);
-    const hugpairs = [];
-    for (let i = 2; i < squadids.length; i++) {
-      if (squadids[i] === 73 && squadids[i - 2] !== 73) {
-        hugpairs.push([squadids[i - 2], squadids[i - 1]]);
+    if (!gamedata.squads[squad - 1].find((i) => i.id == 104)) {
+      // people hugging 1
+      const squadids = gamedata.squads[squad - 1].map((item) => item.id);
+      const hugpairs = [];
+      for (let i = 2; i < squadids.length; i++) {
+        if (squadids[i] === 73 && squadids[i - 2] !== 73) {
+          hugpairs.push([squadids[i - 2], squadids[i - 1]]);
+        }
       }
+
+      const lockedIndices = gamedata.squads[squad - 1]
+        .map((item, index) =>
+          item.id == 71 ||
+          (gamedata.squads[squad - 1][index + 1] ?? { id: undefined }).id ==
+            71 ||
+          item.id == 72 ||
+          (gamedata.squads[squad - 1][index - 1] ?? { id: undefined }).id == 72
+            ? index
+            : -1
+        )
+        .filter((index) => index != -1);
+      // pushpin, anchor
+
+      const unlockedIndices = gamedata.squads[squad - 1]
+        .map((_, index) => index)
+        .filter((index) => !lockedIndices.includes(index));
+
+      for (let i = unlockedIndices.length - 1; i > 0; i--) {
+        // the shuffling part
+        const j = Math.floor(Math.random() * (i + 1));
+        const idx1 = unlockedIndices[i];
+        const idx2 = unlockedIndices[j];
+        [gamedata.squads[squad - 1][idx1], gamedata.squads[squad - 1][idx2]] = [
+          gamedata.squads[squad - 1][idx2],
+          gamedata.squads[squad - 1][idx1],
+        ];
+      }
+
+      // people hugging 2
+      hugpairs.forEach((pair) => {
+        const [fromId, toId] = pair;
+        const fromIndices = gamedata.squads[squad - 1]
+          .map((item, index) => (item.id === fromId ? index : -1))
+          .filter((index) => index !== -1);
+        const toIndices = gamedata.squads[squad - 1]
+          .map((item, index) => (item.id === toId ? index : -1))
+          .filter((index) => index !== -1);
+        if (fromIndices.length === 0 || toIndices.length === 0) return;
+        const toIndex = toIndices[Math.floor(Math.random() * toIndices.length)];
+        const fromIndex =
+          fromIndices[Math.floor(Math.random() * fromIndices.length)];
+        const [itemToMove] = gamedata.squads[squad - 1].splice(toIndex, 1);
+        gamedata.squads[squad - 1].splice(fromIndex, 0, itemToMove);
+      });
+    } else {
+      gamedata.squads[squad - 1].splice(
+        gamedata.squads[squad - 1].indexOf((i) => i.id == 104),
+        1
+      );
+      gamedata = richtextadd(
+        gamedata,
+        `\n‼️ ${gamedata.player[squad - 1]}'s ${emojis[104].emoji} melted, but the Squad stayed in place!`
+      );
     }
-
-    const lockedIndices = gamedata.squads[squad - 1]
-      .map((item, index) =>
-        item.id == 71 ||
-        (gamedata.squads[squad - 1][index + 1] ?? { id: undefined }).id == 71 ||
-        item.id == 72 ||
-        (gamedata.squads[squad - 1][index - 1] ?? { id: undefined }).id == 72
-          ? index
-          : -1
-      )
-      .filter((index) => index != -1);
-    // pushpin, anchor
-
-    const unlockedIndices = gamedata.squads[squad - 1]
-      .map((_, index) => index)
-      .filter((index) => !lockedIndices.includes(index));
-
-    for (let i = unlockedIndices.length - 1; i > 0; i--) {
-      // the shuffling part
-      const j = Math.floor(Math.random() * (i + 1));
-      const idx1 = unlockedIndices[i];
-      const idx2 = unlockedIndices[j];
-      [gamedata.squads[squad - 1][idx1], gamedata.squads[squad - 1][idx2]] = [
-        gamedata.squads[squad - 1][idx2],
-        gamedata.squads[squad - 1][idx1],
-      ];
-    }
-
-    // people hugging 2
-    hugpairs.forEach((pair) => {
-      const [fromId, toId] = pair;
-      const fromIndices = gamedata.squads[squad - 1]
-        .map((item, index) => (item.id === fromId ? index : -1))
-        .filter((index) => index !== -1);
-      const toIndices = gamedata.squads[squad - 1]
-        .map((item, index) => (item.id === toId ? index : -1))
-        .filter((index) => index !== -1);
-      if (fromIndices.length === 0 || toIndices.length === 0) return;
-      const toIndex = toIndices[Math.floor(Math.random() * toIndices.length)];
-      const fromIndex =
-        fromIndices[Math.floor(Math.random() * fromIndices.length)];
-      const [itemToMove] = gamedata.squads[squad - 1].splice(toIndex, 1);
-      gamedata.squads[squad - 1].splice(fromIndex, 0, itemToMove);
-    });
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (
