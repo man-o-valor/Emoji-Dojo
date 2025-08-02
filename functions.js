@@ -1255,7 +1255,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           if (
             (gamedata.squads[squad - 1][pos + 1] ?? { id: undefined }).id ==
               78 &&
-            musicaltrigger(gamedata, squad - 1, pos + 1) &&
+            musicaltrigger(gamedata, squad, pos + 1) &&
             val < -1
           ) {
             // saxophone
