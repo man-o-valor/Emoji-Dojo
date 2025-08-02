@@ -1071,7 +1071,7 @@ const emojis = [
     names: ["Pushpin", "Pin", "Thumbtack", "Tack"],
     class: 8,
     description:
-      "When your Squad is Shuffled, this and the friendly Emoji in behind it do not get moved",
+      "When your Squad is Shuffled, this and the friendly Emoji behind it do not get moved",
   },
   {
     emoji: "🫂",
