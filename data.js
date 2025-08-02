@@ -1101,7 +1101,7 @@ const emojis = [
     hp: 2,
     dmg: 0,
     rarity: 1,
-    names: ["Anger", "Anger Symbol", "Angry", "Backpack"],
+    names: ["Anger", "Anger Symbol", "Angry", "Backpack", "🎒"],
     class: 8,
     description:
       "The friendly Emoji in front of this attacks for 2 more damage",
@@ -1343,14 +1343,24 @@ const emojis = [
     description: "Enemy Emojis directly in front of this cannot be healed",
   },
   {
-    emoji: "🤫",
+    emoji: "🔇",
     id: 98,
     hp: 3,
     dmg: 2,
     rarity: 2,
-    names: ["Shushing Face", "Shh", "Shush", "Shushing"],
+    names: ["Mute", "Muted Speaker", "Muted", "Sound Off"],
     class: 7,
     description: "Enemy Emojis that benefit from 🎶 do not recieve their benefits",
+  },
+  {
+    emoji: "🫨",
+    id: 99,
+    hp: 4,
+    dmg: 2,
+    rarity: 1,
+    names: ["Shaking Face", "Shaking", "Vibrating Face", "Vibrating"],
+    class: 6,
+    description: "When your Squad is Shuffled, increases its attack power by 1",
   },
 ];
 

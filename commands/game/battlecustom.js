@@ -10,6 +10,8 @@ const {
   getlogs,
   writelogs,
   dailyrewardremind,
+  getsquad,
+  database,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -35,10 +37,9 @@ module.exports = {
         .setDescription("The time in seconds between each turn (defaults to 4)")
     ),
   async execute(interaction) {
-    await interaction.deferReply();
     let battlespeed = parseFloat(interaction.options.getString("speed") ?? "4");
     let squad1input = interaction.options.getString("squad1");
-    let squad2input = interaction.options.getString("squad1");
+    let squad2input = interaction.options.getString("squad2");
     if (battlespeed < 0) {
       battlespeed = 0;
     }
@@ -62,51 +63,78 @@ module.exports = {
       .setStyle(ButtonStyle.Success);
     const row1 = new ActionRowBuilder().addComponents(cook);
 
-    const segmenter1 = new Intl.Segmenter("en", {
-      granularity: "grapheme",
-    });
-    let input1 = interaction.options.getString("squad1").replace(/\s+/g, "");
-    let player1squadarray = [...segmenter1.segment(input1)];
-    player1squadarray = player1squadarray
-      .filter((item) => item != "")
-      .map((obj) => obj.segment);
-    let error = false;
-    for (let i = 0; i < 8; i++) {
-      let objectalternative = emojis.find(
-        (x) => x.emoji == player1squadarray[i]
-      );
-      player1squadarray[i] = objectalternative.id;
-      if ((objectalternative = undefined)) {
-        error = true;
-        break;
+    let player1squadarray;
+    if (squad1input.includes("@me")) {
+      player1squadarray = await getsquad(interaction.user.id);
+    } else if (squad1input.match(/@(\d+)/)) {
+      let squadget =
+        (await database.get(
+          interaction.user.id + "savedsquad" + squad1input.match(/@(\d+)/)[1]
+        )) ?? "";
+      if (squadget != "") {
+        player1squadarray = squadget.split(",").slice(0, 8);
+      } else {
+        player1squadarray = [undefined];
       }
+    } else {
+      const segmenter1 = new Intl.Segmenter("en", {
+        granularity: "grapheme",
+      });
+      let input1 = squad1input.replace(/\s+/g, "");
+      player1squadarray = [...segmenter1.segment(input1)];
+      player1squadarray = player1squadarray
+        .filter((item) => item != "")
+        .map((obj) => obj.segment);
+      for (let i = 0; i < 8; i++) {
+        let objectalternative = emojis.find(
+          (x) => x.emoji == player1squadarray[i]
+        );
+        player1squadarray[i] = (objectalternative ?? { id: undefined }).id;
+      }
+      player1squadarray.reverse();
     }
 
-    const segmenter2 = new Intl.Segmenter("en", {
-      granularity: "grapheme",
-    });
-    let input2 = interaction.options.getString("squad2").replace(/\s+/g, "");
-    let player2squadarray = [...segmenter2.segment(input2)];
-    player2squadarray = player2squadarray
-      .filter((item) => item != "")
-      .map((obj) => obj.segment);
-    for (let i = 0; i < 8; i++) {
-      let objectalternative = emojis.find(
-        (x) => x.emoji == player2squadarray[i]
-      );
-      player2squadarray[i] = objectalternative.id;
-      if ((objectalternative = undefined)) {
-        error = true;
-        break;
+    let player2squadarray;
+    if (squad2input.includes("@me")) {
+      player2squadarray = await getsquad(interaction.user.id);
+    } else if (squad2input.match(/@(\d+)/)) {
+      let squadget =
+        (await database.get(
+          interaction.user.id + "savedsquad" + squad2input.match(/@(\d+)/)[1]
+        )) ?? "";
+      if (squadget != "") {
+        player2squadarray = squadget.split(",").slice(0, 8);
+      } else {
+        player2squadarray = [undefined];
       }
+    } else {
+      const segmenter2 = new Intl.Segmenter("en", {
+        granularity: "grapheme",
+      });
+      let input2 = squad2input.replace(/\s+/g, "");
+      player2squadarray = [...segmenter2.segment(input2)];
+      player2squadarray = player2squadarray
+        .filter((item) => item != "")
+        .map((obj) => obj.segment);
+      for (let i = 0; i < 8; i++) {
+        let objectalternative = emojis.find(
+          (x) => x.emoji == player2squadarray[i]
+        );
+        player2squadarray[i] = (objectalternative ?? { id: undefined }).id;
+      }
+      player2squadarray.reverse();
     }
 
-    if (error) {
+    if (
+      player1squadarray.includes(undefined) ||
+      player2squadarray.includes(undefined)
+    ) {
       await interaction.reply({
         flags: "Ephemeral",
         content: `One of the Squads you entered doesn't seem valid. Make sure they're both sequences of 8 emojis that exist in Emoji Dojo.`,
       });
     } else {
+      await interaction.deferReply();
       let player1squadtext = "";
       for (let i = 7; i > -1; i--) {
         player1squadtext += `${emojis[player1squadarray[i]].emoji} `;
@@ -169,8 +197,8 @@ module.exports = {
           try {
             while (
               gamedata.turn < 200 &&
-              gamedata.squads[0][0] != null &&
-              gamedata.squads[1][0] != null
+              gamedata.squads[0][0] != undefined &&
+              gamedata.squads[1][0] != undefined
             ) {
               if (gamedata.turn % 5 == 0) {
                 prevturn = lodash.cloneDeep(gamedata.squads);
