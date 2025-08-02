@@ -264,6 +264,70 @@ module.exports = {
               );
               await delay(battlespeed * 1000);
             }
+            battleover = true;
+            const txt = Buffer.from(gamedata.logfile);
+            let int3;
+            const exportbutton = new ButtonBuilder()
+              .setCustomId("export")
+              .setLabel("Download Battle Log")
+              .setEmoji("📤")
+              .setStyle(ButtonStyle.Primary);
+            const row2 = new ActionRowBuilder().addComponents(exportbutton);
+            if (
+              gamedata.turn >= 200 ||
+              (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)
+            ) {
+              int3 = await interaction2.followUp({
+                components: [row2],
+                content: `🏳️ The match ended in a draw... ||<@${interaction.user.id}>||`,
+              });
+              let logs = await getlogs();
+              logs.logs.games.customdraws += 1;
+              await writelogs(logs);
+            } else {
+              if (gamedata.squads[1].length == 0) {
+                int3 = await interaction2.followUp({
+                  components: [row2],
+                  content: `\`Squad 1\` is the winner! ||<@${interaction.user.id}>||`,
+                });
+              }
+              if (gamedata.squads[0].length == 0) {
+                int3 = await interaction2.followUp({
+                  components: [row2],
+                  content: `\`Squad 2\` is the winner! ||<@${interaction.user.id}>||`,
+                });
+              }
+            }
+            let collector = int3.createMessageComponentCollector({
+              time: 1200000,
+            });
+            collector.on("collect", async (interaction3) => {
+              try {
+                interaction3.reply({
+                  flags: "Ephemeral",
+                  files: [
+                    {
+                      attachment: txt,
+                      name: `Custom Battle.txt`,
+                    },
+                  ],
+                });
+                let logs = await getlogs();
+                logs.logs.games.customlogsrequested += 1;
+                logs.logs.players[
+                  `user${interaction3.user.id}`
+                ].customlogsrequested =
+                  logs.logs.players[`user${interaction3.user.id}`]
+                    .customlogsrequested ?? 0;
+                logs.logs.players[
+                  `user${interaction3.user.id}`
+                ].customlogsrequested += 1;
+                await writelogs(logs);
+              } catch (e) {
+                exportbutton.setDisabled(true);
+                interaction3.editReply({ components: [row2] });
+              }
+            });
           } catch (e) {
             console.error(e);
             const txt = Buffer.from(gamedata.logfile);
@@ -283,70 +347,6 @@ module.exports = {
               ],
             });
           }
-          battleover = true;
-          const txt = Buffer.from(gamedata.logfile);
-          let int3;
-          const exportbutton = new ButtonBuilder()
-            .setCustomId("export")
-            .setLabel("Download Battle Log")
-            .setEmoji("📤")
-            .setStyle(ButtonStyle.Primary);
-          const row2 = new ActionRowBuilder().addComponents(exportbutton);
-          if (
-            gamedata.turn >= 200 ||
-            (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)
-          ) {
-            int3 = await interaction2.followUp({
-              components: [row2],
-              content: `🏳️ The match ended in a draw... ||<@${interaction.user.id}>||`,
-            });
-            let logs = await getlogs();
-            logs.logs.games.customdraws += 1;
-            await writelogs(logs);
-          } else {
-            if (gamedata.squads[1].length == 0) {
-              int3 = await interaction2.followUp({
-                components: [row2],
-                content: `\`Squad 1\` is the winner! ||<@${interaction.user.id}>||`,
-              });
-            }
-            if (gamedata.squads[0].length == 0) {
-              int3 = await interaction2.followUp({
-                components: [row2],
-                content: `\`Squad 2\` is the winner! ||<@${interaction.user.id}>||`,
-              });
-            }
-          }
-          let collector = int3.createMessageComponentCollector({
-            time: 1200000,
-          });
-          collector.on("collect", async (interaction3) => {
-            try {
-              interaction3.reply({
-                flags: "Ephemeral",
-                files: [
-                  {
-                    attachment: txt,
-                    name: `Custom Battle.txt`,
-                  },
-                ],
-              });
-              let logs = await getlogs();
-              logs.logs.games.customlogsrequested += 1;
-              logs.logs.players[
-                `user${interaction3.user.id}`
-              ].customlogsrequested =
-                logs.logs.players[`user${interaction3.user.id}`]
-                  .customlogsrequested ?? 0;
-              logs.logs.players[
-                `user${interaction3.user.id}`
-              ].customlogsrequested += 1;
-              await writelogs(logs);
-            } catch (e) {
-              exportbutton.setDisabled(true);
-              interaction3.editReply({ components: [row2] });
-            }
-          });
         }
       } catch (e) {
         console.error(e);

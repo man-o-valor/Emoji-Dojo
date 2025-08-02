@@ -1544,13 +1544,13 @@ function playturn(gamedata) {
         "clapped at"
       );
     }
-    if (activeemoji.id == 100) {
-      // mag
+    if (activeemoji.id == 101) {
+      // top
       basicattackflag = false;
       gamedata = alterhp(
         gamedata,
         gamedata.playerturn * -1 + 3,
-        gamedata.squads[gamedata.playerturn * -1 + 3].reduce(
+        gamedata.squads[gamedata.playerturn * -1 + 2].reduce(
           (maxi, current, currenti, array) => {
             return (current?.hp ?? -Infinity) > (array[maxi]?.hp ?? -Infinity)
               ? currenti
@@ -1563,13 +1563,13 @@ function playturn(gamedata) {
         0 - activeemoji.dmg
       );
     }
-    if (activeemoji.id == 101) {
-      // top
+    if (activeemoji.id == 100) {
+      // mag
       basicattackflag = false;
       gamedata = alterhp(
         gamedata,
         gamedata.playerturn * -1 + 3,
-        gamedata.squads[gamedata.playerturn * -1 + 3].reduce(
+        gamedata.squads[gamedata.playerturn * -1 + 2].reduce(
           (mini, current, currenti, array) => {
             return (current?.hp ?? -Infinity) < (array[mini]?.hp ?? -Infinity)
               ? currenti
@@ -1995,7 +1995,9 @@ function shufflesquad(gamedata, squad) {
       );
       gamedata = richtextadd(
         gamedata,
-        `\n‼️ ${gamedata.player[squad - 1]}'s ${emojis[104].emoji} melted, but the Squad stayed in place!`
+        `\n‼️ ${gamedata.player[squad - 1]}'s ${
+          emojis[104].emoji
+        } melted, but the Squad stayed in place!`
       );
     }
 
