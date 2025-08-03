@@ -584,7 +584,7 @@ const emojis = [
       "Twinkle",
       "Glitter",
     ],
-    description: "Nothing special (scattered by 🦄)",
+    description: "After attacking, damages itself by 1 (scattered by 🦄)",
   },
   {
     emoji: "🦄",
@@ -679,7 +679,7 @@ const emojis = [
   {
     emoji: "🔥",
     id: 46,
-    hp: 2,
+    hp: 3,
     dmg: 3,
     rarity: 1,
     names: ["Fire", "Flame", "Flames", "Heat"],
@@ -871,7 +871,7 @@ const emojis = [
       "Blight",
     ],
     description:
-      "Before being Shuffled, transforms the Emoji behind it into a 🦠 with identical stats",
+      "Before being Shuffled, transforms the Emoji behind it into a 🦠 with identical stats (summoned by 😷)",
   },
   {
     emoji: "🛸",
@@ -1074,15 +1074,15 @@ const emojis = [
       "When your Squad is Shuffled, this and the friendly Emoji behind it do not get moved",
   },
   {
-    emoji: "🫂",
+    emoji: "🚧",
     id: 73,
     hp: 4,
     dmg: 1,
     rarity: 2,
-    names: ["People Hugging", "Hugging", "Hug", "Hug In Silhouette"],
+    names: ["Construction", "Barrier", "Under Construction", "Traffic Barrier"],
     class: 8,
     description:
-      "When your Squad is Shuffled, the two friendly Emojis in front of this stay together",
+      "When your Squad is Shuffled, this does not get moved. Additionally, Emojis will not move past this during the shuffle",
   },
   {
     emoji: "🔋",

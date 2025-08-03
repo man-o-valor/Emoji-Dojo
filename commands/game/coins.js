@@ -19,7 +19,7 @@ module.exports = {
       (await database.get(interaction.user.id + "coins")) ?? "100"
     );
     let mod = (await database.get(interaction.user.id + "coinmod")) ?? "16";
-    let restocktime = await database.get(interaction.user.id + "coinrestock");
+    let restocktime = await database.get(interaction.user.id + "coinrestock") ?? "0";
 
     if (parseInt(restocktime) < Date.now() / 1000) {
       let now = new Date();

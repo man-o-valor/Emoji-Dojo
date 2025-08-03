@@ -90,7 +90,8 @@ module.exports = {
           `!**${
             dailystreak > 0
               ? ` *(❤️‍🔥 ${dailystreak + 1} day streak)*`
-              : Math.floor(Date.now() / 1000) - dailytime > 86400 * 2
+              : Math.floor(Date.now() / 1000) - dailytime > 86400 * 2 &&
+                dailytime != 0
               ? ` *(streak lost)*`
               : ""
           }`,
