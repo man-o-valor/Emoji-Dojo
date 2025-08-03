@@ -637,7 +637,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               }
               gamedata = richtextadd(
                 gamedata,
-                `\n❤ ${gamedata.player[squad - 1]}'s ${
+                `\n♡ ${gamedata.player[squad - 1]}'s ${
                   emojis[62].emoji
                 } healed all friendly ${
                   gamedata.squads[squad - 1][pos].emoji
@@ -652,7 +652,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           gamedata.squads[squad2 - 1][pos2].dmg += 1;
           gamedata = richtextadd(
             gamedata,
-            `\n⚔ ${gamedata.player[squad2 - 1]}'s ${
+            `\n⇮ ${gamedata.player[squad2 - 1]}'s ${
               gamedata.squads[squad2 - 1][pos2].emoji
             } strengthened and healed itself by 1!`
           );
@@ -728,7 +728,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // shuffle button/twisted rightwards arrows
           gamedata = richtextadd(
             gamedata,
-            `\n↭ ${gamedata.player[squad - 1]}'s ${emojis[10].emoji} Shuffled ${
+            `\n↝ ${gamedata.player[squad - 1]}'s ${emojis[10].emoji} Shuffled ${
               gamedata.player[squad2 - 1]
             }'s Squad!`
           );
@@ -741,7 +741,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // bomb
           gamedata = richtextadd(
             gamedata,
-            `\n⚠ ${gamedata.player[squad - 1]}'s ${emojis[36].emoji} exploded!`
+            `\n✩ ${gamedata.player[squad - 1]}'s ${emojis[36].emoji} exploded!`
           );
           gamedata.squads[squad - 1].splice(pos, 1);
           gamedata = alterhp(
@@ -789,7 +789,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           gamedata = richtextadd(
             gamedata,
-            `\n↭ ${gamedata.player[squad - 1]}'s ${emojis[57].emoji} Shuffled ${
+            `\n↝ ${gamedata.player[squad - 1]}'s ${emojis[57].emoji} Shuffled ${
               gamedata.player[squad2 - 1]
             }'s Squad!`
           );
@@ -818,7 +818,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // pinata
           gamedata = richtextadd(
             gamedata,
-            `\n⚠ ${gamedata.player[squad - 1]}'s ${emojis[43].emoji} shattered!`
+            `\n✩ ${gamedata.player[squad - 1]}'s ${emojis[43].emoji} shattered!`
           );
           gamedata = alterhp(
             gamedata,
@@ -877,7 +877,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           gamedata = shufflesquad(gamedata, squad2);
           gamedata = richtextadd(
             gamedata,
-            `\n↭ ${gamedata.player[squad - 1]}'s ${emojis[59].emoji} Shuffled ${
+            `\n↝ ${gamedata.player[squad - 1]}'s ${emojis[59].emoji} Shuffled ${
               gamedata.player[squad2 - 1]
             }'s Squad, and zapped ${
               gamedata.squads[squad2 - 1][0].emoji
@@ -993,7 +993,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }
             gamedata = richtextadd(
               gamedata,
-              `\n❤ ${gamedata.player[squad - 1]}'s ${
+              `\n♡ ${gamedata.player[squad - 1]}'s ${
                 emojis[51].emoji
               } healed all Emojis behind itself by 1!`
             );
@@ -1031,7 +1031,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // tornado
           gamedata = richtextadd(
             gamedata,
-            `\n↭ ${gamedata.player[squad - 1]}'s ${emojis[41].emoji} Shuffled ${
+            `\n↝ ${gamedata.player[squad - 1]}'s ${emojis[41].emoji} Shuffled ${
               gamedata.player[squad2 - 1]
             }'s Squad!`
           );
@@ -1046,14 +1046,14 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             if (squad == squad2 && pos == pos2) {
               gamedata = richtextadd(
                 gamedata,
-                `\n❤ ${gamedata.player[squad2 - 1]}'s ${
+                `\n♡ ${gamedata.player[squad2 - 1]}'s ${
                   gamedata.squads[squad2 - 1][pos2].emoji
                 } ${verb ?? "healed"} itself. (${val} health)`
               );
             } else {
               gamedata = richtextadd(
                 gamedata,
-                `\n❤ ${gamedata.player[squad2 - 1]}'s ${
+                `\n♡ ${gamedata.player[squad2 - 1]}'s ${
                   gamedata.squads[squad2 - 1][pos2].emoji
                 } ${verb ?? "healed"} ${gamedata.player[squad - 1]}'s ${
                   gamedata.squads[squad - 1][pos].emoji
@@ -1069,7 +1069,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata = shufflesquad(gamedata, squad);
             gamedata = richtextadd(
               gamedata,
-              `\n↭ ${gamedata.player[squad - 1]}'s ${
+              `\n↝ ${gamedata.player[squad - 1]}'s ${
                 emojis[50].emoji
               } Shuffled ${gamedata.player[squad - 1]}'s Squad!`
             );
@@ -1091,7 +1091,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata = shufflesquad(gamedata, squad2);
             gamedata = richtextadd(
               gamedata,
-              `\n↭ ${gamedata.player[squad - 1]}'s ${
+              `\n↝ ${gamedata.player[squad - 1]}'s ${
                 emojis[10].emoji
               } Shuffled ${
                 gamedata.player[squad2 - 1]
@@ -1132,7 +1132,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata.squads[squad - 1].splice(pos, 1);
             gamedata = richtextadd(
               gamedata,
-              `\n⚠ ${gamedata.player[squad - 1]}'s ${
+              `\n✩ ${gamedata.player[squad - 1]}'s ${
                 emojis[36].emoji
               } exploded!`
             );
@@ -1141,7 +1141,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             // tornado (2)
             gamedata = richtextadd(
               gamedata,
-              `\n↭ ${gamedata.player[squad - 1]}'s ${
+              `\n↝ ${gamedata.player[squad - 1]}'s ${
                 emojis[41].emoji
               } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
             );
@@ -1166,7 +1166,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata = shufflesquad(gamedata, squad2);
             gamedata = richtextadd(
               gamedata,
-              `\n↭ ${gamedata.player[squad - 1]}'s ${
+              `\n↝ ${gamedata.player[squad - 1]}'s ${
                 emojis[10].emoji
               } Shuffled ${
                 gamedata.player[squad2 - 1]
@@ -1207,7 +1207,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata.squads[squad - 1].splice(pos, 1);
             gamedata = richtextadd(
               gamedata,
-              `\n⚠ ${gamedata.player[squad - 1]}'s ${
+              `\n✩ ${gamedata.player[squad - 1]}'s ${
                 emojis[36].emoji
               } exploded!`
             );
@@ -1216,7 +1216,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             // tornado (3)
             gamedata = richtextadd(
               gamedata,
-              `\n↭ ${gamedata.player[squad - 1]}'s ${
+              `\n↝ ${gamedata.player[squad - 1]}'s ${
                 emojis[41].emoji
               } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
             );
@@ -1231,7 +1231,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata.squads[squad - 1][pos].dmg -= 1;
               gamedata = richtextadd(
                 gamedata,
-                `\n⚠ ${gamedata.player[squad2 - 1]}'s ${
+                `\n✩ ${gamedata.player[squad2 - 1]}'s ${
                   gamedata.squads[squad2 - 1][pos2].emoji
                 } weakened ${gamedata.player[squad - 1]}'s ${
                   gamedata.squads[squad - 1][pos].emoji
@@ -1600,7 +1600,7 @@ function playturn(gamedata) {
       basicattackflag = false;
       gamedata = richtextadd(
         gamedata,
-        `\n⚠ ${gamedata.player[gamedata.playerturn - 1]}'s ${
+        `\n✩ ${gamedata.player[gamedata.playerturn - 1]}'s ${
           gamedata.squads[gamedata.playerturn - 1].filter(
             (element) => element.id == 93
           ).length < 2
@@ -1644,7 +1644,7 @@ function playturn(gamedata) {
       }
       gamedata = richtextadd(
         gamedata,
-        `\n⚠ ${gamedata.player[gamedata.playerturn - 1]}'s ${
+        `\n✩ ${gamedata.player[gamedata.playerturn - 1]}'s ${
           emojis[94].emoji
         } attacked the front ${damage} enemy Emojis!`
       );
@@ -1859,7 +1859,7 @@ function playturn(gamedata) {
 
     gamedata.emojitext += "\n";
     gamedata.logfile.slice(0, -2);
-    gamedata.logfile += "  ❤️\n";
+    gamedata.logfile += "  ♡️\n";
 
     for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
       gamedata.emojitext += renderdemoji(gamedata.squads[0][i].dmg) + " ";
@@ -1875,7 +1875,7 @@ function playturn(gamedata) {
 
     gamedata.emojitext += "\n";
     gamedata.logfile.slice(0, -2);
-    gamedata.logfile += "  ⚔️\n";
+    gamedata.logfile += "  ⇮️\n";
 
     for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
       gamedata.emojitext += gamedata.squads[0][i].emoji + " ";
@@ -1925,7 +1925,7 @@ function shufflesquad(gamedata, squad) {
           gamedata.squads[squad - 1][i + 1].dmg = tempdmg;
           gamedata = richtextadd(
             gamedata,
-            `\n⚠ ${gamedata.player[squad - 1]}'s ${
+            `\n✩ ${gamedata.player[squad - 1]}'s ${
               emojis[58].emoji
             } infected a ${emojis[tempemj].emoji}!`
           );
@@ -2054,7 +2054,7 @@ function shufflesquad(gamedata, squad) {
         gamedata.squads[squad - 1][i].dmg += 1;
         gamedata = richtextadd(
           gamedata,
-          `\n⚔ ${gamedata.player[squad - 1]}'s ${
+          `\n⇮ ${gamedata.player[squad - 1]}'s ${
             emojis[99].emoji
           } strengthened itself by 1!`
         );
@@ -2086,7 +2086,7 @@ function shufflesquad(gamedata, squad) {
         gamedata.squads[squad - 1].splice(i, 1);
         gamedata = richtextadd(
           gamedata,
-          `\n↭ ${gamedata.player[squad - 1]}'s ${emojis[27].emoji} Shuffled ${
+          `\n↝ ${gamedata.player[squad - 1]}'s ${emojis[27].emoji} Shuffled ${
             gamedata.player[0 - squad + 2]
           }'s Squad and defeated itself!`
         );
