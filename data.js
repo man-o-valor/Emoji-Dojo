@@ -420,7 +420,7 @@ const emojis = [
     description: "Nothing special (starts as 🦎)",
   },
   {
-    emoji: "☠️",
+    emoji: "𝚾️",
     id: 25,
     hp: 3,
     dmg: 1,

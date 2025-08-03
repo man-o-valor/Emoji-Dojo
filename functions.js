@@ -506,7 +506,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -1, "", true);
         gamedata = richtextadd(
           gamedata,
-          `\n⮜ ${gamedata.player[squad2 - 1]}'s ${
+          `\n↢ ${gamedata.player[squad2 - 1]}'s ${
             emojis[64].emoji
           } damaged itself by attacking! (1 damage)`
         );
@@ -605,7 +605,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           gamedata = richtextadd(
             gamedata,
-            `\n⮜ ${gamedata.player[squad2 - 1]}'s ${
+            `\n↢ ${gamedata.player[squad2 - 1]}'s ${
               emojis[83].emoji
             } was hurt by its violence! (3 damage)`
           );
@@ -1078,7 +1078,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           if (!silence) {
             gamedata = richtextadd(
               gamedata,
-              `\n⮞ ${gamedata.player[squad2 - 1]}'s ${
+              `\n↣ ${gamedata.player[squad2 - 1]}'s ${
                 gamedata.squads[squad2 - 1][pos2].emoji
               } ${verb ?? "tried to attack"} ${gamedata.player[squad - 1]}'s ${
                 gamedata.squads[squad - 1][pos].emoji
@@ -1152,7 +1152,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             if (gamedata.squads[squad2 - 1][pos2]) {
               gamedata = richtextadd(
                 gamedata,
-                `\n⮞ ${gamedata.player[squad2 - 1]}'s ${
+                `\n↣ ${gamedata.player[squad2 - 1]}'s ${
                   gamedata.squads[squad2 - 1][pos2].emoji
                 } ${verb ?? "attacked"} ${gamedata.player[squad - 1]}'s ${
                   gamedata.squads[squad - 1][pos].emoji
