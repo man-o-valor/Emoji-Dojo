@@ -320,7 +320,7 @@ module.exports = {
               ) || x.emoji == closeviewemoji.replace(/\s+/g, "")
           );
           const viewemojiid = vaultarray.find(
-            (x) => emojis[x].id == (emojifound ?? { id: undefined }).id
+            (x) => emojis[x].id == (emojifound)?.id
           );
 
           const vaultembed = new EmbedBuilder()

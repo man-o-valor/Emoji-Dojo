@@ -89,7 +89,7 @@ module.exports = {
         let objectalternative = emojis.find(
           (x) => x.emoji == player1squadarray[i]
         );
-        player1squadarray[i] = (objectalternative ?? { id: undefined }).id;
+        player1squadarray[i] = (objectalternative)?.id;
       }
       player1squadarray.reverse();
     }
@@ -120,7 +120,7 @@ module.exports = {
         let objectalternative = emojis.find(
           (x) => x.emoji == player2squadarray[i]
         );
-        player2squadarray[i] = (objectalternative ?? { id: undefined }).id;
+        player2squadarray[i] = (objectalternative)?.id;
       }
       player2squadarray.reverse();
     }
@@ -256,7 +256,7 @@ module.exports = {
                 richnumberhidden = "-# " + numberhidden + " lines hidden";
               }
               await interaction2.editReply(
-                `\`Custom Battle\`\nLet the battle begin! 🗘 Turn ${gamedata.turn}\n` +
+                `\`Custom Battle\`\nLet the battle begin! Turn ${gamedata.turn}\n` +
                   gamedata.emojitext +
                   "\n\n" +
                   richnumberhidden +
@@ -333,7 +333,7 @@ module.exports = {
             const txt = Buffer.from(gamedata.logfile);
             await interaction2.editReply({
               content:
-                `\`Custom Battle\`\nLet the battle begin! 🗘 Turn ${gamedata.turn}\n` +
+                `\`Custom Battle\`\nLet the battle begin! Turn ${gamedata.turn}\n` +
                 gamedata.emojitext +
                 "\n\n" +
                 "🤒 An error has occurred and the Battle cannot continue.```" +

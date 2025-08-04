@@ -236,7 +236,7 @@ module.exports = {
                     richnumberhidden = "-# " + numberhidden + " lines hidden";
                   }
                   await interaction2.editReply(
-                    `<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🗘 Turn ${gamedata.turn}\n` +
+                    `<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! Turn ${gamedata.turn}\n` +
                       gamedata.emojitext +
                       "\n\n" +
                       richnumberhidden +
@@ -249,7 +249,7 @@ module.exports = {
                 const txt = Buffer.from(gamedata.logfile);
                 await interaction2.editReply({
                   content:
-                    `<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! 🗘 Turn ${gamedata.turn}\n` +
+                    `<@${interaction.user.id}> vs \`@DojoBot\`\nLet the battle begin! Turn ${gamedata.turn}\n` +
                     gamedata.emojitext +
                     "\n\n" +
                     "🤒 An error has occurred and the Battle cannot continue.```" +
