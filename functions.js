@@ -1102,12 +1102,14 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               0,
               squad,
               0,
-              gamedata.squads[squad - 1][pos].dmg,
+              0- gamedata.squads[squad - 1][pos].dmg,
+              "",
+              true
             );
             gamedata = richtextadd(
               gamedata,
               `\n⇋ ${gamedata.player[squad - 1]}'s ${
-                emojis[109].emoji
+                emojis[110].emoji
               } retreated behind ${gamedata.squads[squad - 1][pos].emoji}, and ${gamedata.squads[squad - 1][pos].emoji} attacked!`
             );
           }
