@@ -1089,7 +1089,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             );
           }
           if (
-            gamedata.squads[squad - 1][pos]?.id == 109 &&
+            gamedata.squads[squad - 1][pos]?.id == 110 &&
             gamedata.squads[squad - 1].length > 1
           ) {
             // curling stone
