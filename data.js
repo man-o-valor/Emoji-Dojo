@@ -1483,7 +1483,7 @@ const emojis = [
   {
     emoji: "🥌",
     id: 109,
-    hp: 5,
+    hp: 4,
     dmg: 2,
     rarity: 0,
     names: [
@@ -1492,7 +1492,7 @@ const emojis = [
       "Curl",
     ],
     class: 1,
-    description: "Deals 1 more damage if the frontmost enemy Emoji has more health than it",
+    description: "When attacked, switches places with the friendly Emoji behind it and the new frontmost friendly Emoji attacks once",
   },
 ];
 

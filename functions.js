@@ -1073,7 +1073,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               "jazzed"
             );
           }
-
           if (
             gamedata.squads[squad - 1][pos]?.id == 3 &&
             gamedata.squads[squad - 1].length > 1
@@ -1087,6 +1086,29 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               `\n⇋ ${gamedata.player[squad - 1]}'s ${
                 emojis[3].emoji
               } retreated behind ${gamedata.squads[squad - 1][pos].emoji}!`
+            );
+          }
+          if (
+            gamedata.squads[squad - 1][pos]?.id == 109 &&
+            gamedata.squads[squad - 1].length > 1
+          ) {
+            // curling stone
+            const temp = gamedata.squads[squad - 1][pos];
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata.squads[squad - 1].splice(pos + 1, 0, temp);
+            gamedata = alterhp(
+              gamedata,
+              squad2,
+              0,
+              squad,
+              0,
+              gamedata.squads[squad - 1][pos].dmg,
+            );
+            gamedata = richtextadd(
+              gamedata,
+              `\n⇋ ${gamedata.player[squad - 1]}'s ${
+                emojis[109].emoji
+              } retreated behind ${gamedata.squads[squad - 1][pos].emoji}, and ${gamedata.squads[squad - 1][pos].emoji} attacked!`
             );
           }
           if (
