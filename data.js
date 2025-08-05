@@ -1497,7 +1497,7 @@ const emojis = [
     dmg: 2,
     rarity: 0,
     names: ["Curling Stone", "Curling", "Curl"],
-    class: 1,
+    class: 4,
     description:
       "When attacked, switches places with the friendly Emoji behind it and the new frontmost friendly Emoji attacks once",
   },

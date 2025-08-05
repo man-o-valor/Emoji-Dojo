@@ -78,9 +78,9 @@ module.exports = {
           .setStyle(ButtonStyle.Danger);
         const row1 = new ActionRowBuilder().addComponents(cook, nah);
 
-        cursed = parseInt(
+        cursed = 0/*parseInt(
           (await database.get(interaction.user.id + "curse")) ?? "0"
-        );
+        );*/
 
         let player1squadarray = await getsquad(interaction.user.id);
 

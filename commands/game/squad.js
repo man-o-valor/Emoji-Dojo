@@ -57,7 +57,7 @@ module.exports = {
         .setLabel("Import")
         .setEmoji("📥")
         .setStyle(ButtonStyle.Success);
-      const curse = new ButtonBuilder()
+      /*const curse = new ButtonBuilder()
         .setCustomId("curse")
         .setLabel("Curse")
         .setEmoji("👺")
@@ -66,8 +66,8 @@ module.exports = {
         curse.setLabel("Uncurse");
         curse.setEmoji("👼");
         curse.setStyle(ButtonStyle.Primary);
-      }
-      const row1 = new ActionRowBuilder().addComponents(edit, save, curse);
+      }*/
+      const row1 = new ActionRowBuilder().addComponents(edit, save/*, curse*/);
       const squadembed = new EmbedBuilder()
         .setColor(0x226699)
         .setTitle(`${interaction.user.globalName}'s Squad 👥`)
