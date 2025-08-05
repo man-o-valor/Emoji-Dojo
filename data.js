@@ -1350,7 +1350,8 @@ const emojis = [
     rarity: 2,
     names: ["Mute", "Muted Speaker", "Muted", "Sound Off"],
     class: 7,
-    description: "Enemy Emojis that benefit from 🎶 do not recieve their benefits",
+    description:
+      "Enemy Emojis that benefit from 🎶 do not recieve their benefits",
   },
   {
     emoji: "🫨",
@@ -1368,7 +1369,14 @@ const emojis = [
     hp: 4,
     dmg: 1,
     rarity: 0,
-    names: ["Mag", "Magnifying Glass", "Magnifying Glass Left", "Mag Left", "Mag 1", "🔎"],
+    names: [
+      "Mag",
+      "Magnifying Glass",
+      "Magnifying Glass Left",
+      "Mag Left",
+      "Mag 1",
+      "🔎",
+    ],
     class: 1,
     description: "Targets the enemy Emoji with the least health",
   },
@@ -1400,7 +1408,8 @@ const emojis = [
     rarity: 1,
     names: ["Bouquet", "Flowers"],
     class: 1,
-    description: "When a friendly Emoji is defeated, increases its attack power by 1",
+    description:
+      "When a friendly Emoji is defeated, increases its attack power by 1",
   },
   {
     emoji: "⛄",
@@ -1410,7 +1419,8 @@ const emojis = [
     rarity: 0,
     names: ["Snowman", "Snowman without Snow"],
     class: 6,
-    description: "When your Squad is shuffled, Emojis retain their positions and this defeats itself",
+    description:
+      "When your Squad is shuffled, Emojis retain their positions and this defeats itself",
   },
   {
     emoji: "🪨",
@@ -1430,7 +1440,8 @@ const emojis = [
     rarity: 1,
     names: ["Satellite", "Satellite Dish", "Dish", "Reciever Dish", "Antenna"],
     class: 8,
-    description: "When the friendly frontmost Emoji is healed, this heals the same amount",
+    description:
+      "When the friendly frontmost Emoji is healed, this heals the same amount",
   },
   {
     emoji: "⏮️",
@@ -1462,9 +1473,11 @@ const emojis = [
       "Flaming Heart",
       "Fire Heart",
       "Red Heart on Fire",
+      "Flaming Heart",
     ],
     class: 1,
-    description: "When healed, damages the frontmost enemy Emoji for as much healing it received",
+    description:
+      "When healed, damages the frontmost enemy Emoji for as much healing it received",
   },
   {
     emoji: "🥊",
@@ -1472,13 +1485,10 @@ const emojis = [
     hp: 5,
     dmg: 2,
     rarity: 0,
-    names: [
-      "Boxing Glove",
-      "Boxing",
-      "Punching Glove",
-    ],
+    names: ["Boxing Glove", "Boxing", "Punching Glove"],
     class: 1,
-    description: "Deals 1 more damage if the frontmost enemy Emoji has more health than it",
+    description:
+      "Deals 1 more damage if the frontmost enemy Emoji has more health than it",
   },
   {
     emoji: "🥌",
@@ -1486,13 +1496,10 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 0,
-    names: [
-      "Curling Stone",
-      "Curling",
-      "Curl",
-    ],
+    names: ["Curling Stone", "Curling", "Curl"],
     class: 1,
-    description: "When attacked, switches places with the friendly Emoji behind it and the new frontmost friendly Emoji attacks once",
+    description:
+      "When attacked, switches places with the friendly Emoji behind it and the new frontmost friendly Emoji attacks once",
   },
 ];
 

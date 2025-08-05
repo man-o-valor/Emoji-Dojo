@@ -71,11 +71,11 @@ module.exports = {
           emojis.filter((e) => e.rarity == 2),
         ];
         const newstring =
-          emojilist[0][Math.floor(Math.random() * emojilist[0].length)].id +
+          emojilist[0][Math.floor(Math.random() * emojilist[0].length)]?.id +
           "," +
-          emojilist[1][Math.floor(Math.random() * emojilist[1].length)].id +
+          emojilist[1][Math.floor(Math.random() * emojilist[1].length)]?.id +
           "," +
-          emojilist[2][Math.floor(Math.random() * emojilist[2].length)].id +
+          emojilist[2][Math.floor(Math.random() * emojilist[2].length)]?.id +
           ",";
         await database.set("shopoffers", newstring);
 
@@ -480,7 +480,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         buy.setLabel(`You bought ${modalquantity}`);
                         buy.setStyle(1);
                         const emojilist = emojis.filter(
-                          (e) => e.rarity == shopdata[choice].id
+                          (e) => e.rarity == shopdata[choice]?.id
                         );
                         let allemojistoadd = "";
                         for (let i = 0; i < modalquantity; i++) {
@@ -489,7 +489,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                               Math.floor(Math.random() * emojilist.length)
                             ];
                           allemojistoadd += emojitoadd.id + ",";
-                          emojisbought[shopdata[choice].id].push(emojitoadd);
+                          emojisbought[shopdata[choice]?.id].push(emojitoadd);
                         }
                         let tempvault = await database.get(
                           interaction.user.id + "vault"
@@ -521,7 +521,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         buy.setStyle(1);
                         let emojistoadd = "";
                         for (let i = 0; i < modalquantity; i++) {
-                          for (const a of packcontents[shopdata[choice].id]) {
+                          for (const a of packcontents[shopdata[choice]?.id]) {
                             const emojilist = emojis.filter(
                               (e) => e.rarity == a
                             );
@@ -563,8 +563,8 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         buy.setStyle(1);
                         let allemojistoadd = "";
                         for (let i = 0; i < modalquantity; i++) {
-                          allemojistoadd += shopdata[choice].id + ",";
-                          emojisbought[shopdata[choice].id].push(
+                          allemojistoadd += shopdata[choice]?.id + ",";
+                          emojisbought[shopdata[choice]?.id].push(
                             shopdata[choice]
                           );
                         }
@@ -747,11 +747,11 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
                   const emojilist = emojis.filter(
-                    (e) => e.rarity == shopdata[choice].id
+                    (e) => e.rarity == shopdata[choice]?.id
                   );
                   const emojitoadd =
                     emojilist[Math.floor(Math.random() * emojilist.length)];
-                  emojisbought[shopdata[choice].id].push(emojitoadd);
+                  emojisbought[shopdata[choice]?.id].push(emojitoadd);
 
                   let tempvault = await database.get(
                     interaction.user.id + "vault"
@@ -782,7 +782,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
                   let emojistoadd = "";
-                  for (const a of packcontents[shopdata[choice].id]) {
+                  for (const a of packcontents[shopdata[choice]?.id]) {
                     const emojilist = emojis.filter((e) => e.rarity == a);
                     let thisemoji =
                       emojilist[Math.floor(Math.random() * emojilist.length)];
@@ -815,7 +815,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
-                  let allemojistoadd = shopdata[choice].id + ",";
+                  let allemojistoadd = shopdata[choice]?.id + ",";
                   let tempvault = await database.get(
                     interaction.user.id + "vault"
                   );

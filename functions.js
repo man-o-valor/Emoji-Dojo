@@ -17,7 +17,7 @@ function musicaltrigger(gamedata, squad, pos) {
   return (
     (gamedata.squads[squad - 1].some((x) => x.id == 14) ||
       gamedata.squads[squad - 1][pos + 1]?.id == 77) &&
-    !gamedata.squads[squad * -1 + 2].some((x) => x.id == 98)
+    !gamedata.squads[squad * -1 + 2].some((x) => x?.id == 98)
   );
 }
 
@@ -346,7 +346,7 @@ function allemojisofrarity(rarity) {
   let returninfo = [];
   for (i = 0; i < emojis.length; i++) {
     if (emojis[i].rarity == rarity) {
-      returninfo.push(emojis[i].id);
+      returninfo.push(emojis[i]?.id);
     }
   }
   return returninfo;
@@ -598,22 +598,22 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // night with stars
           for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
             if (
-              gamedata.squads[squad - 1][i].id ==
-                gamedata.squads[squad - 1][pos].id &&
+              gamedata.squads[squad - 1][i]?.id ==
+                gamedata.squads[squad - 1][pos]?.id &&
               gamedata.squads[squad - 1][i].hp > 0
             ) {
               gamedata = alterhp(gamedata, squad, i, squad2, pos, -1);
             }
           }
         }
-        if (gamedata.squads[squad - 1][pos].id != 62) {
+        if (gamedata.squads[squad - 1][pos]?.id != 62) {
           // skyline
           for (i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
             if (gamedata.squads[squad - 1][i]?.id == 62) {
               for (j = 0; j < gamedata.squads[squad - 1].length; j++) {
                 if (
-                  gamedata.squads[squad - 1][j].id ==
-                    gamedata.squads[squad - 1][pos].id &&
+                  gamedata.squads[squad - 1][j]?.id ==
+                    gamedata.squads[squad - 1][pos]?.id &&
                   gamedata.squads[squad - 1][j].hp > 0
                 ) {
                   gamedata = alterhp(gamedata, squad, j, squad, i, 1, "", true);
@@ -695,7 +695,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           gamedata.squads[squad - 1].splice(
             pos + 1,
             1,
-            lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
+            lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos]?.id])
           );
           gamedata = richtextadd(
             gamedata,
@@ -780,7 +780,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata.squads[squad - 1].splice(
                 gamedata.squads[squad - 1].length,
                 0,
-                lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos].id])
+                lodash.cloneDeep(emojis[gamedata.squads[squad - 1][pos]?.id])
               );
               gamedata = alterhp(
                 gamedata,
@@ -881,7 +881,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // fire
           if (
             gamedata.squads[squad - 1].length > 1 &&
-            gamedata.squads[squad - 1][1].id != 46
+            gamedata.squads[squad - 1][1]?.id != 46
           ) {
             gamedata = alterhp(
               gamedata,
@@ -1351,16 +1351,16 @@ function playturn(gamedata) {
   setup: {
     if (gamedata.turn == 0) {
       for (i = 0; i < gamedata.squads[0].length; i++) {
-        if (gamedata.squads[0][i].id == 26) {
+        if (gamedata.squads[0][i]?.id == 26) {
           // cherries
           gamedata.squads[0].splice(i, 0, lodash.cloneDeep(emojis[26]));
           i++;
-        } else if (gamedata.squads[0][i].id == 70) {
+        } else if (gamedata.squads[0][i]?.id == 70) {
           // wireless
           gamedata.squads[0][i].hp += gamedata.squads[0].filter(
             (element) => element.id == 70
           ).length;
-        } else if (gamedata.squads[0][i].id == 95) {
+        } else if (gamedata.squads[0][i]?.id == 95) {
           // family
           gamedata.squads[0][i].hp += gamedata.squads[0].filter(
             (element) => element.class == 8
@@ -1389,16 +1389,16 @@ function playturn(gamedata) {
         }
       }
       for (i = 0; i < gamedata.squads[1].length; i++) {
-        if (gamedata.squads[1][i].id == 26) {
+        if (gamedata.squads[1][i]?.id == 26) {
           // cherries
           gamedata.squads[1].splice(i, 0, lodash.cloneDeep(emojis[26]));
           i++;
-        } else if (gamedata.squads[1][i].id == 70) {
+        } else if (gamedata.squads[1][i]?.id == 70) {
           // wireless
           gamedata.squads[1][i].hp += gamedata.squads[1].filter(
             (element) => element.id == 70
           ).length;
-        } else if (gamedata.squads[1][i].id == 95) {
+        } else if (gamedata.squads[1][i]?.id == 95) {
           // family
           gamedata.squads[1][i].hp += gamedata.squads[1].filter(
             (element) => element.class == 8
@@ -1522,7 +1522,7 @@ function playturn(gamedata) {
         } ${emojis[93].emoji} attacked!`
       );
       for (i = 0; i < gamedata.squads[gamedata.playerturn - 1].length; i++) {
-        if (gamedata.squads[gamedata.playerturn - 1][i].id == 93) {
+        if (gamedata.squads[gamedata.playerturn - 1][i]?.id == 93) {
           gamedata = alterhp(
             gamedata,
             gamedata.playerturn * -1 + 3,
@@ -1603,7 +1603,7 @@ function playturn(gamedata) {
               (element) => element.id == 14
             ).length *
               2) +
-          gamedata.squads[gamedata.playerturn - 1][1].id ==
+          gamedata.squads[gamedata.playerturn - 1][1]?.id ==
           77,
         "blasted"
       );
@@ -1804,17 +1804,17 @@ function shufflesquad(gamedata, squad) {
     // ice cube
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-      if (gamedata.squads[squad - 1][i].id == 33) {
+      if (gamedata.squads[squad - 1][i]?.id == 33 && !gamedata.squads[squad - 1][0]?.id == 50) {
         // dash
         gamedata = alterhp(gamedata, squad, 0, squad, i, 2);
       }
       if (
-        gamedata.squads[squad - 1][i].id == 58 &&
+        gamedata.squads[squad - 1][i]?.id == 58 &&
         i != gamedata.squads[squad - 1].length - 1
       ) {
         // microbe
-        if (gamedata.squads[squad - 1][i + 1].id != 58) {
-          const tempemj = gamedata.squads[squad - 1][i + 1].id;
+        if (gamedata.squads[squad - 1][i + 1]?.id != 58) {
+          const tempemj = gamedata.squads[squad - 1][i + 1]?.id;
           const temphp = gamedata.squads[squad - 1][i + 1].hp;
           const tempdmg = gamedata.squads[squad - 1][i + 1].dmg;
           gamedata.squads[squad - 1].splice(
@@ -1855,7 +1855,7 @@ function shufflesquad(gamedata, squad) {
       let partitions = [];
       let currentPartition = [];
       for (let i = 0; i < squadArray.length; i++) {
-        if (squadArray[i].id === 73) {
+        if (squadArray[i]?.id === 73) {
           if (currentPartition.length > 0) {
             partitions.push(currentPartition);
             currentPartition = [];
@@ -1871,7 +1871,7 @@ function shufflesquad(gamedata, squad) {
 
       // shuffle part
       for (const partition of partitions) {
-        if (partition.length === 1 && squadArray[partition[0]].id === 73)
+        if (partition.length === 1 && squadArray[partition[0]]?.id === 73)
           continue;
 
         const unlocked = partition.filter(
@@ -1903,7 +1903,7 @@ function shufflesquad(gamedata, squad) {
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
       if (
-        gamedata.squads[squad - 1][i].id == 28 &&
+        gamedata.squads[squad - 1][i]?.id == 28 &&
         i < gamedata.squads[squad - 1].length - 1
       ) {
         // pickup truck
@@ -1915,11 +1915,11 @@ function shufflesquad(gamedata, squad) {
           temp
         );
       }
-      if (gamedata.squads[squad - 1][i].id == 30) {
+      if (gamedata.squads[squad - 1][i]?.id == 30) {
         // bus
         gamedata = alterhp(gamedata, squad, i, squad, i, 2);
         for (let j = gamedata.squads[squad - 1].length - 1; j > -1; j--) {
-          if (gamedata.squads[squad - 1][j].id == 29) {
+          if (gamedata.squads[squad - 1][j]?.id == 29) {
             // bus stop
             const temp = gamedata.squads[squad - 1][i];
             gamedata.squads[squad - 1].splice(i, 1);
@@ -1941,18 +1941,18 @@ function shufflesquad(gamedata, squad) {
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-      if (gamedata.squads[squad - 1][i].id == 29) {
+      if (gamedata.squads[squad - 1][i]?.id == 29) {
         // bus stop
         gamedata = alterhp(gamedata, squad, i + 1, squad, i, 2);
       }
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-      if (gamedata.squads[squad - 1][i].id == 19) {
+      if (gamedata.squads[squad - 1][i]?.id == 19) {
         // woozy face
         gamedata = alterhp(gamedata, squad, i, squad, i, 1);
       }
-      if (gamedata.squads[squad - 1][i].id == 99) {
+      if (gamedata.squads[squad - 1][i]?.id == 99) {
         // shaking face
         gamedata.squads[squad - 1][i].dmg += 1;
         gamedata = richtextadd(
@@ -1965,7 +1965,7 @@ function shufflesquad(gamedata, squad) {
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-      if (gamedata.squads[squad - 1][i].id == 47) {
+      if (gamedata.squads[squad - 1][i]?.id == 47) {
         // volcano
         gamedata.squads[0 - squad + 2].splice(
           0,
@@ -1984,7 +1984,7 @@ function shufflesquad(gamedata, squad) {
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-      if (gamedata.squads[squad - 1][i].id == 27) {
+      if (gamedata.squads[squad - 1][i]?.id == 27) {
         // cyclone
         gamedata.squads[squad - 1].splice(i, 1);
         gamedata = richtextadd(
@@ -1999,7 +1999,7 @@ function shufflesquad(gamedata, squad) {
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-      if (gamedata.squads[squad - 1][i].id == 31) {
+      if (gamedata.squads[squad - 1][i]?.id == 31) {
         // popcorn
         gamedata = alterhp(gamedata, squad, 0, squad, i, 2);
       }

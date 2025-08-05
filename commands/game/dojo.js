@@ -320,7 +320,7 @@ module.exports = {
               ) || x.emoji == closeviewemoji.replace(/\s+/g, "")
           );
           const viewemojiid = vaultarray.find(
-            (x) => emojis[x].id == (emojifound)?.id
+            (x) => emojis[x]?.id == (emojifound)?.id
           );
 
           const vaultembed = new EmbedBuilder()
@@ -628,7 +628,7 @@ module.exports = {
                             await database.set(
                               interaction.user.id + "vault",
                               tempvault +
-                                emojis[classes[emojifound.class].legendary].id +
+                                emojis[classes[emojifound.class].legendary]?.id +
                                 ","
                             );
                             await interaction3.followUp({

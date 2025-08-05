@@ -64,7 +64,7 @@ module.exports = {
             ) || x.emoji == theyget.replace(/\s+/g, "")
         );
         let myviewemojiid = myvault.find(
-          (x) => emojis[x].id == (myemojifound)?.id
+          (x) => emojis[x]?.id == (myemojifound)?.id
         );
         const theiremojifound = emojis.find(
           (x) =>
@@ -75,7 +75,7 @@ module.exports = {
             ) || x.emoji == iwant.replace(/\s+/g, "")
         );
         let theirviewemojiid = theirvault.find(
-          (x) => emojis[x].id == (theiremojifound)?.id
+          (x) => emojis[x]?.id == (theiremojifound)?.id
         );
         console.log(myemojifound);
         console.log(myviewemojiid);
@@ -202,11 +202,11 @@ module.exports = {
                       theirvault = await getvault(tradeuser.id);
                       myviewemojiid = myvault.find(
                         (x) =>
-                          emojis[x].id == (myemojifound)?.id
+                          emojis[x]?.id == (myemojifound)?.id
                       );
                       theirviewemojiid = theirvault.find(
                         (x) =>
-                          emojis[x].id ==
+                          emojis[x]?.id ==
                           (theiremojifound)?.id
                       );
                       interaction.editReply({
