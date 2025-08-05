@@ -1102,7 +1102,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               0,
               squad,
               0,
-              0- gamedata.squads[squad - 1][pos].dmg,
+              0 - gamedata.squads[squad - 1][pos].dmg,
               "",
               true
             );
@@ -1110,7 +1110,9 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata,
               `\n⇋ ${gamedata.player[squad - 1]}'s ${
                 emojis[110].emoji
-              } retreated behind ${gamedata.squads[squad - 1][pos].emoji}, and ${gamedata.squads[squad - 1][pos].emoji} attacked!`
+              } retreated behind ${
+                gamedata.squads[squad - 1][pos].emoji
+              }, and ${gamedata.squads[squad - 1][pos].emoji} attacked!`
             );
           }
           if (
@@ -1602,9 +1604,8 @@ function playturn(gamedata) {
             gamedata.squads[gamedata.playerturn - 1].filter(
               (element) => element.id == 14
             ).length *
-              2) +
-          gamedata.squads[gamedata.playerturn - 1][1]?.id ==
-          77,
+              2 +
+            (gamedata.squads[gamedata.playerturn - 1][1]?.id == 77 ? 1 : 0)),
         "blasted"
       );
     }
@@ -1804,7 +1805,10 @@ function shufflesquad(gamedata, squad) {
     // ice cube
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-      if (gamedata.squads[squad - 1][i]?.id == 33 && !gamedata.squads[squad - 1][0]?.id == 50) {
+      if (
+        gamedata.squads[squad - 1][i]?.id == 33 &&
+        !gamedata.squads[squad - 1][0]?.id == 50
+      ) {
         // dash
         gamedata = alterhp(gamedata, squad, 0, squad, i, 2);
       }
