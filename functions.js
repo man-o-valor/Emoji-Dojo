@@ -801,7 +801,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }
           }
         }
-        if (gamedata.squads[squad - 1][pos]?.id == 59) {
+        if (gamedata.squads[squad - 1][pos]?.id == 59 && gamedata.squads[squad2 - 1][0]) {
           // flying saucer
           gamedata.squads[squad - 1].splice(pos, 1);
           gamedata = shufflesquad(gamedata, squad2);
@@ -1257,7 +1257,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           }
         }
       }
-      if (!silence && val == 0) {
+      if (!silence && val == 0 && gamedata.squads[squad2 - 1][pos2]) {
         gamedata = richtextadd(
           gamedata,
           `\n↣ ${gamedata.player[squad2 - 1]}'s ${
