@@ -109,7 +109,7 @@ const emojis = [
     hp: 4,
     dmg: 0,
     rarity: 0,
-    names: ["Clap", "Clapping", "Clapping Hands", "Boi", "Spades"],
+    names: ["Clap", "Clapping", "Clapping Hands", "Boi", "Spades", "Applause", "Bravo", "Well Done", "High Five"],
     class: 8,
     description: "Deals 1 more damage for each undefeated friendly 👏",
   },
@@ -130,6 +130,7 @@ const emojis = [
       "Bf",
       "Partner",
       "Hearts",
+      "Blowing Kiss", "Smooch", "Love", "Sweetheart"
     ],
     class: 0,
     description:
@@ -141,7 +142,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 0,
-    names: ["Relieved", "Calm", "Relaxed", "Clubs"],
+    names: ["Relieved", "Calm", "Relaxed", "Clubs", "Zen", "Peaceful", "Serene", "Content"],
     class: 2,
     description: "Takes 1 less damage from every attack, to a minimum of 1",
   },
@@ -162,6 +163,7 @@ const emojis = [
       "Scared",
       "Sweating",
       "Sweat",
+      "Anxious", "Nervous", "Sweat Drop", "Stressed"
     ],
     class: 4,
     description:
@@ -183,6 +185,7 @@ const emojis = [
       "Happy",
       "Happy Face",
       "Swords",
+      "Cheerful", "Beaming", "Joyful", "Grinny"
     ],
     class: 1,
     description: "Nothing special",
@@ -193,7 +196,7 @@ const emojis = [
     hp: 5,
     dmg: 1,
     rarity: 1,
-    names: ["Turtle", "Tortoise"],
+    names: ["Turtle", "Tortoise", "Slowpoke", "Shell"],
     class: 4,
     description:
       "When attacked, moves to the back of your Squad and Heals itself by 1",
@@ -204,7 +207,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 2,
-    names: ["Speaking Head", "Speaking", "Facts", "Spitting", "Shout"],
+    names: ["Speaking Head", "Speaking", "Facts", "Spitting", "Shout", "Talk", "Speech", "Voice", "Yell"],
     class: 5,
     description:
       "When attacking at more than 2 health, lowers the enemy Emoji's attack power by 1 to a minimum of 0",
@@ -215,7 +218,7 @@ const emojis = [
     hp: 1,
     dmg: 0,
     rarity: -1,
-    names: ["No Mouth", "Blank", "Petrified"],
+    names: ["No Mouth", "Blank", "Petrified", "Speechless", "Blank Face", "Expressionless"],
     description: "Nothing special (spooked by 👻)",
   },
   {
@@ -224,7 +227,7 @@ const emojis = [
     hp: 3,
     dmg: 1,
     rarity: 1,
-    names: ["Handshake", "Hand Shake", "Shake", "Hands", "Hand", "Jacks"],
+    names: ["Handshake", "Hand Shake", "Shake", "Hands", "Hand", "Jacks", "Agreement", "Deal", "Collaboration", "Unity"],
     class: 8,
     description:
       "Will also attack if there is one friendly Emoji in front of it",
@@ -241,6 +244,7 @@ const emojis = [
       "Grad Hat",
       "Graduation Cap",
       "Grad Cap",
+      "Scholar", "Student", "Education", "Cap"
     ],
     class: 3,
     description:
@@ -252,7 +256,7 @@ const emojis = [
     hp: 1,
     dmg: 0,
     rarity: 0,
-    names: ["Twisted Rightwards Arrows", "Shuffle", "Shuffle Button", "TRWA"],
+    names: ["Twisted Rightwards Arrows", "Shuffle", "Shuffle Button", "TRWA", "Mix", "Random", "Scramble", "Switch"],
     class: 6,
     description:
       "When attacked or defeated, Shuffles the enemy Squad and defeats itself",
@@ -263,7 +267,7 @@ const emojis = [
     hp: 1,
     dmg: 2,
     rarity: 1,
-    names: ["Headstone", "Grave", "Gravestone", "Tombstone", "Tomb", "Sprouts"],
+    names: ["Headstone", "Grave", "Gravestone", "Tombstone", "Tomb", "Sprouts", "Rest", "RIP", "Graveyard", "Memorial"],
     class: 0,
     description: "When a friendly Emoji is defeated, heals itself by 1",
   },
@@ -273,7 +277,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 0,
-    names: ["Martial Arts Uniform", "Gi", "Kung Fu", "Kungfu", "Kung-fu"],
+    names: ["Martial Arts Uniform", "Gi", "Kung Fu", "Kungfu", "Kung-fu", "Karate", "Martial Artist", "Uniform", "Dojo"],
     class: 8,
     description:
       "The friendly Emoji in front of this attacks for 1 more damage",
@@ -284,7 +288,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 0,
-    names: ["Guitar", "Electric Guitar", "Rock and Roll"],
+    names: ["Guitar", "Electric Guitar", "Rock and Roll", "Strum", "Guitarist", "Rockstar", "Strings"],
     class: 7,
     description:
       "If there is at least one undefeated friendly 🎶, deal 1 more damage",
@@ -303,6 +307,7 @@ const emojis = [
       "Music Note",
       "Melody",
       "Beat",
+      "Tune", "Song", "Harmony", "Chorus"
     ],
     class: 7,
     description:
@@ -323,6 +328,7 @@ const emojis = [
       "Fisher",
       "Fisherman",
       "Angler",
+      "Catch", "Hook", "Fishing Line", "Angling"
     ],
     class: 4,
     description:
@@ -334,7 +340,7 @@ const emojis = [
     hp: 3,
     dmg: 1,
     rarity: 0,
-    names: ["Golf", "Hole in one", "Putt", "Drive"],
+    names: ["Golf", "Hole in one", "Putt", "Drive", "Golf Course", "Green", "Flag", "Hole"],
     class: 4,
     description:
       "When attacked, moves the frontmost enemy emoji to the back of the enemy Squad",
@@ -345,7 +351,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 1,
-    names: ["Shield", "Guard", "Ward", "Houses"],
+    names: ["Shield", "Guard", "Ward", "Houses", "Protector", "Defender", "Barrier", "Fortress"],
     class: 2,
     description:
       "Takes 1 less damage for every friendly undefeated Defense class emoji, to a minimum of 1. Cannot be healed",
@@ -356,7 +362,7 @@ const emojis = [
     hp: 1,
     dmg: 2,
     rarity: 1,
-    names: ["Skull", "Dead", "Death", "Diamonds"],
+    names: ["Skull", "Dead", "Death", "Diamonds", "Skeleton", "Perished", "Skully"],
     class: 0,
     description: "When an enemy Emoji is defeated, heals itself by 1",
   },
@@ -366,7 +372,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 1,
-    names: ["Woozy Face", "Woozy", "Drunk", "Tipsy", "Octothorpe"],
+    names: ["Woozy Face", "Woozy", "Drunk", "Tipsy", "Octothorpe", "Dizzy", "Confused", "Wobbly", "Tipsy Face"],
     class: 6,
     description: "When your Squad is Shuffled, heals itself by 1",
   },
@@ -376,7 +382,7 @@ const emojis = [
     hp: 1,
     dmg: 2,
     rarity: 0,
-    names: ["Chess Pawn", "Pawn"],
+    names: ["Chess Pawn", "Pawn", "Chess", "Piece", "Game", "Pawn Piece"],
     class: 5,
     description: "When this defeats an Emoji, it becomes a 👑",
   },
@@ -386,7 +392,7 @@ const emojis = [
     hp: 8,
     dmg: 3,
     rarity: -1,
-    names: ["Crown", "Royalty", "Royal", "Queen", "King"],
+    names: ["Crown", "Royalty", "Royal", "Queen", "King", "Monarch", "Leader", "Regal", "Majesty"],
     description: "Nothing special (starts as ♟️)",
   },
   {
@@ -395,7 +401,7 @@ const emojis = [
     hp: 3,
     dmg: 0,
     rarity: 0,
-    names: ["Rage", "Angry", "Mad", "Fury", "Furious", "Enraged"],
+    names: ["Rage", "Angry", "Mad", "Fury", "Furious", "Enraged", "Temper", "Irate", "Annoyed", "Red Face"],
     class: 1,
     description:
       "Attacks for half the number of undefeated enemy Emojis (rounded up), plus its attack power",
@@ -406,7 +412,7 @@ const emojis = [
     hp: 3,
     dmg: 1,
     rarity: 0,
-    names: ["Lizard", "Gecko"],
+    names: ["Lizard", "Gecko", "Scaly", "Scalie"],
     class: 5,
     description: "If this is the only undefeated friendly Emoji, become a 🐲",
   },
@@ -416,7 +422,7 @@ const emojis = [
     hp: 6,
     dmg: 5,
     rarity: -1,
-    names: ["Dragon Face", "Dragon", "Big Lizard", "Lizard Crown"],
+    names: ["Dragon Face", "Dragon", "Big Lizard", "Lizard Crown", "Mythical", "Beast"],
     description: "Nothing special (starts as 🦎)",
   },
   {
@@ -430,6 +436,7 @@ const emojis = [
       "Skull and Crossbones",
       "Jolly Roger",
       "Crossbones",
+      "Pirate", "Danger", "Toxic", "Deadly"
     ],
     class: 0,
     description:
@@ -441,7 +448,7 @@ const emojis = [
     hp: 2,
     dmg: 1,
     rarity: 1,
-    names: ["Cherries", "Cherry"],
+    names: ["Cherries", "Cherry", "Sweet", "Double", "Pair"],
     class: 3,
     description: "At the beginning of the Battle, doubles itself",
   },
@@ -451,7 +458,7 @@ const emojis = [
     hp: 4,
     dmg: 1,
     rarity: 1,
-    names: ["Cyclone", "Spiral", "Portal", "Black Hole"],
+    names: ["Cyclone", "Spiral", "Portal", "Black Hole", "Whirl", "Twist", "Vortex", "Swirl"],
     class: 6,
     description:
       "When your Squad is Shuffled, Shuffles the enemy Squad and defeats itself (Only one takes effect if multiple are undefeated)",
@@ -462,7 +469,7 @@ const emojis = [
     hp: 3,
     dmg: 3,
     rarity: 1,
-    names: ["Pickup Truck", "Truck", "Pickup"],
+    names: ["Pickup Truck", "Truck", "Pickup", "Vehicle", "Drive", "Transport", "Hauler"],
     class: 4,
     description: "When your Squad is Shuffled, moves to the back",
   },
@@ -472,7 +479,7 @@ const emojis = [
     hp: 1,
     dmg: 2,
     rarity: 1,
-    names: ["Busstop", "Bus Stop"],
+    names: ["Busstop", "Bus Stop", "Stop", "Station", "Transit", "Bus Sign"],
     class: 0,
     description:
       "When your Squad is Shuffled, heals the Emoji behind itself by 2",
@@ -483,10 +490,10 @@ const emojis = [
     hp: 4,
     dmg: 4,
     rarity: 2,
-    names: ["Bus", "Trolley", "Tram", "Train"],
+    names: ["Bus", "Trolley", "Tram", "Train", "Transport", "Vehicle", "Commute", "Public Transport"],
     class: 4,
     description:
-      "When your Squad is Shuffled, heals itself by 2, and there is at least one undefeated friendly 🚏, moves behind it",
+      "When your Squad is Shuffled, heals itself by 2, and if there is at least one undefeated friendly 🚏, moves behind it",
   },
   {
     emoji: "🍿",
@@ -494,7 +501,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 1,
-    names: ["Popcorn", "Pop", "Corn", "Kings"],
+    names: ["Popcorn", "Pop", "Corn", "Kings", "Snack", "Movie", "Cinema"],
     class: 0,
     description:
       "When your Squad is Shuffled, heals the frontmost friendly Emoji by 2",
@@ -505,7 +512,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 2,
-    names: ["Ice Cube", "Ice", "Cold", "Frozen"],
+    names: ["Ice Cube", "Ice", "Cold", "Frozen", "Freeze", "Chill", "Cube", "Icy"],
     class: 6,
     description: "While undefeated, your squad cannot be Shuffled",
   },
@@ -515,7 +522,7 @@ const emojis = [
     hp: 1,
     dmg: 1,
     rarity: 0,
-    names: ["Dash", "Puff of Smoke", "Poof", "Gust of Wind", "Gust", "Wind"],
+    names: ["Dash", "Puff of Smoke", "Poof", "Gust of Wind", "Gust", "Wind", "Blow", "Whoosh", "Air", "Breeze"],
     class: 0,
     description:
       "Before your Squad is Shuffled, heals the frontmost friendly Emoji by 2",
@@ -533,6 +540,7 @@ const emojis = [
       "Thunder",
       "Thunder Bolt",
       "Acdc",
+      "Shock", "Bolt", "Energy", "Charge"
     ],
     class: 1,
     description: "Attacks the 2 frontmost enemy emojis at once",
@@ -543,7 +551,7 @@ const emojis = [
     hp: 2,
     dmg: 1,
     rarity: 1,
-    names: ["Bricks", "Brick"],
+    names: ["Bricks", "Brick", "Wall", "Masonry"],
     class: 2,
     description:
       "Takes 2 less damage from every attack, to a minimum of 1. Cannot be healed",
@@ -554,7 +562,7 @@ const emojis = [
     hp: 1,
     dmg: 0,
     rarity: 1,
-    names: ["Bomb", "Explode", "Explosion"],
+    names: ["Bomb", "Explode", "Explosion", "Boom", "Blast", "Detonate", "Kaboom"],
     class: 1,
     description:
       "When attacked or defeated, defeats the frontmost enemy emoji and defeats itself",
@@ -565,7 +573,7 @@ const emojis = [
     hp: 4,
     dmg: 1,
     rarity: 2,
-    names: ["Ghost", "Spectre", "Haunt", "Petrify"],
+    names: ["Ghost", "Spectre", "Haunt", "Petrify", "Spirit", "Phantom", "Spook", "Wraith"],
     class: 5,
     description:
       "Every other round when attacking, transforms the frontmost enemy Emoji into a 😶 with identical stats",
@@ -583,6 +591,7 @@ const emojis = [
       "Twinkles",
       "Twinkle",
       "Glitter",
+      "Shine", "Gleam", "Spark", "Magic"
     ],
     description: "After attacking, damages itself by 1 (scattered by 🦄)",
   },
@@ -592,7 +601,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 2,
-    names: ["Unicorn", "Magic Horse", "Pegasus", "Pony"],
+    names: ["Unicorn", "Magic Horse", "Pegasus", "Pony", "Fantasy", "Mystic"],
     class: 3,
     description: "When defeated, summons ✨ at the front of the enemy Squad",
   },
@@ -602,7 +611,7 @@ const emojis = [
     hp: 6,
     dmg: 2,
     rarity: 0,
-    names: ["Black Joker", "Joker", "Joker Card", "Jimbo"],
+    names: ["Black Joker", "Joker", "Joker Card", "Jimbo", "Card", "Wild", "Jester", "Trickster"],
     class: 2,
     description: "Increases any damage taken to itself by 1",
   },
@@ -612,7 +621,7 @@ const emojis = [
     hp: 3,
     dmg: 1,
     rarity: 1,
-    names: ["Cloud Tornado", "Tornado", "Hurricane"],
+    names: ["Cloud Tornado", "Tornado", "Hurricane", "Twister", "Storm", "Whirlwind", "Cyclone"],
     class: 6,
     description: "When attacked or defeated, Shuffles the enemy Squad",
   },
@@ -631,6 +640,7 @@ const emojis = [
       "Tango",
       "Tango Dancer",
       "Acorns",
+      "Ballet", "Performance", "Groove"
     ],
     class: 4,
     description:
@@ -642,7 +652,7 @@ const emojis = [
     hp: 4,
     dmg: 1,
     rarity: 1,
-    names: ["Piñata", "Pinata", "Llama", "Candy", "Birthday", "Birthday Party"],
+    names: ["Piñata", "Pinata", "Llama", "Candy", "Birthday", "Birthday Party", "Fiesta", "Candy Burst"],
     class: 2,
     description:
       "When defeated, heals the new frontmost friendly Emoji by 2 and damages the frontmost enemy Emoji by 2",
@@ -653,7 +663,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 0,
-    names: ["Violin", "Cello", "Acoustic", "Acoustic Guitar"],
+    names: ["Violin", "Cello", "Acoustic", "Acoustic Guitar", "Strings", "Fiddle", "Music", "Orchestra"],
     class: 7,
     description:
       "If there is at least one undefeated friendly 🎶, deal 3 more damage",
@@ -672,6 +682,7 @@ const emojis = [
       "Radio Station",
       "Broadcast",
       "Radio Broadcast",
+      "Music Box", "Tuner", "Airwaves"
     ],
     class: 7,
     description: "When defeated, summons 🎶 at the back of your Squad",
@@ -682,7 +693,7 @@ const emojis = [
     hp: 3,
     dmg: 3,
     rarity: 1,
-    names: ["Fire", "Flame", "Flames", "Heat"],
+    names: ["Fire", "Flame", "Flames", "Heat", "Inferno", "Burn", "Hot", "Blaze"],
     class: 1,
     description:
       "When this Emoji is defeated, damages the new frontmost friendly Emoji by 2",
@@ -703,6 +714,7 @@ const emojis = [
       "Wild Fire",
       "Wildfires",
       "Wild Fires",
+      "Mountain", "Ash", "Volcanic"
     ],
     class: 6,
     description:
@@ -722,6 +734,7 @@ const emojis = [
       "Confetti",
       "Horn",
       "Celebration",
+      "Festive", "Yay"
     ],
     class: 0,
     description:
@@ -733,7 +746,7 @@ const emojis = [
     hp: 6,
     dmg: 3,
     rarity: 2,
-    names: ["Flying Disc", "Disc", "Frisbee"],
+    names: ["Flying Disc", "Disc", "Frisbee", "Disc Golf", "Frisbee Game"],
     class: 1,
     description: "Attacks the Emoji behind this for 1 when attacking",
   },
@@ -753,6 +766,7 @@ const emojis = [
       "Track Skip",
       "Skip Track",
       "Skip Track Button",
+      "Forward", "Advance", "Skip Ahead", "Next Song"
     ],
     class: 6,
     description: "When healed, Shuffles your Squad",
@@ -763,7 +777,7 @@ const emojis = [
     hp: 1,
     dmg: 2,
     rarity: 3, // Master of Healing
-    names: ["X Ray", "X-ray", "Xray", "Scan", "Mri"],
+    names: ["X Ray", "X-ray", "Xray", "Scan", "Mri", "Radiology", "Medical", "Xray Image"],
     class: 0,
     description:
       "When a friendly Emoji is defeated, heals all friendly Emojis behind itself by 1",
@@ -786,6 +800,7 @@ const emojis = [
       "Dark City",
       "Night City",
       "City Night",
+      "Evening", "Twilight", "Night Sky", "City Lights"
     ],
     class: 1,
     description:
@@ -797,7 +812,7 @@ const emojis = [
     hp: 4,
     dmg: 3,
     rarity: 3, // Master of Damaging
-    names: ["Wolf", "Predator"],
+    names: ["Wolf", "Predator", "Canine", "Howl", "Pack", "Alpha"],
     class: 1,
     description:
       "When this defeats an Emoji, heals itself by 1 and increases its attack power by 1",
@@ -808,7 +823,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 1,
-    names: ["Bubbles", "Bubble"],
+    names: ["Bubbles", "Bubble", "Foam", "Soap", "Bubble Pop", "Clean"],
     class: 2,
     description: "Reduces any damage taken to itself to 1. Cannot be healed",
   },
@@ -818,7 +833,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 1,
-    names: ["Banana", "Banana Peel", "Slippery", "Slip"],
+    names: ["Banana", "Banana Peel", "Slippery", "Slip", "Peel"],
     class: 4,
     description:
       "When defeated, damages the frontmost enemy Emoji by 2 and moves it to the back of the enemy Squad",
@@ -829,7 +844,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 1,
-    names: ["Magnet", "Attraction", "Sniper", "Snipe"],
+    names: ["Magnet", "Attraction", "Sniper", "Snipe", "Pull", "Attract", "Magnetic"],
     class: 4,
     description:
       "When defeated, damages the furthermost enemy Emoji by 2 and moves it to the front of the enemy Squad",
@@ -848,6 +863,7 @@ const emojis = [
       "Coronavirus",
       "Covid",
       "Pandemic",
+      "Sick", "Ill", "Mask Up"
     ],
     class: 5,
     description:
@@ -868,7 +884,7 @@ const emojis = [
       "Sickness",
       "Illness",
       "Corruption",
-      "Blight",
+      "Blight", "Infection", "Contagion", "Pathogen"
     ],
     description:
       "Before being Shuffled, transforms the Emoji behind it into a 🦠 with identical stats (summoned by 😷)",
@@ -879,7 +895,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 2,
-    names: ["Flying Saucer", "Saucer", "Spaceship", "Ufo", "Aliens"],
+    names: ["Flying Saucer", "Saucer", "Spaceship", "Ufo", "Aliens", "Alien", "Extraterrestrial"],
     class: 6,
     description:
       "When defeated, Shuffle the enemy Squad and deal 3 damage to the frontmost enemy Emoji",
@@ -890,7 +906,7 @@ const emojis = [
     hp: 5,
     dmg: 1,
     rarity: 3, // Master of Defense
-    names: ["Mirror", "Window", "Glass", "Reflect", "Reflection"],
+    names: ["Mirror", "Window", "Glass", "Reflect", "Reflection", "Reflector", "Looking Glass", "Mirror Image", "Shiny"],
     class: 2,
     description:
       "Attacks for as much damage as the frontmost enemy Emoji, plus its own attack power",
@@ -901,7 +917,7 @@ const emojis = [
     hp: 2,
     dmg: 1,
     rarity: 3, // Master of Summoning
-    names: ["Magic Wand", "Wand", "Magic", "Spell", "Staff"],
+    names: ["Magic Wand", "Wand", "Magic", "Spell", "Staff", "Enchanter", "Sorcery", "Magic Stick", "Wizard"],
     class: 3,
     description:
       "When the first friendly Emoji is defeated this round, revives it at 2 health at the back of the Squad, and defeats itself",
@@ -920,6 +936,7 @@ const emojis = [
       "Skyscrapers",
       "Skyscraper",
       "Lilys",
+      "Metropolis", "Urban", "City Life"
     ],
     class: 8,
     description:
@@ -940,6 +957,7 @@ const emojis = [
       "Blast",
       "Amplifier",
       "Amplified",
+      "Volume", "Loudspeaker", "Sound", "Noise"
     ],
     class: 7,
     description:
@@ -951,7 +969,7 @@ const emojis = [
     hp: 6,
     dmg: 2,
     rarity: 0,
-    names: ["Mushroom", "Red Mushroom", "Fungus", "Shroom"],
+    names: ["Mushroom", "Red Mushroom", "Fungus", "Shroom", "Toadstool", "Fungi", "Mush"],
     class: 1,
     description: "After attacking, damages itself by 1",
   },
@@ -973,6 +991,7 @@ const emojis = [
       "Mystery",
       "Mysterious",
       "Unknown",
+      "Group", "Crowd", "People", "Team"
     ],
     class: 3,
     description:
@@ -984,7 +1003,7 @@ const emojis = [
     hp: 3,
     dmg: 1,
     rarity: 2,
-    names: ["New", "New Button", "New Indicator"],
+    names: ["New", "New Button", "New Indicator", "Fresh", "Recent", "Brand New", "Update"],
     class: 5,
     description:
       "When the friendly Emoji in front of this is defeated, restores that Emoji to original condition and defeats itself",
@@ -1005,6 +1024,7 @@ const emojis = [
       "Lock Ink",
       "Pen Lock",
       "Lock Pen",
+      "Secure", "Lockdown", "Penlock", "Signed"
     ],
     class: 5,
     description:
@@ -1013,8 +1033,8 @@ const emojis = [
   {
     emoji: "🔒",
     id: 68,
-    hp: null,
-    dmg: null,
+    hp: 1,
+    dmg: 0,
     rarity: -1,
     names: ["Lock", "Locked", "Padlock"],
     class: null,
@@ -1026,7 +1046,7 @@ const emojis = [
     hp: 1,
     dmg: 1,
     rarity: 1,
-    names: ["Amphora", "Vase", "Pot", "Clay Pot", "Urn"],
+    names: ["Amphora", "Vase", "Pot", "Clay Pot", "Urn", "Jar", "Container", "Artifact", "Relic"],
     class: 5,
     description: "When defeated, summons a random *️⃣ Common emoji",
   },
@@ -1045,7 +1065,7 @@ const emojis = [
       "Wi-fi",
       "Data",
       "Connection",
-      "Rings",
+      "Online"
     ],
     class: 8,
     description:
@@ -1057,7 +1077,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 1,
-    names: ["Anchor"],
+    names: ["Anchor", "Dock", "Harbor", "Anchor Down"],
     class: 8,
     description:
       "When your Squad is Shuffled, this and the friendly Emoji in front of it do not get moved",
@@ -1068,7 +1088,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 1,
-    names: ["Pushpin", "Pin", "Thumbtack", "Tack"],
+    names: ["Pushpin", "Pin", "Thumbtack", "Tack", "Pinpoint"],
     class: 8,
     description:
       "When your Squad is Shuffled, this and the friendly Emoji behind it do not get moved",
@@ -1079,7 +1099,7 @@ const emojis = [
     hp: 4,
     dmg: 1,
     rarity: 2,
-    names: ["Construction", "Barrier", "Under Construction", "Traffic Barrier"],
+    names: ["Construction", "Barrier", "Under Construction", "Traffic Barrier", "Roadblock", "Obstacle", "Construction Zone", "Detour"],
     class: 8,
     description:
       "When your Squad is Shuffled, this does not get moved. Additionally, Emojis will not move past this during the shuffle",
@@ -1090,7 +1110,7 @@ const emojis = [
     hp: 4,
     dmg: 0,
     rarity: 2,
-    names: ["Battery", "Full Battery", "Charge"],
+    names: ["Battery", "Full Battery", "Charge", "Power", "Energy", "Charge Up", "Battery Life"],
     class: 1,
     description:
       "Attacks for the amount of health it has, plus its own attack power",
@@ -1101,7 +1121,7 @@ const emojis = [
     hp: 2,
     dmg: 0,
     rarity: 1,
-    names: ["Anger", "Anger Symbol", "Angry", "Backpack", "🎒"],
+    names: ["Anger", "Anger Symbol", "Angry", "Backpack", "🎒", "Frustration", "Anger Mark", "Red Mark" , "Anime"],
     class: 8,
     description:
       "The friendly Emoji in front of this attacks for 2 more damage",
@@ -1109,10 +1129,10 @@ const emojis = [
   {
     emoji: "🌫️",
     id: 76,
-    hp: 0,
+    hp: 1,
     dmg: 0,
     rarity: 1,
-    names: ["Fog", "Mist", "Foggy", "Misty"],
+    names: ["Fog", "Mist", "Foggy", "Misty", "Cloudy", "Haze", "Obscure", "Smog"],
     class: 0,
     description:
       "At the beginning of the Battle, heals the friendly Emoji in front of itself by 3 and defeats itself",
@@ -1123,7 +1143,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 0,
-    names: ["Headphones", "Earbuds"],
+    names: ["Headphones", "Earbuds", "Listen", "Earphones", "Music Gear"],
     class: 7,
     description:
       "Friendly Emojis in front of this act as if this was a 🎶 emoji",
@@ -1134,7 +1154,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 1,
-    names: ["Saxophone", "Sax"],
+    names: ["Saxophone", "Sax", "Jazz", "Sax Player", "Brass"],
     class: 7,
     description:
       "If there is at least one undefeated friendly 🎶, heals the friendly Emoji in front of itself by 1 when it is attacked for more than 1 damage.",
@@ -1145,7 +1165,7 @@ const emojis = [
     hp: 4,
     dmg: 3,
     rarity: 1,
-    names: ["Drum", "Drum with Drumsticks"],
+    names: ["Drum", "Drum with Drumsticks", "Percussion", "Drummer", "Beat", "Rhythm"],
     class: 7,
     description:
       "If there is at least one undefeated friendly 🎶, takes 1 less damage from every attack to a minimum of 1",
@@ -1156,7 +1176,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 2,
-    names: ["Fax", "Fax Machine", "Receipt Printer", "Printer"],
+    names: ["Fax", "Fax Machine", "Receipt Printer", "Printer", "Send", "Transmit", "Faxer", "Document"],
     class: 3,
     description:
       "When this defeats an Emoji, it summons 📃 at the front of the Squad",
@@ -1177,7 +1197,7 @@ const emojis = [
     hp: 6,
     dmg: 3,
     rarity: 3,
-    names: ["Dove", "Bird"],
+    names: ["Dove", "Bird", "Peace", "Messenger", "White Bird", "Tranquil"],
     class: 4,
     description:
       "When this would defeat an Emoji, converts it to the friendly team and moves it to the front of the Squad with 1 health",
@@ -1188,7 +1208,7 @@ const emojis = [
     hp: 6,
     dmg: 3,
     rarity: 1,
-    names: ["Innocent", "Halo", "Holy", "Angel Face", "Smiling Face with Halo"],
+    names: ["Innocent", "Halo", "Holy", "Angel Face", "Smiling Face with Halo", "Saint", "Blessed", "Virtue", "Good"],
     class: 2,
     description: "When this defeats an Emoji, attacks itself for 3",
   },
@@ -1198,7 +1218,7 @@ const emojis = [
     hp: 4,
     dmg: 3,
     rarity: 1,
-    names: ["Bow and Arrow", "Archery", "Bow", "Crossbow"],
+    names: ["Bow and Arrow", "Archery", "Bow", "Crossbow", "Arrow", "Shooter", "Marksman"],
     class: 1,
     description:
       "Attacks the Emoji behind the frontmost enemy Emoji, if possible",
@@ -1206,10 +1226,10 @@ const emojis = [
   {
     emoji: "💉",
     id: 85,
-    hp: 0,
+    hp: 1,
     dmg: 0,
     rarity: 1,
-    names: ["Syringe", "Shot", "Steroids"],
+    names: ["Syringe", "Shot", "Steroids", "Injection", "Vaccine", "Medicine"],
     class: 1,
     description:
       "At the beginning of the Battle, increases the attack power of friendly Emoji in front of itself by 1 and defeats itself",
@@ -1220,7 +1240,7 @@ const emojis = [
     hp: 2,
     dmg: 0,
     rarity: 1,
-    names: ["Bone", "Fossil"],
+    names: ["Bone", "Fossil", "Skeletal", "Remains", "Fossilized"],
     class: 5,
     description: "When this would be defeated, instead transforms into 🦖",
   },
@@ -1240,7 +1260,7 @@ const emojis = [
     hp: 3,
     dmg: 3,
     rarity: 1,
-    names: ["Back", "Back Arrow", "Back Sign"],
+    names: ["Back", "Back Arrow", "Back Sign", "Reverse", "Go Back", "Return", "Backtrack"],
     class: 1,
     description:
       "Attacks the Emoji at the back of the enemy Squad instead of the front",
@@ -1251,7 +1271,7 @@ const emojis = [
     hp: 6,
     dmg: 1,
     rarity: 1,
-    names: ["Dart", "Direct Hit", "Target", "Bullseye"],
+    names: ["Dart", "Direct Hit", "Target", "Bullseye", "Aim", "Target Practice", "Dartboard"],
     class: 2,
     description:
       "All enemy attacks are redirected towards this, regardless of the aggressor's position",
@@ -1262,7 +1282,7 @@ const emojis = [
     hp: 1,
     dmg: 0,
     rarity: -1,
-    names: ["Moneybag", "Money Bag", "Marigold", "Sack"],
+    names: ["Moneybag", "Money Bag", "Marigold", "Sack", "Cash", "Gold", "Rich", "Loot"],
     class: null,
     description:
       "When this survives a Battle without being defeated, give you more money idk",
@@ -1273,7 +1293,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 0,
-    names: ["Rotating Light", "Alarm", "Police Light", "Siren"],
+    names: ["Rotating Light", "Alarm", "Police Light", "Siren", "Alert", "Emergency", "Warning", "Red Light"],
     class: 3,
     description:
       "If this is the only undefeated friendly Emoji, summon 🚓 at the back of the Squad",
@@ -1305,7 +1325,7 @@ const emojis = [
     hp: 3,
     dmg: 3,
     rarity: 2,
-    names: ["Sewing Needle", "Needle"],
+    names: ["Sewing Needle", "Needle", "Thread", "Sew", "Stitch", "Needlework"],
     class: 1,
     description:
       "When attacking, attacks the first X emojis in the enemy Squad for 1 damage, where X is its attack power.",
@@ -1316,7 +1336,7 @@ const emojis = [
     hp: 2,
     dmg: 0,
     rarity: 3, // Master of Teamup
-    names: ["Family"],
+    names: ["Family", "Parents", "Children", "Family Group", "Kin"],
     class: 8,
     description:
       "At the beginning of the Battle, increases its health and attack power by the number of friendly Teamup class emojis",
@@ -1327,7 +1347,7 @@ const emojis = [
     hp: 3,
     dmg: 3,
     rarity: 2,
-    names: ["Accordion"],
+    names: ["Accordion", "Music Instrument", "Polka", "Accordionist"],
     class: 7,
     description:
       "If there is at least one undefeated friendly 🎶, attacks the 2 frontmost enemy emojis at once",
@@ -1338,7 +1358,7 @@ const emojis = [
     hp: 5,
     dmg: 2,
     rarity: 2,
-    names: ["Adhesive Bandage", "Bandaid", "Bandage", "Band-aid"],
+    names: ["Adhesive Bandage", "Bandaid", "Bandage", "Band-aid", "Patch", "Heal", "Bandage Up", "Aid"],
     class: 1,
     description: "Enemy Emojis directly in front of this cannot be healed",
   },
@@ -1348,7 +1368,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 2,
-    names: ["Mute", "Muted Speaker", "Muted", "Sound Off"],
+    names: ["Mute", "Muted Speaker", "Muted", "Sound Off", "Silence", "Mute Button", "No Sound", "Quiet", "Alarm Off"],
     class: 7,
     description:
       "Enemy Emojis that benefit from 🎶 do not recieve their benefits",
@@ -1359,7 +1379,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 1,
-    names: ["Shaking Face", "Shaking", "Vibrating Face", "Vibrating"],
+    names: ["Shaking Face", "Shaking", "Vibrating Face", "Vibrating", "Shake", "Quake", "Vibrate", "Tremble"],
     class: 6,
     description: "When your Squad is Shuffled, increases its attack power by 1",
   },
@@ -1376,6 +1396,7 @@ const emojis = [
       "Mag Left",
       "Mag 1",
       "🔎",
+      "Search", "Find", "Inspect", "Zoom"
     ],
     class: 1,
     description: "Targets the enemy Emoji with the least health",
@@ -1386,7 +1407,7 @@ const emojis = [
     hp: 3,
     dmg: 3,
     rarity: 0,
-    names: ["Top", "Top Arrow", "Dartichoke"],
+    names: ["Top", "Top Arrow", "Dartichoke", "Up", "Topmost", "Highest"],
     class: 1,
     description: "Targets the enemy Emoji with the most health",
   },
@@ -1396,7 +1417,7 @@ const emojis = [
     hp: 3,
     dmg: 1,
     rarity: 0,
-    names: ["Socks", "Sock", "Thigh Highs", "Programming Socks", "Leg Warmers"],
+    names: ["Socks", "Sock", "Thigh Highs", "Programming Socks", "Leg Warmers", "Feet", "Warmers", "Stockings"],
     class: 1,
     description: "When attacking, attacks 2 consecutive times",
   },
@@ -1406,7 +1427,7 @@ const emojis = [
     hp: 5,
     dmg: 1,
     rarity: 1,
-    names: ["Bouquet", "Flowers"],
+    names: ["Bouquet", "Flowers", "Gift", "Arrangement", "Blossom"],
     class: 1,
     description:
       "When a friendly Emoji is defeated, increases its attack power by 1",
@@ -1417,7 +1438,7 @@ const emojis = [
     hp: 2,
     dmg: 1,
     rarity: 0,
-    names: ["Snowman", "Snowman without Snow"],
+    names: ["Snowman", "Snowman without Snow", "Frosty", "Snow", "Winter", "Snow Figure"],
     class: 6,
     description:
       "When your Squad is shuffled, Emojis retain their positions and this defeats itself",
@@ -1428,7 +1449,7 @@ const emojis = [
     hp: 7,
     dmg: 1,
     rarity: 0,
-    names: ["Rock", "Stone", "Boulder"],
+    names: ["Rock", "Stone", "Boulder", "Pebble", "Gravel", "Rocky"],
     class: 6,
     description: "when shuffle rock dont move",
   },
@@ -1438,7 +1459,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 1,
-    names: ["Satellite", "Satellite Dish", "Dish", "Reciever Dish", "Antenna"],
+    names: ["Satellite", "Satellite Dish", "Dish", "Reciever Dish", "Antenna", "Signal Tower", "Broadcast", "Dish"],
     class: 8,
     description:
       "When the friendly frontmost Emoji is healed, this heals the same amount",
@@ -1458,6 +1479,7 @@ const emojis = [
       "Last Track",
       "Last Track Button",
       "Last",
+      "Rewind", "Backtrack", "Last Song"
     ],
     class: 6,
     description: "When attacked or defeated, Shuffles your Squad",
@@ -1474,6 +1496,7 @@ const emojis = [
       "Fire Heart",
       "Red Heart on Fire",
       "Flaming Heart",
+      "Passion", "Burning Heart", "Love Fire", "Fiery Love"
     ],
     class: 1,
     description:
@@ -1485,7 +1508,7 @@ const emojis = [
     hp: 5,
     dmg: 2,
     rarity: 0,
-    names: ["Boxing Glove", "Boxing", "Punching Glove"],
+    names: ["Boxing Glove", "Boxing", "Punching Glove", "Fight", "Boxer", "Punch", "Glove"],
     class: 1,
     description:
       "Deals 1 more damage if the frontmost enemy Emoji has more health than it",
@@ -1496,7 +1519,7 @@ const emojis = [
     hp: 4,
     dmg: 2,
     rarity: 0,
-    names: ["Curling Stone", "Curling", "Curl"],
+    names: ["Curling Stone", "Curling", "Curl", "Ice Sport", "Sweeper"],
     class: 4,
     description:
       "When attacked, switches places with the friendly Emoji behind it and the new frontmost friendly Emoji attacks once",

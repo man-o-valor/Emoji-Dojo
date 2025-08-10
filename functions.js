@@ -304,7 +304,7 @@ async function coinschange(id, amt, affectcooldown) {
       nextReset = midnight + 129600;
     }
 
-    await database.set(id + "coinmod", "16");
+    await database.set(id + "coinmod", "18");
     await database.set(id + "coinrestock", nextReset);
     restocktime = nextReset;
   }
@@ -939,6 +939,9 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata = alterhp(gamedata, squad2, i, squad2, i, 1);
           }
         }
+        if (kill) {
+          gamedata.squads[squad - 1].splice(pos, 1);
+        }
         if (
           (
             gamedata.squads[squad2 - 1][
@@ -956,19 +959,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             1,
             "congratulated"
           );
-        }
-        if (gamedata.squads[squad - 1][pos]?.id == 41) {
-          // tornado
-          gamedata = richtextadd(
-            gamedata,
-            `\n↝ ${gamedata.player[squad - 1]}'s ${emojis[41].emoji} Shuffled ${
-              gamedata.player[squad2 - 1]
-            }'s Squad!`
-          );
-          gamedata = shufflesquad(gamedata, squad2);
-        }
-        if (kill) {
-          gamedata.squads[squad - 1].splice(pos, 1);
         }
       } else {
         if (val > 0) {
