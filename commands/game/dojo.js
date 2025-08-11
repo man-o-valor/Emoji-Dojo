@@ -26,6 +26,7 @@ const {
   getlogs,
   writelogs,
   dailyrewardremind,
+  adminpanel
 } = require("../../functions.js");
 const fs = require("fs");
 const { closestMatch } = require("closest-match");
@@ -46,241 +47,7 @@ module.exports = {
         interaction.user.id == "1013096732147597412" ||
         interaction.user.id == "1146557659349270639"
       ) {
-        devdata = viewemoji.split(" ");
-        devdata.shift();
-        if (devdata[0] == "read") {
-          const data = await database.get(devdata[1]);
-          await interaction.reply({
-            flags: "Ephemeral",
-            content: `Found "${data}" at "${devdata[1]}".`,
-          });
-        } else if (devdata[0] == "write") {
-          await database.set(devdata[1], devdata[2]);
-          await interaction.reply({
-            flags: "Ephemeral",
-            content: `Wrote "${devdata[2]}" to "${devdata[1]}".`,
-          });
-        } else if (devdata[0] == "clear") {
-          await database.delete(devdata[1]);
-          await interaction.reply({
-            flags: "Ephemeral",
-            content: `Cleared all data from "${devdata[1]}".`,
-          });
-        } else if (devdata[0] == "give") {
-          let allemojistoadd = "";
-          for (let i = 0; i < parseInt(devdata[3] ?? "1"); i++) {
-            allemojistoadd +=
-              emojis.find(
-                (x) =>
-                  x.names.find(
-                    (y) =>
-                      y.replace(/\s+/g, "_").toLowerCase() ==
-                      devdata[2].trim().replace(/\s+/g, "_").toLowerCase()
-                  ) || x.emoji == devdata[2].replace(/\s+/g, "")
-              ).id + ",";
-          }
-          const data = await database.get(devdata[1] + "vault");
-          await database.set(devdata[1] + "vault", data + allemojistoadd);
-          await interaction.reply({
-            ephemeral: false,
-            content: `Gave <@${devdata[1]}> ${parseInt(devdata[3] ?? "1")}x ${
-              emojis.find(
-                (x) =>
-                  x.names.find(
-                    (y) =>
-                      y.replace(/\s+/g, "_").toLowerCase() ==
-                      devdata[2].trim().replace(/\s+/g, "_").toLowerCase()
-                  ) || x.emoji == devdata[2].replace(/\s+/g, "")
-              ).emoji
-            }.`,
-          });
-        } else if (devdata[0] == "logs") {
-          const json = Buffer.from(fs.readFileSync("logs.json", "utf8"));
-          const now = new Date();
-          const dateString = now.toDateString();
-          const timeString = now.toLocaleTimeString();
-          await interaction.reply({
-            flags: "Ephemeral",
-            files: [
-              {
-                attachment: json,
-                name: `logs (${dateString}, ${timeString}).json`,
-              },
-            ],
-          });
-        } else if (devdata[0] == "users") {
-          let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
-          const now = Math.floor(Date.now() / 1000);
-          const activeuserslastday = Object.values(logs.logs.players).filter(
-            (player) => player.lastboop > now - 86400
-          ).length;
-          const activeuserslastdaypercent =
-            Math.floor(
-              (100 /
-                (Object.values(logs.logs.players).length /
-                  activeuserslastday)) *
-                100
-            ) / 100;
-          const activeuserslastweek = Object.values(logs.logs.players).filter(
-            (player) => player.lastboop > now - 86400 * 7
-          ).length;
-          const activeuserslastweekpercent =
-            Math.floor(
-              (100 /
-                (Object.values(logs.logs.players).length /
-                  activeuserslastweek)) *
-                100
-            ) / 100;
-          const newuserslastday = Object.values(logs.logs.players).filter(
-            (player) => player.joindate > now - 86400
-          ).length;
-          const newuserslastdaypercent =
-            Math.floor(
-              (100 /
-                (Object.values(logs.logs.players).length / newuserslastday)) *
-                100
-            ) / 100;
-          const newuserslastweek = Object.values(logs.logs.players).filter(
-            (player) => player.joindate > now - 86400 * 7
-          ).length;
-          const newuserslastweekpercent =
-            Math.floor(
-              (100 /
-                (Object.values(logs.logs.players).length / newuserslastweek)) *
-                100
-            ) / 100;
-          await interaction.reply({
-            flags: "Ephemeral",
-            content: `👥 Number of users with data: **${
-              Object.values(logs.logs.players).length
-            }**\n❤️‍🔥 Number of active users in the past day: **${activeuserslastday}** (${activeuserslastdaypercent}%)\n❤️‍🔥 Number of active users in the past week: **${activeuserslastweek}** (${activeuserslastweekpercent}%)\n🐣 Number of new users in the past day: **${newuserslastday}** (${newuserslastdaypercent}%)\n🐣 Number of new users in the past week: **${newuserslastweek}** (${newuserslastweekpercent}%)\n👀 Last interaction: <t:${
-              logs.logs.games.lastboop
-            }:R>`,
-          });
-        } else if (devdata[0] == "emojis") {
-          let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
-          const emojisArray = logs.logs.emojis;
-          let bestbotindex = -1;
-          let worstbotindex = -1;
-          let bestbotratio = -99999;
-          let worstbotratio = 99999;
-          let bestbotlosses = 0;
-          let bestbotwins = 0;
-          let worstbotlosses = 0;
-          let worstbotwins = 0;
-          let bestuserindex = -1;
-          let worstuserindex = -1;
-          let bestuserratio = -99999;
-          let worstuserratio = 99999;
-          let bestuserlosses = 0;
-          let bestuserwins = 0;
-          let worstuserlosses = 0;
-          let worstuserwins = 0;
-          let bestfriendlyindex = -1;
-          let worstfriendlyindex = -1;
-          let bestfriendlyratio = -99999;
-          let worstfriendlyratio = 99999;
-          let bestfriendlylosses = 0;
-          let bestfriendlywins = 0;
-          let worstfriendlylosses = 0;
-          let worstfriendlywins = 0;
-          let bestindex = -1;
-          let worstindex = -1;
-          let bestratio = -99999;
-          let worstratio = 99999;
-          let bestlosses = 0;
-          let bestwins = 0;
-          let worstlosses = 0;
-          let worstwins = 0;
-          let mostviewedindex = -1;
-          let mostviewedtimes = 0;
-
-          for (let i = 0; i < emojisArray.length; i++) {
-            const emoji = emojisArray[i];
-            const {
-              botlosses = 0,
-              botwins = 0,
-              userlosses = 0,
-              userwins = 0,
-              friendlylosses = 0,
-              friendlywins = 0,
-              emojisviewed = 0,
-            } = emoji;
-            const botratio = botwins / botlosses;
-            const userratio = userwins / userlosses;
-            const friendlyratio = friendlywins / friendlylosses;
-            const ratio =
-              (userwins + botwins + friendlywins) /
-              (userlosses + botlosses + friendlylosses);
-
-            if (botratio > bestbotratio) {
-              bestbotratio = botratio;
-              bestbotindex = i;
-              bestbotlosses = botlosses;
-              bestbotwins = botwins;
-            } else if (botratio < worstbotratio) {
-              worstbotratio = botratio;
-              worstbotindex = i;
-              worstbotlosses = botlosses;
-              worstbotwins = botwins;
-            }
-            if (userratio > bestuserratio) {
-              bestuserratio = userratio;
-              bestuserindex = i;
-              bestuserlosses = userlosses;
-              bestuserwins = userwins;
-            } else if (userratio < worstuserratio) {
-              worstuserratio = userratio;
-              worstuserindex = i;
-              worstuserlosses = userlosses;
-              worstuserwins = userwins;
-            }
-            if (friendlyratio > bestfriendlyratio) {
-              bestfriendlyratio = friendlyratio;
-              bestfriendlyindex = i;
-              bestfriendlylosses = friendlylosses;
-              bestfriendlywins = friendlywins;
-            } else if (friendlyratio < worstfriendlyratio) {
-              worstfriendlyratio = friendlyratio;
-              worstfriendlyindex = i;
-              worstfriendlylosses = friendlylosses;
-              worstfriendlywins = friendlywins;
-            }
-            if (ratio > bestratio) {
-              bestratio = ratio;
-              bestindex = i;
-              bestlosses = userlosses + botlosses + friendlylosses;
-              bestwins = userwins + botwins + friendlywins;
-            } else if (friendlyratio < worstratio) {
-              worstratio = ratio;
-              worstindex = i;
-              worstlosses = userlosses + botlosses + friendlylosses;
-              worstwins = userwins + botwins + friendlywins;
-            }
-            if (emojisviewed > mostviewedtimes) {
-              mostviewedtimes = emojisviewed;
-              mostviewedindex = i;
-            }
-          }
-          await interaction.reply({
-            flags: "Ephemeral",
-            content: `🏆 Strongest emoji in all battles: ${emojis[bestindex].emoji} (${bestwins}/${bestlosses})\n❌ Weakest emoji in all battles: ${emojis[worstindex].emoji} (${worstwins}/${worstlosses})\n\n🤖🏆 Strongest emoji in bot battles: ${emojis[bestbotindex].emoji} (${bestbotwins}/${bestbotlosses})\n🤖❌ Weakest emoji in bot battles: ${emojis[worstbotindex].emoji} (${worstbotwins}/${worstbotlosses})\n\n👤🏆 Strongest emoji in user battles: ${emojis[bestuserindex].emoji} (${bestuserwins}/${bestuserlosses})\n👤❌ Weakest emoji in user battles: ${emojis[worstuserindex].emoji} (${worstuserwins}/${worstuserlosses})\n\n💕🏆 Strongest emoji in friendly battles: ${emojis[bestfriendlyindex].emoji} (${bestfriendlywins}/${bestfriendlylosses})\n💕❌ Weakest emoji in friendly battles: ${emojis[worstfriendlyindex].emoji} (${worstfriendlywins}/${worstfriendlylosses})\n\n👀 Most viewed emoji: ${emojis[mostviewedindex].emoji} (${mostviewedtimes})`,
-          });
-        } else if (devdata[0] == "names") {
-          let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
-          let names = "Last 40 players to join Emoji Dojo:";
-          for (
-            let i = Object.values(logs.logs.players).length - 1;
-            i > Object.values(logs.logs.players).length - 41;
-            i--
-          ) {
-            names += "\n<@" + Object.keys(logs.logs.players)[i].slice(4) + ">";
-          }
-          await interaction.reply({
-            flags: "Ephemeral",
-            content: names,
-          });
-        }
+        await adminpanel(interaction, viewemoji);
       } else {
         await interaction.reply({
           flags: "Ephemeral",
@@ -320,7 +87,7 @@ module.exports = {
               ) || x.emoji == closeviewemoji.replace(/\s+/g, "")
           );
           const viewemojiid = vaultarray.find(
-            (x) => emojis[x]?.id == (emojifound)?.id
+            (x) => emojis[x]?.id == emojifound?.id
           );
 
           const vaultembed = new EmbedBuilder()
@@ -628,7 +395,8 @@ module.exports = {
                             await database.set(
                               interaction.user.id + "vault",
                               tempvault +
-                                emojis[classes[emojifound.class].legendary]?.id +
+                                emojis[classes[emojifound.class].legendary]
+                                  ?.id +
                                 ","
                             );
                             await interaction3.followUp({
