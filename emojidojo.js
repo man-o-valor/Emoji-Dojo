@@ -3,7 +3,6 @@ const path = require('node:path');
 const { Client, Events, Collection,GatewayIntentBits,ActivityType } = require('discord.js');
 const { token,testtoken,privatetoken } = require('./config.json');
 
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -14,6 +13,8 @@ const logchannel =  client.channels.cache.get('1217859665648680991');
 const errorchannel = client.channels.cache.get('1217859723320361041');
 
 module.exports = {logchannel,errorchannel}
+
+fs.writeFile("logs.json", "", { flag: 'wx' }, (err) => {});
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
