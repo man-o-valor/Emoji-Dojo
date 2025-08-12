@@ -1954,7 +1954,7 @@ const emojis = [
     hp: 5,
     dmg: 1,
     rarity: 1,
-    names: ["Bouquet", "Flowers", "Gift", "Arrangement", "Blossom"],
+    names: ["Bouquet", "Flowers", "Arrangement", "Blossom"],
     class: 1,
     description:
       "When a friendly Emoji is defeated, increases its attack power by 1",
