@@ -2005,7 +2005,7 @@ const emojis = [
     ],
     class: 8,
     description:
-      "When the friendly frontmost Emoji is healed, this heals the same amount",
+      "When the friendly frontmost Emoji is healed, this heals itself by the same amount",
   },
   {
     emoji: "⏮️",
@@ -2139,6 +2139,25 @@ const emojis = [
     class: null,
     description:
       "When attacked, defeats itself, and when attacking, deals 1 more damage (cut out by ✂️)",
+  },
+  {
+    emoji: "🚫",
+    id: 115,
+    hp: 3,
+    dmg: 3,
+    rarity: 1,
+    names: [
+      "No Entry Sign",
+      "Prohibited",
+      "No",
+      "No Entry",
+      "Ban",
+      "Banned",
+      "Delete"
+    ],
+    class: 5,
+    description:
+      "When this would defeat an Emoji, instead deletes it (emojis that benefit from defeated emojis do not benefit from this)",
   },
 ];
 
