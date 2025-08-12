@@ -77,10 +77,6 @@ module.exports = {
         let theirviewemojiid = theirvault.find(
           (x) => emojis[x]?.id == (theiremojifound)?.id
         );
-        console.log(myemojifound);
-        console.log(myviewemojiid);
-        console.log(theiremojifound);
-        console.log(theirviewemojiid);
         if (myviewemojiid) {
           if (theirviewemojiid) {
             if (
