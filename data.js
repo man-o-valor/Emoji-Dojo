@@ -848,7 +848,7 @@ const emojis = [
     emoji: "🃏",
     id: 40,
     hp: 6,
-    dmg: 2,
+    dmg: 4,
     rarity: 0,
     names: [
       "Black Joker",
@@ -969,7 +969,7 @@ const emojis = [
     emoji: "🔥",
     id: 46,
     hp: 3,
-    dmg: 3,
+    dmg: 4,
     rarity: 1,
     names: [
       "Fire",
