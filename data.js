@@ -65,7 +65,7 @@ const classes = [
     id: 3,
     name: "Summoning",
     emoji: "<:summoning:1326215191234351188>",
-    legendary: 61,
+    legendary: 111,
   },
   {
     id: 4,
@@ -1252,7 +1252,7 @@ const emojis = [
     id: 61,
     hp: 2,
     dmg: 1,
-    rarity: 3, // Master of Summoning
+    rarity: 2,
     names: [
       "Magic Wand",
       "Wand",
@@ -2079,6 +2079,24 @@ const emojis = [
     class: 4,
     description:
       "When attacked, switches places with the friendly Emoji behind it and the new frontmost friendly Emoji attacks once",
+  },
+  {
+    emoji: "🎁",
+    id: 111,
+    hp: 10,
+    dmg: 0,
+    rarity: 3, // Master of Summoning
+    names: [
+      "Gift",
+      "Wrapped Gift",
+      "Present",
+      "Package",
+      "Wrapped",
+      "Surprise",
+    ],
+    class: 3,
+    description:
+      "When attacked or defeated, summons a random non-Master Emoji in front of itself",
   },
 ];
 

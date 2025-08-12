@@ -562,7 +562,7 @@ async function sortDojo(interaction, sort, vaultarray, vaultembed) {
       let classdesc = "";
       for (let i = 0; i < classes.length; i++) {
         if (classnumbers[i] > 0) {
-          classdesc += `## ${classes[i].name} ${classes[i].emoji}\n${classtext[i]}\n`;
+          classdesc += `## ${classes[i].emoji} ${classes[i].name}\n${classtext[i]}\n`;
         }
       }
       vaultembed.setDescription(

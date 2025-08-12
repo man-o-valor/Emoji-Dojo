@@ -360,7 +360,14 @@ function richtextadd(gamedata, text) {
 }
 
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
-  modifyAttack(gamedata, squad, squad2, pos, pos2, val);
+  ({ gamedata, squad, squad2, pos, pos2, val } = modifyAttack(
+    gamedata,
+    squad,
+    squad2,
+    pos,
+    pos2,
+    val
+  ));
 
   alter: {
     if (gamedata.squads[squad - 1][pos]) {
@@ -372,14 +379,25 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       }
       gamedata.squads[squad - 1][pos].hp += val;
 
-      onBeforeAttack(gamedata, squad, squad2, pos2);
+      ({ gamedata, squad, squad2, pos2 } = onBeforeAttack(
+        gamedata,
+        squad,
+        squad2,
+        pos2
+      ));
       if (gamedata.squads[squad - 1][pos].hp <= 0) {
-        onBeforeDefeated(gamedata, squad, pos);
+        ({ gamedata, squad, pos } = onBeforeDefeated(gamedata, squad, pos));
       }
 
       if (gamedata.squads[squad - 1][pos]?.hp <= 0) {
         kill = true;
-        onBeforeDefeating(gamedata, squad, squad2, pos, pos2);
+        ({ gamedata, squad, squad2, pos, pos2 } = onBeforeDefeating(
+          gamedata,
+          squad,
+          squad2,
+          pos,
+          pos2
+        ));
         if (
           !silence &&
           gamedata.squads[squad2 - 1][pos2] &&
@@ -394,12 +412,24 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }! (${val * -1} damage)`
           );
         }
-        onDefeating(gamedata, squad, squad2, pos, pos2, val);
-        onAttackedOrDefeated(gamedata, squad, squad2, pos);
+        ({ gamedata, squad, squad2, pos, pos2, val } = onDefeating(
+          gamedata,
+          squad,
+          squad2,
+          pos,
+          pos2,
+          val
+        ));
+        ({ gamedata, squad, squad2, pos } = onAttackedOrDefeated(
+          gamedata,
+          squad,
+          squad2,
+          pos
+        ));
         if (kill) {
           gamedata.squads[squad - 1].splice(pos, 1);
         }
-        onDefeat(gamedata, squad, squad2);
+        ({ gamedata, squad, squad2 } = onDefeat(gamedata, squad, squad2));
       } else {
         if (val > 0) {
           if (!silence && gamedata.squads[squad2 - 1][pos2]) {
@@ -421,7 +451,14 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               );
             }
           }
-          onHealed(gamedata, squad, squad2, pos, pos2, val);
+          ({ gamedata, squad, squad2, pos, pos2, val } = onHealed(
+            gamedata,
+            squad,
+            squad2,
+            pos,
+            pos2,
+            val
+          ));
         } else if (val < 0) {
           if (!silence) {
             if (gamedata.squads[squad2 - 1][pos2]) {
@@ -435,11 +472,30 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               );
             }
           }
-          onAttack(gamedata, squad, squad2, pos, pos2, val);
+          ({ gamedata, squad, squad2, pos, pos2, val } = onAttack(
+            gamedata,
+            squad,
+            squad2,
+            pos,
+            pos2,
+            val
+          ));
         }
       }
       if (val < 0) {
-        onAfterAttack(gamedata, squad, squad2, pos, pos2);
+        ({ gamedata, squad, squad2, pos, pos2 } = onAfterAttack(
+          gamedata,
+          squad,
+          squad2,
+          pos,
+          pos2
+        ));
+        ({ gamedata, squad, squad2, pos } = onAttackedOrDefeated(
+          gamedata,
+          squad,
+          squad2,
+          pos
+        ));
       }
       if (!silence && val == 0 && gamedata.squads[squad2 - 1][pos2]) {
         gamedata = richtextadd(
@@ -1153,6 +1209,23 @@ function onAttackedOrDefeated(gamedata, squad, squad2, pos) {
     );
     gamedata = shufflesquad(gamedata, squad);
   }
+  if (gamedata.squads[squad - 1][pos]?.id == 111) {
+    // wrapped gift
+    const nonmasters = emojis.filter((item) => item.rarity != 3 && item.class !== null );
+    const rand = Math.floor(Math.random() * nonmasters.length);
+    gamedata.squads[squad - 1].splice(
+      pos,
+      0,
+      lodash.cloneDeep(nonmasters[rand])
+    );
+    gamedata = richtextadd(
+      gamedata,
+      `\n✚ ${gamedata.player[squad - 1]}'s ${emojis[111].emoji} summoned ${
+        nonmasters[rand].emoji
+      }!`
+    );
+  }
+  return { gamedata, squad, squad2, pos };
 }
 
 function onDefeat(gamedata, squad, squad2) {
@@ -1209,6 +1282,7 @@ function onDefeat(gamedata, squad, squad2) {
       gamedata = alterhp(gamedata, squad2, i, squad2, i, 1);
     }
   }
+  return { gamedata, squad, squad2 };
 }
 
 function onDefeating(gamedata, squad, squad2, pos, pos2) {
@@ -1520,6 +1594,7 @@ function onDefeating(gamedata, squad, squad2, pos, pos2) {
       gamedata = alterhp(gamedata, squad, 1, squad, pos, -2, "burned", false);
     }
   }
+  return { gamedata, squad, squad2, pos, pos2 };
 }
 
 function onBeforeDefeated(gamedata, squad, pos) {
@@ -1533,6 +1608,7 @@ function onBeforeDefeated(gamedata, squad, pos) {
       } evolved into a ${emojis[87].emoji}!`
     );
   }
+  return { gamedata, squad, pos };
 }
 
 function onBeforeAttack(gamedata, squad, squad2, pos2) {
@@ -1565,6 +1641,7 @@ function onBeforeAttack(gamedata, squad, squad2, pos2) {
       } damaged itself by attacking! (1 damage)`
     );
   }
+  return { gamedata, squad, squad2, pos2 };
 }
 
 function onHealed(gamedata, squad, squad2, pos, pos2, val) {
@@ -1593,6 +1670,7 @@ function onHealed(gamedata, squad, squad2, pos, pos2, val) {
       }
     }
   }
+  return { gamedata, squad, squad2, pos, pos2, val };
 }
 
 function onAttack(gamedata, squad, squad2, pos, pos2, val) {
@@ -1749,6 +1827,7 @@ function onAttack(gamedata, squad, squad2, pos, pos2, val) {
       } to the back of their Squad!`
     );
   }
+  return { gamedata, squad, squad2, pos, pos2, val };
 }
 
 function onAfterAttack(gamedata, squad, squad2, pos, pos2) {
@@ -1802,6 +1881,7 @@ function onAfterAttack(gamedata, squad, squad2, pos, pos2) {
       );
     }
   }
+  return { gamedata, squad, squad2, pos, pos2 };
 }
 
 function onBeforeDefeating(gamedata, squad, squad2, pos, pos2) {
@@ -1825,6 +1905,7 @@ function onBeforeDefeating(gamedata, squad, squad2, pos, pos2) {
     silence = true;
     kill = false;
   }
+  return { gamedata, squad, squad2, pos, pos2 };
 }
 
 function modifyAttack(gamedata, squad, squad2, pos, pos2, val) {
@@ -1925,6 +2006,7 @@ function modifyAttack(gamedata, squad, squad2, pos, pos2, val) {
       verb = "tried to heal";
     }
   }
+  return { gamedata, squad, squad2, pos, pos2, val };
 }
 
 customemojis: {
