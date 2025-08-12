@@ -372,8 +372,9 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   alter: {
     if (gamedata.squads[squad - 1][pos]) {
       if (
-        gamedata.squads[squad - 1][pos].hp == undefined ||
-        gamedata.squads[squad - 1][pos].hp < 0
+        (gamedata.squads[squad - 1][pos].hp == undefined ||
+          gamedata.squads[squad - 1][pos].hp < 0) &&
+        gamedata.squads[squad - 1][pos]
       ) {
         gamedata.squads[squad - 1][pos].hp = 0;
       }
@@ -857,6 +858,20 @@ function playturn(gamedata) {
         0 - activeemoji.dmg
       );
     }
+    if (
+      activeemoji.id == 112 &&
+      musicaltrigger(gamedata, gamedata.playerturn, 0)
+    ) {
+      // maracas
+      gamedata = alterhp(
+        gamedata,
+        gamedata.playerturn * -1 + 3,
+        0,
+        gamedata.playerturn,
+        0,
+        0 - activeemoji.dmg
+      );
+    }
     if (basicattackflag) {
       gamedata = alterhp(
         gamedata,
@@ -901,7 +916,7 @@ function playturn(gamedata) {
           emojis[37].emoji
         } transformed ${
           gamedata.player[gamedata.playerturn * -1 + 2]
-        }'s ${tempemj} into a ${emojis[7].emoji}!`
+        }'s ${tempemj} into ${emojis[7].emoji}!`
       );
     }
   }
@@ -1211,7 +1226,9 @@ function onAttackedOrDefeated(gamedata, squad, squad2, pos) {
   }
   if (gamedata.squads[squad - 1][pos]?.id == 111) {
     // wrapped gift
-    const nonmasters = emojis.filter((item) => item.rarity != 3 && item.class !== null );
+    const nonmasters = emojis.filter(
+      (item) => item.rarity != 3 && !(item.class === null && item.rarity === -1)
+    );
     const rand = Math.floor(Math.random() * nonmasters.length);
     gamedata.squads[squad - 1].splice(
       pos,
@@ -1594,6 +1611,28 @@ function onDefeating(gamedata, squad, squad2, pos, pos2) {
       gamedata = alterhp(gamedata, squad, 1, squad, pos, -2, "burned", false);
     }
   }
+  if (
+    gamedata.squads[squad2 - 1][pos]?.id == 113 &&
+    gamedata.squads[squad - 1][pos + 1]
+  ) {
+    // scissors
+    const tempemj = gamedata.squads[squad - 1][pos + 1]?.emoji;
+    const temphp = gamedata.squads[squad - 1][pos + 1]?.hp;
+    const tempdmg = gamedata.squads[squad - 1][pos + 1]?.dmg;
+    gamedata.squads[squad - 1].splice(
+      pos + 1,
+      1,
+      lodash.cloneDeep(emojis[114])
+    );
+    gamedata.squads[squad - 1][pos + 1].hp = temphp;
+    gamedata.squads[squad - 1][pos + 1].dmg = tempdmg;
+    gamedata = richtextadd(
+      gamedata,
+      `\n⇪ ${gamedata.player[squad2 - 1]}'s ${emojis[113].emoji} transformed ${
+        gamedata.player[squad - 1]
+      }'s ${tempemj} into ${emojis[114].emoji}!`
+    );
+  }
   return { gamedata, squad, squad2, pos, pos2 };
 }
 
@@ -1605,7 +1644,7 @@ function onBeforeDefeated(gamedata, squad, pos) {
       gamedata,
       `\n⇪ Instead of being defeated, ${gamedata.player[squad - 1]}'s ${
         emojis[86].emoji
-      } evolved into a ${emojis[87].emoji}!`
+      } evolved into ${emojis[87].emoji}!`
     );
   }
   return { gamedata, squad, pos };
@@ -1784,7 +1823,7 @@ function onAttack(gamedata, squad, squad2, pos, pos2, val) {
       gamedata,
       `\n⇪ ${gamedata.player[squad - 1]}'s ${emojis[67].emoji} transformed ${
         gamedata.player[squad2 - 1]
-      }'s ${tempemj} into a ${
+      }'s ${tempemj} into ${
         emojis[68].emoji
       }, and increased its attack power by 1!`
     );
@@ -1827,6 +1866,16 @@ function onAttack(gamedata, squad, squad2, pos, pos2, val) {
       } to the back of their Squad!`
     );
   }
+  if (gamedata.squads[squad - 1][pos]?.id == 114) {
+    // dotted line face
+    gamedata.squads[squad - 1].splice(pos, 1);
+    gamedata = richtextadd(
+      gamedata,
+      `\n𝚾 ${gamedata.player[squad - 1]}'s ${
+        emojis[114].emoji
+      } defeated itself!`
+    );
+  }
   return { gamedata, squad, squad2, pos, pos2, val };
 }
 
@@ -1854,14 +1903,14 @@ function onAfterAttack(gamedata, squad, squad2, pos, pos2) {
       gamedata.squads[0].splice(0, 1, lodash.cloneDeep(emojis[24]));
       gamedata = richtextadd(
         gamedata,
-        `\n⇪ ${gamedata.player[0]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
+        `\n⇪ ${gamedata.player[0]}'s ${emojis[23].emoji} evolved into ${emojis[24].emoji}!`
       );
     } else if (gamedata.squads[0][0]?.id == 91) {
       // rotating light
       gamedata.squads[0].splice(1, 0, lodash.cloneDeep(emojis[92]));
       gamedata = richtextadd(
         gamedata,
-        `\n✚ ${gamedata.player[0]}'s ${emojis[91].emoji} called in a ${emojis[92].emoji}`
+        `\n✚ ${gamedata.player[0]}'s ${emojis[91].emoji} called in ${emojis[92].emoji}`
       );
     }
   }
@@ -1871,13 +1920,13 @@ function onAfterAttack(gamedata, squad, squad2, pos, pos2) {
       gamedata.squads[1].splice(0, 1, lodash.cloneDeep(emojis[24]));
       gamedata = richtextadd(
         gamedata,
-        `\n⇪ ${gamedata.player[1]}'s ${emojis[23].emoji} evolved into a ${emojis[24].emoji}!`
+        `\n⇪ ${gamedata.player[1]}'s ${emojis[23].emoji} evolved into ${emojis[24].emoji}!`
       );
     } else if (gamedata.squads[1][0]?.id == 91) {
       gamedata.squads[1].splice(1, 0, lodash.cloneDeep(emojis[92]));
       gamedata = richtextadd(
         gamedata,
-        `\n✚ ${gamedata.player[1]}'s ${emojis[91].emoji} called in a ${emojis[92].emoji}`
+        `\n✚ ${gamedata.player[1]}'s ${emojis[91].emoji} called in ${emojis[92].emoji}`
       );
     }
   }
@@ -1923,6 +1972,10 @@ function modifyAttack(gamedata, squad, squad2, pos, pos2, val) {
   if (gamedata.squads[squad2 - 1][pos2 + 1]?.id == 75 && val <= 0) {
     // anger
     val -= 2;
+  }
+  if (gamedata.squads[squad2 - 1][pos2]?.id == 114 && val <= 0) {
+    // dotted line face
+    val -= 1;
   }
   if (
     gamedata.squads[squad2 - 1][pos2]?.id == 109 &&

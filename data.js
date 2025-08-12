@@ -254,7 +254,7 @@ const emojis = [
     emoji: "😶",
     id: 7,
     hp: 1,
-    dmg: 0,
+    dmg: 1,
     rarity: -1,
     names: [
       "No Mouth",
@@ -812,7 +812,7 @@ const emojis = [
     ],
     class: 5,
     description:
-      "Every other round when attacking, transforms the frontmost enemy Emoji into a 😶 with identical stats",
+      "Every other round when attacking, transforms the frontmost enemy Emoji into 😶 with identical stats",
   },
   {
     emoji: "✨",
@@ -1205,7 +1205,7 @@ const emojis = [
       "Pathogen",
     ],
     description:
-      "Before being Shuffled, transforms the Emoji behind it into a 🦠 with identical stats (summoned by 😷)",
+      "Before being Shuffled, transforms the Emoji behind it into 🦠 with identical stats (summoned by 😷)",
   },
   {
     emoji: "🛸",
@@ -1401,13 +1401,13 @@ const emojis = [
     ],
     class: 5,
     description:
-      "When attacked, transforms the frontmost enemy emoji into a 🔒 with identical stats, and increases the frontmost enemy's attack power by 1",
+      "When attacked, transforms the frontmost enemy emoji into 🔒 with identical stats, and increases the frontmost enemy's attack power by 1",
   },
   {
     emoji: "🔒",
     id: 68,
     hp: 1,
-    dmg: 0,
+    dmg: 1,
     rarity: -1,
     names: ["Lock", "Locked", "Padlock"],
     class: null,
@@ -1749,7 +1749,7 @@ const emojis = [
     emoji: "💰",
     id: 90,
     hp: 1,
-    dmg: 0,
+    dmg: 1,
     rarity: -1,
     names: [
       "Moneybag",
@@ -2097,6 +2097,48 @@ const emojis = [
     class: 3,
     description:
       "When attacked or defeated, summons a random non-Master Emoji in front of itself",
+  },
+  {
+    emoji: "🪇",
+    id: 112,
+    hp: 4,
+    dmg: 2,
+    rarity: 1,
+    names: ["Maracas", "Maraca", "Shakers", "Shaker"],
+    class: 7,
+    description:
+      "If there is at least one undefeated friendly 🎶 when attacking, attacks 2 consecutive times",
+  },
+  {
+    emoji: "✂️",
+    id: 113,
+    hp: 4,
+    dmg: 2,
+    rarity: 2,
+    names: ["Scissors", "Shears", "Scissor", "Pair of Scissors"],
+    class: 5,
+    description:
+      "When this defeats an emoji, transforms the enemy emoji behind it into 🫥 with identical stats",
+  },
+  {
+    emoji: "🫥",
+    id: 114,
+    hp: 1,
+    dmg: 1,
+    rarity: -1,
+    names: [
+      "Dotted Line Face",
+      "Cutout Face",
+      "Cut out",
+      "Dotted Line",
+      "Disappearing Face",
+      "Disappearing",
+      "Invisible",
+      "Invisible Face",
+    ],
+    class: null,
+    description:
+      "When attacked, defeats itself, and when attacking, deals 1 more damage (cut out by ✂️)",
   },
 ];
 
