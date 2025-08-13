@@ -2083,7 +2083,7 @@ const emojis = [
   {
     emoji: "🎁",
     id: 111,
-    hp: 10,
+    hp: 7,
     dmg: 0,
     rarity: 3, // Master of Summoning
     names: [
@@ -2096,7 +2096,7 @@ const emojis = [
     ],
     class: 3,
     description:
-      "When attacked or defeated, summons a random non-Master Emoji in front of itself",
+      "When attacked, summons a random non-Master Emoji in front of itself",
   },
   {
     emoji: "🪇",
