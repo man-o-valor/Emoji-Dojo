@@ -362,7 +362,7 @@ module.exports = {
                 }
               }
               let collector = int3.createMessageComponentCollector({
-                time: 1200000,
+                time: 12000,
               });
               collector.on("collect", async (interaction3) => {
                 try {

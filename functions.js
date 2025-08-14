@@ -1378,8 +1378,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             );
           }
         }
-      }
-      attackedOrDefeated: {
+        attackedOrDefeated: {
         if (gamedata.squads[squad - 1][pos]?.id == 10) {
           // shuffle button/twisted rightwards arrows
           gamedata.squads[squad - 1].splice(pos, 1);
@@ -1448,6 +1447,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           gamedata = shufflesquad(gamedata, squad);
         }
+      }
       }
     }
     if (val < 0) {
