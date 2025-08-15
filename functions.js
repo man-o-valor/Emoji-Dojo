@@ -525,8 +525,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       }
     }
 
+    let target = lodash.cloneDeep(gamedata.squads[squad - 1][pos]);
+    let kill;
     if (gamedata.squads[squad - 1][pos]?.hp <= 0) {
-      let kill = true;
+      kill = true;
       beforeDefeating: {
         if (gamedata.squads[squad2 - 1][pos2]?.id == 82) {
           // dove
@@ -959,80 +961,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         }
       }
       if (kill) {
-        attackedOrDefeated: {
-          if (gamedata.squads[squad - 1][pos]?.id == 10) {
-            // shuffle button/twisted rightwards arrows
-            gamedata.squads[squad - 1].splice(pos, 1);
-            gamedata = shufflesquad(gamedata, squad2);
-            gamedata = richtextadd(
-              gamedata,
-              `\n↝ ${gamedata.player[squad - 1]}'s ${
-                emojis[10].emoji
-              } Shuffled ${
-                gamedata.player[squad2 - 1]
-              }'s Squad, and defeated itself!`
-            );
-          }
-          if (gamedata.squads[squad - 1][pos]?.id == 9) {
-            // mortar board
-            gamedata.squads[squad - 1].splice(pos, 1);
-            for (i = 0; i < 3; i++) {
-              gamedata.squads[squad - 1].splice(
-                pos,
-                0,
-                cloneWithEdit(emojis[0], { hp: 1 })
-              );
-            }
-            gamedata = richtextadd(
-              gamedata,
-              `\n✚ ${gamedata.player[squad - 1]}'s ${
-                emojis[9].emoji
-              } sparked a standing ovation and summoned ${emojis[0].emoji}${
-                emojis[0].emoji
-              }${emojis[0].emoji}, and defeated itself!`
-            );
-          }
-          if (gamedata.squads[squad - 1][pos]?.id == 36) {
-            // bomb
-            gamedata = alterhp(
-              gamedata,
-              0 - squad + 3,
-              0,
-              squad,
-              pos,
-              -1000,
-              "exploded",
-              true
-            );
-            gamedata.squads[squad - 1].splice(pos, 1);
-            gamedata = richtextadd(
-              gamedata,
-              `\n✩ ${gamedata.player[squad - 1]}'s ${
-                emojis[36].emoji
-              } exploded!`
-            );
-          }
-          if (gamedata.squads[squad - 1][pos]?.id == 41) {
-            // tornado
-            gamedata = richtextadd(
-              gamedata,
-              `\n↝ ${gamedata.player[squad - 1]}'s ${
-                emojis[41].emoji
-              } Shuffled ${gamedata.player[squad2 - 1]}'s Squad!`
-            );
-            gamedata = shufflesquad(gamedata, squad2);
-          }
-          if (gamedata.squads[squad - 1][pos]?.id == 107) {
-            // track previous
-            gamedata = richtextadd(
-              gamedata,
-              `\n↝ ${gamedata.player[squad - 1]}'s ${
-                emojis[107].emoji
-              } Shuffled ${gamedata.player[squad - 1]}'s Squad!`
-            );
-            gamedata = shufflesquad(gamedata, squad);
-          }
-        }
         gamedata.squads[squad - 1].splice(pos, 1);
         defeat: {
           if (
@@ -1378,10 +1306,25 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             );
           }
         }
-        attackedOrDefeated: {
-        if (gamedata.squads[squad - 1][pos]?.id == 10) {
+      }
+    }
+    if (!silence && val == 0 && gamedata.squads[squad2 - 1][pos2]) {
+      gamedata = richtextadd(
+        gamedata,
+        `\n↣ ${gamedata.player[squad2 - 1]}'s ${
+          gamedata.squads[squad2 - 1][pos2].emoji
+        } ${verb ?? "tried to attack"} ${gamedata.player[squad - 1]}'s ${
+          gamedata.squads[squad - 1][pos].emoji
+        }... but it did nothing.`
+      );
+    }
+    if (val <= 0) {
+      attackedOrDefeated: {
+        if (target?.id == 10) {
           // shuffle button/twisted rightwards arrows
-          gamedata.squads[squad - 1].splice(pos, 1);
+          if (kill == undefined) {
+            gamedata.squads[squad - 1].splice(pos, 1);
+          }
           gamedata = shufflesquad(gamedata, squad2);
           gamedata = richtextadd(
             gamedata,
@@ -1390,9 +1333,11 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }'s Squad, and defeated itself!`
           );
         }
-        if (gamedata.squads[squad - 1][pos]?.id == 9) {
+        if (target?.id == 9) {
           // mortar board
-          gamedata.squads[squad - 1].splice(pos, 1);
+          if (kill == undefined) {
+            gamedata.squads[squad - 1].splice(pos, 1);
+          }
           for (i = 0; i < 3; i++) {
             gamedata.squads[squad - 1].splice(
               pos,
@@ -1409,25 +1354,27 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }${emojis[0].emoji}, and defeated itself!`
           );
         }
-        if (gamedata.squads[squad - 1][pos]?.id == 36) {
+        if (target?.id == 36) {
           // bomb
           gamedata = alterhp(
             gamedata,
             0 - squad + 3,
             0,
             squad,
-            pos,
+            -1,
             -1000,
             "exploded",
             true
           );
-          gamedata.squads[squad - 1].splice(pos, 1);
+          if (kill == undefined) {
+            gamedata.squads[squad - 1].splice(pos, 1);
+          }
           gamedata = richtextadd(
             gamedata,
             `\n✩ ${gamedata.player[squad - 1]}'s ${emojis[36].emoji} exploded!`
           );
         }
-        if (gamedata.squads[squad - 1][pos]?.id == 41) {
+        if (target?.id == 41) {
           // tornado
           gamedata = richtextadd(
             gamedata,
@@ -1437,7 +1384,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           gamedata = shufflesquad(gamedata, squad2);
         }
-        if (gamedata.squads[squad - 1][pos]?.id == 107) {
+        if (target?.id == 107) {
           // track previous
           gamedata = richtextadd(
             gamedata,
@@ -1447,7 +1394,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
           gamedata = shufflesquad(gamedata, squad);
         }
-      }
       }
     }
     if (val < 0) {
@@ -1503,16 +1449,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           }
         }
       }
-    }
-    if (!silence && val == 0 && gamedata.squads[squad2 - 1][pos2]) {
-      gamedata = richtextadd(
-        gamedata,
-        `\n↣ ${gamedata.player[squad2 - 1]}'s ${
-          gamedata.squads[squad2 - 1][pos2].emoji
-        } ${verb ?? "tried to attack"} ${gamedata.player[squad - 1]}'s ${
-          gamedata.squads[squad - 1][pos].emoji
-        }... but it did nothing.`
-      );
     }
   }
 
