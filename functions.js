@@ -361,7 +361,7 @@ function richtextadd(gamedata, text) {
 
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (gamedata.richtext.length > 10000) {
-    console.log(JSON.stringify(gamedata.richtext));
+    console.log(JSON.stringify(gamedata));
     return;
   }
   modifyAttack: {
