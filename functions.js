@@ -647,30 +647,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             }
           }
         }
-        if (gamedata.squads[squad - 1][pos]?.id != 62) {
-          // skyline
-          for (i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
-            if (gamedata.squads[squad - 1][i]?.id == 62) {
-              for (j = 0; j < gamedata.squads[squad - 1].length; j++) {
-                if (
-                  gamedata.squads[squad - 1][j]?.id ==
-                    gamedata.squads[squad - 1][pos]?.id &&
-                  gamedata.squads[squad - 1][j].hp > 0
-                ) {
-                  gamedata = alterhp(gamedata, squad, j, squad, i, 1, "", true);
-                }
-              }
-              gamedata = richtextadd(
-                gamedata,
-                `\n♡ ${gamedata.player[squad - 1]}'s ${
-                  emojis[62].emoji
-                } healed all friendly ${
-                  gamedata.squads[squad - 1][pos].emoji
-                } by 1!`
-              );
-            }
-          }
-        }
         if (gamedata.squads[squad2 - 1][pos2]?.id == 53) {
           // wolf
           gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, 1, "", true);
@@ -1019,6 +995,29 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
                   emojis[51].emoji
                 } healed all Emojis behind itself by 1!`
               );
+            }
+            if (gamedata.squads[squad - 1][i]?.id == 62) {
+              // skyline
+              takeeffect = false;
+              for (j = 0; j < gamedata.squads[squad - 1].length; j++) {
+                if (
+                  gamedata.squads[squad - 1][j]?.id == target?.id &&
+                  gamedata.squads[squad - 1][j].hp > 0
+                ) {
+                  gamedata = alterhp(gamedata, squad, j, squad, i, 1, "", true);
+                }
+                takeeffect = true;
+              }
+              if (takeeffect) {
+                gamedata = richtextadd(
+                  gamedata,
+                  `\n♡ ${gamedata.player[squad - 1]}'s ${
+                    emojis[62].emoji
+                  } healed all friendly ${
+                    gamedata.squads[squad - 1][pos].emoji
+                  } by 1!`
+                );
+              }
             }
           }
           for (i = 0; i < gamedata.squads[squad2 - 1].length; i++) {
