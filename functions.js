@@ -916,7 +916,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           }
         }
         if (
-          gamedata.squads[squad2 - 1][pos]?.id == 113 &&
+          gamedata.squads[squad2 - 1][pos2]?.id == 113 &&
           gamedata.squads[squad - 1][pos + 1]
         ) {
           // scissors

@@ -2153,11 +2153,11 @@ const emojis = [
       "No Entry",
       "Ban",
       "Banned",
-      "Delete"
+      "Delete",
     ],
     class: 5,
     description:
-      "When this would defeat an Emoji, instead deletes it (emojis that benefit from defeated emojis do not benefit from this)",
+      "When this would defeat an Emoji, instead deletes it (Emojis that benefit from defeated Emojis do not benefit from this)",
   },
 ];
 
