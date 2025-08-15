@@ -360,6 +360,10 @@ function richtextadd(gamedata, text) {
 }
 
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
+  if (gamedata.richtext.length > 10000) {
+    console.log(JSON.stringify(gamedata.richtext));
+    return;
+  }
   modifyAttack: {
     if (
       gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 &&
