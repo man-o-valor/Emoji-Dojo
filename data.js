@@ -435,7 +435,7 @@ const emojis = [
     ],
     class: 4,
     description:
-      "When attacked, moves the furthermost enemy emoji to the front of the enemy Squad",
+      "After attacking, moves the furthermost enemy emoji to the front of the enemy Squad",
   },
   {
     emoji: "⛳",
@@ -455,7 +455,7 @@ const emojis = [
     ],
     class: 4,
     description:
-      "When attacked, moves the frontmost enemy emoji to the back of the enemy Squad",
+      "After attacking, moves the frontmost enemy emoji to the back of the enemy Squad",
   },
   {
     emoji: "🛡️",
@@ -783,12 +783,7 @@ const emojis = [
     rarity: 1,
     names: [
       "Bomb",
-      "Explode",
-      "Explosion",
-      "Boom",
-      "Blast",
-      "Detonate",
-      "Kaboom",
+      "Explosive",
     ],
     class: 1,
     description:
@@ -2158,6 +2153,25 @@ const emojis = [
     class: 5,
     description:
       "When this would defeat an Emoji, instead deletes it (Emojis that benefit from defeated Emojis do not benefit from this)",
+  },
+  {
+    emoji: "💥",
+    id: 116,
+    hp: 1,
+    dmg: 0,
+    rarity: 2,
+    names: [
+      "Boom",
+      "Collision",
+      "Explosion",
+      "Explode",
+      "Blast",
+      "Detonate",
+      "Kaboom",
+    ],
+    class: 1,
+    description:
+      "When attacked or defeated, defeats the two frontmost enemy Emojis and the Emoji behind itself, and defeats itself",
   },
 ];
 
