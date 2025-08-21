@@ -2114,6 +2114,10 @@ function shufflesquad(gamedata, squad) {
     }
 
     for (let i = gamedata.squads[squad - 1].length - 1; i > -1; i--) {
+      if (gamedata.squads[squad - 1][i]?.id == 31) {
+        // popcorn
+        gamedata = alterhp(gamedata, squad, 0, squad, i, 2);
+      }
       if (gamedata.squads[squad - 1][i]?.id == 19) {
         // woozy face
         gamedata = alterhp(gamedata, squad, i, squad, i, 1);

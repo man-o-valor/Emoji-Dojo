@@ -4,6 +4,11 @@ const {
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
+  ContainerBuilder,
+  TextDisplayBuilder,
+  SeparatorBuilder,
+  SeparatorSpacingSize,
+  MessageFlags,
 } = require("discord.js");
 const { classes, emojis, devotionhelp } = require("../../data.js");
 const {
@@ -21,7 +26,8 @@ module.exports = {
   async execute(interaction) {
     await trysetupuser(interaction.user);
     let userlab = await fetchresearch(interaction.user.id);
-    let embeddescription = "";
+    let container = new ContainerBuilder();
+    let labcovered = 0;
     for (let i = 0; i < userlab.length; i++) {
       if (userlab[i] > 0) {
         let rewardemoji = "❔";
@@ -65,35 +71,43 @@ module.exports = {
         progressbar +=
           progresssquares[2][4 - Math.min(40 - (userlab[i] % 40), 4)];
 
-        embeddescription += `${classes[i].emoji} **${classes[i].name}:** ${
-          userlab[i] % 40
-        }/40 | Reward: ${rewardemoji}\n${progressbar}\n<:divider1:1327378203156676810>${"<:divider2:1327378216540962869>".repeat(8)}<:divider3:1327378225512316938>\n`;
+        container.addTextDisplayComponents(
+          new TextDisplayBuilder().setContent(
+            `${classes[i].emoji} **${classes[i].name}:** ${
+              userlab[i] % 40
+            }/40 | Reward: ${rewardemoji}\n${progressbar}`
+          )
+        );
+        labcovered += 1;
+        container.addSeparatorComponents(
+          new SeparatorBuilder()
+            .setSpacing(SeparatorSpacingSize.Small)
+            .setDivider(true)
+        );
       }
     }
 
-    if (embeddescription == "") {
-      embeddescription = "☮️ You haven't devoted any emojis yet.";
+    if (labcovered == 0) {
+      container.addTextDisplayComponents(
+        new TextDisplayBuilder().setContent(
+          `☮️ You haven't devoted any emojis yet.`
+        )
+      );
     }
 
-    const help = new ButtonBuilder()
-      .setCustomId("help")
-      .setLabel("Help")
-      .setEmoji("❔")
-      .setStyle(ButtonStyle.Danger);
-    const row1 = new ActionRowBuilder().addComponents(help);
-
-    const labembed = new EmbedBuilder()
-      .setColor(0x9266cc)
-      .setTitle(`Devotions 🛐`)
-      .setDescription(
-        "<:divider1:1327378203156676810>" + "<:divider2:1327378216540962869>".repeat(8) + "<:divider3:1327378225512316938>\n" +
-          embeddescription
+    container.addActionRowComponents(
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setCustomId("help")
+          .setLabel("Help")
+          .setEmoji("❔")
+          .setStyle(ButtonStyle.Primary)
       )
-      .setTimestamp()
-      .setFooter({ text: `${interaction.user.globalName}'s Devotions` });
+    );
+
     const response = await interaction.reply({
-      embeds: [labembed],
-      components: [row1],
+      components: [container],
+      flags: MessageFlags.IsComponentsV2,
     });
     await dailyrewardremind(interaction);
     let logs = await getlogs();
