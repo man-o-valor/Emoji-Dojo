@@ -8,6 +8,10 @@ const {
   TextInputBuilder,
   TextInputStyle,
   MessageFlags,
+  ContainerBuilder,
+  TextDisplayBuilder,
+  SeparatorBuilder,
+  SeparatorSpacingSize,
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -30,17 +34,17 @@ module.exports = {
       await trysetupuser(interaction.user);
       let squadarray = await getsquad(interaction.user.id);
       let squadtext = "";
-      let url =
-        interaction?.channel?.url ||
-        (interaction?.channelId && interaction.guildId
-          ? `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}`
-          : "https://discord.com/channels/@me");
+      let explanations = "";
+      let explainedemojis = [];
       for (let i = 7; i > -1; i--) {
-        squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${
-          emojis[squadarray[i]].names[0]
-        } | ${emojis[squadarray[i]].hp} health, ${
-          emojis[squadarray[i]].dmg
-        } attack power. ${emojis[squadarray[i]].description}\") `;
+        squadtext += `${emojis[squadarray[i]].emoji} `;
+      }
+      for (let i = 0; i < 8; i++) {
+        if (explainedemojis.includes(squadarray[i])) continue;
+        explainedemojis.push(squadarray[i]);
+        explanations += `${emojis[squadarray[i]].emoji} - (${
+          emojis[squadarray[i]].hp
+        }/${emojis[squadarray[i]].dmg}) ${emojis[squadarray[i]].description}\n`;
       }
 
       let cursed = parseInt(
@@ -67,14 +71,25 @@ module.exports = {
         curse.setEmoji("👼");
         curse.setStyle(ButtonStyle.Primary);
       }*/
-      const row1 = new ActionRowBuilder().addComponents(edit, save/*, curse*/);
-      const squadembed = new EmbedBuilder()
-        .setColor(0x226699)
-        .setTitle(`${interaction.user.globalName}'s Squad 👥`)
-        .setDescription(`## ${squadtext}`)
-        .setFooter({
-          text: `This is your Squad. Hover over your Emojis to read their descriptions. Add emojis to your squad with /dojo or import a squad by copying it and pasting it with the button below`,
-        });
+      const row1 = new ActionRowBuilder().addComponents(edit, save /*, curse*/);
+      let container = new ContainerBuilder()
+        .addTextDisplayComponents(
+          new TextDisplayBuilder().setContent("## " + squadtext)
+        )
+        .addSeparatorComponents(
+          new SeparatorBuilder()
+            .setSpacing(SeparatorSpacingSize.Small)
+            .setDivider(false)
+        )
+        .addTextDisplayComponents(
+          new TextDisplayBuilder().setContent(explanations)
+        )
+        .addSeparatorComponents(
+          new SeparatorBuilder()
+            .setSpacing(SeparatorSpacingSize.Large)
+            .setDivider(true)
+        )
+        .addActionRowComponents(row1);
       let logs = await getlogs();
       logs.logs.games.squadsviewed += 1;
       logs.logs.players[`user${interaction.user.id}`] =
@@ -84,9 +99,9 @@ module.exports = {
       logs.logs.players[`user${interaction.user.id}`].squadsviewed += 1;
       await writelogs(logs);
       const response = await interaction.reply({
-        embeds: [squadembed],
-        components: [row1],
+        components: [container],
         withResponse: true,
+        flags: MessageFlags.IsComponentsV2,
       });
       await dailyrewardremind(interaction);
 
@@ -229,7 +244,6 @@ module.exports = {
             );
 
             const editembed = new EmbedBuilder()
-              .setColor(0xe1e8ed)
               .setTitle(`Saved Squads 🔖`)
               .setDescription(`Current Squad:\n## ${squadtexts[0]}`)
               .addFields(
@@ -296,45 +310,75 @@ module.exports = {
               .setEmoji("➕")
               .setStyle(ButtonStyle.Primary);
 
-            const row1 = new ActionRowBuilder().addComponents(load1, load2);
-            const row2 = new ActionRowBuilder().addComponents(save1, save2);
-            const row3 = new ActionRowBuilder().addComponents(buy);
+            const row1 = new ActionRowBuilder().addComponents(load1, save1);
+            const row2 = new ActionRowBuilder().addComponents(load2, save2);
+            const buyrow = new ActionRowBuilder().addComponents(buy);
+
+            container = new ContainerBuilder()
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  "### Saved Squads 🔖\n## " + squadtexts[0]
+                )
+              )
+              .addSeparatorComponents(
+                new SeparatorBuilder()
+                  .setSpacing(SeparatorSpacingSize.Large)
+                  .setDivider(true)
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(squadtexts[1])
+              )
+              .addActionRowComponents(row1)
+              .addSeparatorComponents(
+                new SeparatorBuilder()
+                  .setSpacing(SeparatorSpacingSize.Large)
+                  .setDivider(true)
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(squadtexts[2])
+              )
+              .addActionRowComponents(row2);
 
             if (slotsbought > 0) {
-              editembed.addFields(
-                {
-                  name: "",
-                  value: "",
-                  inline: false,
-                },
-                {
-                  name: "Saved Squad 3",
-                  value: squadtexts[3],
-                  inline: true,
-                }
-              );
-              row1.addComponents(load3);
-              row2.addComponents(save3);
+              const row3 = new ActionRowBuilder().addComponents(load3, save3);
+              container
+                .addSeparatorComponents(
+                  new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Large)
+                    .setDivider(true)
+                )
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(squadtexts[3])
+                )
+                .addActionRowComponents(row3);
               if (slotsbought > 1) {
-                editembed.addFields({
-                  name: "Saved Squad 4",
-                  value: squadtexts[4],
-                  inline: true,
-                });
-                row1.addComponents(load4);
-                row2.addComponents(save4);
+                const row4 = new ActionRowBuilder().addComponents(load4, save4);
+                container
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Large)
+                      .setDivider(true)
+                  )
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(squadtexts[4])
+                  )
+                  .addActionRowComponents(row4);
               }
             }
 
-            let components = [row1, row2];
-
             if (slotsbought < 2) {
-              components.push(row3);
+              container
+                .addSeparatorComponents(
+                  new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Large)
+                    .setDivider(true)
+                )
+                .addActionRowComponents(buyrow);
             }
             const response2 = await interaction2.reply({
-              embeds: [editembed],
-              components: components,
+              components: [container],
               withResponse: true,
+              flags: MessageFlags.IsComponentsV2,
             });
             const collectorFilter = (i) => i.user.id == interaction.user.id;
             let collector =
@@ -457,7 +501,7 @@ module.exports = {
                 save3.setDisabled(true);
                 save4.setDisabled(true);
                 buy.setDisabled(true);
-                interaction2.editReply({ components: components });
+                interaction2.editReply({ components: [container] });
               }
             });
           } else if (interaction2.customId === "curse") {
