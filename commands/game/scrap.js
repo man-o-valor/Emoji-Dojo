@@ -95,14 +95,14 @@ module.exports = {
       );
     }
 
+    let help = new ButtonBuilder()
+      .setCustomId("help")
+      .setLabel("Help")
+      .setEmoji("❔")
+      .setStyle(ButtonStyle.Primary);
+
     container.addActionRowComponents(
-      new ActionRowBuilder().addComponents(
-        new ButtonBuilder()
-          .setCustomId("help")
-          .setLabel("Help")
-          .setEmoji("❔")
-          .setStyle(ButtonStyle.Primary)
-      )
+      new ActionRowBuilder().addComponents(help)
     );
 
     const response = await interaction.reply({

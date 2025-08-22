@@ -4,6 +4,11 @@ const {
   ButtonBuilder,
   ActionRowBuilder,
   EmbedBuilder,
+  ContainerBuilder,
+  TextDisplayBuilder,
+  SeparatorBuilder,
+  SeparatorSpacingSize,
+  MessageFlags,
 } = require("discord.js");
 const { emojis, raritynames } = require("../../data.js");
 const {
@@ -64,7 +69,7 @@ module.exports = {
             ) || x.emoji == theyget.replace(/\s+/g, "")
         );
         let myviewemojiid = myvault.find(
-          (x) => emojis[x]?.id == (myemojifound)?.id
+          (x) => emojis[x]?.id == myemojifound?.id
         );
         const theiremojifound = emojis.find(
           (x) =>
@@ -75,7 +80,7 @@ module.exports = {
             ) || x.emoji == iwant.replace(/\s+/g, "")
         );
         let theirviewemojiid = theirvault.find(
-          (x) => emojis[x]?.id == (theiremojifound)?.id
+          (x) => emojis[x]?.id == theiremojifound?.id
         );
         if (myviewemojiid) {
           if (theirviewemojiid) {
@@ -118,43 +123,47 @@ module.exports = {
                 const row1 = new ActionRowBuilder().addComponents(yay, nay);
                 let accepts = [0, 0];
                 const acceptemojis = ["👎", "✋", "👍"];
-                let tradeembed = new EmbedBuilder()
-                  .setColor(0x3b88c3)
-                  .setTitle(
-                    `**${tradeuser.globalName.replace(
-                      /`/g,
-                      ""
-                    )}**, **${interaction.user.globalName.replace(
-                      /`/g,
-                      ""
-                    )}** wants to trade with you!`
+                let tradecontainer = new ContainerBuilder()
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      `<@${tradeuser.id}>, <@${interaction.user.id}> wants to trade!`
+                    )
                   )
-                  .setDescription(
-                    `\`${interaction.user.globalName.replace(/`/g, "")}\`: ${
-                      acceptemojis[accepts[0] + 1]
-                    } \`${tradeuser.globalName.replace(/`/g, "")}\`: ${
-                      acceptemojis[accepts[1] + 1]
-                    }`
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Large)
+                      .setDivider(true)
                   )
-                  .addFields(
-                    {
-                      name: `${interaction.user.globalName.replace(
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      `${
+                        acceptemojis[accepts[0] + 1]
+                      } \`${interaction.user.globalName.replace(
                         /`/g,
                         ""
-                      )} wants:`,
-                      value: `${theiremojifound.emoji} ${theiremojifound.names[0]}`,
-                      inline: true,
-                    },
-                    {
-                      name: `${tradeuser.globalName.replace(/`/g, "")} gets:`,
-                      value: `${myemojifound.emoji} ${myemojifound.names[0]}`,
-                      inline: true,
-                    }
-                  );
+                      )}\` gets: ${theiremojifound.emoji} ${
+                        theiremojifound.names[0]
+                      }`
+                    )
+                  )
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      `${
+                        acceptemojis[accepts[1] + 1]
+                      } \`${tradeuser.globalName.replace(/`/g, "")}\` gets: ${
+                        myemojifound.emoji
+                      } ${myemojifound.names[0]}`
+                    )
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Large)
+                      .setDivider(true)
+                  )
+                  .addActionRowComponents(row1);
                 const message = await interaction.reply({
-                  components: [row1],
-                  embeds: [tradeembed],
-                  content: `<@${tradeuser.id}> <@${interaction.user.id}>`,
+                  components: [tradecontainer],
+                  flags: MessageFlags.IsComponentsV2,
                 });
                 await dailyrewardremind(interaction);
                 const collectorFilter = (i) =>
@@ -181,13 +190,47 @@ module.exports = {
                         accepts[1] = -1;
                       }
                     }
-                    tradeembed.setDescription(
-                      `\`${interaction.user.globalName.replace(/`/g, "")}\`: ${
-                        acceptemojis[accepts[0] + 1]
-                      } \`${tradeuser.globalName.replace(/`/g, "")}\`: ${
-                        acceptemojis[accepts[1] + 1]
-                      }`
-                    );
+                    tradecontainer = new ContainerBuilder()
+                      .addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(
+                          `<@${tradeuser.id}>, <@${interaction.user.id}> wants to trade!`
+                        )
+                      )
+                      .addSeparatorComponents(
+                        new SeparatorBuilder()
+                          .setSpacing(SeparatorSpacingSize.Large)
+                          .setDivider(true)
+                      )
+                      .addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(
+                          `${
+                            acceptemojis[accepts[0] + 1]
+                          } \`${interaction.user.globalName.replace(
+                            /`/g,
+                            ""
+                          )}\` gets: ${theiremojifound.emoji} ${
+                            theiremojifound.names[0]
+                          }`
+                        )
+                      )
+                      .addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(
+                          `${
+                            acceptemojis[accepts[1] + 1]
+                          } \`${tradeuser.globalName.replace(
+                            /`/g,
+                            ""
+                          )}\` gets: ${myemojifound.emoji} ${
+                            myemojifound.names[0]
+                          }`
+                        )
+                      )
+                      .addSeparatorComponents(
+                        new SeparatorBuilder()
+                          .setSpacing(SeparatorSpacingSize.Large)
+                          .setDivider(true)
+                      )
+                      .addActionRowComponents(row1);
 
                     if (
                       interaction2.customId === "yay" &&
@@ -197,17 +240,16 @@ module.exports = {
                       myvault = await getvault(interaction.user.id);
                       theirvault = await getvault(tradeuser.id);
                       myviewemojiid = myvault.find(
-                        (x) =>
-                          emojis[x]?.id == (myemojifound)?.id
+                        (x) => emojis[x]?.id == myemojifound?.id
                       );
                       theirviewemojiid = theirvault.find(
-                        (x) =>
-                          emojis[x]?.id ==
-                          (theiremojifound)?.id
+                        (x) => emojis[x]?.id == theiremojifound?.id
                       );
+                      yay.setDisabled(true);
+                      nay.setDisabled(true);
                       interaction.editReply({
-                        embeds: [tradeembed],
-                        components: [],
+                        components: [tradecontainer],
+                        flags: MessageFlags.IsComponentsV2,
                       });
                       if (myviewemojiid && theirviewemojiid) {
                         myvault.splice(myvault.indexOf(myemojifound.id), 1);
@@ -272,13 +314,19 @@ module.exports = {
                         });
                       }
                     } else {
-                      interaction2.update({ embeds: [tradeembed] });
+                      interaction2.update({
+                        components: [tradecontainer],
+                        flags: MessageFlags.IsComponentsV2,
+                      });
                     }
                   });
                 } catch (e) {
                   console.error(e);
+                  yay.setDisabled(true);
+                  nay.setDisabled(true);
                   interaction.editReply({
-                    components: [],
+                    components: [tradecontainer],
+                    flags: MessageFlags.IsComponentsV2,
                   });
                 }
               } else {
