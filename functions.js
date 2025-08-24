@@ -1647,7 +1647,7 @@ function playturn(gamedata) {
         0,
         0 -
           activeemoji.dmg -
-          Math.ceil(gamedata.squads[gamedata.playerturn - 1].length / 2)
+          Math.ceil(gamedata.squads[0 - gamedata.playerturn + 1].length / 2)
       );
     }
     if (activeemoji.id == 93) {
