@@ -187,7 +187,7 @@ module.exports = {
                           1
                         );
                         datainput = objectalternative.id + "," + datainput;
-                        emojiinput += `[${objectalternative.emoji}](${url} \"${objectalternative.names[0]} | ${objectalternative.hp} health, ${objectalternative.dmg} attack power. ${objectalternative.description}\") `;
+                        emojiinput += `${objectalternative.emoji} `;
                       } else {
                         emojimissing = inputarr[i].segment;
 
@@ -399,11 +399,7 @@ module.exports = {
                   let squadarray = await getsquad(interaction.user.id);
                   let squadtext = "";
                   for (let i = 7; i > -1; i--) {
-                    squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${
-                      emojis[squadarray[i]].names[0]
-                    } | ${emojis[squadarray[i]].hp} health, ${
-                      emojis[squadarray[i]].dmg
-                    } attack power. ${emojis[squadarray[i]].description}\") `;
+                    squadtext += `${emojis[squadarray[i]].emoji} `;
                   }
                   interaction3.reply({
                     content: `Success! Saved Squad ${interaction3.customId[4]} has been saved as:\n## ${squadtext}`,
@@ -430,13 +426,7 @@ module.exports = {
                       );
                       datainput = datainput + saveloading[i] + ",";
                       emojiinput =
-                        `[${emojis[saveloading[i]].emoji}](${url} \"${
-                          emojis[saveloading[i]].names[0]
-                        } | ${emojis[saveloading[i]].hp} health, ${
-                          emojis[saveloading[i]].dmg
-                        } attack power. ${
-                          emojis[saveloading[i]].description
-                        }\") ` + emojiinput;
+                        `${emojis[saveloading[i]].emoji} ` + emojiinput;
                     } else {
                       emojimissing = saveloading[i];
                       break;

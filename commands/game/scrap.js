@@ -128,11 +128,11 @@ module.exports = {
       });
       interaction2.reply({ flags: "Ephemeral", content: devotionhelp });
       help.setDisabled(true);
-      interaction.editReply({ components: [row1] });
+      interaction.editReply({ components: [container] });
     } catch (e) {
       console.error(e);
       help.setDisabled(true);
-      interaction.editReply({ components: [row1] });
+      interaction.editReply({ components: [container] });
     }
   },
 };
