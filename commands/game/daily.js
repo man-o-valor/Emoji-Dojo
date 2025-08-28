@@ -73,7 +73,7 @@ module.exports = {
         } else {
           let amt =
             20 + 10 * Math.min(dailystreak, 5) + Math.floor(Math.random() * 30);
-          await coinschange(interaction.user.id, amt);
+          await coinschange(interaction.user.id, amt, false);
           rewardName = `🪙 ${amt} Coins`;
         }
       }

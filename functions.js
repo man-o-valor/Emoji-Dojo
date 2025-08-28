@@ -412,6 +412,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       // violin
       val -= 3;
     }
+    if (gamedata.squads[squad2 - 1][pos2]?.id == 22 && val <= 0) {
+      // rage
+      val -= Math.ceil(gamedata.squads[gamedata.playerturn - 1].length / 2);
+    }
     // protection buffs start here
     if (gamedata.squads[squad - 1][pos]?.id == 2 && val < 0) {
       // relieved face
@@ -900,8 +904,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         if (gamedata.squads[squad - 1][pos]?.id == 46) {
           // fire
           if (
-            gamedata.squads[squad - 1].length > 1 &&
-            gamedata.squads[squad - 1][1]?.id != 46
+            gamedata.squads[squad - 1].length > 1
           ) {
             gamedata = alterhp(
               gamedata,
@@ -1634,20 +1637,6 @@ function playturn(gamedata) {
         gamedata.playerturn,
         0,
         0 - activeemoji.dmg
-      );
-    }
-    if (activeemoji.id == 22) {
-      // rage
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 -
-          activeemoji.dmg -
-          Math.ceil(gamedata.squads[gamedata.playerturn - 1].length / 2)
       );
     }
     if (activeemoji.id == 93) {
