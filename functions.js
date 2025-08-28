@@ -414,7 +414,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     }
     if (gamedata.squads[squad2 - 1][pos2]?.id == 22 && val <= 0) {
       // rage
-      val -= Math.ceil(gamedata.squads[gamedata.playerturn - 1].length / 2);
+      val -= Math.ceil(gamedata.squads[squad - 1].length / 2);
     }
     // protection buffs start here
     if (gamedata.squads[squad - 1][pos]?.id == 2 && val < 0) {
