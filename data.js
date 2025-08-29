@@ -319,7 +319,7 @@ const emojis = [
       "Twisted Rightwards Arrows",
       "Shuffle",
       "Shuffle Button",
-      "TRWA",
+      "Trwa",
       "Mix",
       "Random",
       "Scramble",
@@ -781,10 +781,7 @@ const emojis = [
     hp: 1,
     dmg: 0,
     rarity: 1,
-    names: [
-      "Bomb",
-      "Explosive",
-    ],
+    names: ["Bomb", "Explosive"],
     class: 1,
     description:
       "When attacked or defeated, defeats the frontmost enemy emoji and defeats itself",
@@ -966,16 +963,7 @@ const emojis = [
     hp: 3,
     dmg: 4,
     rarity: 1,
-    names: [
-      "Fire",
-      "Flame",
-      "Flames",
-      "Heat",
-      "Inferno",
-      "Burn",
-      "Hot",
-      "Blaze",
-    ],
+    names: ["Fire", "Flame", "Flames", "Heat", "Inferno", "Burn", "Blaze"],
     class: 1,
     description:
       "When this Emoji is defeated, damages the new frontmost friendly Emoji by 2",
@@ -1738,7 +1726,7 @@ const emojis = [
     ],
     class: 2,
     description:
-      "All enemy attacks are redirected towards this, regardless of the aggressor's position",
+      "All enemy attacks are redirected towards this, regardless of the aggressor's position. Increases any damage taken to itself by 1",
   },
   {
     emoji: "💰",
@@ -2172,6 +2160,109 @@ const emojis = [
     class: 1,
     description:
       "When attacked or defeated, defeats the two frontmost enemy Emojis and the Emoji behind itself, and defeats itself",
+  },
+  {
+    emoji: "🗿",
+    id: 117,
+    hp: 4,
+    dmg: 1,
+    rarity: 1,
+    names: [
+      "Moyai",
+      "Moai",
+      "Vine Boom",
+      "Vine",
+      "Easter Island",
+      "Stone Head",
+      "Statue",
+    ],
+    class: 2,
+    description:
+      "All enemy attacks are redirected towards this, regardless of the aggressor's position. Takes 1 less damage from every attack, to a minimum of 1",
+  },
+  {
+    emoji: "🛃",
+    id: 118,
+    hp: 6,
+    dmg: 1,
+    rarity: 1,
+    names: ["Customs", "Luggage", "Airport", "Security"],
+    class: 6,
+    description:
+      "All enemy attacks are redirected towards this, regardless of the aggressor's position. When defeated, Shuffles the enemy Squad",
+  },
+  {
+    emoji: "🥵",
+    id: 119,
+    hp: 6,
+    dmg: 1,
+    rarity: 1,
+    names: ["Hot Face", "Hot", "Sweaty", "Sweaty Face", "Heat Stroke"],
+    class: 2,
+    description:
+      "All enemy attacks are redirected towards this, regardless of the aggressor's position. After attacking, damages itself by 1",
+  },
+  {
+    emoji: "🪖",
+    id: 120,
+    hp: 8,
+    dmg: 1,
+    rarity: 1,
+    names: ["Military Helmet", "Helmet", "Army", "Soldier", "Military"],
+    class: 2,
+    description:
+      "All enemy attacks are redirected towards this, regardless of the aggressor's position. Cannot be healed",
+  },
+  {
+    emoji: "🌳",
+    id: 121,
+    hp: 4,
+    dmg: 1,
+    rarity: 2,
+    names: [
+      "Deciduous Tree",
+      "Tree",
+      "Apple Tree",
+      "Fruit Tree",
+      "Orchard",
+      "Oak Tree",
+      "Groot",
+    ],
+    class: 3,
+    description:
+      "When defeated, summons 2 🍎 at the front of the Squad that defeated it",
+  },
+  {
+    emoji: "🍎",
+    id: 122,
+    hp: 1,
+    dmg: 0,
+    rarity: -1,
+    names: ["Apple", "Red Apple"],
+    class: null,
+    description:
+      "When defeated, heals the frontmost enemy Emoji for 1 (dropped by 🌳)",
+  },
+  {
+    emoji: "😴",
+    id: 123,
+    hp: 5,
+    dmg: 2,
+    rarity: 2,
+    names: ["Sleeping", "Sleep", "Tired", "Nap", "Sleeping Face", "Tired Face"],
+    class: 3,
+    description: "When attacked, summons 💤 in front of itself",
+  },
+  {
+    emoji: "💤",
+    id: 124,
+    hp: 1,
+    dmg: 0,
+    rarity: -1,
+    names: ["Zzz", "Sleep"],
+    class: null,
+    description:
+      "When attacked or defeated, heals the Emoji behind itself by 1 (summoned by 😴)",
   },
 ];
 
