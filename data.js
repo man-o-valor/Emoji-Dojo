@@ -2164,9 +2164,9 @@ const emojis = [
   {
     emoji: "🗿",
     id: 117,
-    hp: 4,
+    hp: 3,
     dmg: 1,
-    rarity: 1,
+    rarity: 2,
     names: [
       "Moyai",
       "Moai",
