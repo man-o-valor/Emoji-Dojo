@@ -786,7 +786,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         if (target?.id == 121) {
           // tree
           for (i = 0; i < 2; i++) {
-            gamedata.squads[squad2].splice(0, 0, lodash.cloneDeep(emojis[122]));
+            gamedata.squads[squad].splice(0, 0, lodash.cloneDeep(emojis[122]));
           }
           gamedata = richtextadd(
             gamedata,
