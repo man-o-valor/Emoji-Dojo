@@ -369,7 +369,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     const dartlikes = new Set([89, 117, 118, 119, 120]);
     // dart/moai/hot face/military helmet/baggage claim
     if (
-      gamedata.squads[squad - 1].findIndex((x) => dartlikes.has(x.id)) &&
+      gamedata.squads[squad - 1].findIndex((x) => dartlikes.has(x.id)) != -1 &&
       squad != squad2
     ) {
       pos = gamedata.squads[squad - 1].findIndex((x) => dartlikes.has(x.id));
