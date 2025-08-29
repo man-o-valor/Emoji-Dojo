@@ -366,40 +366,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   }
   let target;
   modifyAttack: {
-    if (
-      gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 &&
-      squad != squad2
-    ) {
-      // dart
-      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 89);
-    }
-    if (
-      gamedata.squads[squad - 1].findIndex((x) => x.id == 117) > -1 &&
-      squad != squad2
-    ) {
-      // moyai/moai
-      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 117);
-    }
-    if (
-      gamedata.squads[squad - 1].findIndex((x) => x.id == 118) > -1 &&
-      squad != squad2
-    ) {
-      // customs
-      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 118);
-    }
-    if (
-      gamedata.squads[squad - 1].findIndex((x) => x.id == 119) > -1 &&
-      squad != squad2
-    ) {
-      // hot face
-      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 119);
-    }
-    if (
-      gamedata.squads[squad - 1].findIndex((x) => x.id == 120) > -1 &&
-      squad != squad2
-    ) {
-      // military helmet
-      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 120);
+    const dartlikes = new Set([89, 117, 118, 119, 120]);
+    // dart/moai/hot face/military helmet/baggage claim
+    if (gamedata.squads[squad - 1].findIndex((x) => dartlikes.has(x.id))) {
+      pos = gamedata.squads[squad - 1].findIndex((x) => dartlikes.has(x.id));
     }
 
     target = lodash.cloneDeep(gamedata.squads[squad - 1][pos]);
@@ -786,7 +756,11 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         if (target?.id == 121) {
           // tree
           for (i = 0; i < 2; i++) {
-            gamedata.squads[squad2 - 1].splice(0, 0, lodash.cloneDeep(emojis[122]));
+            gamedata.squads[squad2 - 1].splice(
+              0,
+              0,
+              lodash.cloneDeep(emojis[122])
+            );
           }
           gamedata = richtextadd(
             gamedata,
@@ -796,7 +770,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           );
         }
         if (target?.id == 118) {
-          // customs
+          // baggage claim
           gamedata = shufflesquad(gamedata, squad2);
           gamedata = richtextadd(
             gamedata,

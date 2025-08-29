@@ -2181,12 +2181,12 @@ const emojis = [
       "All enemy attacks are redirected towards this, regardless of the aggressor's position. Takes 1 less damage from every attack, to a minimum of 1",
   },
   {
-    emoji: "🛃",
+    emoji: "🛄",
     id: 118,
     hp: 6,
     dmg: 1,
     rarity: 1,
-    names: ["Customs", "Luggage", "Airport", "Security"],
+    names: ["Baggage Claim", "Luggage", "Airport", "Security", "Customs"],
     class: 6,
     description:
       "All enemy attacks are redirected towards this, regardless of the aggressor's position. When defeated, Shuffles the enemy Squad",
