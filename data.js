@@ -2262,7 +2262,7 @@ const emojis = [
     names: ["Zzz", "Sleep"],
     class: null,
     description:
-      "When attacked or defeated, heals the Emoji behind itself by 1 (summoned by 😴)",
+      "When defeated, heals the Emoji behind itself by 1 (summoned by 😴)",
   },
 ];
 

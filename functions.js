@@ -364,7 +364,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     console.log(JSON.stringify(gamedata));
     return;
   }
-let target;
+  let target;
   modifyAttack: {
     if (
       gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 &&
@@ -506,6 +506,7 @@ let target;
       gamedata.squads[squad - 1][pos].hp = 0;
     }
     gamedata.squads[squad - 1][pos].hp += val;
+    target = gamedata.squads[squad - 1][pos];
 
     beforeAttack: {
       if (
