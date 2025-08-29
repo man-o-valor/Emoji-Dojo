@@ -364,7 +364,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     console.log(JSON.stringify(gamedata));
     return;
   }
-  let target = lodash.cloneDeep(gamedata.squads[squad - 1][pos]);
   modifyAttack: {
     if (
       gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 &&
@@ -373,6 +372,37 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       // dart
       pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 89);
     }
+    if (
+      gamedata.squads[squad - 1].findIndex((x) => x.id == 117) > -1 &&
+      squad != squad2
+    ) {
+      // moyai/moai
+      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 117);
+    }
+    if (
+      gamedata.squads[squad - 1].findIndex((x) => x.id == 118) > -1 &&
+      squad != squad2
+    ) {
+      // customs
+      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 118);
+    }
+    if (
+      gamedata.squads[squad - 1].findIndex((x) => x.id == 119) > -1 &&
+      squad != squad2
+    ) {
+      // hot face
+      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 119);
+    }
+    if (
+      gamedata.squads[squad - 1].findIndex((x) => x.id == 120) > -1 &&
+      squad != squad2
+    ) {
+      // military helmet
+      pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 120);
+    }
+
+    let target = lodash.cloneDeep(gamedata.squads[squad - 1][pos]);
+
     if (gamedata.squads[squad2 - 1][pos2 + 1]?.id == 12 && val <= 0) {
       // martial arts uniform
       val -= 1;
