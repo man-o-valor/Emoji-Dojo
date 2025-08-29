@@ -364,6 +364,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     console.log(JSON.stringify(gamedata));
     return;
   }
+let target;
   modifyAttack: {
     if (
       gamedata.squads[squad - 1].findIndex((x) => x.id == 89) > -1 &&
@@ -401,7 +402,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       pos = gamedata.squads[squad - 1].findIndex((x) => x.id == 120);
     }
 
-    let target = lodash.cloneDeep(gamedata.squads[squad - 1][pos]);
+    target = lodash.cloneDeep(gamedata.squads[squad - 1][pos]);
 
     if (gamedata.squads[squad2 - 1][pos2 + 1]?.id == 12 && val <= 0) {
       // martial arts uniform
