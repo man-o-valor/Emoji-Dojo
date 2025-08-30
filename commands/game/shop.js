@@ -9,6 +9,12 @@ const {
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
+  ContainerBuilder,
+  TextDisplayBuilder,
+  SeparatorBuilder,
+  SeparatorSpacingSize,
+  SectionBuilder,
+  MessageFlags,
 } = require("discord.js");
 const { emojis, classes } = require("../../data.js");
 const {
@@ -181,7 +187,9 @@ module.exports = {
           quotes.push("Swiftly defeat your enemies with my Damaging Pack!");
           break;
         case 2: // Defense
-          quotes.push("Protect your Squad from your enemies with my Defense Pack!");
+          quotes.push(
+            "Protect your Squad from your enemies with my Defense Pack!"
+          );
           break;
         case 3: // Summoning
           quotes.push("Overwhelm your enemies with my Summoning Pack!");
@@ -205,23 +213,163 @@ module.exports = {
 
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-      let marketcontents;
-
-      marketcontents = `
-${emojis[dailyemojis[0]].emoji} **${emojis[dailyemojis[0]].names[0]}** (100 🪙)
-${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].names[0]}** (200 🪙)
-${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙)
-
-🎁${
-        classes[dailyPack_class].emoji
-      } **${dailyPack_name}** (${dailyPack_price} 🪙)
-
-:asterisk: **Random Common Emoji** (75 🪙)
-✳️ **Random Rare Emoji** (150 🪙)
-⚛️ **Random Special Emoji** (450 🪙)
-
-🎁:asterisk: **Common Emoji Pack** (300 🪙)
-🎁✳️ **Rare Emoji Pack** (1000 🪙)\n​`; // ZWS so Discord doesn't truncate whitespace
+      let shopcomponents = [
+        new ContainerBuilder()
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `## The Shop\nYou have ${coincount} 🪙`
+            )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Small)
+              .setDivider(true)
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `💁 *${quote}*\n-# Daily offers reroll <t:${shoprestock}:R>`
+            )
+          ),
+        new ContainerBuilder()
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(100 🪙)")
+                  .setCustomId("0")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  `${emojis[dailyemojis[0]].emoji} **${
+                    emojis[dailyemojis[0]].names[0]
+                  }**`
+                )
+              )
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(200 🪙)")
+                  .setCustomId("1")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  `${emojis[dailyemojis[1]].emoji} **${
+                    emojis[dailyemojis[1]].names[0]
+                  }**`
+                )
+              )
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(600 🪙)")
+                  .setCustomId("2")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  `${emojis[dailyemojis[2]].emoji} **${
+                    emojis[dailyemojis[2]].names[0]
+                  }**`
+                )
+              )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Large)
+              .setDivider(true)
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(75 🪙)")
+                  .setCustomId("4")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  ":asterisk: **Random Common Emoji**"
+                )
+              )
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(150 🪙)")
+                  .setCustomId("5")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent("✳️ **Random Rare Emoji**")
+              )
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(450 🪙)")
+                  .setCustomId("6")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  "⚛️ **Random Special Emoji**"
+                )
+              )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Large)
+              .setDivider(true)
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel(`(${dailyPack_price} 🪙)`)
+                  .setCustomId("3")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  `🎁${classes[dailyPack_class].emoji} **${dailyPack_name}**`
+                )
+              )
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(300 🪙)")
+                  .setCustomId("7")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  "🎁:asterisk: **Common Emoji Pack**"
+                )
+              )
+          )
+          .addSectionComponents(
+            new SectionBuilder()
+              .setButtonAccessory(
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Success)
+                  .setLabel("(1000 🪙)")
+                  .setCustomId("8")
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent("🎁✳️ **Rare Emoji Pack**")
+              )
+          ),
+      ];
 
       let shopdata;
 
@@ -325,32 +473,9 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
         };
       });
 
-      let shop = new ActionRowBuilder().addComponents(
-        new StringSelectMenuBuilder()
-          .setCustomId("myDropdown")
-          .setPlaceholder("Select an item")
-          .setOptions(
-            options.map(({ label, description, value }) =>
-              new StringSelectMenuOptionBuilder()
-                .setLabel(label)
-                .setDescription(description)
-                .setValue(value)
-            )
-          )
-      );
-
-      const shopembed = new EmbedBuilder()
-        .setColor(0x4e5058)
-        .setTitle(`The Shop`)
-        .setDescription(
-          `💁 *${quote}*\n-# Daily offers reroll <t:${shoprestock}:R>\n${marketcontents}`
-        )
-        .setTimestamp()
-        .setFooter({ text: `You have ${coincount} 🪙` });
-
       const message = await interaction.reply({
-        embeds: [shopembed],
-        components: [shop],
+        components: shopcomponents,
+        flags: MessageFlags.IsComponentsV2,
       });
       await dailyrewardremind(interaction);
       let logs = await getlogs();
@@ -363,7 +488,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
       await writelogs(logs);
 
       const collectorFilter = (i) => {
-        return interaction.user.id == i.user.id && i.isStringSelectMenu();
+        return interaction.user.id == i.user.id && !isNaN(Number(i.customId));
       };
 
       let dropdownCollector = message.createMessageComponentCollector({
@@ -380,15 +505,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
           const $ = parseInt(
             (await database.get(interaction.user.id + "coins")) ?? "100"
           );
-          choice = parseInt(interaction.values[0]);
-
-          const shopembed = new EmbedBuilder()
-            .setColor(0x4e5058)
-            .setTitle(`${shopdata[choice].emoji} ${shopdata[choice].label}`)
-            .setDescription(
-              `**Costs ${shopdata[choice].cost}** 🪙 (you have ${$} 🪙)\n${shopdata[choice].description}`
-            )
-            .setTimestamp();
+          choice = parseInt(interaction.customId);
 
           const buy = new ButtonBuilder()
             .setCustomId("buy")
@@ -415,9 +532,31 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
           }
 
           const bothrow = new ActionRowBuilder().addComponents(buy, buymore);
-          const buyrow = new ActionRowBuilder().addComponents(buy);
 
-          interaction.update({ embeds: [shopembed], components: [bothrow] });
+          const individualcontainer = new ContainerBuilder()
+            .addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(
+                `### ${shopdata[choice].emoji} ${shopdata[choice].label}`
+              )
+            )
+            .addSeparatorComponents(
+              new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+                .setDivider(true)
+            )
+            .addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(
+                `Costs ${shopdata[choice].cost} 🪙 (you have ${$} 🪙)\n${shopdata[choice].description}`
+              )
+            )
+            .addSeparatorComponents(
+              new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+                .setDivider(false)
+            )
+            .addActionRowComponents(bothrow);
+
+          interaction.update({ components: [individualcontainer] });
 
           const ButtonFilter = (i) => {
             return interaction.user.id == i.user.id && i.isButton();
@@ -433,6 +572,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
               const $ = parseInt(
                 (await database.get(interaction.user.id + "coins")) ?? "100"
               );
+
               if ($ < shopdata[choice].cost) {
                 newinteraction.reply({
                   content:
@@ -477,8 +617,8 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                           -1 * modalquantity * shopdata[choice].cost
                         );
                         buy.setDisabled(true);
-                        buy.setLabel(`You bought ${modalquantity}`);
-                        buy.setStyle(1);
+                        buymore.setDisabled(true);
+                        buymore.setLabel(`You bought ${modalquantity}`);
                         const emojilist = emojis.filter(
                           (e) => e.rarity == shopdata[choice]?.id
                         );
@@ -517,8 +657,8 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                           -1 * modalquantity * shopdata[choice].cost
                         );
                         buy.setDisabled(true);
-                        buy.setLabel(`You bought ${modalquantity}`);
-                        buy.setStyle(1);
+                        buymore.setDisabled(true);
+                        buymore.setLabel(`You bought ${modalquantity}`);
                         let emojistoadd = "";
                         for (let i = 0; i < modalquantity; i++) {
                           for (const a of packcontents[shopdata[choice]?.id]) {
@@ -559,14 +699,12 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                           -1 * modalquantity * shopdata[choice].cost
                         );
                         buy.setDisabled(true);
-                        buy.setLabel(`You bought ${modalquantity}`);
-                        buy.setStyle(1);
+                        buymore.setDisabled(true);
+                        buymore.setLabel(`You bought ${modalquantity}`);
                         let allemojistoadd = "";
                         for (let i = 0; i < modalquantity; i++) {
                           allemojistoadd += shopdata[choice]?.id + ",";
-                          emojisbought[shopdata[choice]?.id].push(
-                            shopdata[choice]
-                          );
+                          emojisbought[0].push(shopdata[choice]);
                         }
                         let tempvault = await database.get(
                           interaction.user.id + "vault"
@@ -596,6 +734,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         buy.setDisabled(true);
                         buy.setLabel(`You bought this`);
                         buy.setStyle(1);
+                        buymore.setDisabled(true);
                         let emojistoadd = "";
 
                         for (let i = 0; i < modalquantity; i++) {
@@ -733,9 +872,29 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                         }
                       }
                       newerinteraction.reply({
-                        content: `<@${interaction.user.id}> bought:\n>>> ${emojiString}`,
+                        components: [
+                          new ContainerBuilder()
+                            .addTextDisplayComponents(
+                              new TextDisplayBuilder().setContent(
+                                `### 🧾 <@${interaction.user.id}> bought:`
+                              )
+                            )
+                            .addSeparatorComponents(
+                              new SeparatorBuilder()
+                                .setSpacing(SeparatorSpacingSize.Small)
+                                .setDivider(true)
+                            )
+                            .addTextDisplayComponents(
+                              new TextDisplayBuilder().setContent(
+                                `>>> ${emojiString}`
+                              )
+                            ),
+                        ],
+                        flags: MessageFlags.IsComponentsV2,
                       });
-                      interaction.editReply({ components: [buyrow] });
+                      interaction.editReply({
+                        components: [individualcontainer],
+                      });
                     });
                 } else if (shopdata[choice].type == "emoji") {
                   // BUY ONE ################################
@@ -746,6 +905,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
+                  buymore.setDisabled(true);
                   const emojilist = emojis.filter(
                     (e) => e.rarity == shopdata[choice]?.id
                   );
@@ -781,6 +941,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
+                  buymore.setDisabled(true);
                   let emojistoadd = "";
                   for (const a of packcontents[shopdata[choice]?.id]) {
                     const emojilist = emojis.filter((e) => e.rarity == a);
@@ -815,6 +976,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
+                  buymore.setDisabled(true);
                   let allemojistoadd = shopdata[choice]?.id + ",";
                   let tempvault = await database.get(
                     interaction.user.id + "vault"
@@ -842,6 +1004,7 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
+                  buymore.setDisabled(true);
                   let emojistoadd = "";
 
                   if (dailyPack_isRare) {
@@ -964,9 +1127,27 @@ ${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙
                     }
                   }
                   newinteraction.reply({
-                    content: `🛒 <@${interaction.user.id}> bought:\n>>> ${emojiString}`,
+                    components: [
+                      new ContainerBuilder()
+                        .addTextDisplayComponents(
+                          new TextDisplayBuilder().setContent(
+                            `### 🧾 <@${interaction.user.id}> bought:`
+                          )
+                        )
+                        .addSeparatorComponents(
+                          new SeparatorBuilder()
+                            .setSpacing(SeparatorSpacingSize.Small)
+                            .setDivider(true)
+                        )
+                        .addTextDisplayComponents(
+                          new TextDisplayBuilder().setContent(
+                            `>>> ${emojiString}`
+                          )
+                        ),
+                    ],
+                    flags: MessageFlags.IsComponentsV2,
                   });
-                  interaction.editReply({ components: [buyrow] });
+                  interaction.editReply({ components: [individualcontainer] });
                 }
               }
             });
