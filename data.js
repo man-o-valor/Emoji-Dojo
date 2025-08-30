@@ -2183,7 +2183,7 @@ const emojis = [
   {
     emoji: "🛄",
     id: 118,
-    hp: 6,
+    hp: 4,
     dmg: 1,
     rarity: 1,
     names: ["Baggage Claim", "Luggage", "Airport", "Security", "Customs"],
