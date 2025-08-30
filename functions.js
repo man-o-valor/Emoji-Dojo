@@ -365,7 +365,7 @@ function richtextadd(gamedata, text) {
 
 function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   if (gamedata.richtext.length > 10000) {
-    console.log(JSON.stringify(gamedata));
+    console.error(JSON.stringify(gamedata));
     return;
   }
   let target;
@@ -2186,7 +2186,7 @@ customemojis: {
     const index =
       Math.max(
         -4,
-        Math.min(Math.floor(Number(value)) + 1, dmgemojis.length - 1)
+        Math.min(Math.floor(Number(value)) + 1, dmgemojis.length - 4)
       ) + 3;
     return dmgemojis[index];
   }
