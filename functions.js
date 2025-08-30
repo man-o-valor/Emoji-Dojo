@@ -508,11 +508,12 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         squad != squad2
       ) {
         // mushroom, sparkles, hot face
+        let victim = lodash.cloneDeep(gamedata.squads[squad2 - 1][pos2]);
         gamedata = alterhp(gamedata, squad2, pos2, squad2, pos2, -1, "", true);
         gamedata = richtextadd(
           gamedata,
           `\n↢ ${gamedata.player[squad2 - 1]}'s ${
-            gamedata.squads[squad2 - 1][pos2]?.emoji
+            victim?.emoji
           } damaged itself by attacking! (1 damage)`
         );
       }
@@ -1495,7 +1496,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata.squads[0].splice(1, 0, lodash.cloneDeep(emojis[92]));
             gamedata = richtextadd(
               gamedata,
-              `\n✚ ${gamedata.player[0]}'s ${emojis[91].emoji} called in ${emojis[92].emoji}`
+              `\n✚ ${gamedata.player[0]}'s ${emojis[91].emoji} called in ${emojis[92].emoji}!`
             );
           }
         }
@@ -1511,7 +1512,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             gamedata.squads[1].splice(1, 0, lodash.cloneDeep(emojis[92]));
             gamedata = richtextadd(
               gamedata,
-              `\n✚ ${gamedata.player[1]}'s ${emojis[91].emoji} called in ${emojis[92].emoji}`
+              `\n✚ ${gamedata.player[1]}'s ${emojis[91].emoji} called in ${emojis[92].emoji}!`
             );
           }
         }
