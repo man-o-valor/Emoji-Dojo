@@ -458,8 +458,13 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
       // joker, dart
       val = val - 1;
     }
-    if (target?.id == 25 || target?.id == 54 || target?.id == 120) {
-      // bricks, bubbles, military helmet
+    if (
+      target?.id == 25 ||
+      target?.id == 54 ||
+      target?.id == 103 ||
+      target?.id == 120
+    ) {
+      // bricks, bubbles, military helmet, bouquet
       if (val > 0) {
         val = 0;
         verb = "tried to heal";

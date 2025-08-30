@@ -1940,7 +1940,7 @@ const emojis = [
     names: ["Bouquet", "Flowers", "Arrangement", "Blossom"],
     class: 1,
     description:
-      "When a friendly Emoji is defeated, increases its attack power by 1",
+      "When a friendly Emoji is defeated, increases its own attack power by 1. Cannot be healed",
   },
   {
     emoji: "⛄",
