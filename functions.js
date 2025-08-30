@@ -332,6 +332,10 @@ async function coinschange(id, amt, affectcooldown) {
   return [amt, doublerbonus];
 }
 
+function newcoincurve(coins) {
+  return Math.floor(0.688921 + 0.149597 * Math.log(coins));
+}
+
 async function getsquad(id) {
   let rawsquad = await database.get(id + "squad");
   if (rawsquad == undefined) {
@@ -922,7 +926,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
         }
         if (target?.id == 46) {
           // fire
-          if (gamedata.squads[squad - 1].length > 1) {
+          if (
+            gamedata.squads[squad - 1].length > 1 &&
+            gamedata.squads[squad - 1][1].id != 46
+          ) {
             gamedata = alterhp(
               gamedata,
               squad,
@@ -2430,4 +2437,5 @@ module.exports = {
   makesquad,
   issquadinvalid,
   adminpanel,
+  newcoincurve,
 };
