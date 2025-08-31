@@ -213,164 +213,6 @@ module.exports = {
 
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-      let shopcomponents = [
-        new ContainerBuilder()
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              `## The Shop\nYou have ${coincount} 🪙`
-            )
-          )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Small)
-              .setDivider(true)
-          )
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              `💁 *${quote}*\n-# Daily offers reroll <t:${shoprestock}:R>`
-            )
-          ),
-        new ContainerBuilder()
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(100 🪙)")
-                  .setCustomId("0")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  `${emojis[dailyemojis[0]].emoji} **${
-                    emojis[dailyemojis[0]].names[0]
-                  }**`
-                )
-              )
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(200 🪙)")
-                  .setCustomId("1")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  `${emojis[dailyemojis[1]].emoji} **${
-                    emojis[dailyemojis[1]].names[0]
-                  }**`
-                )
-              )
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(600 🪙)")
-                  .setCustomId("2")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  `${emojis[dailyemojis[2]].emoji} **${
-                    emojis[dailyemojis[2]].names[0]
-                  }**`
-                )
-              )
-          )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Large)
-              .setDivider(true)
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(75 🪙)")
-                  .setCustomId("4")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  ":asterisk: **Random Common Emoji**"
-                )
-              )
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(150 🪙)")
-                  .setCustomId("5")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent("✳️ **Random Rare Emoji**")
-              )
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(450 🪙)")
-                  .setCustomId("6")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  "⚛️ **Random Special Emoji**"
-                )
-              )
-          )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Large)
-              .setDivider(true)
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel(`(${dailyPack_price} 🪙)`)
-                  .setCustomId("3")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  `🎁${classes[dailyPack_class].emoji} **${dailyPack_name}**`
-                )
-              )
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(300 🪙)")
-                  .setCustomId("7")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  "🎁:asterisk: **Common Emoji Pack**"
-                )
-              )
-          )
-          .addSectionComponents(
-            new SectionBuilder()
-              .setButtonAccessory(
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Success)
-                  .setLabel("(1000 🪙)")
-                  .setCustomId("8")
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent("🎁✳️ **Rare Emoji Pack**")
-              )
-          ),
-      ];
-
       let shopdata;
 
       shopdata = [
@@ -399,14 +241,6 @@ module.exports = {
           description: emojis[dailyemojis[2]].description,
         },
         {
-          label: dailyPack_name,
-          emoji: `🎁📆`,
-          type: "dailypack",
-          id: 0,
-          cost: dailyPack_price,
-          description: dailyPack_description,
-        },
-        {
           label: `Random Common Emoji`,
           emoji: `:asterisk:`,
           type: "emoji",
@@ -432,6 +266,14 @@ module.exports = {
           cost: 450,
           description:
             "One random special emoji, ready to add to your Squad and use!",
+        },
+        {
+          label: dailyPack_name,
+          emoji: `🎁📆`,
+          type: "dailypack",
+          id: 0,
+          cost: dailyPack_price,
+          description: dailyPack_description,
         },
         {
           label: `Common Emoji Pack`,
@@ -473,6 +315,107 @@ module.exports = {
         };
       });
 
+      let shop = new ActionRowBuilder().addComponents(
+        new StringSelectMenuBuilder()
+          .setCustomId("myDropdown")
+          .setPlaceholder("Select an item")
+          .setOptions(
+            options.map(({ label, description, value }) =>
+              new StringSelectMenuOptionBuilder()
+                .setLabel(label)
+                .setDescription(description)
+                .setValue(value)
+            )
+          )
+      );
+
+      let shopcomponents = [
+        new ContainerBuilder()
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `## The Shop\nYou have ${coincount} 🪙`
+            )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Small)
+              .setDivider(true)
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `💁 *${quote}*\n-# Daily offers reroll <t:${shoprestock}:R>`
+            )
+          ),
+        new ContainerBuilder()
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `${emojis[dailyemojis[0]].emoji} **${
+                emojis[dailyemojis[0]].names[0]
+              }** (100 🪙)`
+            )
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `${emojis[dailyemojis[1]].emoji} **${
+                emojis[dailyemojis[1]].names[0]
+              }** (200 🪙)`
+            )
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `${emojis[dailyemojis[2]].emoji} **${
+                emojis[dailyemojis[2]].names[0]
+              }** (600 🪙)`
+            )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Large)
+              .setDivider(true)
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              ":asterisk: **Random Common Emoji** (75 🪙)"
+            )
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              "✳️ **Random Rare Emoji** (150 🪙)"
+            )
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              "⚛️ **Random Special Emoji** (450 🪙)"
+            )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Large)
+              .setDivider(true)
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `🎁${classes[dailyPack_class].emoji} **${dailyPack_name}**`
+            )
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              "🎁:asterisk: **Common Emoji Pack** (300 🪙)"
+            )
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              "🎁✳️ **Rare Emoji Pack** (1000 🪙)"
+            )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Large)
+              .setDivider(true)
+          )
+          .addActionRowComponents(shop),
+      ];
+
       const message = await interaction.reply({
         components: shopcomponents,
         flags: MessageFlags.IsComponentsV2,
@@ -488,7 +431,7 @@ module.exports = {
       await writelogs(logs);
 
       const collectorFilter = (i) => {
-        return interaction.user.id == i.user.id && !isNaN(Number(i.customId));
+        return interaction.user.id == i.user.id && i.isStringSelectMenu();
       };
 
       let dropdownCollector = message.createMessageComponentCollector({
@@ -505,7 +448,7 @@ module.exports = {
           const $ = parseInt(
             (await database.get(interaction.user.id + "coins")) ?? "100"
           );
-          choice = parseInt(interaction.customId);
+          choice = parseInt(interaction.values[0]);
 
           const buy = new ButtonBuilder()
             .setCustomId("buy")
