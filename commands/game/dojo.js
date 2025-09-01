@@ -12,6 +12,8 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
+  StringSelectMenuOptionBuilder,
+  StringSelectMenuBuilder,
 } = require("discord.js");
 const {
   raritycolors,
@@ -95,103 +97,123 @@ module.exports = {
             (x) => emojis[x]?.id == emojifound?.id
           );
 
-          const vaultembed = new EmbedBuilder()
-            .setColor(raritycolors[emojifound.rarity] ?? 0xffffff)
-            .setTitle(`${emojifound.emoji} ${emojifound.names[0]}`)
-            .setDescription(
-              `❤️ Health: **${
-                emojifound.hp ?? "N/A"
-              }**\n<:attackpower:1327657903447998477> Attack Power: **${
-                emojifound.dmg ?? "N/A"
-              }**\n${raritysymbols[emojifound.rarity] ?? "⬜"} Rarity: **${
-                raritynames[emojifound.rarity] ?? "N/A"
-              }**\n${
-                emojifound.class != undefined
-                  ? classes[emojifound.class].emoji ?? "🟣"
-                  : "🟣"
-              } Class: **${
-                emojifound.class != undefined
-                  ? classes[emojifound.class].name ?? "Unknown"
-                  : "None"
-              }**\nAbility:\n> ${emojifound.description}`
-            )
-            .setTimestamp()
-            .setFooter({
-              text: `You have ${vaultarray.reduce(
-                (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
-                0
-              )}`,
-            });
-          const addto1 = new ButtonBuilder()
-            .setCustomId("addto1")
-            .setLabel("Equip")
-            .setEmoji("1️⃣")
-            .setStyle(ButtonStyle.Secondary);
-          const addto2 = new ButtonBuilder()
-            .setCustomId("addto2")
-            .setLabel("Equip")
-            .setEmoji("2️⃣")
-            .setStyle(ButtonStyle.Secondary);
-          const addto3 = new ButtonBuilder()
-            .setCustomId("addto3")
-            .setLabel("Equip")
-            .setEmoji("3️⃣")
-            .setStyle(ButtonStyle.Secondary);
-          const addto4 = new ButtonBuilder()
-            .setCustomId("addto4")
-            .setLabel("Equip")
-            .setEmoji("4️⃣")
-            .setStyle(ButtonStyle.Secondary);
-          const addto5 = new ButtonBuilder()
-            .setCustomId("addto5")
-            .setLabel("Equip")
-            .setEmoji("5️⃣")
-            .setStyle(ButtonStyle.Secondary);
-          const addto6 = new ButtonBuilder()
-            .setCustomId("addto6")
-            .setLabel("Equip")
-            .setEmoji("6️⃣")
-            .setStyle(ButtonStyle.Secondary);
-          const addto7 = new ButtonBuilder()
-            .setCustomId("addto7")
-            .setLabel("Equip")
-            .setEmoji("7️⃣")
-            .setStyle(ButtonStyle.Secondary);
-          const addto8 = new ButtonBuilder()
-            .setCustomId("addto8")
-            .setLabel("Equip")
-            .setEmoji("8️⃣")
-            .setStyle(ButtonStyle.Secondary);
+          let squadarray = await getsquad(interaction.user.id);
+          let addto = new StringSelectMenuBuilder()
+            .setCustomId("addto")
+            .setPlaceholder("Equip...")
+            .setOptions(
+              new StringSelectMenuOptionBuilder()
+                .setLabel("1️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[0]].emoji)
+                .setValue("addto1"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("2️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[1]].emoji)
+                .setValue("addto2"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("3️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[2]].emoji)
+                .setValue("addto3"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("4️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[3]].emoji)
+                .setValue("addto4"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("5️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[4]].emoji)
+                .setValue("addto5"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("6️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[5]].emoji)
+                .setValue("addto6"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("7️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[6]].emoji)
+                .setValue("addto7"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("8️⃣ Equip")
+                .setDescription("replaces " + emojis[squadarray[7]].emoji)
+                .setValue("addto8")
+            );
           const devote = new ButtonBuilder()
             .setCustomId("devote")
             .setLabel(
-              `Devote for ${2 * emojifound.rarity + 1} point${
+              `Devote (${2 * emojifound.rarity + 1} point${
                 2 * emojifound.rarity + 1 != 1 ? "s" : ""
-              } each`
+              } each)`
             )
             .setStyle(ButtonStyle.Primary)
             .setEmoji("🛐");
           const devotehelp = new ButtonBuilder()
             .setCustomId("devotehelp")
             .setLabel(`Devotion Help`)
-            .setStyle(ButtonStyle.Danger)
-            .setEmoji("❔");
-          const row1 = new ActionRowBuilder().addComponents(
-            addto8,
-            addto7,
-            addto6,
-            addto5
-          );
-          const row2 = new ActionRowBuilder().addComponents(
-            addto4,
-            addto3,
-            addto2,
-            addto1
-          );
+            .setStyle(ButtonStyle.Danger);
           const devoterow = new ActionRowBuilder().addComponents(
             devote,
             devotehelp
           );
+          let comps = [];
+          let numberfound = squadarray.reduce(
+            (a, v) => (v == emojifound.id ? a + 1 : a),
+            0
+          );
+          let numberowned = vaultarray.reduce(
+            (a, v) => (v == emojifound.id ? a + 1 : a),
+            0
+          );
+          if (numberfound >= numberowned) {
+            addto = new StringSelectMenuBuilder()
+              .setCustomId("addto")
+              .setPlaceholder("Move...")
+              .setOptions(
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("1️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[0]].emoji)
+                  .setValue("addto1"),
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("2️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[1]].emoji)
+                  .setValue("addto2"),
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("3️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[2]].emoji)
+                  .setValue("addto3"),
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("4️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[3]].emoji)
+                  .setValue("addto4"),
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("5️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[4]].emoji)
+                  .setValue("addto5"),
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("6️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[5]].emoji)
+                  .setValue("addto6"),
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("7️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[6]].emoji)
+                  .setValue("addto7"),
+                new StringSelectMenuOptionBuilder()
+                  .setLabel("8️⃣ Move")
+                  .setDescription("swaps with " + emojis[squadarray[7]].emoji)
+                  .setValue("addto8")
+              );
+          }
+          if (
+            vaultarray.reduce(
+              (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
+              0
+            ) > 0
+          ) {
+            if (emojifound.rarity >= 0 && emojifound.rarity <= 2) {
+              comps.push(devoterow);
+            }
+          } else {
+            addto.setDisabled(true);
+            addto.setPlaceholder("You don't have any of this Emoji");
+          }
+
           let vaultcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
@@ -232,46 +254,14 @@ module.exports = {
                 .setSpacing(SeparatorSpacingSize.Small)
                 .setDivider(true)
             )
-            .addActionRowComponents(row1)
-            .addActionRowComponents(row2)
+            .addActionRowComponents(new ActionRowBuilder().addComponents(addto))
             .addSeparatorComponents(
               new SeparatorBuilder()
                 .setSpacing(SeparatorSpacingSize.Small)
                 .setDivider(true)
             )
             .addActionRowComponents(devoterow);
-          let comps = [];
-          let squadarray = await getsquad(interaction.user.id);
-          let numberfound = squadarray.reduce(
-            (a, v) => (v == emojifound.id ? a + 1 : a),
-            0
-          );
-          let numberowned = vaultarray.reduce(
-            (a, v) => (v == emojifound.id ? a + 1 : a),
-            0
-          );
-          if (numberfound >= numberowned) {
-            addto1.setLabel("Move");
-            addto2.setLabel("Move");
-            addto3.setLabel("Move");
-            addto4.setLabel("Move");
-            addto5.setLabel("Move");
-            addto6.setLabel("Move");
-            addto7.setLabel("Move");
-            addto8.setLabel("Move");
-          }
-          if (
-            vaultarray.reduce(
-              (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
-              0
-            ) > 0
-          ) {
-            comps.push(row1);
-            comps.push(row2);
-            if (emojifound.rarity >= 0 && emojifound.rarity <= 2) {
-              comps.push(devoterow);
-            }
-          }
+
           const response = await interaction.reply({
             components: [vaultcontainer],
             flags: MessageFlags.IsComponentsV2,
@@ -305,10 +295,10 @@ module.exports = {
                 (a, v) => (v == emojifound.id ? a + 1 : a),
                 0
               );
-              if (interaction2.customId.includes("addto")) {
+              if (interaction2.values[0].includes("addto")) {
                 if (numberfound < numberowned) {
                   squadarray = await getsquad(interaction.user.id);
-                  squadarray[interaction2.customId[5] - 1] = emojifound.id;
+                  squadarray[interaction2.values[0][5] - 1] = emojifound.id;
                   await database.set(
                     interaction.user.id + "squad",
                     squadarray.join(",") + ","
@@ -343,11 +333,11 @@ module.exports = {
                   await writelogs(logs);
                 } else {
                   squadarray = await getsquad(interaction.user.id);
-                  let swapemoji = squadarray[interaction2.customId[5] - 1];
+                  let swapemoji = squadarray[interaction2.values[0][5] - 1];
                   let swapindex = squadarray.findIndex(
                     (x) => x == emojifound.id
                   );
-                  squadarray[interaction2.customId[5] - 1] = emojifound.id;
+                  squadarray[interaction2.values[0][5] - 1] = emojifound.id;
                   squadarray[swapindex] = swapemoji;
                   await database.set(
                     interaction.user.id + "squad",
@@ -382,7 +372,7 @@ module.exports = {
                   ].squadedited += 1;
                   await writelogs(logs);
                 }
-              } else if (interaction2.customId == "devote") {
+              } else if (interaction2.values[0] == "devote") {
                 if (numberfound < numberowned) {
                   const modal = new ModalBuilder()
                     .setCustomId("devoteModal")
@@ -503,7 +493,7 @@ module.exports = {
                     content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`,
                   });
                 }
-              } else if (interaction2.customId == "devotehelp") {
+              } else if (interaction2.values[0] == "devotehelp") {
                 interaction2.reply({
                   flags: "Ephemeral",
                   content: devotionhelp,
@@ -512,14 +502,7 @@ module.exports = {
             });
           } catch (e) {
             console.error(e);
-            addto1.setDisabled(true);
-            addto2.setDisabled(true);
-            addto3.setDisabled(true);
-            addto4.setDisabled(true);
-            addto5.setDisabled(true);
-            addto6.setDisabled(true);
-            addto7.setDisabled(true);
-            addto8.setDisabled(true);
+            addto.setDisabled(true);
             interaction.editReply();
           }
         } else {
