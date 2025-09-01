@@ -7,6 +7,11 @@ const {
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
+  MessageFlags,
+  ContainerBuilder,
+  TextDisplayBuilder,
+  SeparatorBuilder,
+  SeparatorSpacingSize,
 } = require("discord.js");
 const {
   raritycolors,
@@ -75,7 +80,7 @@ module.exports = {
 
           let redirecttext = "";
           if (viewemoji != closeviewemoji) {
-            redirecttext = `-# redirected from "${viewemoji}"`;
+            redirecttext = `\n-# redirected from "${viewemoji}"`;
           }
 
           const emojifound = emojis.find(
@@ -187,6 +192,54 @@ module.exports = {
             devote,
             devotehelp
           );
+          let vaultcontainer = new ContainerBuilder()
+            .addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(
+                `## ${emojifound.emoji} ${
+                  emojifound.names[0]
+                }${redirecttext}\nYou have ${vaultarray.reduce(
+                  (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
+                  0
+                )}`
+              )
+            )
+            .addSeparatorComponents(
+              new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+                .setDivider(true)
+            )
+            .addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(
+                `❤️ Health: **${
+                  emojifound.hp ?? "N/A"
+                }**\n<:attackpower:1327657903447998477> Attack Power: **${
+                  emojifound.dmg ?? "N/A"
+                }**\n${raritysymbols[emojifound.rarity] ?? "⬜"} Rarity: **${
+                  raritynames[emojifound.rarity] ?? "N/A"
+                }**\n${
+                  emojifound.class != undefined
+                    ? classes[emojifound.class].emoji ?? "🟣"
+                    : "🟣"
+                } Class: **${
+                  emojifound.class != undefined
+                    ? classes[emojifound.class].name ?? "Unknown"
+                    : "None"
+                }**\nAbility:\n> ${emojifound.description}`
+              )
+            )
+            .addSeparatorComponents(
+              new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+                .setDivider(true)
+            )
+            .addActionRowComponents(row1)
+            .addActionRowComponents(row2)
+            .addSeparatorComponents(
+              new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+                .setDivider(true)
+            )
+            .addActionRowComponents(devoterow);
           let comps = [];
           let squadarray = await getsquad(interaction.user.id);
           let numberfound = squadarray.reduce(
@@ -220,9 +273,8 @@ module.exports = {
             }
           }
           const response = await interaction.reply({
-            embeds: [vaultembed],
-            components: comps,
-            content: redirecttext,
+            components: [vaultcontainer],
+            flags: MessageFlags.IsComponentsV2,
           });
           await dailyrewardremind(interaction);
           let logs = await getlogs();
@@ -476,15 +528,32 @@ module.exports = {
             .setLabel("sort")
             .setEmoji("📶")
             .setStyle(ButtonStyle.Secondary);
-          let vaultembed = new EmbedBuilder().setTitle(
-            `${interaction.user.globalName}'s Dojo`
-          );
-          await sortDojo(interaction, sort, vaultarray, vaultembed);
-          const row1 = new ActionRowBuilder().addComponents(sort);
+          let vaultcontainer = new ContainerBuilder()
+            .addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(
+                "Run `/dojo [emoji]` to see details about one emoji."
+              )
+            )
+            .addSeparatorComponents(
+              new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+                .setDivider(true)
+            )
+            .addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(
+                await sortDojo(interaction, sort, vaultarray)
+              )
+            )
+            .addSeparatorComponents(
+              new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Large)
+                .setDivider(true)
+            )
+            .addActionRowComponents(new ActionRowBuilder().addComponents(sort));
           const response = await interaction.reply({
-            embeds: [vaultembed],
-            components: [row1],
+            components: [vaultcontainer],
             withResponse: true,
+            flags: MessageFlags.IsComponentsV2,
           });
           await dailyrewardremind(interaction);
           let logs = await getlogs();
@@ -510,11 +579,34 @@ module.exports = {
                     0)) %
                   4
               );
-              await sortDojo(interaction2, sort, vaultarray, vaultembed);
+              vaultcontainer = new ContainerBuilder()
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(
+                    "Run `/dojo [emoji]` to see details about one emoji."
+                  )
+                )
+                .addSeparatorComponents(
+                  new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+                    .setDivider(true)
+                )
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(
+                    await sortDojo(interaction, sort, vaultarray)
+                  )
+                )
+                .addSeparatorComponents(
+                  new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Large)
+                    .setDivider(true)
+                )
+                .addActionRowComponents(
+                  new ActionRowBuilder().addComponents(sort)
+                );
               await interaction2.update({
-                embeds: [vaultembed],
-                components: [row1],
+                components: [vaultcontainer],
                 withResponse: true,
+                flags: MessageFlags.IsComponentsV2,
               });
             });
           } catch (e) {
@@ -527,7 +619,7 @@ module.exports = {
   },
 };
 
-async function sortDojo(interaction, sort, vaultarray, vaultembed) {
+async function sortDojo(interaction, sort, vaultarray) {
   let sortstyle = (await database.get(interaction.user.id + "sortstyle")) ?? 0;
   switch (sortstyle) {
     case 1:
@@ -562,20 +654,10 @@ async function sortDojo(interaction, sort, vaultarray, vaultembed) {
       let classdesc = "";
       for (let i = 0; i < classes.length; i++) {
         if (classnumbers[i] > 0) {
-          classdesc += `## ${classes[i].emoji} ${classes[i].name}\n${classtext[i]}\n`;
+          classdesc += `### ${classes[i].emoji} ${classes[i].name} x${classnumbers[i]}\n${classtext[i]}\n`;
         }
       }
-      vaultembed.setDescription(
-        `Run \`/dojo [emoji]\` to view a specific emoji.\n` + classdesc
-      );
-      vaultembed.setFooter({
-        text: classnumbers
-          .map((num, idx) => (num > 0 ? `${num} ${classes[idx].name}` : null))
-          .filter(Boolean)
-          .join(", "),
-      });
-      vaultembed.setColor(0x9266cc);
-      break;
+      return classdesc;
     case 2:
       sort.setLabel("Sort by Attack Power");
       sort.setEmoji("<:attackpower:1327657903447998477>");
@@ -589,7 +671,7 @@ async function sortDojo(interaction, sort, vaultarray, vaultembed) {
           (eid) => (emojis[eid]?.hp ?? 0) === h
         );
         if (groupEmojis.length > 0) {
-          hpGroups += `## ❤️ ${h} Health\n`;
+          hpGroups += `### ❤️ ${h} Health\n`;
           let goneOver = [];
           for (let eid of groupEmojis) {
             if (!goneOver.includes(eid)) {
@@ -604,14 +686,7 @@ async function sortDojo(interaction, sort, vaultarray, vaultembed) {
           hpGroups += "\n";
         }
       }
-      vaultembed.setDescription(
-        `Run \`/dojo [emoji]\` to view a specific emoji.\n${hpGroups}`
-      );
-      vaultembed.setFooter({
-        text: `Sorted by Health (Lowest to Highest)`,
-      });
-      vaultembed.setColor(0xcc2b3d);
-      break;
+      return hpGroups;
     case 3:
       sort.setLabel("Sort by Rarity");
       sort.setEmoji("*️⃣");
@@ -625,7 +700,7 @@ async function sortDojo(interaction, sort, vaultarray, vaultembed) {
           (eid) => (emojis[eid]?.dmg ?? 0) === d
         );
         if (groupEmojis.length > 0) {
-          dmgGroups += `## <:attackpower:1327657903447998477> ${d} Attack Power\n`;
+          dmgGroups += `### <:attackpower:1327657903447998477> ${d} Attack Power\n`;
           let goneOver = [];
           for (let eid of groupEmojis) {
             if (!goneOver.includes(eid)) {
@@ -640,14 +715,7 @@ async function sortDojo(interaction, sort, vaultarray, vaultembed) {
           dmgGroups += "\n";
         }
       }
-      vaultembed.setDescription(
-        `Run \`/dojo [emoji]\` to view a specific emoji.\n${dmgGroups}`
-      );
-      vaultembed.setFooter({
-        text: `Sorted by Attack Power (Lowest to Highest)`,
-      });
-      vaultembed.setColor(0xffac33);
-      break;
+      return dmgGroups;
     default:
       sort.setLabel("Sort by Class");
       sort.setEmoji("🛐");
@@ -675,31 +743,17 @@ async function sortDojo(interaction, sort, vaultarray, vaultembed) {
       }
       let desc = "";
       if (raritynumbers[0] > 0) {
-        desc += `## Common Emojis *️⃣\n${raritytext[0]}\n`;
+        desc += `### *️⃣ Common Emojis x${raritynumbers[0]}\n${raritytext[0]}\n`;
       }
       if (raritynumbers[1] > 0) {
-        desc += `## Rare Emojis ✳️\n${raritytext[1]}\n`;
+        desc += `### ✳️ Rare Emojis x${raritynumbers[1]}\n${raritytext[1]}\n`;
       }
       if (raritynumbers[2] > 0) {
-        desc += `## Special Emojis ⚛️\n${raritytext[2]}\n`;
+        desc += `### ⚛️ Special Emojis x${raritynumbers[2]}\n${raritytext[2]}\n`;
       }
-      let mastermsg = "";
       if (raritynumbers[3] > 0) {
-        desc += `## Master Emojis <:master:1325987682941145259>\n${raritytext[3]}`;
-        mastermsg = `, ${raritynumbers[3]} Master${
-          raritynumbers[3] == 1 ? "" : "s"
-        }`;
+        desc += `### <:master:1325987682941145259> Master Emojis x${raritynumbers[3]}\n${raritytext[3]}`;
       }
-      vaultembed.setDescription(
-        `Run \`/dojo [emoji]\` to view a specific emoji.\n` + desc
-      );
-      vaultembed.setFooter({
-        text: `${raritynumbers[0]} Common${raritynumbers[0] == 1 ? "" : "s"}, ${
-          raritynumbers[1]
-        } Rare${raritynumbers[1] == 1 ? "" : "s"}, ${raritynumbers[2]} Special${
-          raritynumbers[2] == 1 ? "" : "s"
-        }${mastermsg}`,
-      });
-      vaultembed.setColor(0x3b88c3);
+      return desc;
   }
 }
