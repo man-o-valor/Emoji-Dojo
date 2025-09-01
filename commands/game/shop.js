@@ -395,7 +395,7 @@ module.exports = {
           )
           .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-              `🎁${classes[dailyPack_class].emoji} **${dailyPack_name}**`
+              `🎁${classes[dailyPack_class].emoji} **${dailyPack_name}** (${dailyPack_price} 🪙)`
             )
           )
           .addTextDisplayComponents(

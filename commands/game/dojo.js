@@ -200,19 +200,6 @@ module.exports = {
                   .setValue("addto8")
               );
           }
-          if (
-            vaultarray.reduce(
-              (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
-              0
-            ) > 0
-          ) {
-            if (emojifound.rarity >= 0 && emojifound.rarity <= 2) {
-              comps.push(devoterow);
-            }
-          } else {
-            addto.setDisabled(true);
-            addto.setPlaceholder("You don't have any of this Emoji");
-          }
 
           let vaultcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
@@ -259,8 +246,21 @@ module.exports = {
               new SeparatorBuilder()
                 .setSpacing(SeparatorSpacingSize.Small)
                 .setDivider(true)
-            )
-            .addActionRowComponents(devoterow);
+            );
+
+          if (
+            vaultarray.reduce(
+              (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
+              0
+            ) > 0
+          ) {
+            if (emojifound.rarity >= 0 && emojifound.rarity <= 2) {
+              vaultcontainer.addActionRowComponents(devoterow);
+            }
+          } else {
+            addto.setDisabled(true);
+            addto.setPlaceholder("You don't have any of this Emoji");
+          }
 
           const response = await interaction.reply({
             components: [vaultcontainer],
@@ -295,7 +295,10 @@ module.exports = {
                 (a, v) => (v == emojifound.id ? a + 1 : a),
                 0
               );
-              if (interaction2.values[0].includes("addto")) {
+              if (
+                interaction2.values &&
+                interaction2.values[0].includes("addto")
+              ) {
                 if (numberfound < numberowned) {
                   squadarray = await getsquad(interaction.user.id);
                   squadarray[interaction2.values[0][5] - 1] = emojifound.id;
@@ -372,7 +375,7 @@ module.exports = {
                   ].squadedited += 1;
                   await writelogs(logs);
                 }
-              } else if (interaction2.values[0] == "devote") {
+              } else if (interaction2.customId == "devote") {
                 if (numberfound < numberowned) {
                   const modal = new ModalBuilder()
                     .setCustomId("devoteModal")
@@ -493,7 +496,7 @@ module.exports = {
                     content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`,
                   });
                 }
-              } else if (interaction2.values[0] == "devotehelp") {
+              } else if (interaction2.customId == "devotehelp") {
                 interaction2.reply({
                   flags: "Ephemeral",
                   content: devotionhelp,
