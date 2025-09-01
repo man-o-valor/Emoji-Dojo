@@ -241,11 +241,8 @@ module.exports = {
                 .setSpacing(SeparatorSpacingSize.Small)
                 .setDivider(true)
             )
-            .addActionRowComponents(new ActionRowBuilder().addComponents(addto))
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Small)
-                .setDivider(true)
+            .addActionRowComponents(
+              new ActionRowBuilder().addComponents(addto)
             );
 
           if (
@@ -255,6 +252,11 @@ module.exports = {
             ) > 0
           ) {
             if (emojifound.rarity >= 0 && emojifound.rarity <= 2) {
+              vaultcontainer.addSeparatorComponents(
+                new SeparatorBuilder()
+                  .setSpacing(SeparatorSpacingSize.Small)
+                  .setDivider(true)
+              );
               vaultcontainer.addActionRowComponents(devoterow);
             }
           } else {
