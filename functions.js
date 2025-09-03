@@ -180,7 +180,7 @@ async function dailyrewardremind(interaction) {
   if (Math.floor(Date.now() / 1000) - dailytime > 86400) {
     interaction.followUp({
       content:
-        "📦 Your **daily reward** is ready to claim! Claim it now with </daily:1386876634270929048>!",
+        "📦 Your **daily reward** is ready to claim! Claim it now with </daily:1412837210205458511>!",
       flags: MessageFlags.Ephemeral,
     });
   }
@@ -265,19 +265,19 @@ async function trysetupuser(user) {
 
 \`\`\`That should be good enough to start with! Go ahead, you can get to know 'em.\`\`\`
 
-*(Use </dojo:1277719095701143680> to see your collection of Emojis, and see details about each one.)*
+*(Use </dojo:1412837210205458512> to see your collection of Emojis, and see details about each one.)*
 
 \`\`\`When you're ready, organize them into a Squad optimized to battle others and create the best synergy.\`\`\`
 
-*(Use </squad:1277719095701143681> to view your Squad. You can edit your squad from the </dojo:1277719095701143680>.)*
+*(Use </squad:1412837210348060755> to view your Squad. You can edit your squad from the </dojo:1412837210205458512>.)*
 
 \`\`\`Finally, you can Battle! Engage your friends in a Battle, or lower the stakes with a Friendly Battle. If there's no one who wants to fight you, you can always battle Dojobot in a Bot Battle!\`\`\`
 
-*(Use </battleuser:1279264987717570610> and </battlebot:1277719095701143677> to engage in Battles to earn Coins. You can also use </friendlybattle:1289287177875886161> to battle friends without worrying about losing Coins.)*
+*(Use </battleuser:1412837210205458507> and </battlebot:1412837210205458504> to engage in Battles to earn Coins. You can also use </battlefriendly:1412837210205458506> to battle friends without worrying about losing Coins.)*
 
 \`\`\`Once you have enough Coins, you can visit my Emoji Shop! I sell these little guys to aspiring battlers like you. Stop by when you're looking for an emoji!\`\`\`
 
-*(You can use </coins:1277719095701143678> to see how many Coins you have, and </shop:1290417978734678098> to visit Tipping Hand's shop.)*`;
+*(You can use </coins:1412837210205458510> to see how many Coins you have, and </shop:1412837210348060754> to visit my shop.)*`;
     await user.send({ content: welcomemessage });
     return true;
   } else {
