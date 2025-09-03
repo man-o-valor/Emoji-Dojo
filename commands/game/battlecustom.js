@@ -3,6 +3,11 @@ const {
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
+  MessageFlags,
+  SeparatorBuilder,
+  TextDisplayBuilder,
+  ContainerBuilder,
+  SeparatorSpacingSize,
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -12,6 +17,7 @@ const {
   dailyrewardremind,
   getsquad,
   database,
+  makesquad,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -28,18 +34,30 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("squad2")
-        .setDescription("@me, @[saved squad #], or a sequence of 8 emojis")
+        .setDescription(
+          "@me, @[saved squad #], @bot, or a sequence of 8 emojis"
+        )
         .setRequired(true)
     )
     .addStringOption((option) =>
       option
         .setName("speed")
         .setDescription("The time in seconds between each turn (defaults to 4)")
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName("reverse-squad2")
+        .setDescription(
+          "Set this to true if you are copying a squad that goes back to front"
+        )
     ),
   async execute(interaction) {
-    let battlespeed = parseFloat(interaction.options.getString("speed") ?? "4");
+    let battlespeed =
+      parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
     let squad1input = interaction.options.getString("squad1");
     let squad2input = interaction.options.getString("squad2");
+    let reversesquad2 =
+      interaction.options.getBoolean("reverse-squad2") ?? false;
     if (battlespeed < 0) {
       battlespeed = 0;
     }
@@ -89,7 +107,7 @@ module.exports = {
         let objectalternative = emojis.find(
           (x) => x.emoji == player1squadarray[i]
         );
-        player1squadarray[i] = (objectalternative)?.id;
+        player1squadarray[i] = objectalternative?.id;
       }
       player1squadarray.reverse();
     }
@@ -107,6 +125,12 @@ module.exports = {
       } else {
         player2squadarray = [undefined];
       }
+    } else if (squad2input.includes("@bot")) {
+      player2squadarray = await makesquad(
+        player1squadarray,
+        Math.max(Math.min(logs.logs.games.botwins, 50), 1),
+        false
+      );
     } else {
       const segmenter2 = new Intl.Segmenter("en", {
         granularity: "grapheme",
@@ -120,9 +144,11 @@ module.exports = {
         let objectalternative = emojis.find(
           (x) => x.emoji == player2squadarray[i]
         );
-        player2squadarray[i] = (objectalternative)?.id;
+        player2squadarray[i] = objectalternative?.id;
       }
-      player2squadarray.reverse();
+      if (reversesquad2) {
+        player2squadarray.reverse();
+      }
     }
 
     if (
@@ -163,9 +189,32 @@ module.exports = {
 
       gamedata.playerturn = Math.floor(Math.random() * 2) + 1;
 
+      let challengecontainer = new ContainerBuilder()
+        .addTextDisplayComponents(
+          new TextDisplayBuilder().setContent(
+            `### \`Squad 1\` vs \`Squad 2\` • Speed: ${battlespeed}`
+          )
+        )
+        .addSeparatorComponents(
+          new SeparatorBuilder()
+            .setSpacing(SeparatorSpacingSize.Large)
+            .setDivider(true)
+        )
+        .addTextDisplayComponents(
+          new TextDisplayBuilder().setContent(
+            `\`Squad 1\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`Squad 2\``
+          )
+        )
+        .addSeparatorComponents(
+          new SeparatorBuilder()
+            .setSpacing(SeparatorSpacingSize.Large)
+            .setDivider(true)
+        )
+        .addActionRowComponents(row1);
+
       const response = await interaction.editReply({
-        components: [row1],
-        content: `\`Squad 1\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`Squad 2\` \`\`\` \`\`\``,
+        components: [challengecontainer],
+        flags: MessageFlags.IsComponentsV2,
       });
       await dailyrewardremind(interaction);
 
@@ -187,9 +236,6 @@ module.exports = {
             logs.logs.players[`user${interaction.user.id}`].started ?? 0;
           logs.logs.players[`user${interaction.user.id}`].started += 1;
           await writelogs(logs);
-          await interaction2.reply(
-            `\`Custom Battle\`\nLet the battle begin!\n`
-          );
           function delay(time) {
             return new Promise((resolve) => setTimeout(resolve, time));
           }
@@ -255,13 +301,38 @@ module.exports = {
               } else if (numberhidden > 0) {
                 richnumberhidden = "-# " + numberhidden + " lines hidden";
               }
-              await interaction2.editReply(
-                `\`Custom Battle\`\nLet the battle begin! Turn ${gamedata.turn}\n` +
-                  gamedata.emojitext +
-                  "\n\n" +
-                  richnumberhidden +
-                  richtextsnippet
-              );
+              const battlecomponents = [
+                new ContainerBuilder()
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      `\`Squad 1\` vs \`Squad 2\` • Turn ${gamedata.turn}`
+                    )
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Small)
+                      .setDivider(true)
+                  )
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(gamedata.emojitext)
+                  ),
+                new ContainerBuilder().addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(
+                    richnumberhidden + richtextsnippet
+                  )
+                ),
+              ];
+              if (gamedata.turn > 1) {
+                await interaction2.editReply({
+                  components: battlecomponents,
+                  flags: MessageFlags.IsComponentsV2,
+                });
+              } else {
+                await interaction2.reply({
+                  components: battlecomponents,
+                  flags: MessageFlags.IsComponentsV2,
+                });
+              }
               await delay(battlespeed * 1000);
             }
             battleover = true;
@@ -273,33 +344,62 @@ module.exports = {
               .setEmoji("📤")
               .setStyle(ButtonStyle.Primary);
             const row2 = new ActionRowBuilder().addComponents(exportbutton);
+            let battleendcontainer;
             if (
               gamedata.turn >= 200 ||
               (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)
             ) {
-              int3 = await interaction2.followUp({
-                components: [row2],
-                content: `🏳️ The match ended in a draw... ||<@${interaction.user.id}>||`,
-              });
+              battleendcontainer = new ContainerBuilder()
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(
+                    `🏳️ The match ended in a draw... ||<@${interaction.user.id}>||`
+                  )
+                )
+                .addSeparatorComponents(
+                  new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+                    .setDivider(true)
+                )
+                .addActionRowComponents(row2);
               let logs = await getlogs();
               logs.logs.games.customdraws += 1;
               await writelogs(logs);
             } else {
               if (gamedata.squads[1].length == 0) {
-                int3 = await interaction2.followUp({
-                  components: [row2],
-                  content: `\`Squad 1\` is the winner! ||<@${interaction.user.id}>||`,
-                });
+                battleendcontainer = new ContainerBuilder()
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      `\`Squad 1\` is the winner! ||<@${interaction.user.id}>||`
+                    )
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Small)
+                      .setDivider(true)
+                  )
+                  .addActionRowComponents(row2);
               }
               if (gamedata.squads[0].length == 0) {
-                int3 = await interaction2.followUp({
-                  components: [row2],
-                  content: `\`Squad 2\` is the winner! ||<@${interaction.user.id}>||`,
-                });
+                battleendcontainer = new ContainerBuilder()
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      `\`Squad 2\` is the winner! ||<@${interaction.user.id}>||`
+                    )
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Small)
+                      .setDivider(true)
+                  )
+                  .addActionRowComponents(row2);
               }
             }
+            int3 = await interaction2.followUp({
+              components: [battleendcontainer],
+              flags: MessageFlags.IsComponentsV2,
+            });
             let collector = int3.createMessageComponentCollector({
-              time: 12000,
+              time: 600000,
             });
             collector.on("collect", async (interaction3) => {
               try {
@@ -331,14 +431,32 @@ module.exports = {
           } catch (e) {
             console.error(e);
             const txt = Buffer.from(gamedata.logfile);
+            const battlecomponents = [
+              new ContainerBuilder()
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(
+                    `<@${interaction.user.id}> vs \`@DojoBot\` • Turn ${gamedata.turn}`
+                  )
+                )
+                .addSeparatorComponents(
+                  new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+                    .setDivider(true)
+                )
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(gamedata.emojitext)
+                ),
+              new ContainerBuilder().addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  "🤒 An error has occurred and the Battle cannot continue.```" +
+                    e +
+                    "```"
+                )
+              ),
+            ];
             await interaction2.editReply({
-              content:
-                `\`Custom Battle\`\nLet the battle begin! Turn ${gamedata.turn}\n` +
-                gamedata.emojitext +
-                "\n\n" +
-                "🤒 An error has occurred and the Battle cannot continue.```" +
-                e +
-                "```",
+              components: battlecomponents,
+              flags: MessageFlags.IsComponentsV2,
               files: [
                 {
                   attachment: txt,
@@ -350,8 +468,25 @@ module.exports = {
         }
       } catch (e) {
         console.error(e);
+        challengecontainer = new ContainerBuilder()
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `### \`Squad 1\` vs \`Squad 2\` • Speed: ${battlespeed}`
+            )
+          )
+          .addSeparatorComponents(
+            new SeparatorBuilder()
+              .setSpacing(SeparatorSpacingSize.Large)
+              .setDivider(true)
+          )
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              `\`Squad 1\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`Squad 2\``
+            )
+          );
         await interaction.editReply({
-          components: [],
+          components: [challengecontainer],
+          flags: MessageFlags.IsComponentsV2,
         });
       }
     }

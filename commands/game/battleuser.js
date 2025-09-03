@@ -3,6 +3,10 @@ const {
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
+  MessageFlags,
+  TextDisplayBuilder,
+  SeparatorBuilder,
+  ContainerBuilder,
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -37,10 +41,8 @@ module.exports = {
     ),
   async execute(interaction) {
     const battleuser = interaction.options.getUser("user");
-    let battlespeed = parseInt(interaction.options.getString("speed") ?? "4");
-    if (battlespeed < 1) {
-      battlespeed = 1;
-    }
+    let battlespeed =
+      parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
     const othervault = await database.get(battleuser.id + "vault");
     if (await trysetupuser(interaction.user)) {
       await interaction.reply({
@@ -104,12 +106,12 @@ module.exports = {
             const cook = new ButtonBuilder()
               .setCustomId("battle")
               .setLabel("Battle!")
-              .setEmoji("🆚")
+              .setEmoji("👍")
               .setStyle(ButtonStyle.Success);
             const nah = new ButtonBuilder()
               .setCustomId("nah")
               .setLabel("Nah")
-              .setEmoji("✖️")
+              .setEmoji("👎")
               .setStyle(ButtonStyle.Danger);
             const row1 = new ActionRowBuilder().addComponents(cook, nah);
             await database.set(
@@ -160,30 +162,53 @@ module.exports = {
 
             const acceptemojis = ["👎", "✋", "👍"];
 
-            const message = await interaction.reply({
-              components: [row1],
-              content: `<@${battleuser.id}>, <@${
-                interaction.user.id
-              }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
-                /`/g,
-                ""
-              )}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
-                /`/g,
-                ""
-              )}'s\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(
-                /`/g,
-                ""
-              )}\`: ${
-                acceptemojis[accepts[0] + 1]
-              } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                acceptemojis[accepts[1] + 1]
-              }`,
+            let challengecontainer = new ContainerBuilder()
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  `### <@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you! • Speed: ${battlespeed}`
+                )
+              )
+              .addSeparatorComponents(
+                new SeparatorBuilder()
+                  .setSpacing(SeparatorSpacingSize.Large)
+                  .setDivider(true)
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  `\`${interaction.user.globalName.replace(
+                    /`/g,
+                    ""
+                  )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
+                    /`/g,
+                    ""
+                  )}\``
+                )
+              )
+              .addSeparatorComponents(
+                new SeparatorBuilder()
+                  .setSpacing(SeparatorSpacingSize.Large)
+                  .setDivider(true)
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  `\`${interaction.user.globalName.replace(/`/g, "")}\`: ${
+                    acceptemojis[accepts[0] + 1]
+                  } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
+                    acceptemojis[accepts[1] + 1]
+                  }`
+                )
+              )
+              .addActionRowComponents(row1);
+
+            const response = await interaction.reply({
+              components: [challengecontainer],
+              flags: MessageFlags.IsComponentsV2,
             });
             await dailyrewardremind(interaction);
 
             const collectorFilter = (i) =>
               i.user.id == interaction.user.id || i.user.id == battleuser.id;
-            let collector = message.createMessageComponentCollector({
+            let collector = response.createMessageComponentCollector({
               filter: collectorFilter,
               time: 60000,
             });
@@ -211,23 +236,49 @@ module.exports = {
                   accepts[0] == 1 &&
                   accepts[1] == 1
                 ) {
+                  challengecontainer = new ContainerBuilder()
+                    .addTextDisplayComponents(
+                      new TextDisplayBuilder().setContent(
+                        `### <@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you! • Speed: ${battlespeed}`
+                      )
+                    )
+                    .addSeparatorComponents(
+                      new SeparatorBuilder()
+                        .setSpacing(SeparatorSpacingSize.Large)
+                        .setDivider(true)
+                    )
+                    .addTextDisplayComponents(
+                      new TextDisplayBuilder().setContent(
+                        `\`${interaction.user.globalName.replace(
+                          /`/g,
+                          ""
+                        )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
+                          /`/g,
+                          ""
+                        )}\``
+                      )
+                    )
+                    .addSeparatorComponents(
+                      new SeparatorBuilder()
+                        .setSpacing(SeparatorSpacingSize.Large)
+                        .setDivider(true)
+                    )
+                    .addTextDisplayComponents(
+                      new TextDisplayBuilder().setContent(
+                        `\`${interaction.user.globalName.replace(
+                          /`/g,
+                          ""
+                        )}\`: ${
+                          acceptemojis[accepts[0] + 1]
+                        } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
+                          acceptemojis[accepts[1] + 1]
+                        }`
+                      )
+                    )
+                    .addActionRowComponents(row1);
                   interaction.editReply({
-                    content: `<@${battleuser.id}>, <@${
-                      interaction.user.id
-                    }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
-                      /`/g,
-                      ""
-                    )}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
-                      /`/g,
-                      ""
-                    )}'s\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(
-                      /`/g,
-                      ""
-                    )}\`: ${
-                      acceptemojis[accepts[0] + 1]
-                    } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                      acceptemojis[accepts[1] + 1]
-                    }`,
+                    components: [challengecontainer],
+                    flags: MessageFlags.IsComponentsV2,
                   });
                   await database.set(
                     interaction.user.id + "battlepending",
@@ -257,9 +308,6 @@ module.exports = {
                     logs.logs.players[`user${battleuser.id}`].started ?? 0;
                   logs.logs.players[`user${battleuser.id}`].started += 1;
                   await writelogs(logs);
-                  await interaction2.reply(
-                    `<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin!\n`
-                  );
                   function delay(time) {
                     return new Promise((resolve) => setTimeout(resolve, time));
                   }
@@ -330,26 +378,73 @@ module.exports = {
                         richnumberhidden =
                           "-# " + numberhidden + " lines hidden";
                       }
-                      await interaction2.editReply(
-                        `<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` +
-                          gamedata.emojitext +
-                          "\n\n" +
-                          richnumberhidden +
-                          richtextsnippet
-                      );
+                      const battlecomponents = [
+                        new ContainerBuilder()
+                          .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(
+                              `<@${interaction.user.id}> vs <@${battleuser.id}> • Turn ${gamedata.turn}`
+                            )
+                          )
+                          .addSeparatorComponents(
+                            new SeparatorBuilder()
+                              .setSpacing(SeparatorSpacingSize.Small)
+                              .setDivider(true)
+                          )
+                          .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(
+                              gamedata.emojitext
+                            )
+                          ),
+                        new ContainerBuilder().addTextDisplayComponents(
+                          new TextDisplayBuilder().setContent(
+                            richnumberhidden + richtextsnippet
+                          )
+                        ),
+                      ];
+                      if (gamedata.turn > 1) {
+                        await interaction2.editReply({
+                          components: battlecomponents,
+                          flags: MessageFlags.IsComponentsV2,
+                        });
+                      } else {
+                        await interaction2.reply({
+                          components: battlecomponents,
+                          flags: MessageFlags.IsComponentsV2,
+                        });
+                      }
                       await delay(battlespeed * 1000);
                     }
                   } catch (e) {
                     console.error(e);
                     const txt = Buffer.from(gamedata.logfile);
+                    const battlecomponents = [
+                      new ContainerBuilder()
+                        .addTextDisplayComponents(
+                          new TextDisplayBuilder().setContent(
+                            `<@${interaction.user.id}> vs <@${battleuser.id}> • Turn ${gamedata.turn}`
+                          )
+                        )
+                        .addSeparatorComponents(
+                          new SeparatorBuilder()
+                            .setSpacing(SeparatorSpacingSize.Small)
+                            .setDivider(true)
+                        )
+                        .addTextDisplayComponents(
+                          new TextDisplayBuilder().setContent(
+                            gamedata.emojitext
+                          )
+                        ),
+                      new ContainerBuilder().addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(
+                          "🤒 An error has occurred and the Battle cannot continue.```" +
+                            e +
+                            "```"
+                        )
+                      ),
+                    ];
                     await interaction2.editReply({
-                      content:
-                        `<@${interaction.user.id}> vs <@${battleuser.id}>\nLet the battle begin! 🔃 Turn ${gamedata.turn}\n` +
-                        gamedata.emojitext +
-                        "\n\n" +
-                        "🤒 An error has occurred and the Battle cannot continue.```" +
-                        e +
-                        "```",
+                      components: battlecomponents,
+                      flags: MessageFlags.IsComponentsV2,
                       files: [
                         {
                           attachment: txt,
@@ -373,15 +468,24 @@ module.exports = {
                   const row2 = new ActionRowBuilder().addComponents(
                     exportbutton
                   );
+                  let battleendcontainer;
                   if (
                     gamedata.turn >= 200 ||
                     (gamedata.squads[0].length == 0 &&
                       gamedata.squads[1].length == 0)
                   ) {
-                    int3 = await interaction2.followUp({
-                      components: [row2],
-                      content: `🏳️ The match ended in a draw... ||<@${interaction.user.id}><@${battleuser.id}>||`,
-                    });
+                    battleendcontainer = new ContainerBuilder()
+                      .addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(
+                          `🏳️ The match ended in a draw... ||<@${interaction.user.id}> <@${battleuser.id}>||`
+                        )
+                      )
+                      .addSeparatorComponents(
+                        new SeparatorBuilder()
+                          .setSpacing(SeparatorSpacingSize.Small)
+                          .setDivider(true)
+                      )
+                      .addActionRowComponents(row2);
                     let logs = await getlogs();
                     logs.logs.games.userdraws += 1;
                     logs.logs.players[`user${interaction.user.id}`].userdraws =
@@ -406,8 +510,8 @@ module.exports = {
                     await writelogs(logs);
                   } else {
                     if (gamedata.squads[1].length == 0) {
-                      diff1 = gamedata.squads[0].length * 20;
-                      diff2 = diff1 * -0.25;
+                      diff1 = 40;
+                      diff2 = -40;
                       coinsdata = await coinschange(interaction.user.id, diff1);
                       diff1 = coinsdata[0];
                       doublerbonus = coinsdata[1];
@@ -421,10 +525,18 @@ module.exports = {
                         diff1 > 0
                           ? ""
                           : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`;
-                      int3 = await interaction2.followUp({
-                        components: [row2],
-                        content: `<@${interaction.user.id}> is the winner!\n${interaction.user.globalName}: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n${battleuser.globalName}: ${diff2} 🪙`,
-                      });
+                      battleendcontainer = new ContainerBuilder()
+                        .addTextDisplayComponents(
+                          new TextDisplayBuilder().setContent(
+                            `<@${interaction.user.id}> is the winner!\n<@${interaction.user.id}>: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n<@${battleuser.id}>: ${diff2} 🪙`
+                          )
+                        )
+                        .addSeparatorComponents(
+                          new SeparatorBuilder()
+                            .setSpacing(SeparatorSpacingSize.Small)
+                            .setDivider(true)
+                        )
+                        .addActionRowComponents(row2);
                       let logs = await getlogs();
                       logs.logs.players[`user${interaction.user.id}`].userwins =
                         logs.logs.players[`user${interaction.user.id}`]
@@ -450,7 +562,7 @@ module.exports = {
                       await writelogs(logs);
                     }
                     if (gamedata.squads[0].length == 0) {
-                      diff1 = gamedata.squads[1].length * 20;
+                      diff1 = 40;
                       const coindoubler =
                         (await database.get(battleuser.id + "coindoubler")) ??
                         0;
@@ -463,7 +575,7 @@ module.exports = {
                       let bonusmsg =
                         doublerbonus > 0 ? ` (💫 ${doublerbonus})` : "";
                       await coinschange(battleuser.id, diff1);
-                      diff2 = diff1 * -0.25;
+                      diff2 = -40;
                       await coinschange(interaction.user.id, diff2);
                       let restocktime = await database.get(
                         battleuser.id + "coinrestock"
@@ -472,10 +584,18 @@ module.exports = {
                         diff1 > 0
                           ? ""
                           : `\n-# 💡 Your Coin Modifier is exhausted! You won't be earning any more coins until <t:${restocktime}:t>.`;
-                      int3 = await interaction2.followUp({
-                        components: [row2],
-                        content: `<@${battleuser.id}> is the winner!\n${battleuser.globalName}: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n${interaction.user.globalName}: ${diff2} 🪙`,
-                      });
+                      battleendcontainer = new ContainerBuilder()
+                        .addTextDisplayComponents(
+                          new TextDisplayBuilder().setContent(
+                            `<@${battleuser.id}> is the winner!\n<@${battleuser.id}>: +${diff1} 🪙${bonusmsg}${nocoinsmsg}\n<@${interaction.user.id}>: ${diff2} 🪙`
+                          )
+                        )
+                        .addSeparatorComponents(
+                          new SeparatorBuilder()
+                            .setSpacing(SeparatorSpacingSize.Small)
+                            .setDivider(true)
+                        )
+                        .addActionRowComponents(row2);
                       let logs = await getlogs();
                       logs.logs.players[
                         `user${interaction.user.id}`
@@ -502,8 +622,12 @@ module.exports = {
                       await writelogs(logs);
                     }
                   }
+                  int3 = await interaction2.followUp({
+                    components: [battleendcontainer],
+                    flags: MessageFlags.IsComponentsV2,
+                  });
                   let collector = int3.createMessageComponentCollector({
-                    time: 12000,
+                    time: 600000,
                   });
                   collector.on("collect", async (interaction3) => {
                     try {
@@ -533,47 +657,80 @@ module.exports = {
                     }
                   });
                 } else {
+                  challengecontainer = new ContainerBuilder()
+                    .addTextDisplayComponents(
+                      new TextDisplayBuilder().setContent(
+                        `### <@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you! • Speed: ${battlespeed}`
+                      )
+                    )
+                    .addSeparatorComponents(
+                      new SeparatorBuilder()
+                        .setSpacing(SeparatorSpacingSize.Large)
+                        .setDivider(true)
+                    )
+                    .addTextDisplayComponents(
+                      new TextDisplayBuilder().setContent(
+                        `\`${interaction.user.globalName.replace(
+                          /`/g,
+                          ""
+                        )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
+                          /`/g,
+                          ""
+                        )}\``
+                      )
+                    )
+                    .addSeparatorComponents(
+                      new SeparatorBuilder()
+                        .setSpacing(SeparatorSpacingSize.Large)
+                        .setDivider(true)
+                    )
+                    .addTextDisplayComponents(
+                      new TextDisplayBuilder().setContent(
+                        `\`${interaction.user.globalName.replace(
+                          /`/g,
+                          ""
+                        )}\`: ${
+                          acceptemojis[accepts[0] + 1]
+                        } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
+                          acceptemojis[accepts[1] + 1]
+                        }`
+                      )
+                    )
+                    .addActionRowComponents(row1);
                   interaction2.update({
-                    content: `<@${battleuser.id}>, <@${
-                      interaction.user.id
-                    }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
-                      /`/g,
-                      ""
-                    )}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
-                      /`/g,
-                      ""
-                    )}'s\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(
-                      /`/g,
-                      ""
-                    )}\`: ${
-                      acceptemojis[accepts[0] + 1]
-                    } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                      acceptemojis[accepts[1] + 1]
-                    }`,
+                    components: [challengecontainer],
+                    flags: MessageFlags.IsComponentsV2,
                   });
                 }
               });
             } catch (e) {
               console.error(e);
               await database.set(interaction.user.id + "battlepending", "0");
-              await interaction.editReply({
-                components: [],
-                content: `<@${battleuser.id}>, <@${
-                  interaction.user.id
-                }> wants to battle with you!\n\n\`${interaction.user.globalName.replace(
-                  /`/g,
-                  ""
-                )}'s\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
-                  /`/g,
-                  ""
-                )}\` \`\`\` \`\`\`\`${interaction.user.globalName.replace(
-                  /`/g,
-                  ""
-                )}\`: ${
-                  acceptemojis[accepts[0] - 1]
-                } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                  acceptemojis[accepts[1] - 1]
-                }`,
+              challengecontainer = new ContainerBuilder()
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(
+                    `### <@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you! • Speed: ${battlespeed}`
+                  )
+                )
+                .addSeparatorComponents(
+                  new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Large)
+                    .setDivider(true)
+                )
+                .addTextDisplayComponents(
+                  new TextDisplayBuilder().setContent(
+                    `\`${interaction.user.globalName.replace(
+                      /`/g,
+                      ""
+                    )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
+                      /`/g,
+                      ""
+                    )}\``
+                  )
+                );
+              interaction.editReply({
+                components: [challengecontainer],
+                flags: MessageFlags.IsComponentsV2,
               });
             }
           } else {

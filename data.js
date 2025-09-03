@@ -767,7 +767,7 @@ const emojis = [
   {
     emoji: "🧱",
     id: 35,
-    hp: 2,
+    hp: 4,
     dmg: 1,
     rarity: 1,
     names: ["Bricks", "Brick", "Wall", "Masonry"],
@@ -839,8 +839,8 @@ const emojis = [
   {
     emoji: "🃏",
     id: 40,
-    hp: 6,
-    dmg: 4,
+    hp: 7,
+    dmg: 3,
     rarity: 0,
     names: [
       "Black Joker",
@@ -2263,6 +2263,86 @@ const emojis = [
     class: null,
     description:
       "When defeated, heals the Emoji behind itself by 1 (summoned by 😴)",
+  },
+  {
+    emoji: "🧽",
+    id: 125,
+    hp: 2,
+    dmg: 2,
+    rarity: 2,
+    names: [
+      "Sponge",
+      "Soaker",
+      "Cleaning Sponge",
+      "Absorbent",
+      "Absorb",
+      "Soak",
+    ],
+    class: 0,
+    description:
+      "When attacked by a friendly Emoji, instead gets healed by that amount",
+  },
+  {
+    emoji: "🍺",
+    id: 126,
+    hp: 1,
+    dmg: 1,
+    rarity: 2,
+    names: [
+      "Beer",
+      "Beer Mug",
+      "Stein",
+      "Pint",
+      "Alcohol",
+      "Beverage",
+      "Alcoholic",
+    ],
+    class: 0,
+    description:
+      "At the beginning of the Battle, swaps the health and attack power of the friendly Emoji in front of itself and then defeats itself",
+  },
+  {
+    emoji: "🍂",
+    id: 127,
+    hp: 2,
+    dmg: 2,
+    rarity: 0,
+    names: [
+      "Fallen Leaf",
+      "Falling Leaf",
+      "Leaf",
+      "Autumn Leaf",
+      "Autumn",
+      "Fall",
+      "Fall Leaves",
+      "Leaves",
+      "Falling Leaves",
+      "Falling Leaf",
+    ],
+    class: 8,
+    description:
+      "When your Squad is shuffled, all friendly 🍂 attack regardless of position.",
+  },
+  {
+    emoji: "🎬",
+    id: 128,
+    hp: 3,
+    dmg: 2,
+    rarity: 0,
+    names: [
+      "Clapper",
+      "Cinema",
+      "Movie",
+      "Action",
+      "Film",
+      "Director",
+      "Clapboard",
+      "Clapperboard",
+      "Clap Board",
+    ],
+    class: 1,
+    description:
+      "At the beginning of the Battle, attacks once regardless of position",
   },
 ];
 

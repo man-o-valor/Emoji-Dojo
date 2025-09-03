@@ -333,7 +333,7 @@ async function coinschange(id, amt, affectcooldown) {
 }
 
 function newcoincurve(coins) {
-  return Math.floor(0.688921 + 0.149597 * Math.log(coins));
+  return Math.ceil(0.688921 + 0.149597 * Math.log(coins));
 }
 
 async function getsquad(id) {
@@ -380,14 +380,15 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     }
 
     target = lodash.cloneDeep(gamedata.squads[squad - 1][pos]);
-
-    if (gamedata.squads[squad2 - 1][pos2 + 1]?.id == 12 && val <= 0) {
-      // martial arts uniform
-      val -= 1;
-    }
-    if (gamedata.squads[squad2 - 1][pos2 + 1]?.id == 75 && val <= 0) {
-      // anger
-      val -= 2;
+    if (gamedata.squads[squad2 - 1][pos2 + 1]) {
+      if (gamedata.squads[squad2 - 1][pos2 + 1]?.id == 12 && val <= 0) {
+        // martial arts uniform
+        val -= 1;
+      }
+      if (gamedata.squads[squad2 - 1][pos2 + 1]?.id == 75 && val <= 0) {
+        // anger
+        val -= 2;
+      }
     }
     if (gamedata.squads[squad2 - 1][pos2]?.id == 114 && val <= 0) {
       // dotted line face
@@ -423,6 +424,15 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     if (gamedata.squads[squad2 - 1][pos2]?.id == 22 && val <= 0) {
       // rage
       val -= Math.ceil(gamedata.squads[squad - 1].length / 2);
+    }
+    if (
+      gamedata.squads[squad - 1][pos]?.id == 125 &&
+      val <= 0 &&
+      squad == squad2
+    ) {
+      // sponge
+      val *= -1;
+      verb = "healed";
     }
     // protection buffs start here
     if ((target?.id == 2 || target?.id == 117) && val < 0) {
@@ -934,12 +944,12 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           // fire
           if (
             gamedata.squads[squad - 1].length > 1 &&
-            gamedata.squads[squad - 1][1].id != 46
+            gamedata.squads[squad - 1][pos + 1].id != 46
           ) {
             gamedata = alterhp(
               gamedata,
               squad,
-              1,
+              pos + 1,
               squad,
               pos,
               -2,
@@ -1431,7 +1441,10 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
     }
     if (val < 0) {
       afterAttack: {
-        if (gamedata.squads[squad2 - 1][pos2]?.id == 15) {
+        if (
+          gamedata.squads[squad2 - 1][pos2]?.id == 15 &&
+          gamedata.squads[squad - 1][0]
+        ) {
           // fishing pole
           const temp =
             gamedata.squads[squad - 1][gamedata.squads[squad - 1].length - 1];
@@ -1528,445 +1541,476 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
   return gamedata;
 }
 
+function battleStartAbilities(gamedata, squad) {
+  for (i = 0; i < gamedata.squads[squad].length; i++) {
+    if (gamedata.squads[squad][i]?.id == 26) {
+      // cherries
+      gamedata.squads[squad].splice(i, 0, lodash.cloneDeep(emojis[26]));
+      i++;
+    } else if (gamedata.squads[squad][i]?.id == 70) {
+      // wireless
+      gamedata.squads[squad][i].hp += gamedata.squads[squad].filter(
+        (element) => element.id == 70
+      ).length;
+    } else if (gamedata.squads[squad][i]?.id == 95) {
+      // family
+      gamedata.squads[squad][i].hp += gamedata.squads[squad].filter(
+        (element) => element.class == 8
+      ).length;
+      gamedata.squads[squad][i].dmg += gamedata.squads[squad].filter(
+        (element) => element.class == 8
+      ).length;
+    }
+    if (
+      gamedata.squads[squad][i]?.id == 76 &&
+      gamedata.squads[squad][i - 1] != undefined
+    ) {
+      // fog
+      gamedata.squads[squad][i - 1].hp += 3;
+      gamedata.squads[squad].splice(i, 1);
+      i -= 1;
+    }
+    if (
+      gamedata.squads[squad][i]?.id == 85 &&
+      gamedata.squads[squad][i - 1] != undefined
+    ) {
+      // syringe
+      gamedata.squads[squad][i - 1].dmg += 1;
+      gamedata.squads[squad].splice(i, 1);
+      i -= 1;
+    }
+    if (
+      gamedata.squads[squad][i]?.id == 126 &&
+      gamedata.squads[squad][i - 1] != undefined
+    ) {
+      // beer
+      let temp = lodash.cloneDeep(gamedata.squads[squad][i - 1].dmg);
+      gamedata.squads[squad][i - 1].dmg = lodash.cloneDeep(
+        gamedata.squads[squad][i - 1].hp
+      );
+      gamedata.squads[squad][i - 1].hp = temp;
+      gamedata.squads[squad].splice(i, 1);
+      i -= 1;
+    }
+    if (gamedata.squads[squad][i]?.id == 128) {
+      // clapper
+      gamedata = alterhp(
+        gamedata,
+        squad * -1 + 2,
+        0,
+        squad + 1,
+        i,
+        0 - gamedata.squads[squad][i]?.dmg
+      );
+    }
+  }
+}
+
 function playturn(gamedata) {
   setup: {
     if (gamedata.turn == 0) {
-      for (i = 0; i < gamedata.squads[0].length; i++) {
-        if (gamedata.squads[0][i]?.id == 26) {
-          // cherries
-          gamedata.squads[0].splice(i, 0, lodash.cloneDeep(emojis[26]));
-          i++;
-        } else if (gamedata.squads[0][i]?.id == 70) {
-          // wireless
-          gamedata.squads[0][i].hp += gamedata.squads[0].filter(
-            (element) => element.id == 70
-          ).length;
-        } else if (gamedata.squads[0][i]?.id == 95) {
-          // family
-          gamedata.squads[0][i].hp += gamedata.squads[0].filter(
-            (element) => element.class == 8
-          ).length;
-          gamedata.squads[0][i].dmg += gamedata.squads[0].filter(
-            (element) => element.class == 8
-          ).length;
-        }
-        if (
-          gamedata.squads[0][i]?.id == 76 &&
-          gamedata.squads[0][i - 1] != undefined
-        ) {
-          // fog
-          gamedata.squads[0][i - 1].hp += 3;
-          gamedata.squads[0].splice(i, 1);
-          i -= 1;
-        }
-        if (
-          gamedata.squads[0][i]?.id == 85 &&
-          gamedata.squads[0][i - 1] != undefined
-        ) {
-          // syringe
-          gamedata.squads[0][i - 1].dmg += 1;
-          gamedata.squads[0].splice(i, 1);
-          i -= 1;
-        }
-      }
-      for (i = 0; i < gamedata.squads[1].length; i++) {
-        if (gamedata.squads[1][i]?.id == 26) {
-          // cherries
-          gamedata.squads[1].splice(i, 0, lodash.cloneDeep(emojis[26]));
-          i++;
-        } else if (gamedata.squads[1][i]?.id == 70) {
-          // wireless
-          gamedata.squads[1][i].hp += gamedata.squads[1].filter(
-            (element) => element.id == 70
-          ).length;
-        } else if (gamedata.squads[1][i]?.id == 95) {
-          // family
-          gamedata.squads[1][i].hp += gamedata.squads[1].filter(
-            (element) => element.class == 8
-          ).length;
-          gamedata.squads[1][i].dmg += gamedata.squads[1].filter(
-            (element) => element.class == 8
-          ).length;
-        }
-        if (
-          gamedata.squads[1][i]?.id == 76 &&
-          gamedata.squads[1][i - 1] != undefined
-        ) {
-          // fog
-          gamedata.squads[1][i - 1].hp += 3;
-          gamedata.squads[1].splice(i, 1);
-          i -= 1;
-        }
-        if (
-          gamedata.squads[1][i]?.id == 85 &&
-          gamedata.squads[1][i - 1] != undefined
-        ) {
-          // syringe
-          gamedata.squads[1][i - 1].dmg += 1;
-          gamedata.squads[1].splice(i, 1);
-          i -= 1;
-        }
-      }
+      battleStartAbilities(gamedata, 0);
+      battleStartAbilities(gamedata, 1);
     }
     gamedata.turn++;
     gamedata.playerturn = ((gamedata.playerturn + 1) % 2) * -1 + 2;
     gamedata.newlines = 0;
   }
-
-  attack: {
-    let basicattackflag = true;
-    const activeemoji = gamedata.squads[gamedata.playerturn - 1][0];
-    if (activeemoji.id == 0) {
-      // clap
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 -
-          (activeemoji.dmg +
+  if (gamedata.turn > 1) {
+    attack: {
+      let basicattackflag = true;
+      const activeemoji = gamedata.squads[gamedata.playerturn - 1][0];
+      if (activeemoji.id == 0) {
+        // clap
+        basicattackflag = false;
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          0,
+          gamedata.playerturn,
+          0,
+          0 -
+            (activeemoji.dmg +
+              gamedata.squads[gamedata.playerturn - 1].filter(
+                (element) => element.id == 0
+              ).length),
+          "clapped at"
+        );
+      }
+      if (activeemoji.id == 101) {
+        // top
+        basicattackflag = false;
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          gamedata.squads[gamedata.playerturn * -1 + 2].reduce(
+            (maxi, current, currenti, array) => {
+              return (current?.hp ?? -Infinity) > (array[maxi]?.hp ?? -Infinity)
+                ? currenti
+                : maxi;
+            },
+            0
+          ),
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg
+        );
+      }
+      if (activeemoji.id == 100) {
+        // mag
+        basicattackflag = false;
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          gamedata.squads[gamedata.playerturn * -1 + 2].reduce(
+            (mini, current, currenti, array) => {
+              return (current?.hp ?? -Infinity) < (array[mini]?.hp ?? -Infinity)
+                ? currenti
+                : mini;
+            },
+            0
+          ),
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg
+        );
+      }
+      if (activeemoji.id == 93) {
+        // bee
+        basicattackflag = false;
+        gamedata = richtextadd(
+          gamedata,
+          `\n✩ ${gamedata.player[gamedata.playerturn - 1]}'s ${
             gamedata.squads[gamedata.playerturn - 1].filter(
-              (element) => element.id == 0
-            ).length),
-        "clapped at"
-      );
-    }
-    if (activeemoji.id == 101) {
-      // top
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        gamedata.squads[gamedata.playerturn * -1 + 2].reduce(
-          (maxi, current, currenti, array) => {
-            return (current?.hp ?? -Infinity) > (array[maxi]?.hp ?? -Infinity)
-              ? currenti
-              : maxi;
-          },
-          0
-        ),
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-    }
-    if (activeemoji.id == 100) {
-      // mag
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        gamedata.squads[gamedata.playerturn * -1 + 2].reduce(
-          (mini, current, currenti, array) => {
-            return (current?.hp ?? -Infinity) < (array[mini]?.hp ?? -Infinity)
-              ? currenti
-              : mini;
-          },
-          0
-        ),
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-    }
-    if (activeemoji.id == 93) {
-      // bee
-      basicattackflag = false;
-      gamedata = richtextadd(
-        gamedata,
-        `\n✩ ${gamedata.player[gamedata.playerturn - 1]}'s ${
-          gamedata.squads[gamedata.playerturn - 1].filter(
-            (element) => element.id == 93
-          ).length < 2
-            ? "(lonely) "
-            : ""
-        }swarm of ${
-          gamedata.squads[gamedata.playerturn - 1].filter(
-            (element) => element.id == 93
-          ).length
-        } ${emojis[93].emoji} attacked!`
-      );
-      for (i = 0; i < gamedata.squads[gamedata.playerturn - 1].length; i++) {
-        if (gamedata.squads[gamedata.playerturn - 1][i]?.id == 93) {
+              (element) => element.id == 93
+            ).length < 2
+              ? "(lonely) "
+              : ""
+          }swarm of ${
+            gamedata.squads[gamedata.playerturn - 1].filter(
+              (element) => element.id == 93
+            ).length
+          } ${emojis[93].emoji} attacked!`
+        );
+        for (i = 0; i < gamedata.squads[gamedata.playerturn - 1].length; i++) {
+          if (gamedata.squads[gamedata.playerturn - 1][i]?.id == 93) {
+            gamedata = alterhp(
+              gamedata,
+              gamedata.playerturn * -1 + 3,
+              0,
+              gamedata.playerturn,
+              0,
+              0 - gamedata.squads[gamedata.playerturn - 1][i].dmg,
+              "stung",
+              true
+            );
+          }
+        }
+      }
+      if (activeemoji.id == 94 && activeemoji.dmg > 1) {
+        // needle
+        basicattackflag = false;
+        let damage = activeemoji.dmg;
+        if (gamedata.squads[gamedata.playerturn - 1][1]?.id == 75) {
+          damage += 2;
+        } else if (gamedata.squads[gamedata.playerturn - 1][1]?.id == 12) {
+          damage += 1;
+        }
+        gamedata = richtextadd(
+          gamedata,
+          `\n✩ ${gamedata.player[gamedata.playerturn - 1]}'s ${
+            emojis[94].emoji
+          } attacked the front ${damage} enemy Emojis!`
+        );
+        for (
+          let i =
+            Math.min(
+              gamedata.squads[gamedata.playerturn * -1 + 2].length,
+              damage
+            ) - 1;
+          i > -1;
+          i--
+        ) {
           gamedata = alterhp(
             gamedata,
             gamedata.playerturn * -1 + 3,
-            0,
+            i,
             gamedata.playerturn,
             0,
-            0 - gamedata.squads[gamedata.playerturn - 1][i].dmg,
-            "stung",
+            -1,
+            "poked",
             true
           );
         }
       }
-    }
-    if (activeemoji.id == 94 && activeemoji.dmg > 1) {
-      // needle
-      basicattackflag = false;
-      let damage = activeemoji.dmg;
-      if (gamedata.squads[gamedata.playerturn - 1][1]?.id == 75) {
-        damage += 2;
-      } else if (gamedata.squads[gamedata.playerturn - 1][1]?.id == 12) {
-        damage += 1;
-      }
-      gamedata = richtextadd(
-        gamedata,
-        `\n✩ ${gamedata.player[gamedata.playerturn - 1]}'s ${
-          emojis[94].emoji
-        } attacked the front ${damage} enemy Emojis!`
-      );
-      for (
-        let i =
-          Math.min(
-            gamedata.squads[gamedata.playerturn * -1 + 2].length,
-            damage
-          ) - 1;
-        i > -1;
-        i--
-      ) {
+      if (activeemoji.id == 74) {
+        // battery
+        basicattackflag = false;
         gamedata = alterhp(
           gamedata,
           gamedata.playerturn * -1 + 3,
-          i,
+          0,
           gamedata.playerturn,
           0,
-          -1,
-          "poked",
-          true
+          0 - (activeemoji.dmg + activeemoji.hp),
+          "zapped"
+        );
+      }
+      if (
+        activeemoji.id == 63 &&
+        !gamedata.squads[gamedata.playerturn * -1 + 2].some((x) => x.id == 98)
+      ) {
+        // loud sound
+        basicattackflag = false;
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          0,
+          gamedata.playerturn,
+          0,
+          0 -
+            (activeemoji.dmg +
+              gamedata.squads[gamedata.playerturn - 1].filter(
+                (element) => element.id == 14
+              ).length *
+                2 +
+              (gamedata.squads[gamedata.playerturn - 1][1]?.id == 77 ? 1 : 0)),
+          "blasted"
+        );
+      }
+      if (activeemoji.id == 60) {
+        // mirror
+        basicattackflag = false;
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          0,
+          gamedata.playerturn,
+          0,
+          0 -
+            (activeemoji.dmg +
+              gamedata.squads[gamedata.playerturn * -1 + 2][0].dmg),
+          "reflected at"
+        );
+      }
+      if (
+        activeemoji?.id == 84 &&
+        (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length > 1
+      ) {
+        // bow and arrow
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          1,
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg,
+          "shot"
+        );
+        basicattackflag = false;
+      }
+      if (activeemoji?.id == 88) {
+        // back
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length - 1,
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg
+        );
+        basicattackflag = false;
+      }
+      if (
+        activeemoji?.id == 34 &&
+        gamedata.squads[gamedata.playerturn * -1 + 2][1]
+      ) {
+        // zap
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          1,
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg,
+          "zapped"
+        );
+      }
+      if (
+        activeemoji?.id == 96 &&
+        gamedata.squads[gamedata.playerturn * -1 + 2][1] &&
+        musicaltrigger(gamedata, gamedata.playerturn, 0)
+      ) {
+        // accordion
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          1,
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg
+        );
+      }
+      if (activeemoji.id == 102) {
+        // socks
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          0,
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg
+        );
+      }
+      if (
+        activeemoji.id == 112 &&
+        musicaltrigger(gamedata, gamedata.playerturn, 0)
+      ) {
+        // maracas
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          0,
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg
+        );
+      }
+      if (basicattackflag) {
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          0,
+          gamedata.playerturn,
+          0,
+          0 - activeemoji.dmg
+        );
+      }
+      if (gamedata.squads[gamedata.playerturn - 1][1]?.id == 8) {
+        // handshake
+        gamedata = alterhp(
+          gamedata,
+          gamedata.playerturn * -1 + 3,
+          0,
+          gamedata.playerturn,
+          1,
+          0 - gamedata.squads[gamedata.playerturn - 1][1].dmg
+        );
+      }
+
+      if (
+        activeemoji?.id == 37 &&
+        gamedata.turn % 4 <= 2 &&
+        gamedata.squads[gamedata.playerturn * -1 + 2][0]
+      ) {
+        // ghost
+        const tempemj = gamedata.squads[gamedata.playerturn * -1 + 2][0].emoji;
+        const temphp = gamedata.squads[gamedata.playerturn * -1 + 2][0].hp;
+        const tempdmg = gamedata.squads[gamedata.playerturn * -1 + 2][0].dmg;
+        gamedata.squads[gamedata.playerturn * -1 + 2].splice(
+          0,
+          1,
+          lodash.cloneDeep(emojis[7])
+        );
+        gamedata.squads[gamedata.playerturn * -1 + 2][0].hp = temphp;
+        gamedata.squads[gamedata.playerturn * -1 + 2][0].dmg = tempdmg;
+        gamedata = richtextadd(
+          gamedata,
+          `\n⇪ ${gamedata.player[gamedata.playerturn - 1]}'s ${
+            emojis[37].emoji
+          } transformed ${
+            gamedata.player[gamedata.playerturn * -1 + 2]
+          }'s ${tempemj} into ${emojis[7].emoji}!`
         );
       }
     }
-    if (activeemoji.id == 74) {
-      // battery
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 - (activeemoji.dmg + activeemoji.hp),
-        "zapped"
-      );
-    }
-    if (
-      activeemoji.id == 63 &&
-      !gamedata.squads[gamedata.playerturn * -1 + 2].some((x) => x.id == 98)
-    ) {
-      // loud sound
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 -
-          (activeemoji.dmg +
-            gamedata.squads[gamedata.playerturn - 1].filter(
-              (element) => element.id == 14
-            ).length *
-              2 +
-            (gamedata.squads[gamedata.playerturn - 1][1]?.id == 77 ? 1 : 0)),
-        "blasted"
-      );
-    }
-    if (activeemoji.id == 60) {
-      // mirror
-      basicattackflag = false;
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 -
-          (activeemoji.dmg +
-            gamedata.squads[gamedata.playerturn * -1 + 2][0].dmg),
-        "reflected at"
-      );
-    }
-    if (
-      activeemoji?.id == 84 &&
-      (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length > 1
-    ) {
-      // bow and arrow
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        1,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg,
-        "shot"
-      );
-      basicattackflag = false;
-    }
-    if (activeemoji?.id == 88) {
-      // back
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        (gamedata.squads[gamedata.playerturn * -1 + 2] ?? []).length - 1,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-      basicattackflag = false;
-    }
-    if (
-      activeemoji?.id == 34 &&
-      gamedata.squads[gamedata.playerturn * -1 + 2][1]
-    ) {
-      // zap
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        1,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg,
-        "zapped"
-      );
-    }
-    if (
-      activeemoji?.id == 96 &&
-      gamedata.squads[gamedata.playerturn * -1 + 2][1] &&
-      musicaltrigger(gamedata, gamedata.playerturn, 0)
-    ) {
-      // accordion
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        1,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-    }
-    if (activeemoji.id == 102) {
-      // socks
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-    }
-    if (
-      activeemoji.id == 112 &&
-      musicaltrigger(gamedata, gamedata.playerturn, 0)
-    ) {
-      // maracas
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-    }
-    if (basicattackflag) {
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        0,
-        0 - activeemoji.dmg
-      );
-    }
-    if (gamedata.squads[gamedata.playerturn - 1][1]?.id == 8) {
-      // handshake
-      gamedata = alterhp(
-        gamedata,
-        gamedata.playerturn * -1 + 3,
-        0,
-        gamedata.playerturn,
-        1,
-        0 - gamedata.squads[gamedata.playerturn - 1][1].dmg
-      );
-    }
-
-    if (
-      activeemoji?.id == 37 &&
-      gamedata.turn % 4 <= 2 &&
-      gamedata.squads[gamedata.playerturn * -1 + 2][0]
-    ) {
-      // ghost
-      const tempemj = gamedata.squads[gamedata.playerturn * -1 + 2][0].emoji;
-      const temphp = gamedata.squads[gamedata.playerturn * -1 + 2][0].hp;
-      const tempdmg = gamedata.squads[gamedata.playerturn * -1 + 2][0].dmg;
-      gamedata.squads[gamedata.playerturn * -1 + 2].splice(
-        0,
-        1,
-        lodash.cloneDeep(emojis[7])
-      );
-      gamedata.squads[gamedata.playerturn * -1 + 2][0].hp = temphp;
-      gamedata.squads[gamedata.playerturn * -1 + 2][0].dmg = tempdmg;
-      gamedata = richtextadd(
-        gamedata,
-        `\n⇪ ${gamedata.player[gamedata.playerturn - 1]}'s ${
-          emojis[37].emoji
-        } transformed ${
-          gamedata.player[gamedata.playerturn * -1 + 2]
-        }'s ${tempemj} into ${emojis[7].emoji}!`
-      );
-    }
+  } else {
+    gamedata = richtextadd(gamedata, "\nLet the battle begin!");
   }
 
   gamedata.logfile += "\n\n";
 
   scene: {
     // destroying and recreating the battle scene
-    gamedata.emojitext = "";
-    for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
+    gamedata.emojitext = "​";
+
+    if (gamedata.squads[0].length > 12) {
+      gamedata.emojitext += "...";
+    }
+
+    for (let i = Math.min(gamedata.squads[0].length, 12) - 1; i >= 0; i--) {
       gamedata.emojitext += renderhemoji(gamedata.squads[0][i].hp) + " ";
+    }
+    for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
       gamedata.logfile += gamedata.squads[0][i].hp + "▪️";
     }
     gamedata.emojitext += " ";
     gamedata.logfile.slice(0, -2);
     gamedata.logfile += "    ";
-    for (let i = 0; i < gamedata.squads[1].length; i++) {
+    for (let i = 0; i < Math.min(gamedata.squads[1].length, 12); i++) {
       gamedata.emojitext += " " + renderhemoji(gamedata.squads[1][i].hp);
+    }
+    for (let i = 0; i < gamedata.squads[1].length; i++) {
       gamedata.logfile += gamedata.squads[1][i].hp + "▪️";
+    }
+
+    if (gamedata.squads[1].length > 12) {
+      gamedata.emojitext += "...";
     }
 
     gamedata.emojitext += "\n";
     gamedata.logfile.slice(0, -2);
     gamedata.logfile += "  ♡️\n";
 
-    for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
+    if (gamedata.squads[0].length > 12) {
+      gamedata.emojitext += "...";
+    }
+
+    for (let i = Math.min(gamedata.squads[0].length, 12) - 1; i >= 0; i--) {
       gamedata.emojitext += renderdemoji(gamedata.squads[0][i].dmg) + " ";
+    }
+    for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
       gamedata.logfile += gamedata.squads[0][i].dmg + "▪️";
     }
     gamedata.emojitext += " ";
     gamedata.logfile.slice(0, -2);
     gamedata.logfile += "    ";
-    for (let i = 0; i < gamedata.squads[1].length; i++) {
+    for (let i = 0; i < Math.min(gamedata.squads[1].length, 12); i++) {
       gamedata.emojitext += " " + renderdemoji(gamedata.squads[1][i].dmg);
+    }
+    for (let i = 0; i < gamedata.squads[1].length; i++) {
       gamedata.logfile += gamedata.squads[1][i].dmg + "▪️";
+    }
+
+    if (gamedata.squads[1].length > 12) {
+      gamedata.emojitext += "...";
     }
 
     gamedata.emojitext += "\n";
     gamedata.logfile.slice(0, -2);
     gamedata.logfile += "  ⇮️\n";
 
-    for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
+    if (gamedata.squads[0].length > 12) {
+      gamedata.emojitext += "...";
+    }
+
+    for (let i = Math.min(gamedata.squads[0].length, 12) - 1; i >= 0; i--) {
       gamedata.emojitext += gamedata.squads[0][i].emoji + " ";
+    }
+    for (let i = gamedata.squads[0].length - 1; i >= 0; i--) {
       gamedata.logfile += gamedata.squads[0][i].emoji + " ";
     }
     gamedata.emojitext += "|";
     gamedata.logfile += " |  ";
-    for (let i = 0; i < gamedata.squads[1].length; i++) {
+    for (let i = 0; i < Math.min(gamedata.squads[1].length, 12); i++) {
       gamedata.emojitext += " " + gamedata.squads[1][i].emoji;
+    }
+    for (let i = 0; i < gamedata.squads[1].length; i++) {
       gamedata.logfile += gamedata.squads[1][i].emoji + " ";
+    }
+
+    if (gamedata.squads[1].length > 12) {
+      gamedata.emojitext += "...";
     }
   }
 
@@ -2130,6 +2174,34 @@ function shufflesquad(gamedata, squad) {
         if (emoji?.id == 29 && partition.includes(idx + 1)) {
           // bus stop
           gamedata = alterhp(gamedata, squad, idx + 1, squad, idx, 2);
+        }
+      }
+    }
+
+    if (gamedata.squads[squad - 1].some((i) => i.id == 127)) {
+      // fallen leaf
+      gamedata = richtextadd(
+        gamedata,
+        `\n✩ ${gamedata.player[squad - 1]}'s ${
+          gamedata.squads[squad - 1].filter((element) => element.id == 127)
+            .length < 2
+            ? "(lonely) "
+            : ""
+        }pile of ${
+          gamedata.squads[squad - 1].filter((element) => element.id == 127)
+            .length
+        } ${emojis[127].emoji} attacked!`
+      );
+      for (i = 0; i < gamedata.squads[squad - 1].length; i++) {
+        if (gamedata.squads[squad - 1][i]?.id == 127) {
+          gamedata = alterhp(
+            gamedata,
+            squad * -1 + 3,
+            0,
+            squad,
+            0,
+            0 - gamedata.squads[squad - 1][i].dmg
+          );
         }
       }
     }

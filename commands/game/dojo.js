@@ -100,7 +100,13 @@ module.exports = {
           let squadarray = await getsquad(interaction.user.id);
           let addto = new StringSelectMenuBuilder()
             .setCustomId("addto")
-            .setPlaceholder("Equip...")
+            .setPlaceholder(
+              "You have " +
+                vaultarray.reduce(
+                  (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
+                  0
+                )
+            )
             .setOptions(
               new StringSelectMenuOptionBuilder()
                 .setLabel("1️⃣ Equip")
@@ -164,7 +170,13 @@ module.exports = {
           if (numberfound >= numberowned) {
             addto = new StringSelectMenuBuilder()
               .setCustomId("addto")
-              .setPlaceholder("Move...")
+              .setPlaceholder(
+                "You have " +
+                  vaultarray.reduce(
+                    (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
+                    0
+                  )
+              )
               .setOptions(
                 new StringSelectMenuOptionBuilder()
                   .setLabel("1️⃣ Move")
@@ -204,12 +216,7 @@ module.exports = {
           let vaultcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
-                `## ${emojifound.emoji} ${
-                  emojifound.names[0]
-                }${redirecttext}\nYou have ${vaultarray.reduce(
-                  (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
-                  0
-                )}`
+                `## ${emojifound.emoji} ${emojifound.names[0]}${redirecttext}`
               )
             )
             .addSeparatorComponents(
@@ -511,11 +518,23 @@ module.exports = {
             interaction.editReply();
           }
         } else {
-          let sort = new ButtonBuilder()
-            .setCustomId("sort")
-            .setLabel("sort")
-            .setEmoji("📶")
-            .setStyle(ButtonStyle.Secondary);
+          let sortDropdown = new StringSelectMenuBuilder()
+            .setCustomId("sortstyle")
+            .setPlaceholder("Sort...")
+            .setOptions(
+              new StringSelectMenuOptionBuilder()
+                .setLabel("*️⃣ Sort by Rarity")
+                .setValue("0"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("🛐 Sort by Class")
+                .setValue("1"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("❤️ Sort by Health")
+                .setValue("2"),
+              new StringSelectMenuOptionBuilder()
+                .setLabel("⚔️ Sort by Attack Power")
+                .setValue("3")
+            );
           let vaultcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
@@ -529,7 +548,7 @@ module.exports = {
             )
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
-                await sortDojo(interaction, sort, vaultarray)
+                await sortDojo(interaction, vaultarray, sortDropdown)
               )
             )
             .addSeparatorComponents(
@@ -537,7 +556,9 @@ module.exports = {
                 .setSpacing(SeparatorSpacingSize.Large)
                 .setDivider(true)
             )
-            .addActionRowComponents(new ActionRowBuilder().addComponents(sort));
+            .addActionRowComponents(
+              new ActionRowBuilder().addComponents(sortDropdown)
+            );
           const response = await interaction.reply({
             components: [vaultcontainer],
             withResponse: true,
@@ -560,46 +581,45 @@ module.exports = {
             });
           try {
             collector.on("collect", async (interaction2) => {
-              await database.set(
-                interaction.user.id + "sortstyle",
-                (1 +
-                  ((await database.get(interaction.user.id + "sortstyle")) ??
-                    0)) %
-                  4
-              );
-              vaultcontainer = new ContainerBuilder()
-                .addTextDisplayComponents(
-                  new TextDisplayBuilder().setContent(
-                    "Run `/dojo [emoji]` to see details about one emoji."
-                  )
-                )
-                .addSeparatorComponents(
-                  new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-                    .setDivider(true)
-                )
-                .addTextDisplayComponents(
-                  new TextDisplayBuilder().setContent(
-                    await sortDojo(interaction, sort, vaultarray)
-                  )
-                )
-                .addSeparatorComponents(
-                  new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Large)
-                    .setDivider(true)
-                )
-                .addActionRowComponents(
-                  new ActionRowBuilder().addComponents(sort)
+              if (interaction2.customId === "sortstyle") {
+                await database.set(
+                  interaction.user.id + "sortstyle",
+                  parseInt(interaction2.values[0])
                 );
-              await interaction2.update({
-                components: [vaultcontainer],
-                withResponse: true,
-                flags: MessageFlags.IsComponentsV2,
-              });
+                vaultcontainer = new ContainerBuilder()
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      "Run `/dojo [emoji]` to see details about one emoji."
+                    )
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Small)
+                      .setDivider(true)
+                  )
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                      await sortDojo(interaction, vaultarray, sortDropdown)
+                    )
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder()
+                      .setSpacing(SeparatorSpacingSize.Large)
+                      .setDivider(true)
+                  )
+                  .addActionRowComponents(
+                    new ActionRowBuilder().addComponents(sortDropdown)
+                  );
+                await interaction2.update({
+                  components: [vaultcontainer],
+                  withResponse: true,
+                  flags: MessageFlags.IsComponentsV2,
+                });
+              }
             });
           } catch (e) {
             console.error(e);
-            sort.setDisabled(true);
+            sortDropdown.setDisabled(true);
           }
         }
       }
@@ -607,12 +627,17 @@ module.exports = {
   },
 };
 
-async function sortDojo(interaction, sort, vaultarray) {
+async function sortDojo(interaction, vaultarray, sortDropdown) {
   let sortstyle = (await database.get(interaction.user.id + "sortstyle")) ?? 0;
+  sorttypes = [
+    "*️⃣ Sorting by Rarity",
+    "🛐 Sorting by Class",
+    "❤️ Sorting by Health",
+    "⚔️ Sorting by Attack Power",
+  ];
+  sortDropdown.setPlaceholder(sorttypes[sortstyle]);
   switch (sortstyle) {
     case 1:
-      sort.setLabel("Sort by Health");
-      sort.setEmoji("❤️");
       // Sort by class
       let classtext = Array(classes.length).fill("");
       let classnumbers = Array(classes.length).fill(0);
@@ -647,8 +672,6 @@ async function sortDojo(interaction, sort, vaultarray) {
       }
       return classdesc;
     case 2:
-      sort.setLabel("Sort by Attack Power");
-      sort.setEmoji("<:attackpower:1327657903447998477>");
       // Sort by hp
       let hpValues = vaultarray.map((eid) => emojis[eid]?.hp ?? 0);
       let uniqueHPs = [...new Set(hpValues)].sort((a, b) => a - b);
@@ -676,8 +699,6 @@ async function sortDojo(interaction, sort, vaultarray) {
       }
       return hpGroups;
     case 3:
-      sort.setLabel("Sort by Rarity");
-      sort.setEmoji("*️⃣");
       // Sort by dmg
       let dmgValues = vaultarray.map((eid) => emojis[eid]?.dmg ?? 0);
       let uniqueDMGs = [...new Set(dmgValues)].sort((a, b) => a - b);
@@ -705,8 +726,6 @@ async function sortDojo(interaction, sort, vaultarray) {
       }
       return dmgGroups;
     default:
-      sort.setLabel("Sort by Class");
-      sort.setEmoji("🛐");
       // Sort by rarity
       let raritytext = ["", "", "", ""];
       let raritynumbers = [0, 0, 0, 0];
