@@ -376,7 +376,10 @@ module.exports = {
                 await writelogs(logs);
               } else {
                 if (gamedata.squads[1].length == 0) {
-                  let diff1 = newcoincurve(gamedata.squads[0].length);
+                  let mult = parseInt(
+                    await database.get(interaction.user.id + "coinmod")
+                  );
+                  let diff1 = newcoincurve(gamedata.squads[0].length, mult);
                   coinsdata = await coinschange(interaction.user.id, diff1);
                   diff1 = coinsdata[0];
                   doublerbonus = coinsdata[1];
