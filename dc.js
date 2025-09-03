@@ -42,10 +42,6 @@ for (const folder of commandFolders) {
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(token);
 
-rest.put(Routes.applicationCommands(clientId), { body: [] })
-	.then(() => console.log('Successfully deleted ALL OF THE guild commands, muahaha'))
-	.catch(console.error);
-
 // and deploy your commands!
 (async () => {
   try {
@@ -78,7 +74,7 @@ rest.delete(Routes.applicationCommand(clientId, 'COMMAND ID'))
 
 Use this to delete all guild commands
 
-rest.put(Routes.applicationCommands(privateclientId), { body: [] })
+rest.put(Routes.applicationCommands(clientId), { body: [] })
 	.then(() => console.log('Successfully deleted ALL OF THE guild commands, muahaha'))
 	.catch(console.error);
 */
