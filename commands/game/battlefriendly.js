@@ -40,7 +40,9 @@ module.exports = {
   async execute(interaction) {
     try {
       const battleuser = interaction.options.getUser("user");
-      let battlespeed = parseInt(interaction.options.getString("speed") ?? "4");
+      let battlespeed =
+        parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
+      if (isNaN(battlespeed)) battlespeed = 4;
       if (battlespeed < 1) {
         battlespeed = 1;
       }

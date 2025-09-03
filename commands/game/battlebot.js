@@ -52,6 +52,7 @@ module.exports = {
       await interaction.deferReply();
       let battlespeed =
         parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
+      if (isNaN(battlespeed)) battlespeed = 4;
       const bp =
         (await database.get(interaction.user.id + "battlepending")) ?? "0";
       const bbcd =
@@ -380,7 +381,11 @@ module.exports = {
                     await database.get(interaction.user.id + "coinmod")
                   );
                   let diff1 = newcoincurve(gamedata.squads[0].length, mult);
-                  coinsdata = await coinschange(interaction.user.id, diff1);
+                  coinsdata = await coinschange(
+                    interaction.user.id,
+                    diff1,
+                    true
+                  );
                   diff1 = coinsdata[0];
                   doublerbonus = coinsdata[1];
                   let bonusmsg =

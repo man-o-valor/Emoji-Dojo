@@ -43,6 +43,7 @@ module.exports = {
     const battleuser = interaction.options.getUser("user");
     let battlespeed =
       parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
+    if (isNaN(battlespeed)) battlespeed = 4;
     const othervault = await database.get(battleuser.id + "vault");
     if (await trysetupuser(interaction.user)) {
       await interaction.reply({
