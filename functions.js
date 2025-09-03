@@ -332,8 +332,8 @@ async function coinschange(id, amt, affectcooldown) {
   return [amt, doublerbonus];
 }
 
-function newcoincurve(coins) {
-  return Math.ceil(0.688921 + 0.149597 * Math.log(coins));
+function newcoincurve(coins,mult) {
+  return Math.ceil((0.688921 + 0.149597 * Math.log(coins))*mult);
 }
 
 async function getsquad(id) {
