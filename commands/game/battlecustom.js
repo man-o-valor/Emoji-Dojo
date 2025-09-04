@@ -54,7 +54,7 @@ module.exports = {
   async execute(interaction) {
     let battlespeed =
       parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
-    if (isNaN(battlespeed)) battlespeed = 4;
+    if (isNaN(battlespeed)) battlespeed = 0;
     let squad1input = interaction.options.getString("squad1");
     let squad2input = interaction.options.getString("squad2");
     let reversesquad2 =
@@ -224,7 +224,7 @@ module.exports = {
       try {
         const interaction2 = await response.awaitMessageComponent({
           filter: collectorFilter,
-          time: 60000,
+          time: 300000,
         });
         if (interaction2.customId === "battle") {
           let logs = await getlogs();

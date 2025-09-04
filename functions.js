@@ -304,7 +304,7 @@ async function coinschange(id, amt, affectcooldown) {
       nextReset = midnight + 129600;
     }
 
-    await database.set(id + "coinmod", "16");
+    await database.set(id + "coinmod", "20");
     await database.set(id + "coinrestock", nextReset);
     restocktime = nextReset;
   }
@@ -313,7 +313,7 @@ async function coinschange(id, amt, affectcooldown) {
   let coinmod = 0;
   let doublerbonus = 0;
   if (affectcooldown) {
-    coinmod = parseInt((await database.get(id + "coinmod")) ?? "16");
+    coinmod = parseInt((await database.get(id + "coinmod")) ?? "20");
     if (amt > 0) {
       amt = Math.floor((amt / 20) * coinmod);
       const coindoubler = (await database.get(id + "coindoubler")) ?? 0;

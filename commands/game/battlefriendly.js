@@ -42,7 +42,7 @@ module.exports = {
       const battleuser = interaction.options.getUser("user");
       let battlespeed =
         parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
-      if (isNaN(battlespeed)) battlespeed = 4;
+      if (isNaN(battlespeed)) battlespeed = 0;
       if (battlespeed < 1) {
         battlespeed = 1;
       }
@@ -195,7 +195,7 @@ module.exports = {
             i.user.id == interaction.user.id || i.user.id == battleuser.id;
           let collector = response.createMessageComponentCollector({
             filter: collectorFilter,
-            time: 60000,
+            time: 300000,
           });
 
           try {

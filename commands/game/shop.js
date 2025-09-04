@@ -436,7 +436,7 @@ module.exports = {
 
       let dropdownCollector = message.createMessageComponentCollector({
         filter: collectorFilter,
-        time: 60000,
+        time: 300000,
       });
 
       const oldinteraction = interaction;
@@ -507,7 +507,7 @@ module.exports = {
 
           let buttonCollector = message.createMessageComponentCollector({
             filter: ButtonFilter,
-            time: 60000,
+            time: 300000,
           });
 
           try {
