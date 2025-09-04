@@ -217,6 +217,7 @@ module.exports = {
                   );
                   await database.set(interaction.user.id + "dojobotsquad", "");
                   cook.setDisabled(true);
+                  nah.setDisabled(true);
                   interaction.editReply({
                     components: [challengecontainer],
                     flags: MessageFlags.IsComponentsV2,
