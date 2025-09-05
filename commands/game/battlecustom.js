@@ -39,7 +39,7 @@ module.exports = {
         )
         .setRequired(true)
     )
-    .addStringOption((option) =>
+    .addNumberOption((option) =>
       option
         .setName("speed")
         .setDescription("The time in seconds between each turn (defaults to 4)")
@@ -53,7 +53,7 @@ module.exports = {
     ),
   async execute(interaction) {
     let battlespeed =
-      parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
+      parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
     if (isNaN(battlespeed)) battlespeed = 0;
     let squad1input = interaction.options.getString("squad1");
     let squad2input = interaction.options.getString("squad2");
@@ -91,7 +91,7 @@ module.exports = {
           interaction.user.id + "savedsquad" + squad1input.match(/@(\d+)/)[1]
         )) ?? "";
       if (squadget != "") {
-        player1squadarray = squadget.split(",").slice(0, 8);
+        player1squadarray = squadget.split(",");
       } else {
         player1squadarray = [undefined];
       }
@@ -122,7 +122,7 @@ module.exports = {
           interaction.user.id + "savedsquad" + squad2input.match(/@(\d+)/)[1]
         )) ?? "";
       if (squadget != "") {
-        player2squadarray = squadget.split(",").slice(0, 8);
+        player2squadarray = squadget.split(",");
       } else {
         player2squadarray = [undefined];
       }
@@ -141,7 +141,7 @@ module.exports = {
       player2squadarray = player2squadarray
         .filter((item) => item != "")
         .map((obj) => obj.segment);
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < player2squadarray.length; i++) {
         let objectalternative = emojis.find(
           (x) => x.emoji == player2squadarray[i]
         );
@@ -151,6 +151,9 @@ module.exports = {
         player2squadarray.reverse();
       }
     }
+
+    player1squadarray = player1squadarray.slice(-8);
+    player2squadarray = player2squadarray.slice(0, 8);
 
     if (
       player1squadarray.includes(undefined) ||
@@ -164,11 +167,11 @@ module.exports = {
       await interaction.deferReply();
       let player1squadtext = "";
       for (let i = 7; i > -1; i--) {
-        player1squadtext += `${emojis[player1squadarray[i]].emoji} `;
+        player1squadtext += `${emojis[player1squadarray[i]]?.emoji} `;
       }
       let player2squadtext = "";
       for (let i = 0; i < 8; i++) {
-        player2squadtext += `${emojis[player2squadarray[i]].emoji} `;
+        player2squadtext += `${emojis[player2squadarray[i]]?.emoji} `;
       }
 
       let gamedata = {

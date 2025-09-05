@@ -35,7 +35,7 @@ module.exports = {
         .setDescription("The user to battle")
         .setRequired(true)
     )
-    .addStringOption((option) =>
+    .addNumberOption((option) =>
       option
         .setName("speed")
         .setDescription("The time in seconds between each turn (defaults to 4)")
@@ -43,7 +43,7 @@ module.exports = {
   async execute(interaction) {
     const battleuser = interaction.options.getUser("user");
     let battlespeed =
-      parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
+      parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
     if (isNaN(battlespeed)) battlespeed = 0;
     const othervault = await database.get(battleuser.id + "vault");
     if (await trysetupuser(interaction.user)) {

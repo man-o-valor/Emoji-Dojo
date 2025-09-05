@@ -32,7 +32,7 @@ module.exports = {
     .setDescription(
       "Battle DojoBot, with no chance of losing coins (You can reject Dojobot every 10 minutes)"
     )
-    .addStringOption((option) =>
+    .addNumberOption((option) =>
       option
         .setName("speed")
         .setDescription("The time in seconds between each turn (defaults to 4)")
@@ -50,7 +50,7 @@ module.exports = {
       });
     } else {
       let battlespeed =
-        parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
+        parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
       if (isNaN(battlespeed)) battlespeed = 0;
       const bp =
         (await database.get(interaction.user.id + "battlepending")) ?? "0";

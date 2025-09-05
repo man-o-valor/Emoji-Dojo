@@ -158,7 +158,7 @@ module.exports = {
         }
       }
       if (dailyPack_hasSpecial) {
-        dailyPack_description += `\n ${classes[dailyPack_class].emoji}: ⚛️ Special ${classes[dailyPack_class].name} x1`;
+        dailyPack_description += `\n${classes[dailyPack_class].emoji}: ⚛️ Special ${classes[dailyPack_class].name} x1`;
       }
 
       const quotes = [

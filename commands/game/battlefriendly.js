@@ -32,7 +32,7 @@ module.exports = {
         .setDescription("The user to battle")
         .setRequired(true)
     )
-    .addStringOption((option) =>
+    .addNumberOption((option) =>
       option
         .setName("speed")
         .setDescription("The time in seconds between each turn (defaults to 4)")
@@ -41,7 +41,7 @@ module.exports = {
     try {
       const battleuser = interaction.options.getUser("user");
       let battlespeed =
-        parseFloat(interaction.options.getString("speed") ?? "4") ?? 4;
+        parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
       if (isNaN(battlespeed)) battlespeed = 0;
       if (battlespeed < 1) {
         battlespeed = 1;
