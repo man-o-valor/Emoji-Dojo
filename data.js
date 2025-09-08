@@ -2280,7 +2280,7 @@ const emojis = [
     ],
     class: 0,
     description:
-      "When attacked by a friendly Emoji, instead gets healed by that amount",
+      "When recieving a non-fatal attack from a friendly Emoji, instead gets healed by that amount",
   },
   {
     emoji: "🍺",

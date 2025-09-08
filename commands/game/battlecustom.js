@@ -461,6 +461,8 @@ module.exports = {
             await interaction2.editReply({
               components: battlecomponents,
               flags: MessageFlags.IsComponentsV2,
+            });
+            await interaction2.followUp({
               files: [
                 {
                   attachment: txt,
