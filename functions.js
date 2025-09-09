@@ -562,13 +562,6 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
           gamedata.squads[squad - 1][pos]
         ) {
           // dove
-          gamedata.squads[squad2 - 1].splice(
-            0,
-            0,
-            lodash.cloneDeep(gamedata.squads[squad - 1][pos])
-          );
-          gamedata.squads[squad2 - 1][0].hp = 1;
-          gamedata.squads[squad - 1].splice(pos, 1);
           gamedata = richtextadd(
             gamedata,
             `\n⇋ ${gamedata.player[squad2 - 1]}'s ${
@@ -577,6 +570,13 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata.squads[squad - 1][pos].emoji
             }!`
           );
+          gamedata.squads[squad2 - 1].splice(
+            0,
+            0,
+            lodash.cloneDeep(gamedata.squads[squad - 1][pos])
+          );
+          gamedata.squads[squad2 - 1][0].hp = 1;
+          gamedata.squads[squad - 1].splice(pos, 1);
           silence = true;
           kill = false;
         }
@@ -969,6 +969,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             // fire
             if (
               gamedata.squads[squad - 1].length > 1 &&
+              gamedata.squads[squad - 1][pos + 1] &&
               gamedata.squads[squad - 1][pos + 1].id != 46
             ) {
               gamedata = alterhp(
