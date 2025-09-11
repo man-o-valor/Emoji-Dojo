@@ -1,6 +1,5 @@
 const {
   SlashCommandBuilder,
-  EmbedBuilder,
   ContainerBuilder,
   TextDisplayBuilder,
   SeparatorBuilder,

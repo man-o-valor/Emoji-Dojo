@@ -285,9 +285,8 @@ async function trysetupuser(user) {
   }
 }
 
-async function coinschange(id, amt, affectcooldown) {
+async function coinscheck(id) {
   let restocktime = (await database.get(id + "coinrestock")) ?? "0";
-
   if (parseInt(restocktime) < Date.now() / 1000) {
     let now = new Date();
     let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -306,8 +305,10 @@ async function coinschange(id, amt, affectcooldown) {
 
     await database.set(id + "coinmod", "20");
     await database.set(id + "coinrestock", nextReset);
-    restocktime = nextReset;
   }
+}
+
+async function coinschange(id, amt, affectcooldown) {
   affectcooldown = affectcooldown ?? true;
   const originalamt = amt;
   let coinmod = 0;
@@ -2543,4 +2544,5 @@ module.exports = {
   issquadinvalid,
   adminpanel,
   newcoincurve,
+  coinscheck,
 };

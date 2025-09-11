@@ -1,6 +1,5 @@
 const {
   SlashCommandBuilder,
-  EmbedBuilder,
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
@@ -12,6 +11,7 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
+  EmbedBuilder,
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {

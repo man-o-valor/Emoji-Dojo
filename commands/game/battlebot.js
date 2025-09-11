@@ -8,7 +8,6 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
-  AttachmentBuilder,
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -23,6 +22,7 @@ const {
   makesquad,
   issquadinvalid,
   newcoincurve,
+  coinscheck,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -440,6 +440,7 @@ module.exports = {
                       let mult = parseInt(
                         await database.get(interaction.user.id + "coinmod")
                       );
+                      await coinscheck(interaction.user.id);
                       let diff1 = newcoincurve(gamedata.squads[0].length, mult);
                       coinsdata = await coinschange(
                         interaction.user.id,

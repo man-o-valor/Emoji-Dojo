@@ -3,7 +3,6 @@ const {
   ButtonStyle,
   ButtonBuilder,
   ActionRowBuilder,
-  EmbedBuilder,
   ContainerBuilder,
   TextDisplayBuilder,
   SeparatorBuilder,
