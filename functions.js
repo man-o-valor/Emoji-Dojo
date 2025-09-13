@@ -364,7 +364,17 @@ function richtextadd(gamedata, text) {
   return gamedata;
 }
 
-function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
+function alterhp(
+  gamedata,
+  squad,
+  pos,
+  squad2,
+  pos2,
+  val,
+  verb,
+  silence,
+  targethint
+) {
   if (gamedata.richtext.length > 10000) {
     console.error(JSON.stringify(gamedata));
     return;
@@ -791,7 +801,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               gamedata,
               `\n✚ ${gamedata.player[squad - 1]}'s ${
                 emojis[39].emoji
-              } summoned a ${emojis[38].emoji} at the front of ${
+              } summoned ${emojis[38].emoji} at the front of ${
                 gamedata.player[0 - squad + 2]
               }'s Squad!`
             );
@@ -840,7 +850,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
               pos,
               -2,
               "threw candy at",
-              false
+              false,
+              emojis[43]
             );
             if (gamedata.squads[squad - 1].length > 1) {
               gamedata = alterhp(
@@ -851,13 +862,26 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
                 pos,
                 2,
                 "gave candy to",
-                false
+                false,
+                emojis[43]
               );
             }
           }
           if (target?.id == 122) {
             // apple
-            gamedata = alterhp(gamedata, 0 - squad + 3, 0, squad, pos, 1);
+            gamedata.squads[squad - 1].splice(pos, 1);
+            gamedata = alterhp(
+              gamedata,
+              0 - squad + 3,
+              0,
+              squad,
+              pos,
+              1,
+              null,
+              false,
+              emojis[122]
+            );
+            kill = false;
           }
           if (target?.id == 124) {
             // zzz
@@ -885,7 +909,7 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
                 gamedata = richtextadd(
                   gamedata,
                   `\n✚ ${gamedata.player[squad - 1]}'s 🪄 revived the ${
-                    gamedata.squads[squad - 1][pos].emoji
+                    target.emoji
                   } at the back of the Squad!`
                 );
               }
@@ -1395,7 +1419,8 @@ function alterhp(gamedata, squad, pos, squad2, pos2, val, verb, silence) {
             -1,
             -1000,
             "exploded",
-            true
+            true,
+            emojis[36]
           );
           if (kill == undefined) {
             gamedata.squads[squad - 1].splice(pos, 1);
