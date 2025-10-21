@@ -79,14 +79,12 @@ module.exports = {
       player1squadarray = await getSquad(interaction.user.id);
     } else if (squad1input.match(/@(\d+)/)) {
       let squadget = (await database.get(interaction.user.id + "savedsquad" + squad1input.match(/@(\d+)/)[1])) ?? "";
-      console.log(squadget)
       if (squadget != "") {
         player1squadarray = squadget.split(",");
         player1squadarray.pop()
       } else {
         player1squadarray = [undefined];
       }
-      console.log(player1squadarray)
     } else {
       const segmenter1 = new Intl.Segmenter("en", {
         granularity: "grapheme",

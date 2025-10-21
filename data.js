@@ -1045,17 +1045,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 1,
-    names: [
-      "Busts in Silhouette",
-      "Busts",
-      "Silhouettes",
-      "Shadows",
-      "Shades",
-      "Group",
-      "Crowd",
-      "People",
-      "Team"
-    ],
+    names: ["Busts in Silhouette", "Busts", "Silhouettes", "Shadows", "Shades", "Group", "Crowd", "People", "Team"],
     class: 5,
     description: "When defeated, transforms into an exact copy of the Emoji that defeated it"
   },
@@ -1274,7 +1264,8 @@ const emojis = [
     rarity: 1,
     names: ["Bow and Arrow", "Archery", "Bow", "Crossbow", "Arrow", "Shooter", "Marksman"],
     class: 1,
-    description: "If the Emoji this attacks has more than 0 attack power, targets the Emoji behind the frontmost enemy Emoji, if possible"
+    description:
+      "If the Emoji this attacks has more than 0 attack power, targets the Emoji behind the frontmost enemy Emoji, if possible"
   },
   {
     emoji: "💉",
@@ -1315,7 +1306,8 @@ const emojis = [
     rarity: 1,
     names: ["Back", "Back Arrow", "Back Sign", "Reverse", "Go Back", "Return", "Backtrack"],
     class: 1,
-    description: "If the Emoji this attacks has more than 0 attack power, targets the Emoji at the back of the enemy Squad instead of the front"
+    description:
+      "If the Emoji this attacks has more than 0 attack power, targets the Emoji at the back of the enemy Squad instead of the front"
   },
   {
     emoji: "🎯",
@@ -1843,7 +1835,8 @@ const emojis = [
     rarity: 1,
     names: ["Military Medal", "Award", "Plaque", "Military Award", "Medal"],
     class: 1,
-    description: "If the Emoji this attacks has more than 0 attack power, targets the enemy Emoji with the most attack power"
+    description:
+      "If the Emoji this attacks has more than 0 attack power, targets the enemy Emoji with the most attack power"
   },
   {
     emoji: "🪈",
@@ -1934,7 +1927,68 @@ const emojis = [
     rarity: 1,
     names: ["Bust In Silhouette", "Bust", "Silhouette", "Shadow", "Shade", "Mystery", "Unknown", "Solo"],
     class: 5,
-    description: "At the beginning of the Battle, transform into an exact copy of the Emoji on the enemy team in the same position"
+    description:
+      "At the beginning of the Battle, transform into an exact copy of the Emoji on the enemy team in the same position"
+  },
+  {
+    emoji: "🫂",
+    id: 143,
+    hp: 2,
+    dmg: 2,
+    rarity: 2,
+    names: ["People Hugging", "Hug", "Hug in Silhouette", "Hugs"],
+    class: 8,
+    description: "When your Squad is Shuffled, this and the two friendly Emojis in front of it do not get moved"
+  },
+  {
+    emoji: "🖇️",
+    id: 144,
+    hp: 3,
+    dmg: 2,
+    rarity: 2,
+    names: ["Paperclips", "Linked Paperclips", "Paperclip", "Linked Paperclip", "Clipped", "Connected"],
+    class: 8,
+    description: "When your Squad is Shuffled, this and the friendly Emojis in front of and behind it do not get moved"
+  },
+  {
+    emoji: "🗜️",
+    id: 145,
+    hp: 3,
+    dmg: 2,
+    rarity: 2,
+    names: ["Compression", "Clamp", "Compress", "Press", "Vice"],
+    class: 8,
+    description: "When your Squad is Shuffled, this and the two friendly Emojis behind it do not get moved"
+  },
+  {
+    emoji: "🧡",
+    id: 146,
+    hp: 4,
+    dmg: 2,
+    rarity: 1,
+    names: ["Orange Heart", "Orange"],
+    class: 1,
+    description: "When your Squad is Shuffled, this and the two friendly Emojis behind it do not get moved"
+  },
+  {
+    emoji: "🪁",
+    id: 147,
+    hp: 7,
+    dmg: 1,
+    rarity: 1,
+    names: ["Kite", "Flying Kite"],
+    class: 0,
+    description: "When a friendly Emoji moves, heals it by 1 and damages itself by 1"
+  },
+  {
+    emoji: "⛲",
+    id: 148,
+    hp: 4,
+    dmg: 1,
+    rarity: 1,
+    names: ["Fountain", "Water Fountain"],
+    class: 0,
+    description: "When a friendly Emoji moves past this, heals it by 1"
   }
 ];
 

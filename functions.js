@@ -172,7 +172,6 @@ async function generateBotSquad(player1squadarray, tries, evil) {
     for (let i = 0; i < 8; i++) {
       gamedata.squads[1].push(new BattleEmoji(player3squadarray[i].id, 2, "Dojobot2"));
     }
-    console.log(gamedata.squads);
     let oldgamedata;
     if (evil) {
       oldgamedata = lodash.cloneDeep(gamedata);
@@ -359,7 +358,6 @@ class BattleEmoji {
       return gamedata;
     }
     if (target == undefined) return gamedata;
-    console.log(`${this.playername}'s ${this.emoji} alters ${target.playername}'s ${target.emoji} (${val})`);
     if (!gamedata) return gamedata;
     if (gamedata.richtext.length > 10000) {
       console.error(JSON.stringify(gamedata));
@@ -390,9 +388,10 @@ class BattleEmoji {
 
     ({ gamedata, target, offender, val } = defendAttack(gamedata, target, offender, val));
 
-    ({ gamedata, target, offender } = beforeAttack(gamedata, target, offender));
-
     if (target.hp === undefined || target.hp < 0) target.hp = 0;
+
+    ({ gamedata, target, offender, silence } = beforeAttack(gamedata, target, offender, silence));
+
     target.hp += val;
 
     let kill;
@@ -494,8 +493,24 @@ class BattleEmoji {
 
   move(gamedata, newIndex) {
     if (this.id == 105) {
+      // rock
       gamedata = battleLine(gamedata, `\n${this.emoji} ${this.name.toLowerCase()} dont move`);
       return gamedata;
+    }
+    for (let i = 0; i < gamedata.squads[this.squad - 1].length; i++) {
+      if (gamedata.squads[this.squad - 1][i].id == 147) {
+        // kite
+        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1, "", true)
+        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, gamedata.squads[this.squad - 1][i], -1, "", true)
+        gamedata = battleLine(
+          gamedata,
+          `\n♡ ${this.playername}'s ${gamedata.squads[this.squad - 1][i].emoji} healed ${this.emoji} by 1 and damaged itself!`
+        );
+      }
+      if (gamedata.squads[this.squad - 1][i].id == 148 && ((this.index(gamedata) > i && i < newIndex) || (this.index(gamedata) < i && i > newIndex))) {
+        // fountain
+        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1, "", true)
+      }
     }
     const s = gamedata.squads[this.squad - 1];
     const currentIndex = this.index(gamedata);
@@ -842,7 +857,7 @@ function defendAttack(gamedata, target, offender, val) {
   };
 }
 
-function beforeAttack(gamedata, target, offender) {
+function beforeAttack(gamedata, target, offender, silence) {
   if (offender?.id == 42 && offender.squadarr(gamedata).length > 1) {
     // dancer
     gamedata = offender.move(gamedata, offender.index(gamedata) + 1);
@@ -868,10 +883,18 @@ function beforeAttack(gamedata, target, offender) {
       `\n⇪ ${offender.playername}'s ${offender.emoji} transformed ${target.playername}'s ${oldemoji} into ${emojis[7].emoji}!`
     );
   }
+  if (target?.id == 146 && val > 0) {
+    // orange heart
+    target.hp -= val;
+    gamedata = target.alterdmg(gamedata, val);
+    gamedata = battleLine(gamedata, `\n⇮ ${target.playername}'s ${target.emoji} strengthened itself by ${val}!`);
+    silence = true;
+  }
   return {
     gamedata: gamedata,
     target: target,
-    offender: offender
+    offender: offender,
+    silence: silence
   };
 }
 
@@ -1587,12 +1610,18 @@ function shuffleSquad(gamedata, squad) {
         );
       }
 
-      // pushpin, anchor, construction, rock
+      // pushpin, anchor, construction, rock, people hugging, linked paperclips, clamp
       const lockedIndices = squadToShuffle
         .map((item, index) =>
-          [71, 72, 73, 105].includes(item.id) ||
+          [71, 72, 73, 105, 143, 144, 145].includes(item.id) ||
           squadToShuffle[index + 1]?.id === 71 ||
-          squadToShuffle[index - 1]?.id === 72
+          squadToShuffle[index - 1]?.id === 72 ||
+          squadToShuffle[index + 1]?.id === 143 ||
+          squadToShuffle[index + 2]?.id === 143 ||
+          squadToShuffle[index + 1]?.id === 144 ||
+          squadToShuffle[index - 1]?.id === 144 ||
+          squadToShuffle[index - 1]?.id === 145 ||
+          squadToShuffle[index - 2]?.id === 145
             ? index
             : -1
         )
@@ -1802,7 +1831,6 @@ function battleStartAbilities(gamedata) {
   const sunrises1 = gamedata.squads[1].reduce((x, emoji) => {
     return x + (emoji?.id == 129 ? 1 : 0);
   }, 0);
-  console.log(sunrises0, sunrises1);
   if (sunrises0 > sunrises1) {
     gamedata.playerturn = 0;
   } else if (sunrises0 < sunrises1) {

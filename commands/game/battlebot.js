@@ -101,8 +101,6 @@ module.exports = {
           player2squadarray = dojobotsquad;
         }
 
-        console.log(player2squadarray)
-
         if (player2squadarray == "error") {
           await interaction.editReply({
             content: "🤒 Something went wrong with picking DojoBot's Squad.",
