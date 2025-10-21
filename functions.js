@@ -497,19 +497,30 @@ class BattleEmoji {
       gamedata = battleLine(gamedata, `\n${this.emoji} ${this.name.toLowerCase()} dont move`);
       return gamedata;
     }
+
     for (let i = 0; i < gamedata.squads[this.squad - 1].length; i++) {
       if (gamedata.squads[this.squad - 1][i].id == 147) {
         // kite
-        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1, "", true)
-        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, gamedata.squads[this.squad - 1][i], -1, "", true)
+        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1, "", true);
+        gamedata = gamedata.squads[this.squad - 1][i].alterhp(
+          gamedata,
+          gamedata.squads[this.squad - 1][i],
+          -1,
+          "",
+          true
+        );
         gamedata = battleLine(
           gamedata,
-          `\n♡ ${this.playername}'s ${gamedata.squads[this.squad - 1][i].emoji} healed ${this.emoji} by 1 and damaged itself!`
+          `\n♡ ${this.playername}'s ${gamedata.squads[this.squad - 1][i].emoji} healed ${
+            this.emoji
+          } by 1 and damaged itself!`
         );
       }
-      if (gamedata.squads[this.squad - 1][i].id == 148 && ((this.index(gamedata) > i && i < newIndex) || (this.index(gamedata) < i && i > newIndex))) {
-        // fountain
-        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1, "", true)
+      if (gamedata.squads[this.squad - 1][i].id == 148) {
+        const clampedTarget = Math.max(0, Math.min(Math.trunc(newIndex), gamedata.squads[this.squad - 1].length - 1));
+        if ((this.index(gamedata) < i && clampedTarget >= i) || (clampedTarget <= i && this.index(gamedata) > i)) {
+          gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1);
+        }
       }
     }
     const s = gamedata.squads[this.squad - 1];
@@ -797,6 +808,15 @@ function defendAttack(gamedata, target, offender, val) {
     }
     val = -1;
   }
+  if (offender?.id == 152 && val < -1) {
+    // trident
+    const index = target.index(gamedata);
+    for (let i = 0 - val - 1; i > 0; i--) {
+      gamedata = offender.alterhp(gamedata, target.squadarr(gamedata)[index], -1, undefined, false, false);
+    }
+    target = target.squadarr(gamedata)[index] ?? target;
+    val = -1;
+  }
   if (offender?.id == 134 && val < -1 && musicActive(gamedata, offender)) {
     // flute
     for (let i = Math.min(target.squadarr(gamedata).length, 0 - val) - 1; i > 0; i--) {
@@ -842,7 +862,7 @@ function defendAttack(gamedata, target, offender, val) {
       val = 0;
     }
   }
-  if (gamedata.squads[flip12(target.squad) - 1][0]?.id == 97 && target.index(gamedata) == 0) {
+  if (gamedata.squads[flip12(target?.squad) - 1][0]?.id == 97 && target.index(gamedata) == 0) {
     // adhesive bandage
     if (val > 0) {
       val = 0;
@@ -860,11 +880,11 @@ function defendAttack(gamedata, target, offender, val) {
 function beforeAttack(gamedata, target, offender, silence) {
   if (offender?.id == 42 && offender.squadarr(gamedata).length > 1) {
     // dancer
-    gamedata = offender.move(gamedata, offender.index(gamedata) + 1);
     gamedata = battleLine(
       gamedata,
       `\n⇋ ${offender.playername}'s ${offender?.emoji} retreated behind ${offender.emojiinfront(gamedata)?.emoji}!`
     );
+    gamedata = offender.move(gamedata, offender.index(gamedata) + 1);
   }
   if ((offender?.id == 64 || offender?.id == 38 || offender?.id == 119) && target.squad != offender.squad) {
     // mushroom, sparkles, hot face
@@ -1075,8 +1095,8 @@ function onDefeat(gamedata, target, offender) {
       gamedata = target.alterhp(gamedata, target.emojibehind(gamedata), 1);
     }
     if (target?.id == 141) {
-      // crutch
-      gamedata = target.alterdmg(gamedata, offender, -1);
+      // poop
+      gamedata = offender.alterdmg(gamedata, -1);
       gamedata = battleLine(
         gamedata,
         `\n✩ ${target.playername}'s ${target.emoji} weakened ${offender.playername}'s ${offender.emoji}! (-1 attack)`
@@ -1233,7 +1253,7 @@ function onAttack(gamedata, target, offender, val) {
     gamedata = battleLine(gamedata, `\n𝚾 ${target.playername}'s ${target.emoji} defeated itself!`);
   }
   if (target?.id == 131 && target.squadarr(gamedata).length > 1) {
-    // ice skate
+    // revolving hearts
     gamedata = target.move(gamedata, target.index(gamedata) + 1);
     gamedata = target.alterhp(gamedata, target.emojiinfront(gamedata), 1, "", true);
     gamedata = battleLine(
@@ -1450,7 +1470,7 @@ function afterAttackOrDefeat(gamedata, target, offender) {
 }
 
 function afterAttack(gamedata, target, offender) {
-  if (offender?.id == 15 && target.squadarr(gamedata)[0]) {
+  if (offender?.id == 15 && target.squadarr(gamedata)[1]) {
     // fishing pole
     gamedata.squads[target.squad - 1][gamedata.squads[target.squad - 1].length - 1].move(gamedata, 0);
     gamedata = battleLine(
@@ -1466,6 +1486,24 @@ function afterAttack(gamedata, target, offender) {
     gamedata = battleLine(
       gamedata,
       `\n⇋ ${offender.playername}'s ${offender.emoji} whacked ${target.playername}'s ${target.emoji} to the back of their Squad!`
+    );
+  }
+  if (target?.id == 149 && offender.squadarr(gamedata)[1]) {
+    // sweet potato
+    gamedata.squads[offender.squad - 1][gamedata.squads[offender.squad - 1].length - 1].move(gamedata, 0);
+    gamedata = battleLine(
+      gamedata,
+      `\n⇋ ${target.playername}'s ${target.emoji} attracted ${offender.playername}'s ${
+        gamedata.squads[offender.squad - 1][0].emoji
+      } to the front of their Squad!`
+    );
+  }
+  if (target?.id == 16 && offender.squadarr(gamedata)[0]) {
+    // garlic
+    gamedata = offender.move(gamedata, offender.squadarr(gamedata).length - 1);
+    gamedata = battleLine(
+      gamedata,
+      `\n⇋ ${target.playername}'s ${target.emoji} repeled ${offender.playername}'s ${offender.emoji} to the back of their Squad!`
     );
   }
   if (offender?.id == 138 && target.emojibehind(gamedata)) {
@@ -1665,6 +1703,12 @@ function shuffleSquad(gamedata, squad) {
         const temp = squadToShuffle[i];
         squadToShuffle.splice(i, 1);
         squadToShuffle.splice(squadToShuffle.length, 0, temp);
+      }
+      if (squadToShuffle[i]?.id == 151 && i < squadToShuffle.length - 1) {
+        // fire engine
+        const temp = squadToShuffle[i];
+        squadToShuffle.splice(i, 1);
+        squadToShuffle.splice(0, 0, temp);
       }
     }
 

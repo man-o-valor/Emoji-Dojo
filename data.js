@@ -1368,7 +1368,7 @@ const emojis = [
     rarity: 0,
     names: ["Bee", "Bumblebee"],
     class: 8,
-    description: "When attacking on its turn, all friendly 🐝 also attack regardless of position."
+    description: "When attacking on its turn, all friendly 🐝 also attack regardless of position"
   },
   {
     emoji: "🪡",
@@ -1379,7 +1379,7 @@ const emojis = [
     names: ["Sewing Needle", "Needle", "Thread", "Sew", "Stitch", "Needlework", "Sewing"],
     class: 1,
     description:
-      "When attacking, attacks the first X emojis in the enemy Squad for 1 damage, where X is its attack power."
+      "When attacking, attacks the first X emojis in the enemy Squad for 1 damage, where X is its attack power"
   },
   {
     emoji: "👪",
@@ -1807,12 +1807,12 @@ const emojis = [
     description: "After attacking, multiplies the attack power of the target by -1 and adds 1"
   },
   {
-    emoji: "⛸️",
+    emoji: "💞",
     id: 131,
     hp: 4,
     dmg: 1,
     rarity: 0,
-    names: ["Ice Skate", "Skate", "Iceskate", "Ice Skating"],
+    names: ["Revolving Hearts", "Hearts"],
     class: 0,
     description:
       "When attacked, switches places with the friendly Emoji behind it and heals the new frontmost friendly Emoji by 1"
@@ -1910,12 +1910,12 @@ const emojis = [
     description: "Nothing special"
   },
   {
-    emoji: "🩼",
+    emoji: "💩",
     id: 141,
     hp: 2,
     dmg: 2,
     rarity: 0,
-    names: ["Crutch", "Walking Stick"],
+    names: ["Poop", "Poo"],
     class: 5,
     description: "When defeated, lowers the attack power of the Emoji that defeated it by 1"
   },
@@ -1973,7 +1973,7 @@ const emojis = [
   {
     emoji: "🪁",
     id: 147,
-    hp: 7,
+    hp: 5,
     dmg: 1,
     rarity: 1,
     names: ["Kite", "Flying Kite"],
@@ -1983,13 +1983,53 @@ const emojis = [
   {
     emoji: "⛲",
     id: 148,
-    hp: 4,
+    hp: 3,
     dmg: 1,
     rarity: 1,
     names: ["Fountain", "Water Fountain"],
     class: 0,
     description: "When a friendly Emoji moves past this, heals it by 1"
-  }
+  },
+  {
+    emoji: "🍠",
+    id: 149,
+    hp: 4,
+    dmg: 1,
+    rarity: 0,
+    names: ["Sweet Potato", "Yam", "Baked Sweet Potato", "Roasted Sweet Potato"],
+    class: 4,
+    description: "When attacked, moves the furthermost enemy emoji to the front of the enemy squad."
+  },
+  {
+    emoji: "🧄",
+    id: 150,
+    hp: 4,
+    dmg: 1,
+    rarity: 0,
+    names: ["Garlic"],
+    class: 4,
+    description: "When attacked, moves the frontmost enemy emoji to the back of the enemy squad."
+  },
+  {
+    emoji: "🚒",
+    id: 151,
+    hp: 5,
+    dmg: 2,
+    rarity: 1,
+    names: ["Fire Engine", "Fire Truck", "Firefighter", "Firemen", "Firetruck"],
+    class: 7,
+    description: "When your Squad is Shuffled, always ends at the front"
+  },
+  {
+    emoji: "🔱",
+    id: 152,
+    hp: 5,
+    dmg: 3,
+    rarity: 2,
+    names: ["Trident"],
+    class: 1,
+    description: "When attacking, attacks X consecutive times for 1 damage where X is its attack power"
+  },
 ];
 
 module.exports = {
