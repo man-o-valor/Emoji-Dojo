@@ -11,14 +11,15 @@ const {
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
-  getsquad,
-  playturn,
+  getSquad,
+  playTurn,
   database,
-  trysetupuser,
-  getlogs,
-  writelogs,
-  dailyrewardremind,
-  issquadinvalid,
+  setupUser,
+  getLogs,
+  writeLogs,
+  dailyRewardRemind,
+  checkSquadValidity,
+  BattleEmoji,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -26,68 +27,55 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("battlefriendly")
     .setDescription("Battle another user, with no coins at stake.")
-    .addUserOption((option) =>
-      option
-        .setName("user")
-        .setDescription("The user to battle")
-        .setRequired(true)
-    )
+    .addUserOption((option) => option.setName("user").setDescription("The user to battle").setRequired(true))
     .addNumberOption((option) =>
-      option
-        .setName("speed")
-        .setDescription("The time in seconds between each turn (defaults to 4)")
+      option.setName("speed").setDescription("The time in seconds between each turn (defaults to 4)")
     ),
   async execute(interaction) {
     try {
       const battleuser = interaction.options.getUser("user");
-      let battlespeed =
-        parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
+      let battlespeed = parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
       if (isNaN(battlespeed)) battlespeed = 0;
       if (battlespeed < 1) {
         battlespeed = 1;
       }
-      if (await trysetupuser(interaction.user)) {
+      if (await setupUser(interaction.user)) {
         await interaction.reply({
           flags: "Ephemeral",
           content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
         });
-      } else if (await trysetupuser(battleuser.id)) {
+      } else if (await setupUser(battleuser.id)) {
         await interaction.reply({
           flags: "Ephemeral",
           content: `<@${battleuser.id}> doesn't have a Squad yet! Show them how to use \`/squad\` and then you can battle.`,
         });
-      } else if (await issquadinvalid(interaction.user.id)) {
+      } else if (await checkSquadValidity(interaction.user.id)) {
         await interaction.reply({
           flags: "Ephemeral",
           content: `Your squad seems to have some Emojis that aren't in your Dojo.`,
         });
-      } else if (await issquadinvalid(battleuser.id)) {
+      } else if (await checkSquadValidity(battleuser.id)) {
         await interaction.reply({
           flags: "Ephemeral",
           content: `<@${battleuser.id}>'s squad seems to have some Emojis that aren't in their Dojo.`,
         });
       } else {
-        if (
-          battleuser.globalName != undefined &&
-          battleuser.id != interaction.user.id
-        ) {
-          let logs = await getlogs();
+        if (battleuser.globalName != undefined && battleuser.id != interaction.user.id) {
+          let logs = await getLogs();
           logs.logs.games.friendlyopened += 1;
           logs.logs.games.opened += 1;
-          logs.logs.players[`user${interaction.user.id}`] =
-            logs.logs.players[`user${interaction.user.id}`] ?? {};
+          logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
           logs.logs.players[`user${interaction.user.id}`].friendlyopened =
             logs.logs.players[`user${interaction.user.id}`].friendlyopened ?? 0;
           logs.logs.players[`user${interaction.user.id}`].friendlyopened += 1;
           logs.logs.players[`user${interaction.user.id}`].opened =
             logs.logs.players[`user${interaction.user.id}`].opened ?? 0;
           logs.logs.players[`user${interaction.user.id}`].opened += 1;
-          logs.logs.players[`user${battleuser.id}`] =
-            logs.logs.players[`user${battleuser.id}`] ?? {};
+          logs.logs.players[`user${battleuser.id}`] = logs.logs.players[`user${battleuser.id}`] ?? {};
           logs.logs.players[`user${battleuser.id}`].friendlyrequested =
             logs.logs.players[`user${battleuser.id}`].friendlyrequested ?? 0;
           logs.logs.players[`user${battleuser.id}`].friendlyrequested += 1;
-          await writelogs(logs);
+          await writeLogs(logs);
           const cook = new ButtonBuilder()
             .setCustomId("battle")
             .setLabel("Battle!")
@@ -99,17 +87,11 @@ module.exports = {
             .setEmoji("👎")
             .setStyle(ButtonStyle.Danger);
           const row1 = new ActionRowBuilder().addComponents(cook, nah);
-          await database.set(
-            interaction.user.id + "battlepending",
-            60 + Math.floor(Date.now() / 1000)
-          );
-          await database.set(
-            battleuser.id + "battlepending",
-            60 + Math.floor(Date.now() / 1000)
-          );
-          let player1squadarray = await getsquad(interaction.user.id);
+          await database.set(interaction.user.id + "battlepending", 60 + Math.floor(Date.now() / 1000));
+          await database.set(battleuser.id + "battlepending", 60 + Math.floor(Date.now() / 1000));
+          let player1squadarray = await getSquad(interaction.user.id);
 
-          let player2squadarray = await getsquad(battleuser.id);
+          let player2squadarray = await getSquad(battleuser.id);
 
           let player1squadtext = "";
           for (let i = 7; i > -1; i--) {
@@ -131,14 +113,10 @@ module.exports = {
             logfile: `${interaction.user.id} (${interaction.user.username}) vs ${battleuser.id} (${battleuser.username})\nFriendly Battle\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`,
           };
           for (let i = 0; i < 8; i++) {
-            gamedata.squads[0].push(
-              lodash.cloneDeep(emojis[player1squadarray[i]])
-            );
+            gamedata.squads[0].push(new BattleEmoji(player1squadarray[i], 1, interaction.user.globalName));
           }
           for (let i = 0; i < 8; i++) {
-            gamedata.squads[1].push(
-              lodash.cloneDeep(emojis[player2squadarray[i]])
-            );
+            gamedata.squads[1].push(new BattleEmoji(player2squadarray[i], 2, battleuser.globalName));
           }
 
           gamedata.playerturn = Math.floor(Math.random() * 2) + 1;
@@ -153,34 +131,21 @@ module.exports = {
                 `### <@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you! • Speed: ${battlespeed}`
               )
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Large)
-                .setDivider(true)
-            )
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
                 `\`${interaction.user.globalName.replace(
                   /`/g,
                   ""
-                )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
-                  /`/g,
-                  ""
-                )}\``
+                )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(/`/g, "")}\``
               )
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Large)
-                .setDivider(true)
-            )
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
                 `\`${interaction.user.globalName.replace(/`/g, "")}\`: ${
                   acceptemojis[accepts[0] + 1]
-                } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                  acceptemojis[accepts[1] + 1]
-                }`
+                } \`${battleuser.globalName.replace(/`/g, "")}\`: ${acceptemojis[accepts[1] + 1]}`
               )
             )
             .addActionRowComponents(row1);
@@ -189,10 +154,9 @@ module.exports = {
             components: [challengecontainer],
             flags: MessageFlags.IsComponentsV2,
           });
-          await dailyrewardremind(interaction);
+          await dailyRewardRemind(interaction);
 
-          const collectorFilter = (i) =>
-            i.user.id == interaction.user.id || i.user.id == battleuser.id;
+          const collectorFilter = (i) => i.user.id == interaction.user.id || i.user.id == battleuser.id;
           let collector = response.createMessageComponentCollector({
             filter: collectorFilter,
             time: 300000,
@@ -216,11 +180,7 @@ module.exports = {
                   accepts[1] = -1;
                 }
               }
-              if (
-                interaction2.customId === "battle" &&
-                accepts[0] == 1 &&
-                accepts[1] == 1
-              ) {
+              if (interaction2.customId === "battle" && accepts[0] == 1 && accepts[1] == 1) {
                 challengecontainer = new ContainerBuilder()
                   .addTextDisplayComponents(
                     new TextDisplayBuilder().setContent(
@@ -228,9 +188,7 @@ module.exports = {
                     )
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Large)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
                   )
                   .addTextDisplayComponents(
                     new TextDisplayBuilder().setContent(
@@ -244,17 +202,13 @@ module.exports = {
                     )
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Large)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
                   )
                   .addTextDisplayComponents(
                     new TextDisplayBuilder().setContent(
                       `\`${interaction.user.globalName.replace(/`/g, "")}\`: ${
                         acceptemojis[accepts[0] + 1]
-                      } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                        acceptemojis[accepts[1] + 1]
-                      }`
+                      } \`${battleuser.globalName.replace(/`/g, "")}\`: ${acceptemojis[accepts[1] + 1]}`
                     )
                   )
                   .addActionRowComponents(row1);
@@ -262,62 +216,42 @@ module.exports = {
                   components: [challengecontainer],
                   flags: MessageFlags.IsComponentsV2,
                 });
-                await database.set(
-                  interaction.user.id + "battlepending",
-                  300 + Math.floor(Date.now() / 1000)
-                );
-                await database.set(
-                  battleuser.id + "battlepending",
-                  300 + Math.floor(Date.now() / 1000)
-                );
-                let logs = await getlogs();
+                await database.set(interaction.user.id + "battlepending", 300 + Math.floor(Date.now() / 1000));
+                await database.set(battleuser.id + "battlepending", 300 + Math.floor(Date.now() / 1000));
+                let logs = await getLogs();
                 logs.logs.games.friendlystarted += 1;
                 logs.logs.games.started += 1;
-                logs.logs.players[
-                  `user${interaction.user.id}`
-                ].friendlystarted =
-                  logs.logs.players[`user${interaction.user.id}`]
-                    .friendlystarted ?? 0;
-                logs.logs.players[
-                  `user${interaction.user.id}`
-                ].friendlystarted += 1;
+                logs.logs.players[`user${interaction.user.id}`].friendlystarted =
+                  logs.logs.players[`user${interaction.user.id}`].friendlystarted ?? 0;
+                logs.logs.players[`user${interaction.user.id}`].friendlystarted += 1;
                 logs.logs.players[`user${interaction.user.id}`].started =
                   logs.logs.players[`user${interaction.user.id}`].started ?? 0;
                 logs.logs.players[`user${interaction.user.id}`].started += 1;
                 logs.logs.players[`user${battleuser.id}`].friendlystarted =
-                  logs.logs.players[`user${battleuser.id}`].friendlystarted ??
-                  0;
+                  logs.logs.players[`user${battleuser.id}`].friendlystarted ?? 0;
                 logs.logs.players[`user${battleuser.id}`].friendlystarted += 1;
                 logs.logs.players[`user${battleuser.id}`].started =
                   logs.logs.players[`user${battleuser.id}`].started ?? 0;
                 logs.logs.players[`user${battleuser.id}`].started += 1;
-                await writelogs(logs);
+                await writeLogs(logs);
                 function delay(time) {
                   return new Promise((resolve) => setTimeout(resolve, time));
                 }
                 let prevturn = lodash.cloneDeep(gamedata.squads);
                 try {
-                  while (
-                    gamedata.turn < 200 &&
-                    gamedata.squads[0][0] != null &&
-                    gamedata.squads[1][0] != null
-                  ) {
+                  while (gamedata.turn < 200 && gamedata.squads[0][0] != null && gamedata.squads[1][0] != null && !gamedata.draw) {
                     if (gamedata.turn % 5 == 0) {
                       prevturn = lodash.cloneDeep(gamedata.squads);
                     }
-                    gamedata = playturn(gamedata);
-                    if (
-                      gamedata.turn % 5 == 0 &&
-                      lodash.isEqual(gamedata.squads, prevturn)
-                    ) {
+                    gamedata = playTurn(gamedata);
+                    if (gamedata.turn % 5 == 0 && lodash.isEqual(gamedata.squads, prevturn)) {
                       gamedata.turn = 999;
                       break;
                     }
                     let richtextsnippet = "";
                     let numberhidden = gamedata.richtext.length;
                     if (gamedata.richtext.length > 4) {
-                      let toadd =
-                        gamedata.richtext[gamedata.richtext.length - 5];
+                      let toadd = gamedata.richtext[gamedata.richtext.length - 5];
                       if (gamedata.newlines < 5) {
                         toadd = toadd.replace(/\n/g, "\n-# ");
                       }
@@ -325,8 +259,7 @@ module.exports = {
                       numberhidden--;
                     }
                     if (gamedata.richtext.length > 3) {
-                      let toadd =
-                        gamedata.richtext[gamedata.richtext.length - 4];
+                      let toadd = gamedata.richtext[gamedata.richtext.length - 4];
                       if (gamedata.newlines < 4) {
                         toadd = toadd.replace(/\n/g, "\n-# ");
                       }
@@ -334,8 +267,7 @@ module.exports = {
                       numberhidden--;
                     }
                     if (gamedata.richtext.length > 2) {
-                      let toadd =
-                        gamedata.richtext[gamedata.richtext.length - 3];
+                      let toadd = gamedata.richtext[gamedata.richtext.length - 3];
                       if (gamedata.newlines < 3) {
                         toadd = toadd.replace(/\n/g, "\n-# ");
                       }
@@ -343,16 +275,14 @@ module.exports = {
                       numberhidden--;
                     }
                     if (gamedata.richtext.length > 1) {
-                      let toadd =
-                        gamedata.richtext[gamedata.richtext.length - 2];
+                      let toadd = gamedata.richtext[gamedata.richtext.length - 2];
                       if (gamedata.newlines < 2) {
                         toadd = toadd.replace(/\n/g, "\n-# ");
                       }
                       richtextsnippet += toadd;
                       numberhidden--;
                     }
-                    richtextsnippet +=
-                      gamedata.richtext[gamedata.richtext.length - 1];
+                    richtextsnippet += gamedata.richtext[gamedata.richtext.length - 1];
                     numberhidden--;
                     richtextsnippet += " ⇡";
                     let richnumberhidden = "";
@@ -369,19 +299,11 @@ module.exports = {
                           )
                         )
                         .addSeparatorComponents(
-                          new SeparatorBuilder()
-                            .setSpacing(SeparatorSpacingSize.Small)
-                            .setDivider(true)
+                          new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                         )
-                        .addTextDisplayComponents(
-                          new TextDisplayBuilder().setContent(
-                            gamedata.emojitext
-                          )
-                        ),
+                        .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                       new ContainerBuilder().addTextDisplayComponents(
-                        new TextDisplayBuilder().setContent(
-                          richnumberhidden + richtextsnippet
-                        )
+                        new TextDisplayBuilder().setContent(richnumberhidden + richtextsnippet)
                       ),
                     ];
                     if (gamedata.turn > 1) {
@@ -408,18 +330,12 @@ module.exports = {
                         )
                       )
                       .addSeparatorComponents(
-                        new SeparatorBuilder()
-                          .setSpacing(SeparatorSpacingSize.Small)
-                          .setDivider(true)
+                        new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                       )
-                      .addTextDisplayComponents(
-                        new TextDisplayBuilder().setContent(gamedata.emojitext)
-                      ),
+                      .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                     new ContainerBuilder().addTextDisplayComponents(
                       new TextDisplayBuilder().setContent(
-                        "🤒 An error has occurred and the Battle cannot continue.```" +
-                          e +
-                          "```"
+                        "🤒 An error has occurred and the Battle cannot continue.```" + e + "```"
                       )
                     ),
                   ];
@@ -447,11 +363,7 @@ module.exports = {
                   .setStyle(ButtonStyle.Primary);
                 const row2 = new ActionRowBuilder().addComponents(exportbutton);
                 let battleendcontainer;
-                if (
-                  gamedata.turn >= 200 ||
-                  (gamedata.squads[0].length == 0 &&
-                    gamedata.squads[1].length == 0)
-                ) {
+                if (gamedata.turn >= 200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) || gamedata.draw) {
                   battleendcontainer = new ContainerBuilder()
                     .addTextDisplayComponents(
                       new TextDisplayBuilder().setContent(
@@ -459,24 +371,16 @@ module.exports = {
                       )
                     )
                     .addSeparatorComponents(
-                      new SeparatorBuilder()
-                        .setSpacing(SeparatorSpacingSize.Small)
-                        .setDivider(true)
+                      new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                     )
                     .addActionRowComponents(row2);
-                  let logs = await getlogs();
+                  let logs = await getLogs();
                   logs.logs.games.friendlydraws += 1;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].friendlydraws =
-                    logs.logs.players[`user${interaction.user.id}`]
-                      .friendlydraws ?? 0;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].friendlydraws += 1;
+                  logs.logs.players[`user${interaction.user.id}`].friendlydraws =
+                    logs.logs.players[`user${interaction.user.id}`].friendlydraws ?? 0;
+                  logs.logs.players[`user${interaction.user.id}`].friendlydraws += 1;
                   logs.logs.players[`user${battleuser.id}`].friendlydraws =
-                    logs.logs.players[`user${battleuser.id}`].friendlydraws ??
-                    0;
+                    logs.logs.players[`user${battleuser.id}`].friendlydraws ?? 0;
                   logs.logs.players[`user${battleuser.id}`].friendlydraws += 1;
                   for (let i = 7; i > -1; i--) {
                     logs.logs.emojis[player2squadarray[i]].friendlydraws =
@@ -488,7 +392,7 @@ module.exports = {
                       logs.logs.emojis[player1squadarray[i]].friendlydraws ?? 0;
                     logs.logs.emojis[player1squadarray[i]].friendlydraws += 1;
                   }
-                  await writelogs(logs);
+                  await writeLogs(logs);
                 } else {
                   if (gamedata.squads[1].length == 0) {
                     battleendcontainer = new ContainerBuilder()
@@ -498,77 +402,52 @@ module.exports = {
                         )
                       )
                       .addSeparatorComponents(
-                        new SeparatorBuilder()
-                          .setSpacing(SeparatorSpacingSize.Small)
-                          .setDivider(true)
+                        new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                       )
                       .addActionRowComponents(row2);
-                    let logs = await getlogs();
-                    logs.logs.players[
-                      `user${interaction.user.id}`
-                    ].friendlywins =
-                      logs.logs.players[`user${interaction.user.id}`]
-                        .friendlywins ?? 0;
-                    logs.logs.players[
-                      `user${interaction.user.id}`
-                    ].friendlywins += 1;
+                    let logs = await getLogs();
+                    logs.logs.players[`user${interaction.user.id}`].friendlywins =
+                      logs.logs.players[`user${interaction.user.id}`].friendlywins ?? 0;
+                    logs.logs.players[`user${interaction.user.id}`].friendlywins += 1;
                     logs.logs.players[`user${battleuser.id}`].friendlylosses =
-                      logs.logs.players[`user${battleuser.id}`]
-                        .friendlylosses ?? 0;
-                    logs.logs.players[
-                      `user${battleuser.id}`
-                    ].friendlylosses += 1;
+                      logs.logs.players[`user${battleuser.id}`].friendlylosses ?? 0;
+                    logs.logs.players[`user${battleuser.id}`].friendlylosses += 1;
                     for (let i = 7; i > -1; i--) {
                       logs.logs.emojis[player1squadarray[i]].friendlywins =
-                        logs.logs.emojis[player1squadarray[i]].friendlywins ??
-                        0;
+                        logs.logs.emojis[player1squadarray[i]].friendlywins ?? 0;
                       logs.logs.emojis[player1squadarray[i]].friendlywins += 1;
                     }
                     for (let i = 7; i > -1; i--) {
                       logs.logs.emojis[player2squadarray[i]].friendlylosses =
-                        logs.logs.emojis[player2squadarray[i]].friendlylosses ??
-                        0;
-                      logs.logs.emojis[
-                        player2squadarray[i]
-                      ].friendlylosses += 1;
+                        logs.logs.emojis[player2squadarray[i]].friendlylosses ?? 0;
+                      logs.logs.emojis[player2squadarray[i]].friendlylosses += 1;
                     }
-                    await writelogs(logs);
+                    await writeLogs(logs);
                   }
                   if (gamedata.squads[0].length == 0) {
-                    battleendcontainer =
-                      new ContainerBuilder().addTextDisplayComponents(
-                        new TextDisplayBuilder().setContent(
-                          `<@${battleuser.id}> is the winner! ||<@${interaction.user.id}>||`
-                        )
-                      );
-                    let logs = await getlogs();
-                    logs.logs.players[
-                      `user${interaction.user.id}`
-                    ].friendlylosses =
-                      logs.logs.players[`user${interaction.user.id}`]
-                        .friendlylosses ?? 0;
-                    logs.logs.players[
-                      `user${interaction.user.id}`
-                    ].friendlylosses += 1;
+                    battleendcontainer = new ContainerBuilder().addTextDisplayComponents(
+                      new TextDisplayBuilder().setContent(
+                        `<@${battleuser.id}> is the winner! ||<@${interaction.user.id}>||`
+                      )
+                    );
+                    let logs = await getLogs();
+                    logs.logs.players[`user${interaction.user.id}`].friendlylosses =
+                      logs.logs.players[`user${interaction.user.id}`].friendlylosses ?? 0;
+                    logs.logs.players[`user${interaction.user.id}`].friendlylosses += 1;
                     logs.logs.players[`user${battleuser.id}`].friendlywins =
-                      logs.logs.players[`user${battleuser.id}`].friendlywins ??
-                      0;
+                      logs.logs.players[`user${battleuser.id}`].friendlywins ?? 0;
                     logs.logs.players[`user${battleuser.id}`].friendlywins += 1;
                     for (let i = 7; i > -1; i--) {
                       logs.logs.emojis[player1squadarray[i]].friendlylosses =
-                        logs.logs.emojis[player1squadarray[i]].friendlylosses ??
-                        0;
-                      logs.logs.emojis[
-                        player1squadarray[i]
-                      ].friendlylosses += 1;
+                        logs.logs.emojis[player1squadarray[i]].friendlylosses ?? 0;
+                      logs.logs.emojis[player1squadarray[i]].friendlylosses += 1;
                     }
                     for (let i = 7; i > -1; i--) {
                       logs.logs.emojis[player2squadarray[i]].friendlywins =
-                        logs.logs.emojis[player2squadarray[i]].friendlywins ??
-                        0;
+                        logs.logs.emojis[player2squadarray[i]].friendlywins ?? 0;
                       logs.logs.emojis[player2squadarray[i]].friendlywins += 1;
                     }
-                    await writelogs(logs);
+                    await writeLogs(logs);
                   }
                 }
                 int3 = await interaction2.followUp({
@@ -589,17 +468,12 @@ module.exports = {
                         },
                       ],
                     });
-                    let logs = await getlogs();
+                    let logs = await getLogs();
                     logs.logs.games.friendlylogsrequested += 1;
-                    logs.logs.players[
-                      `user${interaction3.user.id}`
-                    ].friendlylogsrequested =
-                      logs.logs.players[`user${interaction3.user.id}`]
-                        .friendlylogsrequested ?? 0;
-                    logs.logs.players[
-                      `user${interaction3.user.id}`
-                    ].friendlylogsrequested += 1;
-                    await writelogs(logs);
+                    logs.logs.players[`user${interaction3.user.id}`].friendlylogsrequested =
+                      logs.logs.players[`user${interaction3.user.id}`].friendlylogsrequested ?? 0;
+                    logs.logs.players[`user${interaction3.user.id}`].friendlylogsrequested += 1;
+                    await writeLogs(logs);
                   } catch (e) {
                     exportbutton.setDisabled(true);
                     interaction3.editReply({ components: [row2] });
@@ -613,9 +487,7 @@ module.exports = {
                     )
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Large)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
                   )
                   .addTextDisplayComponents(
                     new TextDisplayBuilder().setContent(
@@ -629,17 +501,13 @@ module.exports = {
                     )
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Large)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
                   )
                   .addTextDisplayComponents(
                     new TextDisplayBuilder().setContent(
                       `\`${interaction.user.globalName.replace(/`/g, "")}\`: ${
                         acceptemojis[accepts[0] + 1]
-                      } \`${battleuser.globalName.replace(/`/g, "")}\`: ${
-                        acceptemojis[accepts[1] + 1]
-                      }`
+                      } \`${battleuser.globalName.replace(/`/g, "")}\`: ${acceptemojis[accepts[1] + 1]}`
                     )
                   )
                   .addActionRowComponents(row1);
@@ -658,20 +526,13 @@ module.exports = {
                   `### <@${battleuser.id}>, <@${interaction.user.id}> wants to battle with you! • Speed: ${battlespeed}`
                 )
               )
-              .addSeparatorComponents(
-                new SeparatorBuilder()
-                  .setSpacing(SeparatorSpacingSize.Large)
-                  .setDivider(true)
-              )
+              .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
               .addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(
                   `\`${interaction.user.globalName.replace(
                     /`/g,
                     ""
-                  )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(
-                    /`/g,
-                    ""
-                  )}\``
+                  )}\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`${battleuser.globalName.replace(/`/g, "")}\``
                 )
               );
             interaction.editReply({

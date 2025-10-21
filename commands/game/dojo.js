@@ -14,24 +14,17 @@ const {
   StringSelectMenuOptionBuilder,
   StringSelectMenuBuilder,
 } = require("discord.js");
-const {
-  raritycolors,
-  emojis,
-  raritysymbols,
-  raritynames,
-  classes,
-  devotionhelp,
-} = require("../../data.js");
+const { raritycolors, emojis, raritysymbols, raritynames, classes, devotionhelp } = require("../../data.js");
 const {
   database,
-  getvault,
-  trysetupuser,
-  getsquad,
-  devoteemojis,
-  fetchresearch,
-  getlogs,
-  writelogs,
-  dailyrewardremind,
+  getDojo,
+  setupUser,
+  getSquad,
+  devoteEmojis,
+  getDevotions,
+  getLogs,
+  writeLogs,
+  dailyRewardRemind,
   adminpanel,
 } = require("../../functions.js");
 const fs = require("fs");
@@ -41,18 +34,11 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("dojo")
     .setDescription("View your Dojo of Emojis")
-    .addStringOption((option) =>
-      option
-        .setName("emoji")
-        .setDescription("The Emoji to view details of (optional)")
-    ),
+    .addStringOption((option) => option.setName("emoji").setDescription("The Emoji to view details of (optional)")),
   async execute(interaction) {
     const viewemoji = interaction.options.getString("emoji");
     if ((viewemoji ?? "").startsWith("%dev")) {
-      if (
-        interaction.user.id == "1013096732147597412" ||
-        interaction.user.id == "1146557659349270639"
-      ) {
+      if (interaction.user.id == "1013096732147597412" || interaction.user.id == "1146557659349270639") {
         await adminpanel(interaction, viewemoji);
       } else {
         await interaction.reply({
@@ -61,13 +47,13 @@ module.exports = {
         });
       }
     } else {
-      if (await trysetupuser(interaction.user)) {
+      if (await setupUser(interaction.user)) {
         await interaction.reply({
           flags: "Ephemeral",
           content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
         });
       } else {
-        let vaultarray = await getvault(interaction.user.id);
+        let vaultarray = await getDojo(interaction.user.id);
         if (viewemoji) {
           let closeviewemoji = viewemoji;
 
@@ -87,25 +73,15 @@ module.exports = {
           const emojifound = emojis.find(
             (x) =>
               x.names.find(
-                (y) =>
-                  y.replace(/\s+/g, "_").toLowerCase() ==
-                  closeviewemoji.trim().replace(/\s+/g, "_").toLowerCase()
+                (y) => y.replace(/\s+/g, "_").toLowerCase() == closeviewemoji.trim().replace(/\s+/g, "_").toLowerCase()
               ) || x.emoji == closeviewemoji.replace(/\s+/g, "")
           );
-          const viewemojiid = vaultarray.find(
-            (x) => emojis[x]?.id == emojifound?.id
-          );
+          const viewemojiid = vaultarray.find((x) => emojis[x]?.id == emojifound?.id);
 
-          let squadarray = await getsquad(interaction.user.id);
+          let squadarray = await getSquad(interaction.user.id);
           let addto = new StringSelectMenuBuilder()
             .setCustomId("addto")
-            .setPlaceholder(
-              "You have " +
-                vaultarray.reduce(
-                  (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
-                  0
-                )
-            )
+            .setPlaceholder("You have " + vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0))
             .setOptions(
               new StringSelectMenuOptionBuilder()
                 .setLabel("1️⃣ Equip")
@@ -142,40 +118,21 @@ module.exports = {
             );
           const devote = new ButtonBuilder()
             .setCustomId("devote")
-            .setLabel(
-              `Devote (${2 * emojifound.rarity + 1} point${
-                2 * emojifound.rarity + 1 != 1 ? "s" : ""
-              } each)`
-            )
+            .setLabel(`Devote (${2 * emojifound.rarity + 1} point${2 * emojifound.rarity + 1 != 1 ? "s" : ""} each)`)
             .setStyle(ButtonStyle.Primary)
             .setEmoji("🛐");
           const devotehelp = new ButtonBuilder()
             .setCustomId("devotehelp")
             .setLabel(`Devotion Help`)
             .setStyle(ButtonStyle.Danger);
-          const devoterow = new ActionRowBuilder().addComponents(
-            devote,
-            devotehelp
-          );
+          const devoterow = new ActionRowBuilder().addComponents(devote, devotehelp);
           let comps = [];
-          let numberfound = squadarray.reduce(
-            (a, v) => (v == emojifound.id ? a + 1 : a),
-            0
-          );
-          let numberowned = vaultarray.reduce(
-            (a, v) => (v == emojifound.id ? a + 1 : a),
-            0
-          );
+          let numberfound = squadarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0);
+          let numberowned = vaultarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0);
           if (numberfound >= numberowned) {
             addto = new StringSelectMenuBuilder()
               .setCustomId("addto")
-              .setPlaceholder(
-                "You have " +
-                  vaultarray.reduce(
-                    (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
-                    0
-                  )
-              )
+              .setPlaceholder("You have " + vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0))
               .setOptions(
                 new StringSelectMenuOptionBuilder()
                   .setLabel("1️⃣ Move")
@@ -214,54 +171,27 @@ module.exports = {
 
           let vaultcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
-              new TextDisplayBuilder().setContent(
-                `## ${emojifound.emoji} ${emojifound.names[0]}${redirecttext}`
-              )
+              new TextDisplayBuilder().setContent(`## ${emojifound.emoji} ${emojifound.names[0]}${redirecttext}`)
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Small)
-                .setDivider(true)
-            )
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
-                `❤️ Health: **${
-                  emojifound.hp ?? "N/A"
-                }**\n<:attackpower:1327657903447998477> Attack Power: **${
+                `❤️ Health: **${emojifound.hp ?? "N/A"}**\n<:attackpower:1327657903447998477> Attack Power: **${
                   emojifound.dmg ?? "N/A"
                 }**\n${raritysymbols[emojifound.rarity] ?? "⬜"} Rarity: **${
                   raritynames[emojifound.rarity] ?? "N/A"
-                }**\n${
-                  emojifound.class != undefined
-                    ? classes[emojifound.class].emoji ?? "🟣"
-                    : "🟣"
-                } Class: **${
-                  emojifound.class != undefined
-                    ? classes[emojifound.class].name ?? "Unknown"
-                    : "None"
+                }**\n${emojifound.class != undefined ? classes[emojifound.class].emoji ?? "🟣" : "🟣"} Class: **${
+                  emojifound.class != undefined ? classes[emojifound.class].name ?? "Unknown" : "None"
                 }**\nAbility:\n> ${emojifound.description}`
               )
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Small)
-                .setDivider(true)
-            )
-            .addActionRowComponents(
-              new ActionRowBuilder().addComponents(addto)
-            );
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
+            .addActionRowComponents(new ActionRowBuilder().addComponents(addto));
 
-          if (
-            vaultarray.reduce(
-              (acc, curr) => (curr === viewemojiid ? acc + 1 : acc),
-              0
-            ) > 0
-          ) {
+          if (vaultarray.reduce((acc, curr) => (curr === viewemojiid ? acc + 1 : acc), 0) > 0) {
             if (emojifound.rarity >= 0 && emojifound.rarity <= 2) {
               vaultcontainer.addSeparatorComponents(
-                new SeparatorBuilder()
-                  .setSpacing(SeparatorSpacingSize.Small)
-                  .setDivider(true)
+                new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
               );
               vaultcontainer.addActionRowComponents(devoterow);
             }
@@ -274,18 +204,16 @@ module.exports = {
             components: [vaultcontainer],
             flags: MessageFlags.IsComponentsV2,
           });
-          await dailyrewardremind(interaction);
-          let logs = await getlogs();
+          await dailyRewardRemind(interaction);
+          let logs = await getLogs();
           logs.logs.games.emojisviewed += 1;
-          logs.logs.players[`user${interaction.user.id}`] =
-            logs.logs.players[`user${interaction.user.id}`] ?? {};
+          logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
           logs.logs.players[`user${interaction.user.id}`].emojisviewed =
             logs.logs.players[`user${interaction.user.id}`].emojisviewed ?? 0;
           logs.logs.players[`user${interaction.user.id}`].emojisviewed += 1;
-          logs.logs.emojis[emojifound.id].emojisviewed =
-            logs.logs.emojis[emojifound.id].emojisviewed ?? 0;
+          logs.logs.emojis[emojifound.id].emojisviewed = logs.logs.emojis[emojifound.id].emojisviewed ?? 0;
           logs.logs.emojis[emojifound.id].emojisviewed += 1;
-          await writelogs(logs);
+          await writeLogs(logs);
 
           const collectorFilter = (i) => i.user.id == interaction.user.id;
           let collector = response.createMessageComponentCollector({
@@ -294,26 +222,14 @@ module.exports = {
           });
           try {
             collector.on("collect", async (interaction2) => {
-              numberfound = squadarray.reduce(
-                (a, v) => (v == emojifound.id ? a + 1 : a),
-                0
-              );
-              vaultarray = await getvault(interaction.user.id);
-              let numberowned = vaultarray.reduce(
-                (a, v) => (v == emojifound.id ? a + 1 : a),
-                0
-              );
-              if (
-                interaction2.values &&
-                interaction2.values[0].includes("addto")
-              ) {
+              numberfound = squadarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0);
+              vaultarray = await getDojo(interaction.user.id);
+              let numberowned = vaultarray.reduce((a, v) => (v == emojifound.id ? a + 1 : a), 0);
+              if (interaction2.values && interaction2.values[0].includes("addto")) {
                 if (numberfound < numberowned) {
-                  squadarray = await getsquad(interaction.user.id);
+                  squadarray = await getSquad(interaction.user.id);
                   squadarray[interaction2.values[0][5] - 1] = emojifound.id;
-                  await database.set(
-                    interaction.user.id + "squad",
-                    squadarray.join(",") + ","
-                  );
+                  await database.set(interaction.user.id + "squad", squadarray.join(",") + ",");
                   let squadtext = "";
                   let url =
                     interaction?.channel?.url ||
@@ -321,39 +237,29 @@ module.exports = {
                       ? `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}`
                       : "https://discord.com/channels/@me");
                   for (let i = 7; i > -1; i--) {
-                    squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${
-                      emojis[squadarray[i]].names[0]
-                    } | ${emojis[squadarray[i]].hp} health, ${
-                      emojis[squadarray[i]].dmg
-                    } attack power. ${emojis[squadarray[i]].description}\") `;
+                    squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${emojis[squadarray[i]].names[0]} | ${
+                      emojis[squadarray[i]].hp
+                    } health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `;
                   }
                   await interaction2.reply({
                     flags: "Ephemeral",
                     content: `Your squad has been saved!\n${squadtext}`,
                   });
-                  let logs = await getlogs();
+                  let logs = await getLogs();
                   logs.logs.games.squadsedited += 1;
                   logs.logs.players[`user${interaction.user.id}`] =
                     logs.logs.players[`user${interaction.user.id}`] ?? {};
                   logs.logs.players[`user${interaction.user.id}`].squadedited =
-                    logs.logs.players[`user${interaction.user.id}`]
-                      .squadedited ?? 0;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].squadedited += 1;
-                  await writelogs(logs);
+                    logs.logs.players[`user${interaction.user.id}`].squadedited ?? 0;
+                  logs.logs.players[`user${interaction.user.id}`].squadedited += 1;
+                  await writeLogs(logs);
                 } else {
-                  squadarray = await getsquad(interaction.user.id);
+                  squadarray = await getSquad(interaction.user.id);
                   let swapemoji = squadarray[interaction2.values[0][5] - 1];
-                  let swapindex = squadarray.findIndex(
-                    (x) => x == emojifound.id
-                  );
+                  let swapindex = squadarray.findIndex((x) => x == emojifound.id);
                   squadarray[interaction2.values[0][5] - 1] = emojifound.id;
                   squadarray[swapindex] = swapemoji;
-                  await database.set(
-                    interaction.user.id + "squad",
-                    squadarray.join(",") + ","
-                  );
+                  await database.set(interaction.user.id + "squad", squadarray.join(",") + ",");
                   let squadtext = "";
                   let url =
                     interaction?.channel?.url ||
@@ -361,27 +267,22 @@ module.exports = {
                       ? `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}`
                       : "https://discord.com/channels/@me");
                   for (let i = 7; i > -1; i--) {
-                    squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${
-                      emojis[squadarray[i]].names[0]
-                    } | ${emojis[squadarray[i]].hp} health, ${
-                      emojis[squadarray[i]].dmg
-                    } attack power. ${emojis[squadarray[i]].description}\") `;
+                    squadtext += `[${emojis[squadarray[i]].emoji}](${url} \"${emojis[squadarray[i]].names[0]} | ${
+                      emojis[squadarray[i]].hp
+                    } health, ${emojis[squadarray[i]].dmg} attack power. ${emojis[squadarray[i]].description}\") `;
                   }
                   await interaction2.reply({
                     flags: "Ephemeral",
                     content: `Your squad has been saved!\n${squadtext}`,
                   });
-                  let logs = await getlogs();
+                  let logs = await getLogs();
                   logs.logs.games.squadsedited += 1;
                   logs.logs.players[`user${interaction.user.id}`] =
                     logs.logs.players[`user${interaction.user.id}`] ?? {};
                   logs.logs.players[`user${interaction.user.id}`].squadedited =
-                    logs.logs.players[`user${interaction.user.id}`]
-                      .squadedited ?? 0;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].squadedited += 1;
-                  await writelogs(logs);
+                    logs.logs.players[`user${interaction.user.id}`].squadedited ?? 0;
+                  logs.logs.players[`user${interaction.user.id}`].squadedited += 1;
+                  await writeLogs(logs);
                 }
               } else if (interaction2.customId == "devote") {
                 if (numberfound < numberowned) {
@@ -393,111 +294,66 @@ module.exports = {
                     .setLabel("🛐 How many do you want to devote?")
                     .setPlaceholder(`1 - ${numberowned - numberfound}`)
                     .setStyle(TextInputStyle.Short);
-                  const actionRow = new ActionRowBuilder().addComponents(
-                    buymoreinput
-                  );
+                  const actionRow = new ActionRowBuilder().addComponents(buymoreinput);
                   modal.addComponents(actionRow);
                   await interaction2.showModal(modal);
-                  interaction2
-                    .awaitModalSubmit({ time: 60000 })
-                    .then(async (interaction3) => {
-                      if (numberfound < numberowned) {
-                        const devoteamt = parseInt(
-                          interaction3.fields
-                            .getTextInputValue("devoteamt")
-                            .toLowerCase()
-                        );
-                        if (
-                          devoteamt > numberowned - numberfound ||
-                          devoteamt < 1
-                        ) {
-                          await interaction3.reply({
-                            flags: "Ephemeral",
-                            content: `⚠️ Your input was invalid!`,
-                          });
-                        } else {
-                          let emojidisplay = await devoteemojis(
-                            interaction.user.id,
-                            emojifound.id,
-                            devoteamt
-                          );
-                          let lab = await fetchresearch(interaction.user.id);
-                          await interaction3.reply({
-                            flags: "Ephemeral",
-                            content: `🛐 You devoted ${emojidisplay}to the master of ${
-                              classes[emojifound.class].emoji
-                            } **${classes[emojifound.class].name}!** (+${
-                              devoteamt * (2 * emojifound.rarity + 1)
-                            } devotion point${
-                              devoteamt * (2 * emojifound.rarity + 1) != 1
-                                ? "s"
-                                : ""
-                            })`,
-                          });
-                          if (
-                            Math.floor(lab[emojifound.class] / 40) !=
-                            Math.floor(
-                              (lab[emojifound.class] -
-                                devoteamt * (2 * emojifound.rarity + 1)) /
-                                40
-                            )
-                          ) {
-                            let tempvault = await database.get(
-                              interaction.user.id + "vault"
-                            );
-                            await database.set(
-                              interaction.user.id + "vault",
-                              tempvault +
-                                emojis[classes[emojifound.class].legendary]
-                                  ?.id +
-                                ","
-                            );
-                            await interaction3.followUp({
-                              ephemeral: false,
-                              content: `\`\`\` \`\`\`\n\nYour frequent 🛐 **Devotion** has attracted the attention of ${
-                                emojis[classes[emojifound.class].legendary]
-                                  .emoji
-                              } **${
-                                emojis[classes[emojifound.class].legendary]
-                                  .names[0]
-                              }**, master of the art of ${
-                                classes[emojifound.class].emoji
-                              } **${
-                                classes[emojifound.class].name
-                              }!**\n\n\`\`\` \`\`\``,
-                            });
-                          }
-                          let logs = await getlogs();
-                          logs.logs.games.devotionsmade += 1;
-                          logs.logs.games.emojisdevoted += devoteamt;
-                          logs.logs.players[`user${interaction.user.id}`] =
-                            logs.logs.players[`user${interaction.user.id}`] ??
-                            {};
-                          logs.logs.players[
-                            `user${interaction.user.id}`
-                          ].devotionsmade =
-                            logs.logs.players[`user${interaction.user.id}`]
-                              .devotionsmade ?? 0;
-                          logs.logs.players[
-                            `user${interaction.user.id}`
-                          ].devotionsmade += 1;
-                          logs.logs.players[
-                            `user${interaction.user.id}`
-                          ].emojisdevoted =
-                            logs.logs.players[`user${interaction.user.id}`]
-                              .emojisdevoted ?? 0;
-                          logs.logs.players[
-                            `user${interaction.user.id}`
-                          ].emojisdevoted += devoteamt;
-                          await writelogs(logs);
-                        }
-                      } else {
+                  interaction2.awaitModalSubmit({ time: 60000 }).then(async (interaction3) => {
+                    if (numberfound < numberowned) {
+                      const devoteamt = parseInt(interaction3.fields.getTextInputValue("devoteamt").toLowerCase());
+                      if (devoteamt > numberowned - numberfound || devoteamt < 1) {
                         await interaction3.reply({
                           flags: "Ephemeral",
-                          content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`,
+                          content: `⚠️ Your input was invalid!`,
                         });
+                      } else {
+                        let emojidisplay = await devoteEmojis(interaction.user.id, emojifound.id, devoteamt);
+                        let lab = await getDevotions(interaction.user.id);
+                        await interaction3.reply({
+                          flags: "Ephemeral",
+                          content: `🛐 You devoted ${emojidisplay}to the master of ${
+                            classes[emojifound.class].emoji
+                          } **${classes[emojifound.class].name}!** (+${
+                            devoteamt * (2 * emojifound.rarity + 1)
+                          } devotion point${devoteamt * (2 * emojifound.rarity + 1) != 1 ? "s" : ""})`,
+                        });
+                        if (
+                          Math.floor(lab[emojifound.class] / 40) !=
+                          Math.floor((lab[emojifound.class] - devoteamt * (2 * emojifound.rarity + 1)) / 40)
+                        ) {
+                          let tempvault = await database.get(interaction.user.id + "vault");
+                          await database.set(
+                            interaction.user.id + "vault",
+                            tempvault + emojis[classes[emojifound.class].legendary]?.id + ","
+                          );
+                          await interaction3.followUp({
+                            ephemeral: false,
+                            content: `\`\`\` \`\`\`\n\nYour frequent 🛐 **Devotion** has attracted the attention of ${
+                              emojis[classes[emojifound.class].legendary].emoji
+                            } **${emojis[classes[emojifound.class].legendary].names[0]}**, master of the art of ${
+                              classes[emojifound.class].emoji
+                            } **${classes[emojifound.class].name}!**\n\n\`\`\` \`\`\``,
+                          });
+                        }
+                        let logs = await getLogs();
+                        logs.logs.games.devotionsmade += 1;
+                        logs.logs.games.emojisdevoted += devoteamt;
+                        logs.logs.players[`user${interaction.user.id}`] =
+                          logs.logs.players[`user${interaction.user.id}`] ?? {};
+                        logs.logs.players[`user${interaction.user.id}`].devotionsmade =
+                          logs.logs.players[`user${interaction.user.id}`].devotionsmade ?? 0;
+                        logs.logs.players[`user${interaction.user.id}`].devotionsmade += 1;
+                        logs.logs.players[`user${interaction.user.id}`].emojisdevoted =
+                          logs.logs.players[`user${interaction.user.id}`].emojisdevoted ?? 0;
+                        logs.logs.players[`user${interaction.user.id}`].emojisdevoted += devoteamt;
+                        await writeLogs(logs);
                       }
-                    });
+                    } else {
+                      await interaction3.reply({
+                        flags: "Ephemeral",
+                        content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`,
+                      });
+                    }
+                  });
                 } else {
                   await interaction2.reply({
                     flags: "Ephemeral",
@@ -521,94 +377,57 @@ module.exports = {
             .setCustomId("sortstyle")
             .setPlaceholder("Sort...")
             .setOptions(
-              new StringSelectMenuOptionBuilder()
-                .setLabel("*️⃣ Sort by Rarity")
-                .setValue("0"),
-              new StringSelectMenuOptionBuilder()
-                .setLabel("🛐 Sort by Class")
-                .setValue("1"),
-              new StringSelectMenuOptionBuilder()
-                .setLabel("❤️ Sort by Health")
-                .setValue("2"),
-              new StringSelectMenuOptionBuilder()
-                .setLabel("⚔️ Sort by Attack Power")
-                .setValue("3")
+              new StringSelectMenuOptionBuilder().setLabel("*️⃣ Sort by Rarity").setValue("0"),
+              new StringSelectMenuOptionBuilder().setLabel("🛐 Sort by Class").setValue("1"),
+              new StringSelectMenuOptionBuilder().setLabel("❤️ Sort by Health").setValue("2"),
+              new StringSelectMenuOptionBuilder().setLabel("⚔️ Sort by Attack Power").setValue("3")
             );
           let vaultcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
-              new TextDisplayBuilder().setContent(
-                "Run `/dojo [emoji]` to see details about one emoji."
-              )
+              new TextDisplayBuilder().setContent("Run `/dojo [emoji]` to see details about one emoji.")
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Small)
-                .setDivider(true)
-            )
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
             .addTextDisplayComponents(
-              new TextDisplayBuilder().setContent(
-                await sortDojo(interaction, vaultarray, sortDropdown)
-              )
+              new TextDisplayBuilder().setContent(await sortDojo(interaction, vaultarray, sortDropdown))
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Large)
-                .setDivider(true)
-            )
-            .addActionRowComponents(
-              new ActionRowBuilder().addComponents(sortDropdown)
-            );
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
+            .addActionRowComponents(new ActionRowBuilder().addComponents(sortDropdown));
           const response = await interaction.reply({
             components: [vaultcontainer],
             withResponse: true,
             flags: MessageFlags.IsComponentsV2,
           });
-          await dailyrewardremind(interaction);
-          let logs = await getlogs();
+          await dailyRewardRemind(interaction);
+          let logs = await getLogs();
           logs.logs.games.vaultsviewed += 1;
-          logs.logs.players[`user${interaction.user.id}`] =
-            logs.logs.players[`user${interaction.user.id}`] ?? {};
+          logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
           logs.logs.players[`user${interaction.user.id}`].vaultsviewed =
             logs.logs.players[`user${interaction.user.id}`].vaultsviewed ?? 0;
           logs.logs.players[`user${interaction.user.id}`].vaultsviewed += 1;
-          await writelogs(logs);
+          await writeLogs(logs);
           const collectorFilter = (i) => i.user.id == interaction.user.id;
-          let collector =
-            response.resource.message.createMessageComponentCollector({
-              filter: collectorFilter,
-              time: 120000,
-            });
+          let collector = response.resource.message.createMessageComponentCollector({
+            filter: collectorFilter,
+            time: 120000,
+          });
           try {
             collector.on("collect", async (interaction2) => {
               if (interaction2.customId === "sortstyle") {
-                await database.set(
-                  interaction.user.id + "sortstyle",
-                  parseInt(interaction2.values[0])
-                );
+                await database.set(interaction.user.id + "sortstyle", parseInt(interaction2.values[0]));
                 vaultcontainer = new ContainerBuilder()
                   .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(
-                      "Run `/dojo [emoji]` to see details about one emoji."
-                    )
+                    new TextDisplayBuilder().setContent("Run `/dojo [emoji]` to see details about one emoji.")
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Small)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                   )
                   .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(
-                      await sortDojo(interaction, vaultarray, sortDropdown)
-                    )
+                    new TextDisplayBuilder().setContent(await sortDojo(interaction, vaultarray, sortDropdown))
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Large)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
                   )
-                  .addActionRowComponents(
-                    new ActionRowBuilder().addComponents(sortDropdown)
-                  );
+                  .addActionRowComponents(new ActionRowBuilder().addComponents(sortDropdown));
                 await interaction2.update({
                   components: [vaultcontainer],
                   withResponse: true,
@@ -628,12 +447,7 @@ module.exports = {
 
 async function sortDojo(interaction, vaultarray, sortDropdown) {
   let sortstyle = (await database.get(interaction.user.id + "sortstyle")) ?? 0;
-  sorttypes = [
-    "*️⃣ Sorting by Rarity",
-    "🛐 Sorting by Class",
-    "❤️ Sorting by Health",
-    "⚔️ Sorting by Attack Power",
-  ];
+  sorttypes = ["*️⃣ Sorting by Rarity", "🛐 Sorting by Class", "❤️ Sorting by Health", "⚔️ Sorting by Attack Power"];
   sortDropdown.setPlaceholder(sorttypes[sortstyle]);
   switch (sortstyle) {
     case 1:
@@ -643,16 +457,9 @@ async function sortDojo(interaction, vaultarray, sortDropdown) {
       let classemojisgoneover = [];
       for (let i = 0; i < vaultarray.length; i++) {
         let classid = emojis[vaultarray[i]].class;
-        if (
-          classid !== undefined &&
-          classid !== null &&
-          !classemojisgoneover.includes(vaultarray[i])
-        ) {
+        if (classid !== undefined && classid !== null && !classemojisgoneover.includes(vaultarray[i])) {
           classemojisgoneover.push(vaultarray[i]);
-          let numberIHave = vaultarray.reduce(
-            (acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc),
-            0
-          );
+          let numberIHave = vaultarray.reduce((acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc), 0);
           if (classtext[classid] != "") {
             classtext[classid] += ", ";
           }
@@ -677,9 +484,7 @@ async function sortDojo(interaction, vaultarray, sortDropdown) {
       let hpGroups = "";
       for (let h of uniqueHPs) {
         if (h === null || h === undefined) continue;
-        let groupEmojis = vaultarray.filter(
-          (eid) => (emojis[eid]?.hp ?? 0) === h
-        );
+        let groupEmojis = vaultarray.filter((eid) => (emojis[eid]?.hp ?? 0) === h);
         if (groupEmojis.length > 0) {
           hpGroups += `### ❤️ ${h} Health\n`;
           let goneOver = [];
@@ -704,9 +509,7 @@ async function sortDojo(interaction, vaultarray, sortDropdown) {
       let dmgGroups = "";
       for (let d of uniqueDMGs) {
         if (d === null || d === undefined) continue;
-        let groupEmojis = vaultarray.filter(
-          (eid) => (emojis[eid]?.dmg ?? 0) === d
-        );
+        let groupEmojis = vaultarray.filter((eid) => (emojis[eid]?.dmg ?? 0) === d);
         if (groupEmojis.length > 0) {
           dmgGroups += `### <:attackpower:1327657903447998477> ${d} Attack Power\n`;
           let goneOver = [];
@@ -733,10 +536,7 @@ async function sortDojo(interaction, vaultarray, sortDropdown) {
         let rarity = emojis[vaultarray[i]].rarity;
         if (rarity >= 0 && !rarityemojisgoneover.includes(vaultarray[i])) {
           rarityemojisgoneover.push(vaultarray[i]);
-          let numberihave = vaultarray.reduce(
-            (acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc),
-            0
-          );
+          let numberihave = vaultarray.reduce((acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc), 0);
           if (raritytext[rarity] != "") {
             raritytext[rarity] += `, `;
           }

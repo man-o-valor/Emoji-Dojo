@@ -1,36 +1,18 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const { emojis } = require("../../data.js");
-const {
-  database,
-  trysetupuser,
-  getlogs,
-  writelogs,
-  coinschange,
-} = require("../../functions.js");
+const { database, setupUser, getLogs, writeLogs, changeCoins } = require("../../functions.js");
 
 module.exports = {
-  data: new SlashCommandBuilder()
-    .setName("daily")
-    .setDescription("Collect your Daily reward!"),
+  data: new SlashCommandBuilder().setName("daily").setDescription("Collect your Daily reward!"),
   async execute(interaction) {
-    await trysetupuser(interaction.user);
+    await setupUser(interaction.user);
 
-    const dailytime = parseInt(
-      (await database.get(interaction.user.id + "dailytime")) ?? "0"
-    );
-    let dailystreak = parseInt(
-      (await database.get(interaction.user.id + "dailystreak")) ?? "1"
-    );
+    const dailytime = parseInt((await database.get(interaction.user.id + "dailytime")) ?? "0");
+    let dailystreak = parseInt((await database.get(interaction.user.id + "dailystreak")) ?? "1");
     const comeBackLater = [
-      `Your daily reward is still cooking! Come back <t:${
-        dailytime + 86400
-      }:R>.`,
-      `Your daily reward isn't ready to claim yet! Come back <t:${
-        dailytime + 86400
-      }:R>.`,
-      `Your daily reward needs a little more time. Come back <t:${
-        dailytime + 86400
-      }:R>.`,
+      `Your daily reward is still cooking! Come back <t:${dailytime + 86400}:R>.`,
+      `Your daily reward isn't ready to claim yet! Come back <t:${dailytime + 86400}:R>.`,
+      `Your daily reward needs a little more time. Come back <t:${dailytime + 86400}:R>.`,
     ];
 
     const dailyCollect = [
@@ -40,40 +22,27 @@ module.exports = {
       `You uncovered your daily reward and were met with`,
     ];
 
-    let logs = await getlogs();
+    let logs = await getLogs();
 
     if (Math.floor(Date.now() / 1000) - dailytime > 86400) {
-      await database.set(
-        interaction.user.id + "dailytime",
-        Math.floor(Date.now() / 1000)
-      );
+      await database.set(interaction.user.id + "dailytime", Math.floor(Date.now() / 1000));
 
       let rewardName;
       if (Math.random() > 0.8) {
         let emojilist = emojis.filter((e) => e.rarity == 0);
-        const emojitoadd =
-          emojilist[Math.floor(Math.random() * emojilist.length)];
+        const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
         const rawvault = await database.get(interaction.user.id + "vault");
-        await database.set(
-          interaction.user.id + "vault",
-          rawvault + emojitoadd.id + ","
-        );
+        await database.set(interaction.user.id + "vault", rawvault + emojitoadd.id + ",");
         rewardName = `${emojitoadd.emoji} ${emojitoadd.names[0]} Emoji`;
       } else {
         if (Math.random() > 0.6) {
-          let amt =
-            40 + 10 * Math.min(dailystreak, 5) + Math.floor(Math.random() * 20);
-          const coindoubler =
-            (await database.get(interaction.user.id + "coindoubler")) ?? 0;
-          await database.set(
-            interaction.user.id + "coindoubler",
-            coindoubler + amt
-          );
+          let amt = 40 + 10 * Math.min(dailystreak, 5) + Math.floor(Math.random() * 20);
+          const coindoubler = (await database.get(interaction.user.id + "coindoubler")) ?? 0;
+          await database.set(interaction.user.id + "coindoubler", coindoubler + amt);
           rewardName = `💫 x${amt} Coin Doubler`;
         } else {
-          let amt =
-            20 + 10 * Math.min(dailystreak, 5) + Math.floor(Math.random() * 30);
-          await coinschange(interaction.user.id, amt, false);
+          let amt = 20 + 10 * Math.min(dailystreak, 5) + Math.floor(Math.random() * 30);
+          await changeCoins(interaction.user.id, amt, false);
           rewardName = `🪙 ${amt} Coins`;
         }
       }
@@ -90,35 +59,30 @@ module.exports = {
           `!**${
             dailystreak > 0
               ? ` *(❤️‍🔥 ${dailystreak + 1} day streak)*`
-              : Math.floor(Date.now() / 1000) - dailytime > 86400 * 2 &&
-                dailytime != 0
+              : Math.floor(Date.now() / 1000) - dailytime > 86400 * 2 && dailytime != 0
               ? ` *(streak lost)*`
               : ""
           }`,
       });
 
       logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + 1;
-      logs.logs.players[`user${interaction.user.id}`] =
-        logs.logs.players[`user${interaction.user.id}`] ?? {};
+      logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
       logs.logs.players[`user${interaction.user.id}`].dailysclaimed =
         logs.logs.players[`user${interaction.user.id}`].dailysclaimed ?? 0;
       logs.logs.players[`user${interaction.user.id}`].dailysclaimed += 1;
     } else {
       await interaction.reply({
-        content:
-          "📦 " +
-          comeBackLater[Math.floor(Math.random() * comeBackLater.length)],
+        content: "📦 " + comeBackLater[Math.floor(Math.random() * comeBackLater.length)],
         flags: MessageFlags.Ephemeral,
       });
 
       logs.logs.games.dailysfailed = (logs.logs.games.dailysfailed ?? 0) + 1;
-      logs.logs.players[`user${interaction.user.id}`] =
-        logs.logs.players[`user${interaction.user.id}`] ?? {};
+      logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
       logs.logs.players[`user${interaction.user.id}`].dailysfailed =
         logs.logs.players[`user${interaction.user.id}`].dailysfailed ?? 0;
       logs.logs.players[`user${interaction.user.id}`].dailysfailed += 1;
     }
 
-    await writelogs(logs);
+    await writeLogs(logs);
   },
 };

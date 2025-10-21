@@ -11,13 +11,14 @@ const {
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
-  playturn,
-  getlogs,
-  writelogs,
-  dailyrewardremind,
-  getsquad,
+  playTurn,
+  getLogs,
+  writeLogs,
+  dailyRewardRemind,
+  getSquad,
   database,
-  makesquad,
+  generateBotSquad,
+  BattleEmoji,
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -26,55 +27,43 @@ module.exports = {
     .setName("battlecustom")
     .setDescription("Set up a custom battle between any two Squads")
     .addStringOption((option) =>
-      option
-        .setName("squad1")
-        .setDescription("@me, @[saved squad #], or a sequence of 8 emojis")
-        .setRequired(true)
+      option.setName("squad1").setDescription("@me, @[saved squad #], @random, or a sequence of 8 emojis").setRequired(true)
     )
     .addStringOption((option) =>
       option
         .setName("squad2")
-        .setDescription(
-          "@me, @[saved squad #], @bot, or a sequence of 8 emojis"
-        )
+        .setDescription("@me, @[saved squad #], @random, @bot, or a sequence of 8 emojis")
         .setRequired(true)
     )
     .addNumberOption((option) =>
-      option
-        .setName("speed")
-        .setDescription("The time in seconds between each turn (defaults to 4)")
+      option.setName("speed").setDescription("The time in seconds between each turn (defaults to 4)")
     )
     .addBooleanOption((option) =>
       option
         .setName("reverse-squad2")
-        .setDescription(
-          "Set this to true if you are copying a squad that goes back to front"
-        )
+        .setDescription("Set this to true if you are copying a squad that goes back to front")
     ),
   async execute(interaction) {
-    let battlespeed =
-      parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
+    let battlespeed = parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
     if (isNaN(battlespeed)) battlespeed = 0;
     let squad1input = interaction.options.getString("squad1");
     let squad2input = interaction.options.getString("squad2");
-    let reversesquad2 =
-      interaction.options.getBoolean("reverse-squad2") ?? false;
+    let reversesquad2 = interaction.options.getBoolean("reverse-squad2") ?? false;
     if (battlespeed < 0) {
       battlespeed = 0;
     }
 
-    let logs = await getlogs();
+    let logs = await getLogs();
     logs.logs.games.customopened += 1;
     logs.logs.games.opened += 1;
-    logs.logs.players[`user${interaction.user.id}`] =
-      logs.logs.players[`user${interaction.user.id}`] ?? {};
+    logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
     logs.logs.players[`user${interaction.user.id}`].customopened =
       logs.logs.players[`user${interaction.user.id}`].customopened ?? 0;
     logs.logs.players[`user${interaction.user.id}`].customopened += 1;
     logs.logs.players[`user${interaction.user.id}`].opened =
       logs.logs.players[`user${interaction.user.id}`].opened ?? 0;
     logs.logs.players[`user${interaction.user.id}`].opened += 1;
-    await writelogs(logs);
+    await writeLogs(logs);
     const cook = new ButtonBuilder()
       .setCustomId("battle")
       .setLabel("Battle!")
@@ -83,68 +72,60 @@ module.exports = {
     const row1 = new ActionRowBuilder().addComponents(cook);
 
     let player1squadarray;
-    if (squad1input.includes("@me")) {
-      player1squadarray = await getsquad(interaction.user.id);
+    if (squad1input.includes("@random")) {
+      const pool = emojis.filter((e) => e.rarity > -1).map((e) => e.id);
+      player1squadarray = new Array(8).fill(0).map(() => pool[Math.floor(Math.random() * pool.length)]);
+    } else if (squad1input.includes("@me")) {
+      player1squadarray = await getSquad(interaction.user.id);
     } else if (squad1input.match(/@(\d+)/)) {
-      let squadget =
-        (await database.get(
-          interaction.user.id + "savedsquad" + squad1input.match(/@(\d+)/)[1]
-        )) ?? "";
+      let squadget = (await database.get(interaction.user.id + "savedsquad" + squad1input.match(/@(\d+)/)[1])) ?? "";
+      console.log(squadget)
       if (squadget != "") {
         player1squadarray = squadget.split(",");
+        player1squadarray.pop()
       } else {
         player1squadarray = [undefined];
       }
+      console.log(player1squadarray)
     } else {
       const segmenter1 = new Intl.Segmenter("en", {
         granularity: "grapheme",
       });
       let input1 = squad1input.replace(/\s+/g, "");
       player1squadarray = [...segmenter1.segment(input1)];
-      player1squadarray = player1squadarray
-        .filter((item) => item != "")
-        .map((obj) => obj.segment);
+      player1squadarray = player1squadarray.filter((item) => item != "").map((obj) => obj.segment);
       for (let i = 0; i < 8; i++) {
-        let objectalternative = emojis.find(
-          (x) => x.emoji == player1squadarray[i]
-        );
+        let objectalternative = emojis.find((x) => x.emoji == player1squadarray[i]);
         player1squadarray[i] = objectalternative?.id;
       }
       player1squadarray.reverse();
     }
 
     let player2squadarray;
-    if (squad2input.includes("@me")) {
-      player2squadarray = await getsquad(interaction.user.id);
+    if (squad2input.includes("@random")) {
+      const pool = emojis.filter((e) => e.rarity > -1).map((e) => e.id);
+      player2squadarray = new Array(8).fill(0).map(() => pool[Math.floor(Math.random() * pool.length)]);
+    } else if (squad2input.includes("@me")) {
+      player2squadarray = await getSquad(interaction.user.id);
     } else if (squad2input.match(/@(\d+)/)) {
-      let squadget =
-        (await database.get(
-          interaction.user.id + "savedsquad" + squad2input.match(/@(\d+)/)[1]
-        )) ?? "";
+      let squadget = (await database.get(interaction.user.id + "savedsquad" + squad2input.match(/@(\d+)/)[1])) ?? "";
       if (squadget != "") {
         player2squadarray = squadget.split(",");
+        player2squadarray.pop()
       } else {
         player2squadarray = [undefined];
       }
     } else if (squad2input.includes("@bot")) {
-      player2squadarray = await makesquad(
-        player1squadarray,
-        Math.max(Math.min(logs.logs.games.botwins, 50), 1),
-        false
-      );
+      player2squadarray = await generateBotSquad(player1squadarray, Math.max(Math.min(logs.logs.games.botwins, 50), 1), false);
     } else {
       const segmenter2 = new Intl.Segmenter("en", {
         granularity: "grapheme",
       });
       let input2 = squad2input.replace(/\s+/g, "");
       player2squadarray = [...segmenter2.segment(input2)];
-      player2squadarray = player2squadarray
-        .filter((item) => item != "")
-        .map((obj) => obj.segment);
+      player2squadarray = player2squadarray.filter((item) => item != "").map((obj) => obj.segment);
       for (let i = 0; i < player2squadarray.length; i++) {
-        let objectalternative = emojis.find(
-          (x) => x.emoji == player2squadarray[i]
-        );
+        let objectalternative = emojis.find((x) => x.emoji == player2squadarray[i]);
         player2squadarray[i] = objectalternative?.id;
       }
       if (reversesquad2) {
@@ -155,10 +136,7 @@ module.exports = {
     player1squadarray = player1squadarray.slice(-8);
     player2squadarray = player2squadarray.slice(0, 8);
 
-    if (
-      player1squadarray.includes(undefined) ||
-      player2squadarray.includes(undefined)
-    ) {
+    if (player1squadarray.includes(undefined) || player2squadarray.includes(undefined)) {
       await interaction.reply({
         flags: "Ephemeral",
         content: `One of the Squads you entered doesn't seem valid. Make sure they're both sequences of 8 emojis that exist in Emoji Dojo.`,
@@ -185,42 +163,32 @@ module.exports = {
         logfile: `Custom Squad vs Custom Squad\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`,
       };
       for (let i = 0; i < 8; i++) {
-        gamedata.squads[0].push(lodash.cloneDeep(emojis[player1squadarray[i]]));
+        gamedata.squads[0].push(new BattleEmoji(player1squadarray[i], 1, "Squad 1"));
       }
       for (let i = 0; i < 8; i++) {
-        gamedata.squads[1].push(lodash.cloneDeep(emojis[player2squadarray[i]]));
+        gamedata.squads[1].push(new BattleEmoji(player2squadarray[i], 2, "Squad 2"));
       }
 
       gamedata.playerturn = Math.floor(Math.random() * 2) + 1;
 
       let challengecontainer = new ContainerBuilder()
         .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(
-            `### \`Squad 1\` vs \`Squad 2\` • Speed: ${battlespeed}`
-          )
+          new TextDisplayBuilder().setContent(`### \`Squad 1\` vs \`Squad 2\` • Speed: ${battlespeed}`)
         )
-        .addSeparatorComponents(
-          new SeparatorBuilder()
-            .setSpacing(SeparatorSpacingSize.Large)
-            .setDivider(true)
-        )
+        .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
         .addTextDisplayComponents(
           new TextDisplayBuilder().setContent(
             `\`Squad 1\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`Squad 2\``
           )
         )
-        .addSeparatorComponents(
-          new SeparatorBuilder()
-            .setSpacing(SeparatorSpacingSize.Large)
-            .setDivider(true)
-        )
+        .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
         .addActionRowComponents(row1);
 
       const response = await interaction.editReply({
         components: [challengecontainer],
         flags: MessageFlags.IsComponentsV2,
       });
-      await dailyrewardremind(interaction);
+      await dailyRewardRemind(interaction);
 
       const collectorFilter = (i) => i.user.id === interaction.user.id;
 
@@ -230,7 +198,7 @@ module.exports = {
           time: 300000,
         });
         if (interaction2.customId === "battle") {
-          let logs = await getlogs();
+          let logs = await getLogs();
           logs.logs.games.customstarted += 1;
           logs.logs.games.started += 1;
           logs.logs.players[`user${interaction.user.id}`].customstarted =
@@ -239,25 +207,18 @@ module.exports = {
           logs.logs.players[`user${interaction.user.id}`].started =
             logs.logs.players[`user${interaction.user.id}`].started ?? 0;
           logs.logs.players[`user${interaction.user.id}`].started += 1;
-          await writelogs(logs);
+          await writeLogs(logs);
           function delay(time) {
             return new Promise((resolve) => setTimeout(resolve, time));
           }
           let prevturn = lodash.cloneDeep(gamedata.squads);
           try {
-            while (
-              gamedata.turn < 200 &&
-              gamedata.squads[0][0] != undefined &&
-              gamedata.squads[1][0] != undefined
-            ) {
+            while (gamedata.turn < 200 && gamedata.squads[0][0] != undefined && gamedata.squads[1][0] != undefined && !gamedata.draw) {
               if (gamedata.turn % 5 == 0) {
                 prevturn = lodash.cloneDeep(gamedata.squads);
               }
-              gamedata = playturn(gamedata);
-              if (
-                gamedata.turn % 5 == 0 &&
-                lodash.isEqual(gamedata.squads, prevturn)
-              ) {
+              gamedata = playTurn(gamedata);
+              if (gamedata.turn % 5 == 0 && lodash.isEqual(gamedata.squads, prevturn)) {
                 gamedata.turn = 999;
                 break;
               }
@@ -295,8 +256,7 @@ module.exports = {
                 richtextsnippet += toadd;
                 numberhidden--;
               }
-              richtextsnippet +=
-                gamedata.richtext[gamedata.richtext.length - 1];
+              richtextsnippet += gamedata.richtext[gamedata.richtext.length - 1];
               numberhidden--;
               richtextsnippet += " ⇡";
               let richnumberhidden = "";
@@ -308,22 +268,14 @@ module.exports = {
               const battlecomponents = [
                 new ContainerBuilder()
                   .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(
-                      `\`Squad 1\` vs \`Squad 2\` • Turn ${gamedata.turn}`
-                    )
+                    new TextDisplayBuilder().setContent(`\`Squad 1\` vs \`Squad 2\` • Turn ${gamedata.turn}`)
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Small)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                   )
-                  .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(gamedata.emojitext)
-                  ),
+                  .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                 new ContainerBuilder().addTextDisplayComponents(
-                  new TextDisplayBuilder().setContent(
-                    richnumberhidden + richtextsnippet
-                  )
+                  new TextDisplayBuilder().setContent(richnumberhidden + richtextsnippet)
                 ),
               ];
               if (gamedata.turn > 1) {
@@ -349,51 +301,34 @@ module.exports = {
               .setStyle(ButtonStyle.Primary);
             const row2 = new ActionRowBuilder().addComponents(exportbutton);
             let battleendcontainer;
-            if (
-              gamedata.turn >= 200 ||
-              (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0)
-            ) {
+            if (gamedata.turn >= 200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) || gamedata.draw) {
               battleendcontainer = new ContainerBuilder()
                 .addTextDisplayComponents(
-                  new TextDisplayBuilder().setContent(
-                    `🏳️ The match ended in a draw... ||<@${interaction.user.id}>||`
-                  )
+                  new TextDisplayBuilder().setContent(`🏳️ The match ended in a draw... ||<@${interaction.user.id}>||`)
                 )
-                .addSeparatorComponents(
-                  new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-                    .setDivider(true)
-                )
+                .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
                 .addActionRowComponents(row2);
-              let logs = await getlogs();
+              let logs = await getLogs();
               logs.logs.games.customdraws += 1;
-              await writelogs(logs);
+              await writeLogs(logs);
             } else {
               if (gamedata.squads[1].length == 0) {
                 battleendcontainer = new ContainerBuilder()
                   .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(
-                      `\`Squad 1\` is the winner! ||<@${interaction.user.id}>||`
-                    )
+                    new TextDisplayBuilder().setContent(`\`Squad 1\` is the winner! ||<@${interaction.user.id}>||`)
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Small)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                   )
                   .addActionRowComponents(row2);
               }
               if (gamedata.squads[0].length == 0) {
                 battleendcontainer = new ContainerBuilder()
                   .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(
-                      `\`Squad 2\` is the winner! ||<@${interaction.user.id}>||`
-                    )
+                    new TextDisplayBuilder().setContent(`\`Squad 2\` is the winner! ||<@${interaction.user.id}>||`)
                   )
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Small)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                   )
                   .addActionRowComponents(row2);
               }
@@ -416,17 +351,12 @@ module.exports = {
                     },
                   ],
                 });
-                let logs = await getlogs();
+                let logs = await getLogs();
                 logs.logs.games.customlogsrequested += 1;
-                logs.logs.players[
-                  `user${interaction3.user.id}`
-                ].customlogsrequested =
-                  logs.logs.players[`user${interaction3.user.id}`]
-                    .customlogsrequested ?? 0;
-                logs.logs.players[
-                  `user${interaction3.user.id}`
-                ].customlogsrequested += 1;
-                await writelogs(logs);
+                logs.logs.players[`user${interaction3.user.id}`].customlogsrequested =
+                  logs.logs.players[`user${interaction3.user.id}`].customlogsrequested ?? 0;
+                logs.logs.players[`user${interaction3.user.id}`].customlogsrequested += 1;
+                await writeLogs(logs);
               } catch (e) {
                 exportbutton.setDisabled(true);
                 interaction3.editReply({ components: [row2] });
@@ -442,19 +372,11 @@ module.exports = {
                     `<@${interaction.user.id}> vs \`@DojoBot\` • Turn ${gamedata.turn}`
                   )
                 )
-                .addSeparatorComponents(
-                  new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-                    .setDivider(true)
-                )
-                .addTextDisplayComponents(
-                  new TextDisplayBuilder().setContent(gamedata.emojitext)
-                ),
+                .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
+                .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
               new ContainerBuilder().addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(
-                  "🤒 An error has occurred and the Battle cannot continue.```" +
-                    e +
-                    "```"
+                  "🤒 An error has occurred and the Battle cannot continue.```" + e + "```"
                 )
               ),
             ];
@@ -476,15 +398,9 @@ module.exports = {
         console.error(e);
         challengecontainer = new ContainerBuilder()
           .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              `### \`Squad 1\` vs \`Squad 2\` • Speed: ${battlespeed}`
-            )
+            new TextDisplayBuilder().setContent(`### \`Squad 1\` vs \`Squad 2\` • Speed: ${battlespeed}`)
           )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Large)
-              .setDivider(true)
-          )
+          .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
           .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
               `\`Squad 1\` ${player1squadtext}  \`🆚\`  ${player2squadtext} \`Squad 2\``

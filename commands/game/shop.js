@@ -15,14 +15,7 @@ const {
   MessageFlags,
 } = require("discord.js");
 const { emojis, classes } = require("../../data.js");
-const {
-  database,
-  coinschange,
-  trysetupuser,
-  getlogs,
-  writelogs,
-  dailyrewardremind,
-} = require("../../functions.js");
+const { database, changeCoins, setupUser, getLogs, writeLogs, dailyRewardRemind } = require("../../functions.js");
 
 const dailyPack_prices = {
   base: 0,
@@ -36,29 +29,21 @@ const dailyPack_prices = {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("shop")
-    .setDescription(
-      "Visit the Emoji Shop, where you can buy emojis with your Coins"
-    ),
+    .setDescription("Visit the Emoji Shop, where you can buy emojis with your Coins"),
   async execute(interaction) {
-    if (await trysetupuser(interaction.user)) {
+    if (await setupUser(interaction.user)) {
       await interaction.reply({
         flags: "Ephemeral",
         content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
       });
     } else {
-      const coincount = parseInt(
-        (await database.get(interaction.user.id + "coins")) ?? "100"
-      );
+      const coincount = parseInt((await database.get(interaction.user.id + "coins")) ?? "100");
 
       let shoprestock = (await database.get("shoprestock")) ?? "0";
 
       if (parseInt(shoprestock) < Date.now() / 1000) {
         let now = new Date();
-        let startOfDay = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate()
-        );
+        let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         let noonToday = startOfDay.getTime() / 1000 + 43200;
         let timestamp = startOfDay / 1000 + 43200;
         if (Date.now() / 1000 < noonToday) {
@@ -87,17 +72,13 @@ module.exports = {
         let dailyPack_isRare = Math.random() <= 0.35; // 35% for rare
         let dailyPack_isBig = Math.random() <= 0.35; // 35% for big
         let dailyPack_hasSpecial = Math.random() <= 0.25; // 25% to have special
-        let dailyPack_price =
-          dailyPack_prices.base +
-          (dailyPack_hasSpecial ? dailyPack_prices.special : 0);
+        let dailyPack_price = dailyPack_prices.base + (dailyPack_hasSpecial ? dailyPack_prices.special : 0);
         dailyPack_price +=
-          Math.round((Math.random() * 2 - 1) * dailyPack_prices.variance) *
-          dailyPack_prices.variance_increment; // price variance
+          Math.round((Math.random() * 2 - 1) * dailyPack_prices.variance) * dailyPack_prices.variance_increment; // price variance
         if (dailyPack_isRare) {
           dailyPack_price += dailyPack_prices.rare * (dailyPack_isBig ? 3 : 2);
         } else {
-          dailyPack_price +=
-            dailyPack_prices.common * (dailyPack_isBig ? 4 : 3);
+          dailyPack_price += dailyPack_prices.common * (dailyPack_isBig ? 4 : 3);
         }
         const packstring =
           dailyPack_class +
@@ -123,8 +104,7 @@ module.exports = {
       dailyemojis[2] = parseInt(dailyemojis[2]);
 
       // Fetch daily pack info
-      let dailypack =
-        (await database.get("dailypack")) ?? "0,false,false,false,9999,";
+      let dailypack = (await database.get("dailypack")) ?? "0,false,false,false,9999,";
       let dailyPack_info = dailypack.split(",");
       dailyPack_info.pop();
       let dailyPack_class = parseInt(dailyPack_info[0]);
@@ -134,11 +114,9 @@ module.exports = {
       let dailyPack_price = parseInt(dailyPack_info[4]);
 
       // Determine daily pack name
-      let dailyPack_name = `${dailyPack_isBig ? "Large " : ""}${
-        dailyPack_isRare ? "Rare " : "Common "
-      }${dailyPack_hasSpecial ? "Special " : ""}${
-        classes[dailyPack_class].name
-      } Pack`;
+      let dailyPack_name = `${dailyPack_isBig ? "Large " : ""}${dailyPack_isRare ? "Rare " : "Common "}${
+        dailyPack_hasSpecial ? "Special " : ""
+      }${classes[dailyPack_class].name} Pack`;
 
       // Daily pack description
       let dailyPack_description = `Contains:\n>>> ${classes[dailyPack_class].emoji}: `;
@@ -185,9 +163,7 @@ module.exports = {
           quotes.push("Swiftly defeat your enemies with my Damaging Pack!");
           break;
         case 2: // Defense
-          quotes.push(
-            "Protect your Squad from your enemies with my Defense Pack!"
-          );
+          quotes.push("Protect your Squad from your enemies with my Defense Pack!");
           break;
         case 3: // Summoning
           quotes.push("Overwhelm your enemies with my Summoning Pack!");
@@ -244,8 +220,7 @@ module.exports = {
           type: "emoji",
           id: 0,
           cost: 75,
-          description:
-            "One random common emoji, ready to add to your Squad and use!",
+          description: "One random common emoji, ready to add to your Squad and use!",
         },
         {
           label: `Random Rare Emoji`,
@@ -253,8 +228,7 @@ module.exports = {
           type: "emoji",
           id: 1,
           cost: 150,
-          description:
-            "One random rare emoji, ready to add to your Squad and use!",
+          description: "One random rare emoji, ready to add to your Squad and use!",
         },
         {
           label: `Random Special Emoji`,
@@ -262,8 +236,7 @@ module.exports = {
           type: "emoji",
           id: 2,
           cost: 450,
-          description:
-            "One random special emoji, ready to add to your Squad and use!",
+          description: "One random special emoji, ready to add to your Squad and use!",
         },
         {
           label: dailyPack_name,
@@ -319,98 +292,47 @@ module.exports = {
           .setPlaceholder("Select an item")
           .setOptions(
             options.map(({ label, description, value }) =>
-              new StringSelectMenuOptionBuilder()
-                .setLabel(label)
-                .setDescription(description)
-                .setValue(value)
+              new StringSelectMenuOptionBuilder().setLabel(label).setDescription(description).setValue(value)
             )
           )
       );
 
       let shopcomponents = [
         new ContainerBuilder()
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent(`## The Shop\nYou have ${coincount} 🪙`))
+          .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
           .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              `## The Shop\nYou have ${coincount} 🪙`
-            )
-          )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Small)
-              .setDivider(true)
-          )
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              `💁 *${quote}*\n-# Daily offers reroll <t:${shoprestock}:R>`
-            )
+            new TextDisplayBuilder().setContent(`💁 *${quote}*\n-# Daily offers reroll <t:${shoprestock}:R>`)
           ),
         new ContainerBuilder()
           .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-              `${emojis[dailyemojis[0]].emoji} **${
-                emojis[dailyemojis[0]].names[0]
-              }** (100 🪙)`
+              `${emojis[dailyemojis[0]].emoji} **${emojis[dailyemojis[0]].names[0]}** (100 🪙)`
             )
           )
           .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-              `${emojis[dailyemojis[1]].emoji} **${
-                emojis[dailyemojis[1]].names[0]
-              }** (200 🪙)`
+              `${emojis[dailyemojis[1]].emoji} **${emojis[dailyemojis[1]].names[0]}** (200 🪙)`
             )
           )
           .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-              `${emojis[dailyemojis[2]].emoji} **${
-                emojis[dailyemojis[2]].names[0]
-              }** (600 🪙)`
+              `${emojis[dailyemojis[2]].emoji} **${emojis[dailyemojis[2]].names[0]}** (600 🪙)`
             )
           )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Large)
-              .setDivider(true)
-          )
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              ":asterisk: **Random Common Emoji** (75 🪙)"
-            )
-          )
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              "✳️ **Random Rare Emoji** (150 🪙)"
-            )
-          )
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              "⚛️ **Random Special Emoji** (450 🪙)"
-            )
-          )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Large)
-              .setDivider(true)
-          )
+          .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent(":asterisk: **Random Common Emoji** (75 🪙)"))
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent("✳️ **Random Rare Emoji** (150 🪙)"))
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent("⚛️ **Random Special Emoji** (450 🪙)"))
+          .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
           .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
               `🎁${classes[dailyPack_class].emoji} **${dailyPack_name}** (${dailyPack_price} 🪙)`
             )
           )
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              "🎁:asterisk: **Common Emoji Pack** (300 🪙)"
-            )
-          )
-          .addTextDisplayComponents(
-            new TextDisplayBuilder().setContent(
-              "🎁✳️ **Rare Emoji Pack** (1000 🪙)"
-            )
-          )
-          .addSeparatorComponents(
-            new SeparatorBuilder()
-              .setSpacing(SeparatorSpacingSize.Large)
-              .setDivider(true)
-          )
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent("🎁:asterisk: **Common Emoji Pack** (300 🪙)"))
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent("🎁✳️ **Rare Emoji Pack** (1000 🪙)"))
+          .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
           .addActionRowComponents(shop),
       ];
 
@@ -418,15 +340,14 @@ module.exports = {
         components: shopcomponents,
         flags: MessageFlags.IsComponentsV2,
       });
-      await dailyrewardremind(interaction);
-      let logs = await getlogs();
+      await dailyRewardRemind(interaction);
+      let logs = await getLogs();
       logs.logs.games.shopsviewed += 1;
-      logs.logs.players[`user${interaction.user.id}`] =
-        logs.logs.players[`user${interaction.user.id}`] ?? {};
+      logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
       logs.logs.players[`user${interaction.user.id}`].shopsviewed =
         logs.logs.players[`user${interaction.user.id}`].shopsviewed ?? 0;
       logs.logs.players[`user${interaction.user.id}`].shopsviewed += 1;
-      await writelogs(logs);
+      await writeLogs(logs);
 
       const collectorFilter = (i) => {
         return interaction.user.id == i.user.id && i.isStringSelectMenu();
@@ -443,9 +364,7 @@ module.exports = {
 
       try {
         dropdownCollector.on("collect", async (interaction) => {
-          const $ = parseInt(
-            (await database.get(interaction.user.id + "coins")) ?? "100"
-          );
+          const $ = parseInt((await database.get(interaction.user.id + "coins")) ?? "100");
           choice = parseInt(interaction.values[0]);
 
           const buy = new ButtonBuilder()
@@ -476,25 +395,15 @@ module.exports = {
 
           const individualcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
-              new TextDisplayBuilder().setContent(
-                `### ${shopdata[choice].emoji} ${shopdata[choice].label}`
-              )
+              new TextDisplayBuilder().setContent(`### ${shopdata[choice].emoji} ${shopdata[choice].label}`)
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Small)
-                .setDivider(true)
-            )
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent(
                 `Costs ${shopdata[choice].cost} 🪙 (you have ${$} 🪙)\n${shopdata[choice].description}`
               )
             )
-            .addSeparatorComponents(
-              new SeparatorBuilder()
-                .setSpacing(SeparatorSpacingSize.Small)
-                .setDivider(false)
-            )
+            .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(false))
             .addActionRowComponents(bothrow);
 
           interaction.update({ components: [individualcontainer] });
@@ -510,375 +419,232 @@ module.exports = {
 
           try {
             buttonCollector.on("collect", async (newinteraction) => {
-              const $ = parseInt(
-                (await database.get(interaction.user.id + "coins")) ?? "100"
-              );
+              const $ = parseInt((await database.get(interaction.user.id + "coins")) ?? "100");
 
               if ($ < shopdata[choice].cost) {
                 newinteraction.reply({
-                  content:
-                    "Oops, you don't have enough 🪙 to buy this anymore!",
+                  content: "Oops, you don't have enough 🪙 to buy this anymore!",
                   flags: "Ephemeral",
                 });
               } else {
                 let emojisbought = [[], [], []];
                 if (newinteraction.customId == "buymore") {
-                  const modal = new ModalBuilder()
-                    .setCustomId("buyModal")
-                    .setTitle(`Buy more!`);
+                  const modal = new ModalBuilder().setCustomId("buyModal").setTitle(`Buy more!`);
                   const buymoreinput = new TextInputBuilder()
                     .setCustomId("buymoreinput")
                     .setLabel("How many do you want to buy?")
-                    .setPlaceholder(
-                      `1 - ${Math.floor($ / shopdata[choice].cost)}`
-                    )
+                    .setPlaceholder(`1 - ${Math.floor($ / shopdata[choice].cost)}`)
                     .setStyle(TextInputStyle.Short);
-                  const actionRow = new ActionRowBuilder().addComponents(
-                    buymoreinput
-                  );
+                  const actionRow = new ActionRowBuilder().addComponents(buymoreinput);
                   modal.addComponents(actionRow);
                   await newinteraction.showModal(modal);
-                  newinteraction
-                    .awaitModalSubmit({ time: 60000 })
-                    .then(async (newerinteraction) => {
-                      let modalquantity = Math.min(
-                        parseInt(
-                          newerinteraction.fields
-                            .getTextInputValue("buymoreinput")
-                            .toLowerCase()
-                        ),
-                        Math.floor($ / shopdata[choice].cost)
-                      );
-                      if (isNaN(modalquantity) || modalquantity < 1) {
-                        modalquantity = 1;
+                  newinteraction.awaitModalSubmit({ time: 60000 }).then(async (newerinteraction) => {
+                    let modalquantity = Math.min(
+                      parseInt(newerinteraction.fields.getTextInputValue("buymoreinput").toLowerCase()),
+                      Math.floor($ / shopdata[choice].cost)
+                    );
+                    if (isNaN(modalquantity) || modalquantity < 1) {
+                      modalquantity = 1;
+                    }
+                    if (shopdata[choice].type == "emoji") {
+                      await changeCoins(interaction.user.id, -1 * modalquantity * shopdata[choice].cost);
+                      buy.setDisabled(true);
+                      buymore.setDisabled(true);
+                      buymore.setLabel(`You bought ${modalquantity}`);
+                      const emojilist = emojis.filter((e) => e.rarity == shopdata[choice]?.id);
+                      let allemojistoadd = "";
+                      for (let i = 0; i < modalquantity; i++) {
+                        const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
+                        allemojistoadd += emojitoadd.id + ",";
+                        emojisbought[shopdata[choice]?.id].push(emojitoadd);
                       }
-                      if (shopdata[choice].type == "emoji") {
-                        await coinschange(
-                          interaction.user.id,
-                          -1 * modalquantity * shopdata[choice].cost
-                        );
-                        buy.setDisabled(true);
-                        buymore.setDisabled(true);
-                        buymore.setLabel(`You bought ${modalquantity}`);
-                        const emojilist = emojis.filter(
-                          (e) => e.rarity == shopdata[choice]?.id
-                        );
-                        let allemojistoadd = "";
-                        for (let i = 0; i < modalquantity; i++) {
-                          const emojitoadd =
-                            emojilist[
-                              Math.floor(Math.random() * emojilist.length)
-                            ];
-                          allemojistoadd += emojitoadd.id + ",";
-                          emojisbought[shopdata[choice]?.id].push(emojitoadd);
+                      let tempvault = await database.get(interaction.user.id + "vault");
+                      await database.set(interaction.user.id + "vault", tempvault + allemojistoadd);
+                      let logs = await getLogs();
+                      logs.logs.games.randomemojisbought += 1;
+                      logs.logs.players[`user${interaction.user.id}`] =
+                        logs.logs.players[`user${interaction.user.id}`] ?? {};
+                      logs.logs.players[`user${interaction.user.id}`].randomemojisbought =
+                        logs.logs.players[`user${interaction.user.id}`].randomemojisbought ?? 0;
+                      logs.logs.players[`user${interaction.user.id}`].randomemojisbought += modalquantity;
+                      await writeLogs(logs);
+                    } else if (shopdata[choice].type == "pack") {
+                      await changeCoins(interaction.user.id, -1 * modalquantity * shopdata[choice].cost);
+                      buy.setDisabled(true);
+                      buymore.setDisabled(true);
+                      buymore.setLabel(`You bought ${modalquantity}`);
+                      let emojistoadd = "";
+                      for (let i = 0; i < modalquantity; i++) {
+                        for (const a of packcontents[shopdata[choice]?.id]) {
+                          const emojilist = emojis.filter((e) => e.rarity == a);
+                          let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
+                          emojistoadd += thisemoji.id + ",";
+                          emojisbought[a].push(thisemoji);
                         }
-                        let tempvault = await database.get(
-                          interaction.user.id + "vault"
-                        );
-                        await database.set(
-                          interaction.user.id + "vault",
-                          tempvault + allemojistoadd
-                        );
-                        let logs = await getlogs();
-                        logs.logs.games.randomemojisbought += 1;
-                        logs.logs.players[`user${interaction.user.id}`] =
-                          logs.logs.players[`user${interaction.user.id}`] ?? {};
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].randomemojisbought =
-                          logs.logs.players[`user${interaction.user.id}`]
-                            .randomemojisbought ?? 0;
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].randomemojisbought += modalquantity;
-                        await writelogs(logs);
-                      } else if (shopdata[choice].type == "pack") {
-                        await coinschange(
-                          interaction.user.id,
-                          -1 * modalquantity * shopdata[choice].cost
-                        );
-                        buy.setDisabled(true);
-                        buymore.setDisabled(true);
-                        buymore.setLabel(`You bought ${modalquantity}`);
-                        let emojistoadd = "";
-                        for (let i = 0; i < modalquantity; i++) {
-                          for (const a of packcontents[shopdata[choice]?.id]) {
-                            const emojilist = emojis.filter(
-                              (e) => e.rarity == a
-                            );
-                            let thisemoji =
-                              emojilist[
-                                Math.floor(Math.random() * emojilist.length)
-                              ];
-                            emojistoadd += thisemoji.id + ",";
-                            emojisbought[a].push(thisemoji);
-                          }
-                        }
-                        let tempvault = await database.get(
-                          interaction.user.id + "vault"
-                        );
-                        await database.set(
-                          interaction.user.id + "vault",
-                          tempvault + emojistoadd
-                        );
-                        let logs = await getlogs();
-                        logs.logs.games.packsbought += 1;
-                        logs.logs.players[`user${interaction.user.id}`] =
-                          logs.logs.players[`user${interaction.user.id}`] ?? {};
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].packsbought =
-                          logs.logs.players[`user${interaction.user.id}`]
-                            .packsbought ?? 0;
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].packsbought += modalquantity;
-                        await writelogs(logs);
-                      } else if (shopdata[choice].type == "premoji") {
-                        await coinschange(
-                          interaction.user.id,
-                          -1 * modalquantity * shopdata[choice].cost
-                        );
-                        buy.setDisabled(true);
-                        buymore.setDisabled(true);
-                        buymore.setLabel(`You bought ${modalquantity}`);
-                        let allemojistoadd = "";
-                        for (let i = 0; i < modalquantity; i++) {
-                          allemojistoadd += shopdata[choice]?.id + ",";
-                          emojisbought[0].push(shopdata[choice]);
-                        }
-                        let tempvault = await database.get(
-                          interaction.user.id + "vault"
-                        );
-                        await database.set(
-                          interaction.user.id + "vault",
-                          tempvault + allemojistoadd
-                        );
-                        let logs = await getlogs();
-                        logs.logs.games.prepickedemojisbought += 1;
-                        logs.logs.players[`user${interaction.user.id}`] =
-                          logs.logs.players[`user${interaction.user.id}`] ?? {};
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].prepickedemojisbought =
-                          logs.logs.players[`user${interaction.user.id}`]
-                            .prepickedemojisbought ?? 0;
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].prepickedemojisbought += modalquantity;
-                        await writelogs(logs);
-                      } else if (shopdata[choice].type == "dailypack") {
-                        await coinschange(
-                          interaction.user.id,
-                          -1 * modalquantity * dailyPack_price
-                        );
-                        buy.setDisabled(true);
-                        buy.setLabel(`You bought this`);
-                        buy.setStyle(1);
-                        buymore.setDisabled(true);
-                        let emojistoadd = "";
+                      }
+                      let tempvault = await database.get(interaction.user.id + "vault");
+                      await database.set(interaction.user.id + "vault", tempvault + emojistoadd);
+                      let logs = await getLogs();
+                      logs.logs.games.packsbought += 1;
+                      logs.logs.players[`user${interaction.user.id}`] =
+                        logs.logs.players[`user${interaction.user.id}`] ?? {};
+                      logs.logs.players[`user${interaction.user.id}`].packsbought =
+                        logs.logs.players[`user${interaction.user.id}`].packsbought ?? 0;
+                      logs.logs.players[`user${interaction.user.id}`].packsbought += modalquantity;
+                      await writeLogs(logs);
+                    } else if (shopdata[choice].type == "premoji") {
+                      await changeCoins(interaction.user.id, -1 * modalquantity * shopdata[choice].cost);
+                      buy.setDisabled(true);
+                      buymore.setDisabled(true);
+                      buymore.setLabel(`You bought ${modalquantity}`);
+                      let allemojistoadd = "";
+                      for (let i = 0; i < modalquantity; i++) {
+                        allemojistoadd += shopdata[choice]?.id + ",";
+                        emojisbought[0].push(shopdata[choice]);
+                      }
+                      let tempvault = await database.get(interaction.user.id + "vault");
+                      await database.set(interaction.user.id + "vault", tempvault + allemojistoadd);
+                      let logs = await getLogs();
+                      logs.logs.games.prepickedemojisbought += 1;
+                      logs.logs.players[`user${interaction.user.id}`] =
+                        logs.logs.players[`user${interaction.user.id}`] ?? {};
+                      logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought =
+                        logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought ?? 0;
+                      logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought += modalquantity;
+                      await writeLogs(logs);
+                    } else if (shopdata[choice].type == "dailypack") {
+                      await changeCoins(interaction.user.id, -1 * modalquantity * dailyPack_price);
+                      buy.setDisabled(true);
+                      buy.setLabel(`You bought this`);
+                      buy.setStyle(1);
+                      buymore.setDisabled(true);
+                      let emojistoadd = "";
 
-                        for (let i = 0; i < modalquantity; i++) {
-                          if (dailyPack_isRare) {
-                            if (dailyPack_isBig) {
-                              for (let i = 0; i < 3; i++) {
-                                const emojilist = emojis.filter(
-                                  (e) =>
-                                    e.rarity == 1 && e.class == dailyPack_class
-                                );
-                                let thisemoji =
-                                  emojilist[
-                                    Math.floor(Math.random() * emojilist.length)
-                                  ];
-                                emojistoadd += thisemoji.id + ",";
-                                emojisbought[1].push(thisemoji);
-                              }
-                            } else {
-                              for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter(
-                                  (e) =>
-                                    e.rarity == 1 && e.class == dailyPack_class
-                                );
-                                let thisemoji =
-                                  emojilist[
-                                    Math.floor(Math.random() * emojilist.length)
-                                  ];
-                                emojistoadd += thisemoji.id + ",";
-                                emojisbought[1].push(thisemoji);
-                              }
+                      for (let i = 0; i < modalquantity; i++) {
+                        if (dailyPack_isRare) {
+                          if (dailyPack_isBig) {
+                            for (let i = 0; i < 3; i++) {
+                              const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                              let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
+                              emojistoadd += thisemoji.id + ",";
+                              emojisbought[1].push(thisemoji);
                             }
                           } else {
-                            if (dailyPack_isBig) {
-                              for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter(
-                                  (e) =>
-                                    e.rarity == 0 && e.class == dailyPack_class
-                                );
-                                let thisemoji =
-                                  emojilist[
-                                    Math.floor(Math.random() * emojilist.length)
-                                  ];
-                                emojistoadd += thisemoji.id + ",";
-                                emojisbought[0].push(thisemoji);
-                              }
-                              for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter(
-                                  (e) => e.rarity == 0
-                                );
-                                let thisemoji =
-                                  emojilist[
-                                    Math.floor(Math.random() * emojilist.length)
-                                  ];
-                                emojistoadd += thisemoji.id + ",";
-                                emojisbought[0].push(thisemoji);
-                              }
-                            } else {
-                              for (let i = 0; i < 2; i++) {
-                                const emojilist = emojis.filter(
-                                  (e) =>
-                                    e.rarity == 0 && e.class == dailyPack_class
-                                );
-                                let thisemoji =
-                                  emojilist[
-                                    Math.floor(Math.random() * emojilist.length)
-                                  ];
-                                emojistoadd += thisemoji.id + ",";
-                                emojisbought[0].push(thisemoji);
-                              }
-                              // for (let i = 0; i < 1; i++) {
-                              const emojilist = emojis.filter(
-                                (e) => e.rarity == 0
-                              );
-                              let thisemoji =
-                                emojilist[
-                                  Math.floor(Math.random() * emojilist.length)
-                                ];
+                            for (let i = 0; i < 2; i++) {
+                              const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                              let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                               emojistoadd += thisemoji.id + ",";
-                              emojisbought[0].push(thisemoji);
-                              // }
+                              emojisbought[1].push(thisemoji);
                             }
                           }
-                          if (dailyPack_hasSpecial) {
-                            const emojilist = emojis.filter(
-                              (e) => e.rarity == 2 && e.class == dailyPack_class
-                            );
-                            let thisemoji =
-                              emojilist[
-                                Math.floor(Math.random() * emojilist.length)
-                              ];
+                        } else {
+                          if (dailyPack_isBig) {
+                            for (let i = 0; i < 2; i++) {
+                              const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                              let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
+                              emojistoadd += thisemoji.id + ",";
+                              emojisbought[0].push(thisemoji);
+                            }
+                            for (let i = 0; i < 2; i++) {
+                              const emojilist = emojis.filter((e) => e.rarity == 0);
+                              let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
+                              emojistoadd += thisemoji.id + ",";
+                              emojisbought[0].push(thisemoji);
+                            }
+                          } else {
+                            for (let i = 0; i < 2; i++) {
+                              const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                              let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
+                              emojistoadd += thisemoji.id + ",";
+                              emojisbought[0].push(thisemoji);
+                            }
+                            // for (let i = 0; i < 1; i++) {
+                            const emojilist = emojis.filter((e) => e.rarity == 0);
+                            let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                             emojistoadd += thisemoji.id + ",";
-                            emojisbought[2].push(thisemoji);
+                            emojisbought[0].push(thisemoji);
+                            // }
                           }
                         }
-
-                        let tempvault = await database.get(
-                          interaction.user.id + "vault"
-                        );
-                        await database.set(
-                          interaction.user.id + "vault",
-                          tempvault + emojistoadd
-                        );
-
-                        let logs = await getlogs();
-                        logs.logs.games.packsbought += 1;
-                        logs.logs.players[`user${interaction.user.id}`] =
-                          logs.logs.players[`user${interaction.user.id}`] ?? {};
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].packsbought =
-                          logs.logs.players[`user${interaction.user.id}`]
-                            .packsbought ?? 0;
-                        logs.logs.players[
-                          `user${interaction.user.id}`
-                        ].packsbought += modalquantity;
-                        await writelogs(logs);
-                      }
-
-                      let emojiString = "";
-                      if (emojisbought[0][0]) {
-                        for (const e of emojisbought[0]) {
-                          emojiString += e.emoji + " ";
-                        }
-                        emojiString += "\n";
-                      }
-                      if (emojisbought[1][0]) {
-                        for (const e of emojisbought[1]) {
-                          emojiString += e.emoji + " ";
-                        }
-                        emojiString += "\n";
-                      }
-                      if (emojisbought[2][0]) {
-                        for (const e of emojisbought[2]) {
-                          emojiString += e.emoji + " ";
+                        if (dailyPack_hasSpecial) {
+                          const emojilist = emojis.filter((e) => e.rarity == 2 && e.class == dailyPack_class);
+                          let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
+                          emojistoadd += thisemoji.id + ",";
+                          emojisbought[2].push(thisemoji);
                         }
                       }
-                      newerinteraction.reply({
-                        components: [
-                          new ContainerBuilder()
-                            .addTextDisplayComponents(
-                              new TextDisplayBuilder().setContent(
-                                `### 🧾 <@${interaction.user.id}> bought:`
-                              )
-                            )
-                            .addSeparatorComponents(
-                              new SeparatorBuilder()
-                                .setSpacing(SeparatorSpacingSize.Small)
-                                .setDivider(true)
-                            )
-                            .addTextDisplayComponents(
-                              new TextDisplayBuilder().setContent(
-                                `>>> ${emojiString}`
-                              )
-                            ),
-                        ],
-                        flags: MessageFlags.IsComponentsV2,
-                      });
-                      interaction.editReply({
-                        components: [individualcontainer],
-                      });
+
+                      let tempvault = await database.get(interaction.user.id + "vault");
+                      await database.set(interaction.user.id + "vault", tempvault + emojistoadd);
+
+                      let logs = await getLogs();
+                      logs.logs.games.packsbought += 1;
+                      logs.logs.players[`user${interaction.user.id}`] =
+                        logs.logs.players[`user${interaction.user.id}`] ?? {};
+                      logs.logs.players[`user${interaction.user.id}`].packsbought =
+                        logs.logs.players[`user${interaction.user.id}`].packsbought ?? 0;
+                      logs.logs.players[`user${interaction.user.id}`].packsbought += modalquantity;
+                      await writeLogs(logs);
+                    }
+
+                    let emojiString = "";
+                    if (emojisbought[0][0]) {
+                      for (const e of emojisbought[0]) {
+                        emojiString += e.emoji + " ";
+                      }
+                      emojiString += "\n";
+                    }
+                    if (emojisbought[1][0]) {
+                      for (const e of emojisbought[1]) {
+                        emojiString += e.emoji + " ";
+                      }
+                      emojiString += "\n";
+                    }
+                    if (emojisbought[2][0]) {
+                      for (const e of emojisbought[2]) {
+                        emojiString += e.emoji + " ";
+                      }
+                    }
+                    newerinteraction.reply({
+                      components: [
+                        new ContainerBuilder()
+                          .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(`### 🧾 <@${interaction.user.id}> bought:`)
+                          )
+                          .addSeparatorComponents(
+                            new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
+                          )
+                          .addTextDisplayComponents(new TextDisplayBuilder().setContent(`>>> ${emojiString}`)),
+                      ],
+                      flags: MessageFlags.IsComponentsV2,
                     });
+                    interaction.editReply({
+                      components: [individualcontainer],
+                    });
+                  });
                 } else if (shopdata[choice].type == "emoji") {
                   // BUY ONE ################################
-                  await coinschange(
-                    interaction.user.id,
-                    -1 * shopdata[choice].cost
-                  );
+                  await changeCoins(interaction.user.id, -1 * shopdata[choice].cost);
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
                   buymore.setDisabled(true);
-                  const emojilist = emojis.filter(
-                    (e) => e.rarity == shopdata[choice]?.id
-                  );
-                  const emojitoadd =
-                    emojilist[Math.floor(Math.random() * emojilist.length)];
+                  const emojilist = emojis.filter((e) => e.rarity == shopdata[choice]?.id);
+                  const emojitoadd = emojilist[Math.floor(Math.random() * emojilist.length)];
                   emojisbought[shopdata[choice]?.id].push(emojitoadd);
 
-                  let tempvault = await database.get(
-                    interaction.user.id + "vault"
-                  );
-                  await database.set(
-                    interaction.user.id + "vault",
-                    tempvault + emojitoadd.id + ","
-                  );
-                  let logs = await getlogs();
+                  let tempvault = await database.get(interaction.user.id + "vault");
+                  await database.set(interaction.user.id + "vault", tempvault + emojitoadd.id + ",");
+                  let logs = await getLogs();
                   logs.logs.games.randomemojisbought += 1;
                   logs.logs.players[`user${interaction.user.id}`] =
                     logs.logs.players[`user${interaction.user.id}`] ?? {};
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].randomemojisbought =
-                    logs.logs.players[`user${interaction.user.id}`]
-                      .randomemojisbought ?? 0;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].randomemojisbought += 1;
-                  await writelogs(logs);
+                  logs.logs.players[`user${interaction.user.id}`].randomemojisbought =
+                    logs.logs.players[`user${interaction.user.id}`].randomemojisbought ?? 0;
+                  logs.logs.players[`user${interaction.user.id}`].randomemojisbought += 1;
+                  await writeLogs(logs);
                 } else if (shopdata[choice].type == "pack") {
-                  await coinschange(
-                    interaction.user.id,
-                    -1 * shopdata[choice].cost
-                  );
+                  await changeCoins(interaction.user.id, -1 * shopdata[choice].cost);
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
@@ -886,62 +652,40 @@ module.exports = {
                   let emojistoadd = "";
                   for (const a of packcontents[shopdata[choice]?.id]) {
                     const emojilist = emojis.filter((e) => e.rarity == a);
-                    let thisemoji =
-                      emojilist[Math.floor(Math.random() * emojilist.length)];
+                    let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                     emojistoadd += thisemoji.id + ",";
                     emojisbought[a].push(thisemoji);
                   }
-                  let tempvault = await database.get(
-                    interaction.user.id + "vault"
-                  );
-                  await database.set(
-                    interaction.user.id + "vault",
-                    tempvault + emojistoadd
-                  );
-                  let logs = await getlogs();
+                  let tempvault = await database.get(interaction.user.id + "vault");
+                  await database.set(interaction.user.id + "vault", tempvault + emojistoadd);
+                  let logs = await getLogs();
                   logs.logs.games.packsbought += 1;
                   logs.logs.players[`user${interaction.user.id}`] =
                     logs.logs.players[`user${interaction.user.id}`] ?? {};
                   logs.logs.players[`user${interaction.user.id}`].packsbought =
-                    logs.logs.players[`user${interaction.user.id}`]
-                      .packsbought ?? 0;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].packsbought += 1;
-                  await writelogs(logs);
+                    logs.logs.players[`user${interaction.user.id}`].packsbought ?? 0;
+                  logs.logs.players[`user${interaction.user.id}`].packsbought += 1;
+                  await writeLogs(logs);
                 } else if (shopdata[choice].type == "premoji") {
-                  await coinschange(
-                    interaction.user.id,
-                    -1 * shopdata[choice].cost
-                  );
+                  await changeCoins(interaction.user.id, -1 * shopdata[choice].cost);
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
                   buymore.setDisabled(true);
                   let allemojistoadd = shopdata[choice]?.id + ",";
-                  let tempvault = await database.get(
-                    interaction.user.id + "vault"
-                  );
+                  let tempvault = await database.get(interaction.user.id + "vault");
                   emojisbought[choice].push(shopdata[choice]);
-                  await database.set(
-                    interaction.user.id + "vault",
-                    tempvault + allemojistoadd
-                  );
-                  let logs = await getlogs();
+                  await database.set(interaction.user.id + "vault", tempvault + allemojistoadd);
+                  let logs = await getLogs();
                   logs.logs.games.prepickedemojisbought += 1;
                   logs.logs.players[`user${interaction.user.id}`] =
                     logs.logs.players[`user${interaction.user.id}`] ?? {};
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].prepickedemojisbought =
-                    logs.logs.players[`user${interaction.user.id}`]
-                      .prepickedemojisbought ?? 0;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].prepickedemojisbought += 1;
-                  await writelogs(logs);
+                  logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought =
+                    logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought ?? 0;
+                  logs.logs.players[`user${interaction.user.id}`].prepickedemojisbought += 1;
+                  await writeLogs(logs);
                 } else if (shopdata[choice].type == "dailypack") {
-                  await coinschange(interaction.user.id, -1 * dailyPack_price);
+                  await changeCoins(interaction.user.id, -1 * dailyPack_price);
                   buy.setDisabled(true);
                   buy.setLabel(`You bought this`);
                   buy.setStyle(1);
@@ -951,25 +695,15 @@ module.exports = {
                   if (dailyPack_isRare) {
                     if (dailyPack_isBig) {
                       for (let i = 0; i < 3; i++) {
-                        const emojilist = emojis.filter(
-                          (e) => e.rarity == 1 && e.class == dailyPack_class
-                        );
-                        let thisemoji =
-                          emojilist[
-                            Math.floor(Math.random() * emojilist.length)
-                          ];
+                        const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                        let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[1].push(thisemoji);
                       }
                     } else {
                       for (let i = 0; i < 2; i++) {
-                        const emojilist = emojis.filter(
-                          (e) => e.rarity == 1 && e.class == dailyPack_class
-                        );
-                        let thisemoji =
-                          emojilist[
-                            Math.floor(Math.random() * emojilist.length)
-                          ];
+                        const emojilist = emojis.filter((e) => e.rarity == 1 && e.class == dailyPack_class);
+                        let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[1].push(thisemoji);
                       }
@@ -977,75 +711,50 @@ module.exports = {
                   } else {
                     if (dailyPack_isBig) {
                       for (let i = 0; i < 2; i++) {
-                        const emojilist = emojis.filter(
-                          (e) => e.rarity == 0 && e.class == dailyPack_class
-                        );
-                        let thisemoji =
-                          emojilist[
-                            Math.floor(Math.random() * emojilist.length)
-                          ];
+                        const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                        let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[0].push(thisemoji);
                       }
                       for (let i = 0; i < 2; i++) {
                         const emojilist = emojis.filter((e) => e.rarity == 0);
-                        let thisemoji =
-                          emojilist[
-                            Math.floor(Math.random() * emojilist.length)
-                          ];
+                        let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[0].push(thisemoji);
                       }
                     } else {
                       for (let i = 0; i < 2; i++) {
-                        const emojilist = emojis.filter(
-                          (e) => e.rarity == 0 && e.class == dailyPack_class
-                        );
-                        let thisemoji =
-                          emojilist[
-                            Math.floor(Math.random() * emojilist.length)
-                          ];
+                        const emojilist = emojis.filter((e) => e.rarity == 0 && e.class == dailyPack_class);
+                        let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                         emojistoadd += thisemoji.id + ",";
                         emojisbought[0].push(thisemoji);
                       }
                       // for (let i = 0; i < 1; i++) {
                       const emojilist = emojis.filter((e) => e.rarity == 0);
-                      let thisemoji =
-                        emojilist[Math.floor(Math.random() * emojilist.length)];
+                      let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                       emojistoadd += thisemoji.id + ",";
                       emojisbought[0].push(thisemoji);
                       // }
                     }
                   }
                   if (dailyPack_hasSpecial) {
-                    const emojilist = emojis.filter(
-                      (e) => e.rarity == 2 && e.class == dailyPack_class
-                    );
-                    let thisemoji =
-                      emojilist[Math.floor(Math.random() * emojilist.length)];
+                    const emojilist = emojis.filter((e) => e.rarity == 2 && e.class == dailyPack_class);
+                    let thisemoji = emojilist[Math.floor(Math.random() * emojilist.length)];
                     emojistoadd += thisemoji.id + ",";
                     emojisbought[2].push(thisemoji);
                   }
 
-                  let tempvault = await database.get(
-                    interaction.user.id + "vault"
-                  );
-                  await database.set(
-                    interaction.user.id + "vault",
-                    tempvault + emojistoadd
-                  );
+                  let tempvault = await database.get(interaction.user.id + "vault");
+                  await database.set(interaction.user.id + "vault", tempvault + emojistoadd);
 
-                  let logs = await getlogs();
+                  let logs = await getLogs();
                   logs.logs.games.packsbought += 1;
                   logs.logs.players[`user${interaction.user.id}`] =
                     logs.logs.players[`user${interaction.user.id}`] ?? {};
                   logs.logs.players[`user${interaction.user.id}`].packsbought =
-                    logs.logs.players[`user${interaction.user.id}`]
-                      .packsbought ?? 0;
-                  logs.logs.players[
-                    `user${interaction.user.id}`
-                  ].packsbought += 1;
-                  await writelogs(logs);
+                    logs.logs.players[`user${interaction.user.id}`].packsbought ?? 0;
+                  logs.logs.players[`user${interaction.user.id}`].packsbought += 1;
+                  await writeLogs(logs);
                 }
 
                 if (newinteraction.customId != "buymore") {
@@ -1071,20 +780,12 @@ module.exports = {
                     components: [
                       new ContainerBuilder()
                         .addTextDisplayComponents(
-                          new TextDisplayBuilder().setContent(
-                            `### 🧾 <@${interaction.user.id}> bought:`
-                          )
+                          new TextDisplayBuilder().setContent(`### 🧾 <@${interaction.user.id}> bought:`)
                         )
                         .addSeparatorComponents(
-                          new SeparatorBuilder()
-                            .setSpacing(SeparatorSpacingSize.Small)
-                            .setDivider(true)
+                          new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                         )
-                        .addTextDisplayComponents(
-                          new TextDisplayBuilder().setContent(
-                            `>>> ${emojiString}`
-                          )
-                        ),
+                        .addTextDisplayComponents(new TextDisplayBuilder().setContent(`>>> ${emojiString}`)),
                     ],
                     flags: MessageFlags.IsComponentsV2,
                   });

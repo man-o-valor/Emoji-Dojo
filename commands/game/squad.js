@@ -15,14 +15,14 @@ const {
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
-  getsquad,
-  trysetupuser,
-  getlogs,
-  writelogs,
-  dailyrewardremind,
-  getvault,
+  getSquad,
+  setupUser,
+  getLogs,
+  writeLogs,
+  dailyRewardRemind,
+  getDojo,
   database,
-  coinschange,
+  changeCoins,
 } = require("../../functions.js");
 
 module.exports = {
@@ -31,8 +31,8 @@ module.exports = {
     .setDescription("View and edit your Squad of Emojis to battle others with"),
   async execute(interaction) {
     all: {
-      await trysetupuser(interaction.user);
-      let squadarray = await getsquad(interaction.user.id);
+      await setupUser(interaction.user);
+      let squadarray = await getSquad(interaction.user.id);
       let squadtext = "";
       let explanations = "";
       let explainedemojis = [];
@@ -42,14 +42,12 @@ module.exports = {
       for (let i = 0; i < 8; i++) {
         if (explainedemojis.includes(squadarray[i])) continue;
         explainedemojis.push(squadarray[i]);
-        explanations += `${emojis[squadarray[i]].emoji} - (${
-          emojis[squadarray[i]].hp
-        }/${emojis[squadarray[i]].dmg}) ${emojis[squadarray[i]].description}\n`;
+        explanations += `${emojis[squadarray[i]].emoji} - (${emojis[squadarray[i]].hp}/${emojis[squadarray[i]].dmg}) ${
+          emojis[squadarray[i]].description
+        }\n`;
       }
 
-      let cursed = parseInt(
-        (await database.get(interaction.user.id + "curse")) ?? "0"
-      );
+      let cursed = parseInt((await database.get(interaction.user.id + "curse")) ?? "0");
 
       const save = new ButtonBuilder()
         .setCustomId("save")
@@ -73,58 +71,40 @@ module.exports = {
       }*/
       const row1 = new ActionRowBuilder().addComponents(edit, save /*, curse*/);
       let container = new ContainerBuilder()
-        .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent("## " + squadtext)
-        )
-        .addSeparatorComponents(
-          new SeparatorBuilder()
-            .setSpacing(SeparatorSpacingSize.Small)
-            .setDivider(false)
-        )
-        .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(explanations)
-        )
-        .addSeparatorComponents(
-          new SeparatorBuilder()
-            .setSpacing(SeparatorSpacingSize.Large)
-            .setDivider(true)
-        )
+        .addTextDisplayComponents(new TextDisplayBuilder().setContent("## " + squadtext))
+        .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(false))
+        .addTextDisplayComponents(new TextDisplayBuilder().setContent(explanations))
+        .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
         .addActionRowComponents(row1);
-      let logs = await getlogs();
+      let logs = await getLogs();
       logs.logs.games.squadsviewed += 1;
-      logs.logs.players[`user${interaction.user.id}`] =
-        logs.logs.players[`user${interaction.user.id}`] ?? {};
+      logs.logs.players[`user${interaction.user.id}`] = logs.logs.players[`user${interaction.user.id}`] ?? {};
       logs.logs.players[`user${interaction.user.id}`].squadsviewed =
         logs.logs.players[`user${interaction.user.id}`].squadsviewed ?? 0;
       logs.logs.players[`user${interaction.user.id}`].squadsviewed += 1;
-      await writelogs(logs);
+      await writeLogs(logs);
       const response = await interaction.reply({
         components: [container],
         withResponse: true,
         flags: MessageFlags.IsComponentsV2,
       });
-      await dailyrewardremind(interaction);
+      await dailyRewardRemind(interaction);
 
       const collectorFilter = (i) => i.user.id == interaction.user.id;
-      let collector = response.resource.message.createMessageComponentCollector(
-        {
-          filter: collectorFilter,
-          time: 120000,
-        }
-      );
+      let collector = response.resource.message.createMessageComponentCollector({
+        filter: collectorFilter,
+        time: 120000,
+      });
       try {
         collector.on("collect", async (interaction2) => {
           if (interaction2.customId === "import") {
-            let vaultarray = await getvault(interaction.user.id);
+            let vaultarray = await getDojo(interaction.user.id);
             let vaulttext = "";
             let emojisgoneover = [];
             for (let i = 0; i < vaultarray.length; i++) {
               if (!emojisgoneover.includes(vaultarray[i])) {
                 emojisgoneover.push(vaultarray[i]);
-                let numberihave = vaultarray.reduce(
-                  (acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc),
-                  0
-                );
+                let numberihave = vaultarray.reduce((acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc), 0);
                 vaulttext += `${emojis[vaultarray[i]].emoji} `;
                 if (numberihave > 1) {
                   vaulttext += `x${numberihave}, `;
@@ -132,9 +112,7 @@ module.exports = {
               }
             }
 
-            const modal = new ModalBuilder()
-              .setCustomId("squadmodal")
-              .setTitle(`Import a Squad`);
+            const modal = new ModalBuilder().setCustomId("squadmodal").setTitle(`Import a Squad`);
 
             const input = new TextInputBuilder()
               .setCustomId("input")
@@ -147,76 +125,62 @@ module.exports = {
 
             await interaction2.showModal(modal);
 
-            interaction2
-              .awaitModalSubmit({ time: 60000 })
-              .then(async (interaction4) => {
-                vaultarray = await getvault(interaction.user.id);
-                const segmenter = new Intl.Segmenter("en", {
-                  granularity: "grapheme",
+            interaction2.awaitModalSubmit({ time: 60000 }).then(async (interaction4) => {
+              vaultarray = await getDojo(interaction.user.id);
+              const segmenter = new Intl.Segmenter("en", {
+                granularity: "grapheme",
+              });
+              let input = interaction4.fields.getTextInputValue("input").replace(/\s+/g, "");
+              let inputarr = [...segmenter.segment(input)];
+
+              inputarr = inputarr.filter((item) => item != "");
+
+              if (inputarr.length < 8) {
+                await interaction4.reply({
+                  content:
+                    "Your Squad isn't formatted right! It's too short-- it needs 8 emojis in it. (Any extra will be ignored.)",
+                  flags: "Ephemeral",
                 });
-                let input = interaction4.fields
-                  .getTextInputValue("input")
-                  .replace(/\s+/g, "");
-                let inputarr = [...segmenter.segment(input)];
+              } else {
+                let emojiinput = "";
+                let datainput = [];
+                let emojimissing;
+                for (let i = 0; i < 8; i++) {
+                  let objectalternative = emojis.find((x) => x.emoji == inputarr[i].segment);
+                  if (objectalternative != undefined) {
+                    if (vaultarray.find((x) => x == objectalternative.id) != undefined) {
+                      vaultarray.splice(
+                        vaultarray.findIndex((x) => x == objectalternative.id),
+                        1
+                      );
+                      datainput = objectalternative.id + "," + datainput;
+                      emojiinput += `${objectalternative.emoji} `;
+                    } else {
+                      emojimissing = inputarr[i].segment;
 
-                inputarr = inputarr.filter((item) => item != "");
+                      break;
+                    }
+                  } else {
+                    emojimissing = inputarr[i].segment;
+                    break;
+                  }
+                }
 
-                if (inputarr.length < 8) {
+                if (emojimissing) {
                   await interaction4.reply({
-                    content:
-                      "Your Squad isn't formatted right! It's too short-- it needs 8 emojis in it. (Any extra will be ignored.)",
+                    content: `You don't have enough of an emoji listed, or it doesn't exist: ${emojimissing}`,
                     flags: "Ephemeral",
                   });
                 } else {
-                  let emojiinput = "";
-                  let datainput = [];
-                  let emojimissing;
-                  for (let i = 0; i < 8; i++) {
-                    let objectalternative = emojis.find(
-                      (x) => x.emoji == inputarr[i].segment
-                    );
-                    if (objectalternative != undefined) {
-                      if (
-                        vaultarray.find((x) => x == objectalternative.id) !=
-                        undefined
-                      ) {
-                        vaultarray.splice(
-                          vaultarray.findIndex(
-                            (x) => x == objectalternative.id
-                          ),
-                          1
-                        );
-                        datainput = objectalternative.id + "," + datainput;
-                        emojiinput += `${objectalternative.emoji} `;
-                      } else {
-                        emojimissing = inputarr[i].segment;
-
-                        break;
-                      }
-                    } else {
-                      emojimissing = inputarr[i].segment;
-                      break;
-                    }
-                  }
-
-                  if (emojimissing) {
-                    await interaction4.reply({
-                      content: `You don't have enough of an emoji listed, or it doesn't exist: ${emojimissing}`,
-                      flags: "Ephemeral",
-                    });
-                  } else {
-                    // Checks out!
-                    await database.set(
-                      interaction.user.id + "squad",
-                      datainput
-                    );
-                    interaction4.reply({
-                      content: `Your squad has been saved!\n${emojiinput}`,
-                      flags: "Ephemeral",
-                    });
-                  }
+                  // Checks out!
+                  await database.set(interaction.user.id + "squad", datainput);
+                  interaction4.reply({
+                    content: `Your squad has been saved!\n${emojiinput}`,
+                    flags: "Ephemeral",
+                  });
                 }
-              });
+              }
+            });
           } else if (interaction2.customId === "save") {
             let squadtexts = ["", "", "", "", ""];
             let savedsquads = [
@@ -238,10 +202,7 @@ module.exports = {
               }
             }
 
-            let slotsbought = parseInt(
-              (await database.get(interaction.user.id + "squadsavesbought")) ??
-                "0"
-            );
+            let slotsbought = parseInt((await database.get(interaction.user.id + "squadsavesbought")) ?? "0");
 
             const editembed = new EmbedBuilder()
               .setTitle(`Saved Squads 🔖`)
@@ -315,64 +276,34 @@ module.exports = {
             const buyrow = new ActionRowBuilder().addComponents(buy);
 
             container = new ContainerBuilder()
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                  "### Saved Squads 🔖\n## " + squadtexts[0]
-                )
-              )
-              .addSeparatorComponents(
-                new SeparatorBuilder()
-                  .setSpacing(SeparatorSpacingSize.Large)
-                  .setDivider(true)
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(squadtexts[1])
-              )
+              .addTextDisplayComponents(new TextDisplayBuilder().setContent("### Saved Squads 🔖\n## " + squadtexts[0]))
+              .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
+              .addTextDisplayComponents(new TextDisplayBuilder().setContent(squadtexts[1]))
               .addActionRowComponents(row1)
-              .addSeparatorComponents(
-                new SeparatorBuilder()
-                  .setSpacing(SeparatorSpacingSize.Large)
-                  .setDivider(true)
-              )
-              .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(squadtexts[2])
-              )
+              .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
+              .addTextDisplayComponents(new TextDisplayBuilder().setContent(squadtexts[2]))
               .addActionRowComponents(row2);
 
             if (slotsbought > 0) {
               const row3 = new ActionRowBuilder().addComponents(load3, save3);
               container
-                .addSeparatorComponents(
-                  new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Large)
-                    .setDivider(true)
-                )
-                .addTextDisplayComponents(
-                  new TextDisplayBuilder().setContent(squadtexts[3])
-                )
+                .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
+                .addTextDisplayComponents(new TextDisplayBuilder().setContent(squadtexts[3]))
                 .addActionRowComponents(row3);
               if (slotsbought > 1) {
                 const row4 = new ActionRowBuilder().addComponents(load4, save4);
                 container
                   .addSeparatorComponents(
-                    new SeparatorBuilder()
-                      .setSpacing(SeparatorSpacingSize.Large)
-                      .setDivider(true)
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
                   )
-                  .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(squadtexts[4])
-                  )
+                  .addTextDisplayComponents(new TextDisplayBuilder().setContent(squadtexts[4]))
                   .addActionRowComponents(row4);
               }
             }
 
             if (slotsbought < 2) {
               container
-                .addSeparatorComponents(
-                  new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Large)
-                    .setDivider(true)
-                )
+                .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
                 .addActionRowComponents(buyrow);
             }
             const response2 = await interaction2.reply({
@@ -381,22 +312,19 @@ module.exports = {
               flags: MessageFlags.IsComponentsV2,
             });
             const collectorFilter = (i) => i.user.id == interaction.user.id;
-            let collector =
-              response2.resource.message.createMessageComponentCollector({
-                filter: collectorFilter,
-                time: 120000,
-              });
+            let collector = response2.resource.message.createMessageComponentCollector({
+              filter: collectorFilter,
+              time: 120000,
+            });
 
             collector.on("collect", async (interaction3) => {
               try {
                 if (interaction3.customId.includes("save")) {
                   await database.set(
-                    interaction.user.id +
-                      "savedsquad" +
-                      interaction3.customId[4],
+                    interaction.user.id + "savedsquad" + interaction3.customId[4],
                     await database.get(interaction.user.id + "squad")
                   );
-                  let squadarray = await getsquad(interaction.user.id);
+                  let squadarray = await getSquad(interaction.user.id);
                   let squadtext = "";
                   for (let i = 7; i > -1; i--) {
                     squadtext += `${emojis[squadarray[i]].emoji} `;
@@ -406,27 +334,20 @@ module.exports = {
                     flags: MessageFlags.Ephemeral,
                   });
                 } else if (interaction3.customId.includes("load")) {
-                  vaultarray = await getvault(interaction.user.id);
-                  let saveloading = await database.get(
-                    interaction.user.id +
-                      "savedsquad" +
-                      interaction3.customId[4]
-                  );
+                  vaultarray = await getDojo(interaction.user.id);
+                  let saveloading = await database.get(interaction.user.id + "savedsquad" + interaction3.customId[4]);
                   saveloading = saveloading.split(",").slice(0, 8);
                   let emojiinput = "";
                   let datainput = [];
                   let emojimissing = undefined;
                   for (let i = 0; i < 8; i++) {
-                    if (
-                      vaultarray.find((x) => x == saveloading[i]) != undefined
-                    ) {
+                    if (vaultarray.find((x) => x == saveloading[i]) != undefined) {
                       vaultarray.splice(
                         vaultarray.findIndex((x) => x == saveloading[i]),
                         1
                       );
                       datainput = datainput + saveloading[i] + ",";
-                      emojiinput =
-                        `${emojis[saveloading[i]].emoji} ` + emojiinput;
+                      emojiinput = `${emojis[saveloading[i]].emoji} ` + emojiinput;
                     } else {
                       emojimissing = saveloading[i];
                       break;
@@ -438,24 +359,15 @@ module.exports = {
                       flags: "Ephemeral",
                     });
                   } else {
-                    await database.set(
-                      interaction.user.id + "squad",
-                      datainput
-                    );
+                    await database.set(interaction.user.id + "squad", datainput);
                     interaction3.reply({
                       content: `Your squad has been saved!\n${emojiinput}`,
                       flags: "Ephemeral",
                     });
                   }
                 } else if (interaction3.customId == "buy") {
-                  const balance = parseInt(
-                    (await database.get(interaction.user.id + "coins")) ?? "100"
-                  );
-                  let slotsbought = parseInt(
-                    (await database.get(
-                      interaction.user.id + "squadsavesbought"
-                    )) ?? "0"
-                  );
+                  const balance = parseInt((await database.get(interaction.user.id + "coins")) ?? "100");
+                  let slotsbought = parseInt((await database.get(interaction.user.id + "squadsavesbought")) ?? "0");
                   if (balance < 500) {
                     interaction3.reply({
                       content: "You can't afford this!",
@@ -467,15 +379,10 @@ module.exports = {
                       flags: "Ephemeral",
                     });
                   } else {
-                    await coinschange(interaction.user.id, -500);
-                    await database.set(
-                      interaction.user.id + "squadsavesbought",
-                      slotsbought + 1
-                    );
+                    await changeCoins(interaction.user.id, -500);
+                    await database.set(interaction.user.id + "squadsavesbought", slotsbought + 1);
                     interaction3.reply({
-                      content: `Successfully purchased Slot ${
-                        slotsbought + 3
-                      }!`,
+                      content: `Successfully purchased Slot ${slotsbought + 3}!`,
                       flags: "Ephemeral",
                     });
                   }
@@ -495,9 +402,7 @@ module.exports = {
               }
             });
           } else if (interaction2.customId === "curse") {
-            cursed = parseInt(
-              (await database.get(interaction.user.id + "curse")) ?? "0"
-            );
+            cursed = parseInt((await database.get(interaction.user.id + "curse")) ?? "0");
             await database.set(interaction.user.id + "curse", 0 - cursed + 1);
             if (cursed == 0) {
               interaction2.reply({
