@@ -907,6 +907,10 @@ function beforeAttack(gamedata, target, offender, silence) {
     gamedata = battleLine(gamedata, `\n⇮ ${target.playername}'s ${target.emoji} strengthened itself by ${val}!`);
     silence = true;
   }
+  if (offender?.id == 156 && offender.emojibehind(gamedata)) {
+    // cupcake
+    gamedata = offender.alterhp(gamedata, offender.emojibehind(gamedata), 1);
+  }
   return {
     gamedata: gamedata,
     target: target,

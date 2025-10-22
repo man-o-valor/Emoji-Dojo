@@ -2049,7 +2049,7 @@ const emojis = [
     rarity: 0,
     names: ["Cookie", "Chocolate-Chip Cookie"],
     class: 0,
-    description: "When attacked or defeated, heals the Emoji behind this by 1"
+    description: "When attacked or defeated, heals the Emoji behind itself by 1"
   },
   {
     emoji: "🚲",
@@ -2070,6 +2070,16 @@ const emojis = [
     names: ["Game Die", "Die", "Game Dice", "Dice"],
     class: 4,
     description: "After attacking, shuffles the target squad"
+  },
+  {
+    emoji: "🧁",
+    id: 156,
+    hp: 5,
+    dmg: 2,
+    rarity: 0,
+    names: ["Cupcake", "Muffin"],
+    class: 0,
+    description: "After attacking, heals the Emoji behind itself by 1"
   }
 ];
 
