@@ -499,29 +499,26 @@ class BattleEmoji {
     }
 
     for (let i = 0; i < gamedata.squads[this.squad - 1].length; i++) {
-      if (gamedata.squads[this.squad - 1][i].id == 147) {
+      const focusedemoji = gamedata.squads[this.squad - 1][i];
+      if (focusedemoji.id == 147) {
         // kite
-        gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1, "", true);
-        gamedata = gamedata.squads[this.squad - 1][i].alterhp(
-          gamedata,
-          gamedata.squads[this.squad - 1][i],
-          -1,
-          "",
-          true
-        );
+        gamedata = focusedemoji.alterhp(gamedata, this, 1, "", true);
+        gamedata = focusedemoji.alterhp(gamedata, focusedemoji, -1, "", true);
         gamedata = battleLine(
           gamedata,
-          `\n♡ ${this.playername}'s ${gamedata.squads[this.squad - 1][i].emoji} healed ${
-            this.emoji
-          } by 1 and damaged itself!`
+          `\n♡ ${this.playername}'s ${focusedemoji.emoji} healed ${this.emoji} by 1 and damaged itself!`
         );
       }
-      if (gamedata.squads[this.squad - 1][i].id == 148) {
+      if (focusedemoji.id == 148) {
         const clampedTarget = Math.max(0, Math.min(Math.trunc(newIndex), gamedata.squads[this.squad - 1].length - 1));
         if ((this.index(gamedata) < i && clampedTarget >= i) || (clampedTarget <= i && this.index(gamedata) > i)) {
-          gamedata = gamedata.squads[this.squad - 1][i].alterhp(gamedata, this, 1);
+          gamedata = focusedemoji.alterhp(gamedata, this, 1);
         }
       }
+    }
+    if (this.id == 155) {
+      // bike
+      gamedata = this.alterhp(gamedata, gamedata.squads[flip12(this.squad) - 1][0], 0 - this.dmg);
     }
     const s = gamedata.squads[this.squad - 1];
     const currentIndex = this.index(gamedata);
@@ -1405,11 +1402,11 @@ function afterDefeat(gamedata, target, offender) {
 
 function afterAttackOrDefeat(gamedata, target, offender) {
   if (target?.id == 10 && target.battleId != offender.battleId) {
+    // shuffle button/twisted rightwards arrows
     gamedata = battleLine(
       gamedata,
       `\n↝ ${target.playername}'s ${target.emoji} Shuffled ${offender.playername}'s Squad, and defeated itself!`
     );
-    // shuffle button/twisted rightwards arrows
     gamedata = shuffleSquad(gamedata, offender.squad);
     if (target.hp > 0) {
       gamedata = target.alterhp(gamedata, target, -9999, "", true);
@@ -1447,7 +1444,7 @@ function afterAttackOrDefeat(gamedata, target, offender) {
     }
   }
   if (target?.id == 41) {
-    // repeat
+    // tornado
     gamedata = battleLine(
       gamedata,
       `\n↝ ${target.playername}'s ${target.emoji} Shuffled ${offender.playername}'s Squad!`
@@ -1461,6 +1458,10 @@ function afterAttackOrDefeat(gamedata, target, offender) {
       `\n↝ ${target.playername}'s ${target.emoji} Shuffled ${target.playername}'s Squad!`
     );
     gamedata = shuffleSquad(gamedata, target.squad);
+  }
+  if (target?.id == 154 && target.emojibehind(gamedata)) {
+    // cookie
+    gamedata = target.alterhp(gamedata, target.emojibehind(gamedata), 1);
   }
   return {
     gamedata: gamedata,
@@ -1512,6 +1513,14 @@ function afterAttack(gamedata, target, offender) {
     gamedata = battleLine(
       gamedata,
       `\n⇋ ${offender.playername}'s ${offender.emoji} blew ${target.playername}'s ${target.emoji} backward!`
+    );
+  }
+  if (offender?.id == 155) {
+    // game die
+    gamedata = shuffleSquad(gamedata, target.squad);
+    gamedata = battleLine(
+      gamedata,
+      `\n↝ ${offender.playername}'s ${offender.emoji} Shuffled ${target.playername}'s Squad!`
     );
   }
   if (offender?.id == 49 && target != offender.emojibehind(gamedata)) {
@@ -1685,7 +1694,7 @@ function shuffleSquad(gamedata, squad) {
         .alterhp(
           gamedata,
           squadToShuffle.find((i) => i.id == 104),
-          2,
+          -9999,
           "",
           true
         );
@@ -1791,6 +1800,19 @@ function shuffleSquad(gamedata, squad) {
         );
       }
     }
+
+    if (squadToShuffle.some((i) => i.id == 27)) {
+      // cyclone
+      const cyclonefound = squadToShuffle.find((i) => i.id == 27);
+      gamedata = cyclonefound.alterhp(gamedata, cyclonefound, -9999, "", true);
+      gamedata = battleLine(
+        gamedata,
+        `\n↝ ${cyclonefound.playername}'s ${cyclonefound.emoji} Shuffled ${
+          gamedata.player[flip12(squad) - 1]
+        }'s Squad, and defeated itself!`
+      );
+      gamedata = shuffleSquad(gamedata, flip12(squad));
+    }
   }
 
   return gamedata;
@@ -1888,6 +1910,28 @@ function afterTurn(gamedata) {
       if (gamedata.squads[i][j]?.id == 139) {
         // candle
         gamedata.squads[i][j].alterhp(gamedata, gamedata.squads[i][j], -1);
+      }
+      if (gamedata.squads[i][j]?.id == 153 && gamedata.playerturn == i) {
+        // ringed planet
+        infront = gamedata.squads[i][j].emojiinfront(gamedata);
+        behind = gamedata.squads[i][j].emojibehind(gamedata);
+        let orbitstring = "";
+        if (infront) {
+          infront.move(gamedata, j + 1);
+          orbitstring += `${infront.emoji} `;
+          if (behind) {
+            orbitstring += `and `;
+          }
+        }
+
+        if (behind) {
+          behind.move(gamedata, j - 1);
+          orbitstring += `${behind.emoji} `;
+        }
+        gamedata = battleLine(
+          gamedata,
+          `\n⇋ ${orbitstring}orbited around ${gamedata.squads[i][j].playername}'s ${gamedata.squads[i][j].emoji}!`
+        );
       }
     }
   }
