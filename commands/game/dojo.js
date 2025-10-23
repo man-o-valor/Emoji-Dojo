@@ -12,9 +12,9 @@ const {
   SeparatorBuilder,
   SeparatorSpacingSize,
   StringSelectMenuOptionBuilder,
-  StringSelectMenuBuilder,
+  StringSelectMenuBuilder
 } = require("discord.js");
-const { raritycolors, emojis, raritysymbols, raritynames, classes, devotionhelp } = require("../../data.js");
+const { emojis, raritysymbols, raritynames, classes, devotionhelp } = require("../../data.js");
 const {
   database,
   getDojo,
@@ -26,8 +26,8 @@ const {
   writeLogs,
   dailyRewardRemind,
   adminpanel,
+  renderqemoji
 } = require("../../functions.js");
-const fs = require("fs");
 const { closestMatch } = require("closest-match");
 
 module.exports = {
@@ -43,14 +43,14 @@ module.exports = {
       } else {
         await interaction.reply({
           flags: "Ephemeral",
-          content: `🤓 you're not the admin silly`,
+          content: `🤓 you're not the admin silly`
         });
       }
     } else {
       if (await setupUser(interaction.user)) {
         await interaction.reply({
           flags: "Ephemeral",
-          content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
+          content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`
         });
       } else {
         let vaultarray = await getDojo(interaction.user.id);
@@ -202,7 +202,7 @@ module.exports = {
 
           const response = await interaction.reply({
             components: [vaultcontainer],
-            flags: MessageFlags.IsComponentsV2,
+            flags: MessageFlags.IsComponentsV2
           });
           await dailyRewardRemind(interaction);
           let logs = await getLogs();
@@ -218,7 +218,7 @@ module.exports = {
           const collectorFilter = (i) => i.user.id == interaction.user.id;
           let collector = response.createMessageComponentCollector({
             filter: collectorFilter,
-            time: 120000,
+            time: 120000
           });
           try {
             collector.on("collect", async (interaction2) => {
@@ -243,7 +243,7 @@ module.exports = {
                   }
                   await interaction2.reply({
                     flags: "Ephemeral",
-                    content: `Your squad has been saved!\n${squadtext}`,
+                    content: `Your squad has been saved!\n${squadtext}`
                   });
                   let logs = await getLogs();
                   logs.logs.games.squadsedited += 1;
@@ -273,7 +273,7 @@ module.exports = {
                   }
                   await interaction2.reply({
                     flags: "Ephemeral",
-                    content: `Your squad has been saved!\n${squadtext}`,
+                    content: `Your squad has been saved!\n${squadtext}`
                   });
                   let logs = await getLogs();
                   logs.logs.games.squadsedited += 1;
@@ -303,7 +303,7 @@ module.exports = {
                       if (devoteamt > numberowned - numberfound || devoteamt < 1) {
                         await interaction3.reply({
                           flags: "Ephemeral",
-                          content: `⚠️ Your input was invalid!`,
+                          content: `⚠️ Your input was invalid!`
                         });
                       } else {
                         let emojidisplay = await devoteEmojis(interaction.user.id, emojifound.id, devoteamt);
@@ -314,7 +314,7 @@ module.exports = {
                             classes[emojifound.class].emoji
                           } **${classes[emojifound.class].name}!** (+${
                             devoteamt * (2 * emojifound.rarity + 1)
-                          } devotion point${devoteamt * (2 * emojifound.rarity + 1) != 1 ? "s" : ""})`,
+                          } devotion point${devoteamt * (2 * emojifound.rarity + 1) != 1 ? "s" : ""})`
                         });
                         if (
                           Math.floor(lab[emojifound.class] / 40) !=
@@ -331,7 +331,7 @@ module.exports = {
                               emojis[classes[emojifound.class].legendary].emoji
                             } **${emojis[classes[emojifound.class].legendary].names[0]}**, master of the art of ${
                               classes[emojifound.class].emoji
-                            } **${classes[emojifound.class].name}!**\n\n\`\`\` \`\`\``,
+                            } **${classes[emojifound.class].name}!**\n\n\`\`\` \`\`\``
                           });
                         }
                         let logs = await getLogs();
@@ -350,20 +350,20 @@ module.exports = {
                     } else {
                       await interaction3.reply({
                         flags: "Ephemeral",
-                        content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`,
+                        content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`
                       });
                     }
                   });
                 } else {
                   await interaction2.reply({
                     flags: "Ephemeral",
-                    content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`,
+                    content: `⚠️ You don't have enough ${emojifound.emoji} to devote any!`
                   });
                 }
               } else if (interaction2.customId == "devotehelp") {
                 interaction2.reply({
                   flags: "Ephemeral",
-                  content: devotionhelp,
+                  content: devotionhelp
                 });
               }
             });
@@ -382,20 +382,40 @@ module.exports = {
               new StringSelectMenuOptionBuilder().setLabel("❤️ Sort by Health").setValue("2"),
               new StringSelectMenuOptionBuilder().setLabel("⚔️ Sort by Attack Power").setValue("3")
             );
+
+          const pages = await sortDojo(interaction, vaultarray, sortDropdown);
+          if (!pages || pages.length === 0) pages.push("");
+
+          let pageIndex = 0;
+
+          const prevBtn = new ButtonBuilder()
+            .setCustomId("dojo_prev")
+            .setLabel("◀ Prev")
+            .setStyle(ButtonStyle.Secondary)
+            .setDisabled(false);
+          const nextBtn = new ButtonBuilder()
+            .setCustomId("dojo_next")
+            .setLabel("Next ▶")
+            .setStyle(ButtonStyle.Primary)
+            .setDisabled(false);
+
           let vaultcontainer = new ContainerBuilder()
             .addTextDisplayComponents(
               new TextDisplayBuilder().setContent("Run `/dojo [emoji]` to see details about one emoji.")
             )
             .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true))
             .addTextDisplayComponents(
-              new TextDisplayBuilder().setContent(await sortDojo(interaction, vaultarray, sortDropdown))
+              new TextDisplayBuilder().setContent(pages[pageIndex] + `\n\nPage ${pageIndex + 1}/${pages.length}`)
             )
             .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
             .addActionRowComponents(new ActionRowBuilder().addComponents(sortDropdown));
+          if (pages.length > 1)
+            vaultcontainer.addActionRowComponents(new ActionRowBuilder().addComponents(prevBtn, nextBtn));
+
           const response = await interaction.reply({
             components: [vaultcontainer],
             withResponse: true,
-            flags: MessageFlags.IsComponentsV2,
+            flags: MessageFlags.IsComponentsV2
           });
           await dailyRewardRemind(interaction);
           let logs = await getLogs();
@@ -408,12 +428,16 @@ module.exports = {
           const collectorFilter = (i) => i.user.id == interaction.user.id;
           let collector = response.resource.message.createMessageComponentCollector({
             filter: collectorFilter,
-            time: 120000,
+            time: 120000
           });
           try {
             collector.on("collect", async (interaction2) => {
               if (interaction2.customId === "sortstyle") {
                 await database.set(interaction.user.id + "sortstyle", parseInt(interaction2.values[0]));
+                const newPages = await sortDojo(interaction, vaultarray, sortDropdown);
+                pages.length = 0;
+                for (const p of newPages) pages.push(p);
+                pageIndex = 0;
                 vaultcontainer = new ContainerBuilder()
                   .addTextDisplayComponents(
                     new TextDisplayBuilder().setContent("Run `/dojo [emoji]` to see details about one emoji.")
@@ -422,16 +446,64 @@ module.exports = {
                     new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                   )
                   .addTextDisplayComponents(
-                    new TextDisplayBuilder().setContent(await sortDojo(interaction, vaultarray, sortDropdown))
+                    new TextDisplayBuilder().setContent(pages[pageIndex] + `\n\nPage ${pageIndex + 1}/${pages.length}`)
                   )
                   .addSeparatorComponents(
                     new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
                   )
                   .addActionRowComponents(new ActionRowBuilder().addComponents(sortDropdown));
+                if (pages.length > 1)
+                  vaultcontainer.addActionRowComponents(new ActionRowBuilder().addComponents(prevBtn, nextBtn));
                 await interaction2.update({
                   components: [vaultcontainer],
                   withResponse: true,
-                  flags: MessageFlags.IsComponentsV2,
+                  flags: MessageFlags.IsComponentsV2
+                });
+              } else if (interaction2.customId === "dojo_next") {
+                pageIndex = (pageIndex + 1) % pages.length;
+                vaultcontainer = new ContainerBuilder()
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent("Run `/dojo [emoji]` to see details about one emoji.")
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
+                  )
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(pages[pageIndex] + `\n\nPage ${pageIndex + 1}/${pages.length}`)
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
+                  )
+                  .addActionRowComponents(new ActionRowBuilder().addComponents(sortDropdown));
+                if (pages.length > 1)
+                  vaultcontainer.addActionRowComponents(new ActionRowBuilder().addComponents(prevBtn, nextBtn));
+                await interaction2.update({
+                  components: [vaultcontainer],
+                  withResponse: true,
+                  flags: MessageFlags.IsComponentsV2
+                });
+              } else if (interaction2.customId === "dojo_prev") {
+                pageIndex = (pageIndex - 1) % pages.length;
+                vaultcontainer = new ContainerBuilder()
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent("Run `/dojo [emoji]` to see details about one emoji.")
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
+                  )
+                  .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(pages[pageIndex] + `\n\nPage ${pageIndex + 1}/${pages.length}`)
+                  )
+                  .addSeparatorComponents(
+                    new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true)
+                  )
+                  .addActionRowComponents(new ActionRowBuilder().addComponents(sortDropdown));
+                if (pages.length > 1)
+                  vaultcontainer.addActionRowComponents(new ActionRowBuilder().addComponents(prevBtn, nextBtn));
+                await interaction2.update({
+                  components: [vaultcontainer],
+                  withResponse: true,
+                  flags: MessageFlags.IsComponentsV2
                 });
               }
             });
@@ -442,124 +514,164 @@ module.exports = {
         }
       }
     }
-  },
+  }
 };
 
 async function sortDojo(interaction, vaultarray, sortDropdown) {
+  function formatEmojiRows(items) {
+    if (!items || items.length === 0) return "";
+    let out = "";
+    for (let i = 0; i < items.length; i++) {
+      if (i > 0 && i % 7 === 0) out += "\n";
+      out += items[i];
+    }
+    return out;
+  }
+
   let sortstyle = (await database.get(interaction.user.id + "sortstyle")) ?? 0;
   sorttypes = ["*️⃣ Sorting by Rarity", "🛐 Sorting by Class", "❤️ Sorting by Health", "⚔️ Sorting by Attack Power"];
   sortDropdown.setPlaceholder(sorttypes[sortstyle]);
+
+  const tokens = [];
+
   switch (sortstyle) {
-    case 1:
+    case 1: {
       // Sort by class
-      let classtext = Array(classes.length).fill("");
-      let classnumbers = Array(classes.length).fill(0);
-      let classemojisgoneover = [];
-      for (let i = 0; i < vaultarray.length; i++) {
-        let classid = emojis[vaultarray[i]].class;
-        if (classid !== undefined && classid !== null && !classemojisgoneover.includes(vaultarray[i])) {
-          classemojisgoneover.push(vaultarray[i]);
-          let numberIHave = vaultarray.reduce((acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc), 0);
-          if (classtext[classid] != "") {
-            classtext[classid] += ", ";
-          }
-          classtext[classid] += `${emojis[vaultarray[i]].emoji}`;
-          classnumbers[classid] += numberIHave;
-          if (numberIHave > 1) {
-            classtext[classid] += ` x${numberIHave}`;
-          }
-        }
+      const classBuckets = Array(classes.length)
+        .fill(null)
+        .map(() => []);
+      const classCounts = Array(classes.length).fill(0);
+      const seen = new Set();
+      for (const eid of vaultarray) {
+        if (seen.has(eid)) continue;
+        seen.add(eid);
+        const classid = emojis[eid].class;
+        if (classid === undefined || classid === null) continue;
+        const count = vaultarray.filter((x) => x === eid).length;
+        let entry = `${emojis[eid].emoji}`;
+        if (count > 0) entry += renderqemoji(count);
+        classBuckets[classid].push(entry);
+        classCounts[classid] += count;
       }
-      let classdesc = "";
       for (let i = 0; i < classes.length; i++) {
-        if (classnumbers[i] > 0) {
-          classdesc += `### ${classes[i].emoji} ${classes[i].name} x${classnumbers[i]}\n${classtext[i]}\n`;
+        if (classCounts[i] > 0) {
+          tokens.push(`### ${classes[i].emoji} ${classes[i].name} x${classCounts[i]}`);
+          const content = formatEmojiRows(classBuckets[i]);
+          const lines = content.split("\n").filter((t) => t && t.length > 0);
+          for (const line of lines) tokens.push(line);
         }
       }
-      return classdesc;
-    case 2:
-      // Sort by hp
-      let hpValues = vaultarray.map((eid) => emojis[eid]?.hp ?? 0);
-      let uniqueHPs = [...new Set(hpValues)].sort((a, b) => a - b);
-      let hpGroups = "";
-      for (let h of uniqueHPs) {
+      break;
+    }
+    case 2: {
+      // Sort by hp (ascending)
+      const hpValues = vaultarray.map((eid) => emojis[eid]?.hp ?? 0);
+      const uniqueHPs = [...new Set(hpValues)].sort((a, b) => a - b);
+      for (const h of uniqueHPs) {
         if (h === null || h === undefined) continue;
-        let groupEmojis = vaultarray.filter((eid) => (emojis[eid]?.hp ?? 0) === h);
-        if (groupEmojis.length > 0) {
-          hpGroups += `### ❤️ ${h} Health\n`;
-          let goneOver = [];
-          for (let eid of groupEmojis) {
-            if (!goneOver.includes(eid)) {
-              let numberIHave = groupEmojis.filter((x) => x === eid).length;
-              hpGroups += `${emojis[eid].emoji}`;
-              if (numberIHave > 1) hpGroups += ` x${numberIHave}`;
-              hpGroups += ", ";
-              goneOver.push(eid);
-            }
-          }
-          if (hpGroups.endsWith(", ")) hpGroups = hpGroups.slice(0, -2);
-          hpGroups += "\n";
+        const group = vaultarray.filter((eid) => (emojis[eid]?.hp ?? 0) === h);
+        if (!group || group.length === 0) continue;
+        const gone = new Set();
+        const items = [];
+        for (const eid of group) {
+          if (gone.has(eid)) continue;
+          gone.add(eid);
+          const count = group.filter((x) => x === eid).length;
+          let entry = `${emojis[eid].emoji}`;
+          if (count > 0) entry += renderqemoji(count);
+          items.push(entry);
         }
+        tokens.push(`### ❤️ ${h} Health`);
+        const content = formatEmojiRows(items);
+        const lines = content.split("\n").filter((t) => t && t.length > 0);
+        for (const line of lines) tokens.push(line);
       }
-      return hpGroups;
-    case 3:
-      // Sort by dmg
-      let dmgValues = vaultarray.map((eid) => emojis[eid]?.dmg ?? 0);
-      let uniqueDMGs = [...new Set(dmgValues)].sort((a, b) => a - b);
-      let dmgGroups = "";
-      for (let d of uniqueDMGs) {
+      break;
+    }
+    case 3: {
+      // Sort by dmg (ascending)
+      const dmgValues = vaultarray.map((eid) => emojis[eid]?.dmg ?? 0);
+      const uniqueDMGs = [...new Set(dmgValues)].sort((a, b) => a - b);
+      for (const d of uniqueDMGs) {
         if (d === null || d === undefined) continue;
-        let groupEmojis = vaultarray.filter((eid) => (emojis[eid]?.dmg ?? 0) === d);
-        if (groupEmojis.length > 0) {
-          dmgGroups += `### <:attackpower:1327657903447998477> ${d} Attack Power\n`;
-          let goneOver = [];
-          for (let eid of groupEmojis) {
-            if (!goneOver.includes(eid)) {
-              let numberIHave = groupEmojis.filter((x) => x === eid).length;
-              dmgGroups += `${emojis[eid].emoji}`;
-              if (numberIHave > 1) dmgGroups += ` x${numberIHave}`;
-              dmgGroups += ", ";
-              goneOver.push(eid);
-            }
-          }
-          if (dmgGroups.endsWith(", ")) dmgGroups = dmgGroups.slice(0, -2);
-          dmgGroups += "\n";
+        const group = vaultarray.filter((eid) => (emojis[eid]?.dmg ?? 0) === d);
+        if (!group || group.length === 0) continue;
+        const gone = new Set();
+        const items = [];
+        for (const eid of group) {
+          if (gone.has(eid)) continue;
+          gone.add(eid);
+          const count = group.filter((x) => x === eid).length;
+          let entry = `${emojis[eid].emoji}`;
+          if (count > 0) entry += renderqemoji(count);
+          items.push(entry);
         }
+        tokens.push(`### <:attackpower:1327657903447998477> ${d} Attack Power`);
+        const content = formatEmojiRows(items);
+        const lines = content.split("\n").filter((t) => t && t.length > 0);
+        for (const line of lines) tokens.push(line);
       }
-      return dmgGroups;
-    default:
-      // Sort by rarity
-      let raritytext = ["", "", "", ""];
-      let raritynumbers = [0, 0, 0, 0];
-      let rarityemojisgoneover = [];
-      for (let i = 0; i < vaultarray.length; i++) {
-        let rarity = emojis[vaultarray[i]].rarity;
-        if (rarity >= 0 && !rarityemojisgoneover.includes(vaultarray[i])) {
-          rarityemojisgoneover.push(vaultarray[i]);
-          let numberihave = vaultarray.reduce((acc, curr) => (curr === vaultarray[i] ? acc + 1 : acc), 0);
-          if (raritytext[rarity] != "") {
-            raritytext[rarity] += `, `;
-          }
-          raritytext[rarity] += `${emojis[vaultarray[i]].emoji}`;
-          raritynumbers[rarity] += numberihave;
-          if (numberihave > 1) {
-            raritytext[rarity] += ` x${numberihave}`;
-          }
-        }
+      break;
+    }
+    default: {
+      // Sort by rarity (common -> master)
+      const rarityBuckets = [[], [], [], []];
+      const rarityCounts = [0, 0, 0, 0];
+      const seen = new Set();
+      for (const eid of vaultarray) {
+        if (seen.has(eid)) continue;
+        seen.add(eid);
+        const r = emojis[eid].rarity;
+        if (r < 0) continue;
+        const count = vaultarray.filter((x) => x === eid).length;
+        let entry = `${emojis[eid].emoji}`;
+        if (count > 0) entry += renderqemoji(count);
+        rarityBuckets[r].push(entry);
+        rarityCounts[r] += count;
       }
-      let desc = "";
-      if (raritynumbers[0] > 0) {
-        desc += `### *️⃣ Common Emojis x${raritynumbers[0]}\n${raritytext[0]}\n`;
+      if (rarityCounts[0] > 0) {
+        tokens.push(`### *️⃣ Common Emojis x${rarityCounts[0]}`);
+        const content0 = formatEmojiRows(rarityBuckets[0]);
+        const lines0 = content0.split("\n").filter((t) => t && t.length > 0);
+        for (const line of lines0) tokens.push(line);
       }
-      if (raritynumbers[1] > 0) {
-        desc += `### ✳️ Rare Emojis x${raritynumbers[1]}\n${raritytext[1]}\n`;
+      if (rarityCounts[1] > 0) {
+        tokens.push(`### ✳️ Rare Emojis x${rarityCounts[1]}`);
+        const content1 = formatEmojiRows(rarityBuckets[1]);
+        const lines1 = content1.split("\n").filter((t) => t && t.length > 0);
+        for (const line of lines1) tokens.push(line);
       }
-      if (raritynumbers[2] > 0) {
-        desc += `### ⚛️ Special Emojis x${raritynumbers[2]}\n${raritytext[2]}\n`;
+      if (rarityCounts[2] > 0) {
+        tokens.push(`### ⚛️ Special Emojis x${rarityCounts[2]}`);
+        const content2 = formatEmojiRows(rarityBuckets[2]);
+        const lines2 = content2.split("\n").filter((t) => t && t.length > 0);
+        for (const line of lines2) tokens.push(line);
       }
-      if (raritynumbers[3] > 0) {
-        desc += `### <:master:1325987682941145259> Master Emojis x${raritynumbers[3]}\n${raritytext[3]}`;
+      if (rarityCounts[3] > 0) {
+        tokens.push(`### <:master:1325987682941145259> Master Emojis x${rarityCounts[3]}`);
+        const content3 = formatEmojiRows(rarityBuckets[3]);
+        const lines3 = content3.split("\n").filter((t) => t && t.length > 0);
+        for (const line of lines3) tokens.push(line);
       }
-      return desc;
+      break;
+    }
   }
+
+  const pageSize = 12;
+  const pages = [];
+  for (let start = 0; start < tokens.length; start += pageSize) {
+    let pageTokens = tokens.slice(start, start + pageSize);
+    if (pageTokens.length > 0 && !pageTokens[0].startsWith("###")) {
+      for (let j = start - 1; j >= 0; j--) {
+        if (tokens[j].startsWith("###")) {
+          pageTokens.unshift(tokens[j]);
+          break;
+        }
+      }
+    }
+    pages.push(pageTokens.filter((t) => t && t.length > 0).join("\n"));
+  }
+
+  if (pages.length === 0) pages.push("");
+  return pages;
 }

@@ -1,6 +1,6 @@
 const Keyv = require("keyv");
 const lodash = require("lodash");
-const { emojis, healthemojis, dmgemojis } = require("./data.js");
+const { emojis, healthemojis, dmgemojis, quantityemojis } = require("./data.js");
 const fs = require("fs");
 const formatToJson = require("format-to-json");
 const { MessageFlags } = require("discord.js");
@@ -2097,6 +2097,12 @@ function renderdemoji(value) {
   return dmgemojis[index];
 }
 
+function renderqemoji(value) {
+  if (value === undefined || value < 1) return "❔";
+  const index = Math.min(Math.floor(Number(value)), quantityemojis.length) - 1;
+  return quantityemojis[index];
+}
+
 async function adminpanel(interaction, viewemoji) {
   devdata = viewemoji.split(" ");
   devdata.shift();
@@ -2322,5 +2328,6 @@ module.exports = {
   adminpanel,
   curveCoins,
   restockCoins,
+  renderqemoji,
   BattleEmoji
 };
