@@ -2181,7 +2181,17 @@ const emojis = [
     rarity: -1,
     names: ["Hourglass", "Hourglass Not Done", "Time", "Timer"],
     class: null,
-    description: "Increases the number of turns turns until the battle draws by 200"
+    description: "Increases the number of turns until the battle draws by 200"
+  },
+  {
+    emoji: "⏪",
+    id: 165,
+    hp: 4,
+    dmg: 1,
+    rarity: 2,
+    names: ["Rewind", "Rewind Button"],
+    class: 2,
+    description: "When this defeats an Emoji, sets itself back to its default stats. Sets the emoji that defeats it back to its default stats"
   }
 ];
 

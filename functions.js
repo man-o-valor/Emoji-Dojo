@@ -390,7 +390,7 @@ class BattleEmoji {
 
     if (target.hp === undefined || target.hp < 0) target.hp = 0;
 
-    ({ gamedata, target, offender, silence } = beforeAttack(gamedata, target, offender, silence));
+    ({ gamedata, target, offender, val, silence } = beforeAttack(gamedata, target, offender, val, silence));
 
     target.hp += val;
 
@@ -874,7 +874,7 @@ function defendAttack(gamedata, target, offender, val) {
   };
 }
 
-function beforeAttack(gamedata, target, offender, silence) {
+function beforeAttack(gamedata, target, offender, val, silence) {
   if (offender?.id == 42 && offender.squadarr(gamedata).length > 1) {
     // dancer
     gamedata = battleLine(
@@ -901,20 +901,17 @@ function beforeAttack(gamedata, target, offender, silence) {
     );
   }
   if (target?.id == 146 && val > 0) {
-    // orange heart
+    // bandaged heart
     target.hp -= val;
     gamedata = target.alterdmg(gamedata, val);
     gamedata = battleLine(gamedata, `\n⇮ ${target.playername}'s ${target.emoji} strengthened itself by ${val}!`);
     silence = true;
   }
-  if (offender?.id == 157 && offender.emojibehind(gamedata)) {
-    // cupcake
-    gamedata = offender.alterhp(gamedata, offender.emojibehind(gamedata), 1);
-  }
   return {
     gamedata: gamedata,
     target: target,
     offender: offender,
+    val: val,
     silence: silence
   };
 }
@@ -1016,6 +1013,14 @@ function onDefeat(gamedata, target, offender) {
         gamedata,
         `\n⇮ ${offender.playername}'s ${offender.emoji} strengthened and healed itself by 1!`
       );
+    }
+    if (offender?.id == 165) {
+      // rewind
+      gamedata = battleLine(gamedata, `\n✩ ${offender.playername}'s ${offender.emoji} rewound itself!`);
+      offender.hp = offender.originalhp;
+      offender.dmg = offender.originaldmg;
+      offender.id = offender.originalid;
+      offender.emoji = emojis[offender.originalid].emoji;
     }
     if (target?.id == 45) {
       // radio
@@ -1485,6 +1490,19 @@ function afterAttackOrDefeat(gamedata, target, offender) {
       gamedata = target.alterhp(gamedata, target, -9999, "", true);
     }
   }
+  if (target?.id == 165) {
+    // rewind
+    if (offender.summoned) {
+      gamedata = battleLine(gamedata, `\n✩ ${target.playername}'s ${target.emoji} unsummoned ${offender.emoji}!`);
+      gamedata = target.alterhp(gamedata, offender, -9999, "", true);
+    } else {
+      gamedata = battleLine(gamedata, `\n✩ ${target.playername}'s ${target.emoji} rewound ${offender.emoji}!`);
+      offender.hp = offender.originalhp;
+      offender.dmg = offender.originaldmg;
+      offender.id = offender.originalid;
+      offender.emoji = emojis[offender.originalid].emoji;
+    }
+  }
   if (target?.id == 41) {
     // tornado
     gamedata = battleLine(
@@ -1504,6 +1522,10 @@ function afterAttackOrDefeat(gamedata, target, offender) {
   if (target?.id == 154 && target.emojibehind(gamedata)) {
     // cookie
     gamedata = target.alterhp(gamedata, target.emojibehind(gamedata), 1);
+  }
+  if (offender?.id == 157 && offender.emojibehind(gamedata)) {
+    // cupcake
+    gamedata = offender.alterhp(gamedata, offender.emojibehind(gamedata), 1);
   }
   return {
     gamedata: gamedata,
@@ -1891,8 +1913,8 @@ function battleStartAbilities(gamedata) {
           break;
         case 158:
           // blueberries
-          gamedata = gamedata.squads[j][i].summon(gamedata, 157, j + 1, 0);
-          gamedata = gamedata.squads[j][i].summon(gamedata, 157, j + 1, 0);
+          gamedata = gamedata.squads[j][i].summon(gamedata, 158, j + 1, 0);
+          gamedata = gamedata.squads[j][i].summon(gamedata, 158, j + 1, 0);
           i = i + 2;
           break;
         case 70:
@@ -1981,21 +2003,24 @@ function afterTurn(gamedata) {
         behind = gamedata.squads[i][j].emojibehind(gamedata);
         let orbitstring = "";
         if (infront) {
-          infront.move(gamedata, j + 1);
           orbitstring += `${infront.emoji} `;
           if (behind) {
             orbitstring += `and `;
           }
         }
-
         if (behind) {
-          behind.move(gamedata, j - 1);
           orbitstring += `${behind.emoji} `;
         }
         gamedata = battleLine(
           gamedata,
           `\n⇋ ${orbitstring}orbited around ${gamedata.squads[i][j].playername}'s ${gamedata.squads[i][j].emoji}!`
         );
+        if (infront) {
+          infront.move(gamedata, j + 1);
+        }
+        if (behind) {
+          behind.move(gamedata, j - 1);
+        }
       }
     }
   }

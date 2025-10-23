@@ -141,6 +141,9 @@ module.exports = {
     player1squadarray = player1squadarray.slice(-8);
     player2squadarray = player2squadarray.slice(0, 8);
 
+    player1squadarray = player1squadarray.concat(new Array(8 - player1squadarray.length).fill(undefined));
+    player2squadarray = player2squadarray.concat(new Array(8 - player2squadarray.length).fill(undefined));
+
     if (player1squadarray.includes(undefined) || player2squadarray.includes(undefined)) {
       await interaction.reply({
         flags: "Ephemeral",
