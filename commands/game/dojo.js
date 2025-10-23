@@ -373,6 +373,7 @@ module.exports = {
             interaction.editReply();
           }
         } else {
+          await interaction.deferReply();
           let sortDropdown = new StringSelectMenuBuilder()
             .setCustomId("sortstyle")
             .setPlaceholder("Sort...")
@@ -383,8 +384,22 @@ module.exports = {
               new StringSelectMenuOptionBuilder().setLabel("⚔️ Sort by Attack Power").setValue("3")
             );
 
-          const pages = await sortDojo(interaction, vaultarray, sortDropdown);
-          if (!pages || pages.length === 0) pages.push("");
+          const sorttypes = [
+            "*️⃣ Sorting by Rarity",
+            "🛐 Sorting by Class",
+            "❤️ Sorting by Health",
+            "⚔️ Sorting by Attack Power"
+          ];
+          const currentSortStyle = (await database.get(interaction.user.id + "sortstyle")) ?? 0;
+          sortDropdown.setPlaceholder(sorttypes[currentSortStyle]);
+
+          const pagesByStyle = {};
+          for (let s = 0; s < sorttypes.length; s++) {
+            pagesByStyle[s] = await sortDojo(interaction, vaultarray, sortDropdown, s);
+            if (!pagesByStyle[s] || pagesByStyle[s].length === 0) pagesByStyle[s] = [""];
+          }
+
+          const pages = pagesByStyle[currentSortStyle];
 
           let pageIndex = 0;
 
@@ -412,9 +427,9 @@ module.exports = {
           if (pages.length > 1)
             vaultcontainer.addActionRowComponents(new ActionRowBuilder().addComponents(prevBtn, nextBtn));
 
-          const response = await interaction.reply({
+          const responseMessage = await interaction.editReply({
             components: [vaultcontainer],
-            withResponse: true,
+            fetchReply: true,
             flags: MessageFlags.IsComponentsV2
           });
           await dailyRewardRemind(interaction);
@@ -426,7 +441,7 @@ module.exports = {
           logs.logs.players[`user${interaction.user.id}`].vaultsviewed += 1;
           await writeLogs(logs);
           const collectorFilter = (i) => i.user.id == interaction.user.id;
-          let collector = response.resource.message.createMessageComponentCollector({
+          let collector = responseMessage.createMessageComponentCollector({
             filter: collectorFilter,
             time: 120000
           });
@@ -434,9 +449,10 @@ module.exports = {
             collector.on("collect", async (interaction2) => {
               if (interaction2.customId === "sortstyle") {
                 await database.set(interaction.user.id + "sortstyle", parseInt(interaction2.values[0]));
-                const newPages = await sortDojo(interaction, vaultarray, sortDropdown);
+                const newStyle = parseInt(interaction2.values[0]);
                 pages.length = 0;
-                for (const p of newPages) pages.push(p);
+                for (const p of pagesByStyle[newStyle] ?? [""]) pages.push(p);
+                sortDropdown.setPlaceholder(sorttypes[newStyle]);
                 pageIndex = 0;
                 vaultcontainer = new ContainerBuilder()
                   .addTextDisplayComponents(
@@ -483,7 +499,7 @@ module.exports = {
                   flags: MessageFlags.IsComponentsV2
                 });
               } else if (interaction2.customId === "dojo_prev") {
-                pageIndex = (pageIndex - 1) % pages.length;
+                if (pages.length > 0) pageIndex = (pageIndex - 1 + pages.length) % pages.length;
                 vaultcontainer = new ContainerBuilder()
                   .addTextDisplayComponents(
                     new TextDisplayBuilder().setContent("Run `/dojo [emoji]` to see details about one emoji.")
@@ -517,7 +533,7 @@ module.exports = {
   }
 };
 
-async function sortDojo(interaction, vaultarray, sortDropdown) {
+async function sortDojo(interaction, vaultarray, sortDropdown, overrideSortStyle) {
   function formatEmojiRows(items) {
     if (!items || items.length === 0) return "";
     let out = "";
@@ -528,9 +544,13 @@ async function sortDojo(interaction, vaultarray, sortDropdown) {
     return out;
   }
 
-  let sortstyle = (await database.get(interaction.user.id + "sortstyle")) ?? 0;
-  sorttypes = ["*️⃣ Sorting by Rarity", "🛐 Sorting by Class", "❤️ Sorting by Health", "⚔️ Sorting by Attack Power"];
-  sortDropdown.setPlaceholder(sorttypes[sortstyle]);
+  let sortstyle = overrideSortStyle ?? (await database.get(interaction.user.id + "sortstyle")) ?? 0;
+  const sorttypes = [
+    "*️⃣ Sorting by Rarity",
+    "🛐 Sorting by Class",
+    "❤️ Sorting by Health",
+    "⚔️ Sorting by Attack Power"
+  ];
 
   const tokens = [];
 
