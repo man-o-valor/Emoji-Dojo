@@ -907,7 +907,7 @@ function beforeAttack(gamedata, target, offender, silence) {
     gamedata = battleLine(gamedata, `\n⇮ ${target.playername}'s ${target.emoji} strengthened itself by ${val}!`);
     silence = true;
   }
-  if (offender?.id == 156 && offender.emojibehind(gamedata)) {
+  if (offender?.id == 157 && offender.emojibehind(gamedata)) {
     // cupcake
     gamedata = offender.alterhp(gamedata, offender.emojibehind(gamedata), 1);
   }
@@ -1268,6 +1268,30 @@ function onAttack(gamedata, target, offender, val) {
     // lion
     target.alterdmg(gamedata, 0 - val);
   }
+  for (let i = 0; i < target.squadarr(gamedata).length; i++) {
+    switch (gamedata.squads[target.squad - 1][i]?.id) {
+      case 160:
+        // feather/owl
+        gamedata = gamedata.squads[target.squad - 1][i].move(gamedata, 0);
+        gamedata = battleLine(
+          gamedata,
+          `\n⇋ ${gamedata.squads[target.squad - 1][i].playername}'s ${
+            gamedata.squads[target.squad - 1][i].emoji
+          } flew to the front of the Squad!`
+        );
+        break;
+      case 161:
+        // eagle
+        gamedata = gamedata.squads[target.squad - 1][i].move(gamedata, 0);
+        gamedata = battleLine(
+          gamedata,
+          `\n⇋ ${gamedata.squads[target.squad - 1][i].playername}'s ${
+            gamedata.squads[target.squad - 1][i].emoji
+          } flew to the front of the Squad!`
+        );
+        break;
+    }
+  }
 
   return {
     gamedata: gamedata,
@@ -1366,6 +1390,20 @@ function afterDefeat(gamedata, target, offender) {
       case 18:
         // skull
         gamedata = focusedemoji.alterhp(gamedata, focusedemoji, 1);
+        break;
+      case 162:
+        // broken heart
+        gamedata = focusedemoji.alterhp(gamedata, offender.squadarr(gamedata)[0], 1);
+        break;
+      case 163:
+        // ladder
+        gamedata = battleLine(
+          gamedata,
+          `\n⇋ ${focusedemoji.playername}'s ${focusedemoji.emojiinfront(gamedata).emoji} climbed ${
+            focusedemoji.emoji
+          } to the front of their Squad!`
+        );
+        gamedata = focusedemoji.emojiinfront(gamedata).move(gamedata, 0);
         break;
     }
   }
@@ -1519,7 +1557,7 @@ function afterAttack(gamedata, target, offender) {
       `\n⇋ ${offender.playername}'s ${offender.emoji} blew ${target.playername}'s ${target.emoji} backward!`
     );
   }
-  if (offender?.id == 155) {
+  if (offender?.id == 156) {
     // game die
     gamedata = shuffleSquad(gamedata, target.squad);
     gamedata = battleLine(
@@ -1787,11 +1825,11 @@ function shuffleSquad(gamedata, squad) {
       }
       if (squadToShuffle[i]?.id == 99) {
         // shaking face
-        squadToShuffle[i].alterdmg(1);
         gamedata = battleLine(
           gamedata,
           `\n⇮ ${squadToShuffle[i].playername}'s ${squadToShuffle[i].emoji} strengthened itself by 1!`
         );
+        squadToShuffle[i].alterdmg(1);
       }
       if (squadToShuffle[i]?.id == 47) {
         // volcano
@@ -1802,6 +1840,14 @@ function shuffleSquad(gamedata, squad) {
             gamedata.player[flip12(squad) - 1]
           }'s Squad!`
         );
+      }
+      if (squadToShuffle[i]?.id == 159) {
+        // feather
+        gamedata = battleLine(
+          gamedata,
+          `\n⇮ ${squadToShuffle[i].playername}'s ${squadToShuffle[i].emoji} transformed into ${emojis[160].emoji}!`
+        );
+        gamedata = squadToShuffle[i].transform(gamedata, 160);
       }
     }
 
@@ -1826,6 +1872,14 @@ function battleStartAbilities(gamedata) {
   for (let j = 0; j < gamedata.squads.length; j++) {
     for (i = 0; i < gamedata.squads[j].length; i++) {
       switch (gamedata.squads[j][i]?.id) {
+        case 164:
+          // hourglass
+          gamedata.drawtime += 200;
+          gamedata = battleLine(
+            gamedata,
+            `\n${gamedata.squads[j][i].playername}'s ${gamedata.squads[j][i].emoji} delayed the inevitable...`
+          );
+          break;
         case 142:
           // bust in silhouette
           gamedata = gamedata.squads[j][i].transform(gamedata, gamedata.squads[flip01(j)][i].id);
@@ -1834,6 +1888,12 @@ function battleStartAbilities(gamedata) {
           // cherries
           gamedata = gamedata.squads[j][i].summon(gamedata, 26, j + 1, i);
           i++;
+          break;
+        case 158:
+          // blueberries
+          gamedata = gamedata.squads[j][i].summon(gamedata, 157, j + 1, 0);
+          gamedata = gamedata.squads[j][i].summon(gamedata, 157, j + 1, 0);
+          i = i + 2;
           break;
         case 70:
           // wireless

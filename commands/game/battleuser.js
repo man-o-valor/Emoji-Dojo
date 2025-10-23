@@ -119,6 +119,7 @@ module.exports = {
               player: [interaction.user.globalName, battleuser.globalName],
               playerturn: 1,
               newlines: 0,
+              drawtime: 200,
               logfile: `${interaction.user.id} (${interaction.user.username}) vs ${battleuser.id} (${battleuser.username})\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`
             };
             for (let i = 0; i < 8; i++) {
@@ -249,7 +250,7 @@ module.exports = {
                   let prevturn = lodash.cloneDeep(gamedata.squads);
                   try {
                     while (
-                      gamedata.turn < 200 &&
+                      gamedata.turn < gamedata.drawtime &&
                       gamedata.squads[0][0] != null &&
                       gamedata.squads[1][0] != null &&
                       !gamedata.draw
@@ -378,7 +379,7 @@ module.exports = {
                   const row2 = new ActionRowBuilder().addComponents(exportbutton);
                   let battleendcontainer;
                   if (
-                    gamedata.turn >= 200 ||
+                    gamedata.turn >= gamedata.drawtime ||
                     (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) ||
                     gamedata.draw
                   ) {

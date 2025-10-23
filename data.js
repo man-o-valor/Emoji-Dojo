@@ -266,7 +266,7 @@ const emojis = [
     rarity: 1,
     names: ["Turtle", "Tortoise", "Slowpoke", "Shell"],
     class: 4,
-    description: "When attacked, moves to the back of your Squad and Heals itself by 1"
+    description: "When attacked, moves to the back of your Squad and heals itself by 1"
   },
   {
     emoji: "🗣️",
@@ -551,7 +551,7 @@ const emojis = [
     rarity: 1,
     names: ["Cherries", "Cherry", "Sweet", "Double", "Pair"],
     class: 3,
-    description: "At the beginning of the Battle, doubles itself"
+    description: "At the beginning of the Battle, summons 🍒 in front of itself"
   },
   {
     emoji: "🌀",
@@ -1932,12 +1932,12 @@ const emojis = [
     description: "After every turn, damages itself by 1"
   },
   {
-    emoji: "🐙",
+    emoji: "🐻",
     id: 140,
-    hp: 8,
+    hp: 7,
     dmg: 1,
     rarity: 0,
-    names: ["Octopus", "Octo", "Cephalopod"],
+    names: ["Bear", "Grizzly", "Brown Bear", "Cub", "Grizzly Bear"],
     class: 2,
     description: "Nothing special"
   },
@@ -1993,12 +1993,12 @@ const emojis = [
     description: "When your Squad is Shuffled, this and the two friendly Emojis behind it do not get moved"
   },
   {
-    emoji: "🧡",
+    emoji: "❤️‍🩹",
     id: 146,
     hp: 4,
     dmg: 2,
     rarity: 1,
-    names: ["Orange Heart", "Orange"],
+    names: ["Mending Heart", "Healing Heart", "Heart with Bandage", "Bandaged Heart", "Heart Bandage"],
     class: 1,
     description: "Instead of healing, increases its attack power by the amount it would have healed"
   },
@@ -2095,23 +2095,93 @@ const emojis = [
   },
   {
     emoji: "🎲",
-    id: 155,
+    id: 156,
     hp: 2,
     dmg: 2,
     rarity: 1,
     names: ["Game Die", "Die", "Game Dice", "Dice"],
-    class: 4,
+    class: 6,
     description: "After attacking, shuffles the target squad"
   },
   {
     emoji: "🧁",
-    id: 156,
+    id: 157,
     hp: 5,
     dmg: 2,
     rarity: 0,
     names: ["Cupcake", "Muffin"],
     class: 0,
     description: "After attacking, heals the Emoji behind itself by 1"
+  },
+  {
+    emoji: "🫐",
+    id: 158,
+    hp: 1,
+    dmg: 1,
+    rarity: 0,
+    names: ["Blueberries", "Blueberry"],
+    class: 3,
+    description: "At the beginning of the Battle, summons 🫐🫐 at the front of the friendly Squad"
+  },
+  {
+    emoji: "🪶",
+    id: 159,
+    hp: 1,
+    dmg: 0,
+    rarity: 0,
+    names: ["Feather", "Quill"],
+    class: 5,
+    description: "When your Squad is shuffled, transforms into 🦉"
+  },
+  {
+    emoji: "🦉",
+    id: 160,
+    hp: 5,
+    dmg: 3,
+    rarity: -1,
+    names: ["Owl"],
+    class: null,
+    description: "When a friendly Emoji is attacked, moves to the front of the Squad (transformed from 🪶)"
+  },
+  {
+    emoji: "🦅",
+    id: 161,
+    hp: 7,
+    dmg: 3,
+    rarity: 1,
+    names: ["Eagle"],
+    class: 4,
+    description: "When a friendly Emoji is attacked, moves to the front of the Squad"
+  },
+  {
+    emoji: "💔",
+    id: 162,
+    hp: 6,
+    dmg: 4,
+    rarity: 1,
+    names: ["Broken Heart", "Heartbreak", "Shattered Heart", "Heart Break", "Broken", "Break"],
+    class: 0,
+    description: "When an enemy Emoji is defeated, heals the new frontmost enemy Emoji by 1"
+  },
+  {
+    emoji: "🪜",
+    id: 163,
+    hp: 3,
+    dmg: 2,
+    rarity: 1,
+    names: ["Ladder", "Stairs", "Step Ladder", "Steps"],
+    class: 4,
+    description: "When an enemy Emoji is defeated, moves the friendly Emoji in front of this to the front of the Squad"
+  },
+  {
+    emoji: "⌛",
+    id: 164,
+    hp: 4,
+    dmg: 2,
+    rarity: -1,
+    names: ["Hourglass", "Hourglass Not Done", "Time", "Timer"],
+    class: null,
+    description: "Increases the number of turns turns until the battle draws by 200"
   }
 ];
 
