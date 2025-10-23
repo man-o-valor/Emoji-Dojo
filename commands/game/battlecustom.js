@@ -7,7 +7,7 @@ const {
   SeparatorBuilder,
   TextDisplayBuilder,
   ContainerBuilder,
-  SeparatorSpacingSize,
+  SeparatorSpacingSize
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -18,7 +18,7 @@ const {
   getSquad,
   database,
   generateBotSquad,
-  BattleEmoji,
+  BattleEmoji
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -27,7 +27,10 @@ module.exports = {
     .setName("battlecustom")
     .setDescription("Set up a custom battle between any two Squads")
     .addStringOption((option) =>
-      option.setName("squad1").setDescription("@me, @[saved squad #], @random, or a sequence of 8 emojis").setRequired(true)
+      option
+        .setName("squad1")
+        .setDescription("@me, @[saved squad #], @random, or a sequence of 8 emojis")
+        .setRequired(true)
     )
     .addStringOption((option) =>
       option
@@ -81,13 +84,13 @@ module.exports = {
       let squadget = (await database.get(interaction.user.id + "savedsquad" + squad1input.match(/@(\d+)/)[1])) ?? "";
       if (squadget != "") {
         player1squadarray = squadget.split(",");
-        player1squadarray.pop()
+        player1squadarray.pop();
       } else {
         player1squadarray = [undefined];
       }
     } else {
       const segmenter1 = new Intl.Segmenter("en", {
-        granularity: "grapheme",
+        granularity: "grapheme"
       });
       let input1 = squad1input.replace(/\s+/g, "");
       player1squadarray = [...segmenter1.segment(input1)];
@@ -109,15 +112,19 @@ module.exports = {
       let squadget = (await database.get(interaction.user.id + "savedsquad" + squad2input.match(/@(\d+)/)[1])) ?? "";
       if (squadget != "") {
         player2squadarray = squadget.split(",");
-        player2squadarray.pop()
+        player2squadarray.pop();
       } else {
         player2squadarray = [undefined];
       }
     } else if (squad2input.includes("@bot")) {
-      player2squadarray = await generateBotSquad(player1squadarray, Math.max(Math.min(logs.logs.games.botwins, 50), 1), false);
+      player2squadarray = await generateBotSquad(
+        player1squadarray,
+        Math.max(Math.min(logs.logs.games.botwins, 50), 1),
+        false
+      );
     } else {
       const segmenter2 = new Intl.Segmenter("en", {
-        granularity: "grapheme",
+        granularity: "grapheme"
       });
       let input2 = squad2input.replace(/\s+/g, "");
       player2squadarray = [...segmenter2.segment(input2)];
@@ -137,7 +144,7 @@ module.exports = {
     if (player1squadarray.includes(undefined) || player2squadarray.includes(undefined)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `One of the Squads you entered doesn't seem valid. Make sure they're both sequences of 8 emojis that exist in Emoji Dojo.`,
+        content: `One of the Squads you entered doesn't seem valid. Make sure they're both sequences of 8 emojis that exist in Emoji Dojo.`
       });
     } else {
       await interaction.deferReply();
@@ -158,7 +165,7 @@ module.exports = {
         player: ["Squad 1", "Squad 2"],
         playerturn: 1,
         newlines: 0,
-        logfile: `Custom Squad vs Custom Squad\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`,
+        logfile: `Custom Squad vs Custom Squad\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`
       };
       for (let i = 0; i < 8; i++) {
         gamedata.squads[0].push(new BattleEmoji(player1squadarray[i], 1, "Squad 1"));
@@ -184,7 +191,7 @@ module.exports = {
 
       const response = await interaction.editReply({
         components: [challengecontainer],
-        flags: MessageFlags.IsComponentsV2,
+        flags: MessageFlags.IsComponentsV2
       });
       await dailyRewardRemind(interaction);
 
@@ -193,7 +200,7 @@ module.exports = {
       try {
         const interaction2 = await response.awaitMessageComponent({
           filter: collectorFilter,
-          time: 300000,
+          time: 300000
         });
         if (interaction2.customId === "battle") {
           let logs = await getLogs();
@@ -211,7 +218,12 @@ module.exports = {
           }
           let prevturn = lodash.cloneDeep(gamedata.squads);
           try {
-            while (gamedata.turn < 200 && gamedata.squads[0][0] != undefined && gamedata.squads[1][0] != undefined && !gamedata.draw) {
+            while (
+              gamedata.turn < 200 &&
+              gamedata.squads[0][0] != undefined &&
+              gamedata.squads[1][0] != undefined &&
+              !gamedata.draw
+            ) {
               if (gamedata.turn % 5 == 0) {
                 prevturn = lodash.cloneDeep(gamedata.squads);
               }
@@ -274,17 +286,17 @@ module.exports = {
                   .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                 new ContainerBuilder().addTextDisplayComponents(
                   new TextDisplayBuilder().setContent(richnumberhidden + richtextsnippet)
-                ),
+                )
               ];
               if (gamedata.turn > 1) {
                 await interaction2.editReply({
                   components: battlecomponents,
-                  flags: MessageFlags.IsComponentsV2,
+                  flags: MessageFlags.IsComponentsV2
                 });
               } else {
                 await interaction2.reply({
                   components: battlecomponents,
-                  flags: MessageFlags.IsComponentsV2,
+                  flags: MessageFlags.IsComponentsV2
                 });
               }
               await delay(battlespeed * 1000);
@@ -299,7 +311,11 @@ module.exports = {
               .setStyle(ButtonStyle.Primary);
             const row2 = new ActionRowBuilder().addComponents(exportbutton);
             let battleendcontainer;
-            if (gamedata.turn >= 200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) || gamedata.draw) {
+            if (
+              gamedata.turn >= 200 ||
+              (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) ||
+              gamedata.draw
+            ) {
               battleendcontainer = new ContainerBuilder()
                 .addTextDisplayComponents(
                   new TextDisplayBuilder().setContent(`🏳️ The match ended in a draw... ||<@${interaction.user.id}>||`)
@@ -333,10 +349,10 @@ module.exports = {
             }
             int3 = await interaction2.followUp({
               components: [battleendcontainer],
-              flags: MessageFlags.IsComponentsV2,
+              flags: MessageFlags.IsComponentsV2
             });
             let collector = int3.createMessageComponentCollector({
-              time: 600000,
+              time: 600000
             });
             collector.on("collect", async (interaction3) => {
               try {
@@ -345,9 +361,9 @@ module.exports = {
                   files: [
                     {
                       attachment: txt,
-                      name: `Custom Battle.txt`,
-                    },
-                  ],
+                      name: `Custom Battle.txt`
+                    }
+                  ]
                 });
                 let logs = await getLogs();
                 logs.logs.games.customlogsrequested += 1;
@@ -376,19 +392,19 @@ module.exports = {
                 new TextDisplayBuilder().setContent(
                   "🤒 An error has occurred and the Battle cannot continue.```" + e + "```"
                 )
-              ),
+              )
             ];
             await interaction2.editReply({
               components: battlecomponents,
-              flags: MessageFlags.IsComponentsV2,
+              flags: MessageFlags.IsComponentsV2
             });
             await interaction2.followUp({
               files: [
                 {
                   attachment: txt,
-                  name: `Custom Battle [error].txt`,
-                },
-              ],
+                  name: `Custom Battle [error].txt`
+                }
+              ]
             });
           }
         }
@@ -406,9 +422,9 @@ module.exports = {
           );
         await interaction.editReply({
           components: [challengecontainer],
-          flags: MessageFlags.IsComponentsV2,
+          flags: MessageFlags.IsComponentsV2
         });
       }
     }
-  },
+  }
 };

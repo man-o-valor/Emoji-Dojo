@@ -7,7 +7,7 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
-  MessageFlags,
+  MessageFlags
 } = require("discord.js");
 const { classes, emojis, devotionhelp } = require("../../data.js");
 const { getDevotions, setupUser, getLogs, writeLogs, dailyRewardRemind } = require("../../functions.js");
@@ -33,22 +33,22 @@ module.exports = {
             "<:startbar2:1326207327858200646>",
             "<:startbar3:1326207335324188752>",
             "<:startbar4:1326207342823604325>",
-            "<:startbar5:1326207351631384698>",
+            "<:startbar5:1326207351631384698>"
           ],
           [
             "<:bar1:1326207360166789200>",
             "<:bar2:1326207385462636586>",
             "<:bar3:1326207371621699676>",
             "<:bar4:1326207378340708474>",
-            "<:bar5:1326207393343737858>",
+            "<:bar5:1326207393343737858>"
           ],
           [
             "<:endbar1:1326207400860061736>",
             "<:endbar2:1326207409470967869>",
             "<:endbar3:1326207416857002034>",
             "<:endbar4:1326207424788562041>",
-            "<:endbar5:1326207432644362291>",
-          ],
+            "<:endbar5:1326207432644362291>"
+          ]
         ];
         let progressbar = progresssquares[0][Math.min(userlab[i] % 40, 4)];
         progressbar += progresssquares[1][4].repeat(Math.max(Math.floor((userlab[i] % 40) / 4) - 1, 0));
@@ -78,7 +78,7 @@ module.exports = {
 
     const response = await interaction.reply({
       components: [container],
-      flags: MessageFlags.IsComponentsV2,
+      flags: MessageFlags.IsComponentsV2
     });
     await dailyRewardRemind(interaction);
     let logs = await getLogs();
@@ -94,7 +94,7 @@ module.exports = {
     try {
       const interaction2 = await response.awaitMessageComponent({
         filter: collectorFilter,
-        time: 300000,
+        time: 300000
       });
       interaction2.reply({ flags: "Ephemeral", content: devotionhelp });
       help.setDisabled(true);
@@ -104,5 +104,5 @@ module.exports = {
       help.setDisabled(true);
       interaction.editReply({ components: [container] });
     }
-  },
+  }
 };

@@ -12,14 +12,14 @@ module.exports = {
     const comeBackLater = [
       `Your daily reward is still cooking! Come back <t:${dailytime + 86400}:R>.`,
       `Your daily reward isn't ready to claim yet! Come back <t:${dailytime + 86400}:R>.`,
-      `Your daily reward needs a little more time. Come back <t:${dailytime + 86400}:R>.`,
+      `Your daily reward needs a little more time. Come back <t:${dailytime + 86400}:R>.`
     ];
 
     const dailyCollect = [
       `You grabbed your daily reward and got`,
       `You opened your daily reward and found`,
       `You inspected your daily reward and discovered`,
-      `You uncovered your daily reward and were met with`,
+      `You uncovered your daily reward and were met with`
     ];
 
     let logs = await getLogs();
@@ -62,7 +62,7 @@ module.exports = {
               : Math.floor(Date.now() / 1000) - dailytime > 86400 * 2 && dailytime != 0
               ? ` *(streak lost)*`
               : ""
-          }`,
+          }`
       });
 
       logs.logs.games.dailysclaimed = (logs.logs.games.dailysclaimed ?? 0) + 1;
@@ -73,7 +73,7 @@ module.exports = {
     } else {
       await interaction.reply({
         content: "📦 " + comeBackLater[Math.floor(Math.random() * comeBackLater.length)],
-        flags: MessageFlags.Ephemeral,
+        flags: MessageFlags.Ephemeral
       });
 
       logs.logs.games.dailysfailed = (logs.logs.games.dailysfailed ?? 0) + 1;
@@ -84,5 +84,5 @@ module.exports = {
     }
 
     await writeLogs(logs);
-  },
+  }
 };

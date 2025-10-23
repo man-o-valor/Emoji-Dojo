@@ -11,7 +11,7 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
-  EmbedBuilder,
+  EmbedBuilder
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -22,7 +22,7 @@ const {
   dailyRewardRemind,
   getDojo,
   database,
-  changeCoins,
+  changeCoins
 } = require("../../functions.js");
 
 module.exports = {
@@ -86,14 +86,14 @@ module.exports = {
       const response = await interaction.reply({
         components: [container],
         withResponse: true,
-        flags: MessageFlags.IsComponentsV2,
+        flags: MessageFlags.IsComponentsV2
       });
       await dailyRewardRemind(interaction);
 
       const collectorFilter = (i) => i.user.id == interaction.user.id;
       let collector = response.resource.message.createMessageComponentCollector({
         filter: collectorFilter,
-        time: 120000,
+        time: 120000
       });
       try {
         collector.on("collect", async (interaction2) => {
@@ -128,7 +128,7 @@ module.exports = {
             interaction2.awaitModalSubmit({ time: 60000 }).then(async (interaction4) => {
               vaultarray = await getDojo(interaction.user.id);
               const segmenter = new Intl.Segmenter("en", {
-                granularity: "grapheme",
+                granularity: "grapheme"
               });
               let input = interaction4.fields.getTextInputValue("input").replace(/\s+/g, "");
               let inputarr = [...segmenter.segment(input)];
@@ -139,7 +139,7 @@ module.exports = {
                 await interaction4.reply({
                   content:
                     "Your Squad isn't formatted right! It's too short-- it needs 8 emojis in it. (Any extra will be ignored.)",
-                  flags: "Ephemeral",
+                  flags: "Ephemeral"
                 });
               } else {
                 let emojiinput = "";
@@ -169,14 +169,14 @@ module.exports = {
                 if (emojimissing) {
                   await interaction4.reply({
                     content: `You don't have enough of an emoji listed, or it doesn't exist: ${emojimissing}`,
-                    flags: "Ephemeral",
+                    flags: "Ephemeral"
                   });
                 } else {
                   // Checks out!
                   await database.set(interaction.user.id + "squad", datainput);
                   interaction4.reply({
                     content: `Your squad has been saved!\n${emojiinput}`,
-                    flags: "Ephemeral",
+                    flags: "Ephemeral"
                   });
                 }
               }
@@ -188,7 +188,7 @@ module.exports = {
               (await database.get(interaction.user.id + "savedsquad1")) ?? "",
               (await database.get(interaction.user.id + "savedsquad2")) ?? "",
               (await database.get(interaction.user.id + "savedsquad3")) ?? "",
-              (await database.get(interaction.user.id + "savedsquad4")) ?? "",
+              (await database.get(interaction.user.id + "savedsquad4")) ?? ""
             ];
             savedsquads = savedsquads.map((x) => x.split(",").slice(0, 8));
 
@@ -211,12 +211,12 @@ module.exports = {
                 {
                   name: "Saved Squad 1",
                   value: squadtexts[1],
-                  inline: true,
+                  inline: true
                 },
                 {
                   name: "Saved Squad 2",
                   value: squadtexts[2],
-                  inline: true,
+                  inline: true
                 }
               );
 
@@ -309,12 +309,12 @@ module.exports = {
             const response2 = await interaction2.reply({
               components: [container],
               withResponse: true,
-              flags: MessageFlags.IsComponentsV2,
+              flags: MessageFlags.IsComponentsV2
             });
             const collectorFilter = (i) => i.user.id == interaction.user.id;
             let collector = response2.resource.message.createMessageComponentCollector({
               filter: collectorFilter,
-              time: 120000,
+              time: 120000
             });
 
             collector.on("collect", async (interaction3) => {
@@ -331,7 +331,7 @@ module.exports = {
                   }
                   interaction3.reply({
                     content: `Success! Saved Squad ${interaction3.customId[4]} has been saved as:\n## ${squadtext}`,
-                    flags: MessageFlags.Ephemeral,
+                    flags: MessageFlags.Ephemeral
                   });
                 } else if (interaction3.customId.includes("load")) {
                   vaultarray = await getDojo(interaction.user.id);
@@ -356,13 +356,13 @@ module.exports = {
                   if (emojimissing) {
                     await interaction3.reply({
                       content: `You don't have enough of this emoji: ${emojis[emojimissing].emoji}`,
-                      flags: "Ephemeral",
+                      flags: "Ephemeral"
                     });
                   } else {
                     await database.set(interaction.user.id + "squad", datainput);
                     interaction3.reply({
                       content: `Your squad has been saved!\n${emojiinput}`,
-                      flags: "Ephemeral",
+                      flags: "Ephemeral"
                     });
                   }
                 } else if (interaction3.customId == "buy") {
@@ -371,19 +371,19 @@ module.exports = {
                   if (balance < 500) {
                     interaction3.reply({
                       content: "You can't afford this!",
-                      flags: "Ephemeral",
+                      flags: "Ephemeral"
                     });
                   } else if (slotsbought > 1) {
                     interaction3.reply({
                       content: "You've bought every slot!",
-                      flags: "Ephemeral",
+                      flags: "Ephemeral"
                     });
                   } else {
                     await changeCoins(interaction.user.id, -500);
                     await database.set(interaction.user.id + "squadsavesbought", slotsbought + 1);
                     interaction3.reply({
                       content: `Successfully purchased Slot ${slotsbought + 3}!`,
-                      flags: "Ephemeral",
+                      flags: "Ephemeral"
                     });
                   }
                 }
@@ -407,12 +407,12 @@ module.exports = {
             if (cursed == 0) {
               interaction2.reply({
                 content: `👺 Your squad has been **Cursed!** DojoBot will now always prevail.`,
-                flags: "Ephemeral",
+                flags: "Ephemeral"
               });
             } else {
               interaction2.reply({
                 content: `👼 Your squad has been **Uncursed!** DojoBot will now play fair.`,
-                flags: "Ephemeral",
+                flags: "Ephemeral"
               });
             }
           }
@@ -421,5 +421,5 @@ module.exports = {
         console.error(e);
       }
     }
-  },
+  }
 };

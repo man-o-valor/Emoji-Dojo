@@ -7,7 +7,7 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
-  MessageFlags,
+  MessageFlags
 } = require("discord.js");
 const { emojis, raritynames } = require("../../data.js");
 const { setupUser, database, getDojo, dailyRewardRemind, writeLogs, getLogs } = require("../../functions.js");
@@ -32,7 +32,7 @@ module.exports = {
     if (!othervault) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `<@${tradeuser.id}> hasn't played Emoji Dojo before!`,
+        content: `<@${tradeuser.id}> hasn't played Emoji Dojo before!`
       });
     } else {
       if (tradeuser.globalName != undefined && tradeuser.id != interaction.user.id) {
@@ -110,13 +110,13 @@ module.exports = {
                   .addActionRowComponents(row1);
                 const message = await interaction.reply({
                   components: [tradecontainer],
-                  flags: MessageFlags.IsComponentsV2,
+                  flags: MessageFlags.IsComponentsV2
                 });
                 await dailyRewardRemind(interaction);
                 const collectorFilter = (i) => i.user.id == interaction.user.id || i.user.id == tradeuser.id;
                 let collector = message.createMessageComponentCollector({
                   filter: collectorFilter,
-                  time: 120000,
+                  time: 120000
                 });
                 try {
                   collector.on("collect", async (interaction2) => {
@@ -173,7 +173,7 @@ module.exports = {
                       nay.setDisabled(true);
                       interaction.editReply({
                         components: [tradecontainer],
-                        flags: MessageFlags.IsComponentsV2,
+                        flags: MessageFlags.IsComponentsV2
                       });
                       if (myviewemojiid && theirviewemojiid) {
                         myvault.splice(myvault.indexOf(myemojifound.id), 1);
@@ -186,7 +186,7 @@ module.exports = {
                         await database.set(tradeuser.id + "vault", rawvault2 + myemojifound.id + ",");
 
                         interaction2.reply({
-                          content: `**Success!** ${theiremojifound.emoji} ⇄ ${myemojifound.emoji}`,
+                          content: `**Success!** ${theiremojifound.emoji} ⇄ ${myemojifound.emoji}`
                         });
                         let logs = await getLogs();
                         logs.logs.games.tradescompleted = logs.logs.games.tradescompleted ?? 0;
@@ -203,13 +203,13 @@ module.exports = {
                         await writeLogs(logs);
                       } else {
                         interaction2.reply({
-                          content: "This trade can't be completed anymore!",
+                          content: "This trade can't be completed anymore!"
                         });
                       }
                     } else {
                       interaction2.update({
                         components: [tradecontainer],
-                        flags: MessageFlags.IsComponentsV2,
+                        flags: MessageFlags.IsComponentsV2
                       });
                     }
                   });
@@ -219,7 +219,7 @@ module.exports = {
                   nay.setDisabled(true);
                   interaction.editReply({
                     components: [tradecontainer],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                 }
               } else {
@@ -229,40 +229,40 @@ module.exports = {
                   }** and **${
                     raritynames[(theiremojifound ?? { rarity: -1 }).rarity] ?? "N/A"
                   }**) and can't be traded.`,
-                  flags: "Ephemeral",
+                  flags: "Ephemeral"
                 });
               }
             } else {
               await interaction.reply({
                 content: `**Legendary** Emojis can't be traded.`,
-                flags: "Ephemeral",
+                flags: "Ephemeral"
               });
             }
           } else {
             await interaction.reply({
               content: `<@${tradeuser.id}> doesn't have an emoji called "${iwant}."`,
-              flags: "Ephemeral",
+              flags: "Ephemeral"
             });
           }
         } else {
           await interaction.reply({
             content: `You don't have an emoji called "${theyget}."`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         }
       } else {
         if (interaction.user.id == tradeuser.id) {
           await interaction.reply({
             content: `You can't trade with yourself!`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         } else {
           await interaction.reply({
             content: `You can't trade with apps!`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         }
       }
     }
-  },
+  }
 };

@@ -7,7 +7,7 @@ const {
   ContainerBuilder,
   TextDisplayBuilder,
   SeparatorBuilder,
-  SeparatorSpacingSize,
+  SeparatorSpacingSize
 } = require("discord.js");
 
 module.exports = {
@@ -51,12 +51,12 @@ module.exports = {
       );
     const response = await interaction.reply({
       components: [helpcomponent],
-      flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
+      flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2]
     });
 
     try {
       const confirmation = await response.awaitMessageComponent({
-        time: 60_000,
+        time: 60_000
       });
       let creditscomponent = new ContainerBuilder()
         .addTextDisplayComponents(
@@ -70,10 +70,10 @@ module.exports = {
         );
       await confirmation.reply({
         components: [creditscomponent],
-        flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
+        flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2]
       });
     } catch (e) {
       console.error(e);
     }
-  },
+  }
 };

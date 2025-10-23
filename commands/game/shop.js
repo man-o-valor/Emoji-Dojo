@@ -12,7 +12,7 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
-  MessageFlags,
+  MessageFlags
 } = require("discord.js");
 const { emojis, classes } = require("../../data.js");
 const { database, changeCoins, setupUser, getLogs, writeLogs, dailyRewardRemind } = require("../../functions.js");
@@ -23,7 +23,7 @@ const dailyPack_prices = {
   variance_increment: 5,
   common: 80,
   rare: 180,
-  special: 475,
+  special: 475
 };
 
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
     if (await setupUser(interaction.user)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
+        content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`
       });
     } else {
       const coincount = parseInt((await database.get(interaction.user.id + "coins")) ?? "100");
@@ -57,7 +57,7 @@ module.exports = {
         let emojilist = [
           emojis.filter((e) => e.rarity == 0),
           emojis.filter((e) => e.rarity == 1),
-          emojis.filter((e) => e.rarity == 2),
+          emojis.filter((e) => e.rarity == 2)
         ];
         const newstring =
           emojilist[0][Math.floor(Math.random() * emojilist[0].length)]?.id +
@@ -143,7 +143,7 @@ module.exports = {
         "A new caravan of emojis just joined my crew! Looking to trade?",
         "Herding these guys is hard work, but it sure is profitable!",
         "Say hi to Lennon for me!",
-        `I've got extra ${classes[dailyPack_class].name} emojis in today's Daily Pack!`,
+        `I've got extra ${classes[dailyPack_class].name} emojis in today's Daily Pack!`
       ];
       // Rare quotes
       if (dailyPack_hasSpecial && (dailyPack_isRare || dailyPack_isBig)) {
@@ -196,7 +196,7 @@ module.exports = {
           type: "premoji",
           id: dailyemojis[0],
           cost: 100,
-          description: emojis[dailyemojis[0]].description,
+          description: emojis[dailyemojis[0]].description
         },
         {
           label: emojis[dailyemojis[1]].names[0],
@@ -204,7 +204,7 @@ module.exports = {
           type: "premoji",
           id: dailyemojis[1],
           cost: 200,
-          description: emojis[dailyemojis[1]].description,
+          description: emojis[dailyemojis[1]].description
         },
         {
           label: emojis[dailyemojis[2]].names[0],
@@ -212,7 +212,7 @@ module.exports = {
           type: "premoji",
           id: dailyemojis[2],
           cost: 600,
-          description: emojis[dailyemojis[2]].description,
+          description: emojis[dailyemojis[2]].description
         },
         {
           label: `Random Common Emoji`,
@@ -220,7 +220,7 @@ module.exports = {
           type: "emoji",
           id: 0,
           cost: 75,
-          description: "One random common emoji, ready to add to your Squad and use!",
+          description: "One random common emoji, ready to add to your Squad and use!"
         },
         {
           label: `Random Rare Emoji`,
@@ -228,7 +228,7 @@ module.exports = {
           type: "emoji",
           id: 1,
           cost: 150,
-          description: "One random rare emoji, ready to add to your Squad and use!",
+          description: "One random rare emoji, ready to add to your Squad and use!"
         },
         {
           label: `Random Special Emoji`,
@@ -236,7 +236,7 @@ module.exports = {
           type: "emoji",
           id: 2,
           cost: 450,
-          description: "One random special emoji, ready to add to your Squad and use!",
+          description: "One random special emoji, ready to add to your Squad and use!"
         },
         {
           label: dailyPack_name,
@@ -244,7 +244,7 @@ module.exports = {
           type: "dailypack",
           id: 0,
           cost: dailyPack_price,
-          description: dailyPack_description,
+          description: dailyPack_description
         },
         {
           label: `Common Emoji Pack`,
@@ -253,7 +253,7 @@ module.exports = {
           id: 0,
           cost: 300,
           description:
-            "‼️ **20% DISCOUNT!** Contains:\n>>> :asterisk: :asterisk: :asterisk: Common Emoji x3\n✳️ Rare Emoji x1",
+            "‼️ **20% DISCOUNT!** Contains:\n>>> :asterisk: :asterisk: :asterisk: Common Emoji x3\n✳️ Rare Emoji x1"
         },
         {
           label: `Rare Emoji Pack`,
@@ -262,14 +262,14 @@ module.exports = {
           id: 1,
           cost: 1000,
           description:
-            "‼️ **22% DISCOUNT!** Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x5\n✳️ ✳️ ✳️ Rare Emoji x3\n⚛️ Special Emoji x1",
-        },
+            "‼️ **22% DISCOUNT!** Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x5\n✳️ ✳️ ✳️ Rare Emoji x3\n⚛️ Special Emoji x1"
+        }
         //{label:`Special Emoji Pack`,emoji:`🎁⚛️`,type:'pack',id:2,cost:2500,description:"Contains:\n>>> :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: :asterisk: Common Emoji x10\n✳️ ✳️ ✳️ ✳️ ✳️ Rare Emoji x5\n⚛️ ⚛️ ⚛️ Special Emoji x3"},
       ];
 
       const packcontents = [
         [0, 0, 0, 1],
-        [0, 0, 0, 0, 0, 1, 1, 1, 2] /*, [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2]*/,
+        [0, 0, 0, 0, 0, 1, 1, 1, 2] /*, [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2]*/
       ];
 
       let options = shopdata.map((item, index) => {
@@ -282,7 +282,7 @@ module.exports = {
             " " +
             shopdata[index].label,
           value: String(index),
-          description: "[" + String(index + 1) + "]",
+          description: "[" + String(index + 1) + "]"
         };
       });
 
@@ -333,12 +333,12 @@ module.exports = {
           .addTextDisplayComponents(new TextDisplayBuilder().setContent("🎁:asterisk: **Common Emoji Pack** (300 🪙)"))
           .addTextDisplayComponents(new TextDisplayBuilder().setContent("🎁✳️ **Rare Emoji Pack** (1000 🪙)"))
           .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large).setDivider(true))
-          .addActionRowComponents(shop),
+          .addActionRowComponents(shop)
       ];
 
       const message = await interaction.reply({
         components: shopcomponents,
-        flags: MessageFlags.IsComponentsV2,
+        flags: MessageFlags.IsComponentsV2
       });
       await dailyRewardRemind(interaction);
       let logs = await getLogs();
@@ -355,7 +355,7 @@ module.exports = {
 
       let dropdownCollector = message.createMessageComponentCollector({
         filter: collectorFilter,
-        time: 300000,
+        time: 300000
       });
 
       const oldinteraction = interaction;
@@ -414,7 +414,7 @@ module.exports = {
 
           let buttonCollector = message.createMessageComponentCollector({
             filter: ButtonFilter,
-            time: 300000,
+            time: 300000
           });
 
           try {
@@ -424,7 +424,7 @@ module.exports = {
               if ($ < shopdata[choice].cost) {
                 newinteraction.reply({
                   content: "Oops, you don't have enough 🪙 to buy this anymore!",
-                  flags: "Ephemeral",
+                  flags: "Ephemeral"
                 });
               } else {
                 let emojisbought = [[], [], []];
@@ -614,12 +614,12 @@ module.exports = {
                           .addSeparatorComponents(
                             new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                           )
-                          .addTextDisplayComponents(new TextDisplayBuilder().setContent(`>>> ${emojiString}`)),
+                          .addTextDisplayComponents(new TextDisplayBuilder().setContent(`>>> ${emojiString}`))
                       ],
-                      flags: MessageFlags.IsComponentsV2,
+                      flags: MessageFlags.IsComponentsV2
                     });
                     interaction.editReply({
-                      components: [individualcontainer],
+                      components: [individualcontainer]
                     });
                   });
                 } else if (shopdata[choice].type == "emoji") {
@@ -785,9 +785,9 @@ module.exports = {
                         .addSeparatorComponents(
                           new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                         )
-                        .addTextDisplayComponents(new TextDisplayBuilder().setContent(`>>> ${emojiString}`)),
+                        .addTextDisplayComponents(new TextDisplayBuilder().setContent(`>>> ${emojiString}`))
                     ],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                   interaction.editReply({ components: [individualcontainer] });
                 }
@@ -801,5 +801,5 @@ module.exports = {
         console.error(e);
       }
     }
-  },
+  }
 };

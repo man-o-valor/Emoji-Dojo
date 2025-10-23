@@ -19,14 +19,14 @@ module.exports = {
       if (interaction.replied || interaction.deferred) {
         await interaction.followUp({
           flags: "Ephemeral",
-          content: `There was an error with this command!\`\`\`${error.toString()}\`\`\``,
+          content: `There was an error with this command!\`\`\`${error.toString()}\`\`\``
         });
       } else {
         await interaction.reply({
           flags: "Ephemeral",
-          content: `There was an error with this command!\`\`\`${error.toString()}\`\`\``,
+          content: `There was an error with this command!\`\`\`${error.toString()}\`\`\``
         });
       }
     }
-  },
+  }
 };

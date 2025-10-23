@@ -4,7 +4,7 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
-  MessageFlags,
+  MessageFlags
 } = require("discord.js");
 const { database, setupUser, getLogs, writeLogs, dailyRewardRemind } = require("../../functions.js");
 
@@ -33,7 +33,7 @@ module.exports = {
       .addTextDisplayComponents(new TextDisplayBuilder().setContent(battlemsg + coindoublermsg));
     await interaction.reply({
       components: [coincontainer],
-      flags: MessageFlags.IsComponentsV2,
+      flags: MessageFlags.IsComponentsV2
     });
     await dailyRewardRemind(interaction);
     let logs = await getLogs();
@@ -43,5 +43,5 @@ module.exports = {
       logs.logs.players[`user${interaction.user.id}`].coinsviewed ?? 0;
     logs.logs.players[`user${interaction.user.id}`].coinsviewed += 1;
     await writeLogs(logs);
-  },
+  }
 };

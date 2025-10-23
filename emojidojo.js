@@ -47,16 +47,16 @@ if (!fs.existsSync(logsPath)) {
               randomemojisbought: 0,
               packsbought: 0,
               prepickedemojisbought: 0,
-              squadsviewed: 0,
+              squadsviewed: 0
             },
-            players: {},
-          },
+            players: {}
+          }
         },
         null,
         4
       ),
       {
-        withDetails: true,
+        withDetails: true
       }
     ).result
   );
@@ -99,10 +99,10 @@ client
         {
           name: "users Battle! 🗣️🔥",
           type: ActivityType.Watching,
-          url: "http://tinyurl.com/foodtruckdiscordbot",
-        },
+          url: "http://tinyurl.com/foodtruckdiscordbot"
+        }
       ],
-      status: "online",
+      status: "online"
     });
   })
   .catch((error) => {

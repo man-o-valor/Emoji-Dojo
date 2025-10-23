@@ -7,7 +7,7 @@ const {
   ContainerBuilder,
   TextDisplayBuilder,
   SeparatorBuilder,
-  SeparatorSpacingSize,
+  SeparatorSpacingSize
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -23,7 +23,7 @@ const {
   checkSquadValidity,
   curveCoins,
   restockCoins,
-  BattleEmoji,
+  BattleEmoji
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -38,12 +38,12 @@ module.exports = {
     if (await setupUser(interaction.user)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
+        content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`
       });
     } else if (await checkSquadValidity(interaction.user.id)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `Your squad seems to have some Emojis that aren't in your Dojo.`,
+        content: `Your squad seems to have some Emojis that aren't in your Dojo.`
       });
     } else {
       let battlespeed = parseFloat(interaction.options.getNumber("speed") ?? "4") ?? 4;
@@ -104,7 +104,7 @@ module.exports = {
         if (player2squadarray == "error") {
           await interaction.editReply({
             content: "🤒 Something went wrong with picking DojoBot's Squad.",
-            flags: MessageFlags.Ephemeral,
+            flags: MessageFlags.Ephemeral
           });
         } else {
           await database.set(interaction.user.id + "battlepending", 20 + Math.floor(Date.now() / 1000));
@@ -125,7 +125,7 @@ module.exports = {
             player: [interaction.user.globalName, "DojoBot"],
             playerturn: 1,
             newlines: 0,
-            logfile: `${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`,
+            logfile: `${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`
           };
           for (let i = 0; i < 8; i++) {
             gamedata.squads[0].push(new BattleEmoji(player1squadarray[i], 1, interaction.user.globalName));
@@ -159,7 +159,7 @@ module.exports = {
           const response = await interaction.editReply({
             components: [challengecontainer],
             flags: MessageFlags.IsComponentsV2,
-            fetchReply: true,
+            fetchReply: true
           });
           await dailyRewardRemind(interaction);
 
@@ -167,7 +167,7 @@ module.exports = {
             i.user.id == interaction.user.id && (i.customId == "battle" || i.customId == "nah");
           let collector = response.createMessageComponentCollector({
             filter: collectorFilter,
-            time: 120000,
+            time: 120000
           });
           try {
             collector.on("collect", async (interaction2) => {
@@ -180,7 +180,7 @@ module.exports = {
                   nah.setDisabled(true);
                   interaction.editReply({
                     components: [challengecontainer],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                   let logs = await getLogs();
                   logs.logs.games.botstarted += 1;
@@ -197,7 +197,12 @@ module.exports = {
                   }
                   let prevturn = lodash.cloneDeep(gamedata.squads);
                   try {
-                    while (gamedata.turn < 200 && gamedata.squads[0][0] != null && gamedata.squads[1][0] != null && !gamedata.draw) {
+                    while (
+                      gamedata.turn < 200 &&
+                      gamedata.squads[0][0] != null &&
+                      gamedata.squads[1][0] != null &&
+                      !gamedata.draw
+                    ) {
                       if (gamedata.turn % 5 == 0) {
                         prevturn = lodash.cloneDeep(gamedata.squads);
                       }
@@ -262,17 +267,17 @@ module.exports = {
                           .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                         new ContainerBuilder().addTextDisplayComponents(
                           new TextDisplayBuilder().setContent(richnumberhidden + richtextsnippet)
-                        ),
+                        )
                       ];
                       if (gamedata.turn > 1) {
                         await interaction2.editReply({
                           components: battlecomponents,
-                          flags: MessageFlags.IsComponentsV2,
+                          flags: MessageFlags.IsComponentsV2
                         });
                       } else {
                         await interaction2.reply({
                           components: battlecomponents,
-                          flags: MessageFlags.IsComponentsV2,
+                          flags: MessageFlags.IsComponentsV2
                         });
                       }
                       await delay(battlespeed * 1000);
@@ -295,19 +300,19 @@ module.exports = {
                         new TextDisplayBuilder().setContent(
                           "🤒 An error has occurred and the Battle cannot continue.```" + e + "```"
                         )
-                      ),
+                      )
                     ];
                     await interaction2.editReply({
                       components: battlecomponents,
-                      flags: MessageFlags.IsComponentsV2,
+                      flags: MessageFlags.IsComponentsV2
                     });
                     await interaction2.followUp({
                       files: [
                         {
                           attachment: txt,
-                          name: `${interaction.user.username} vs Dojobot [error].txt`,
-                        },
-                      ],
+                          name: `${interaction.user.username} vs Dojobot [error].txt`
+                        }
+                      ]
                     });
                   }
                   await database.set(interaction.user.id + "battlepending", "0");
@@ -321,7 +326,11 @@ module.exports = {
                     .setStyle(ButtonStyle.Primary);
                   const row2 = new ActionRowBuilder().addComponents(exportbutton);
                   let battleendcontainer;
-                  if (gamedata.turn >= 200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) || gamedata.draw) {
+                  if (
+                    gamedata.turn >= 200 ||
+                    (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) ||
+                    gamedata.draw
+                  ) {
                     battleendcontainer = new ContainerBuilder()
                       .addTextDisplayComponents(
                         new TextDisplayBuilder().setContent(
@@ -419,10 +428,10 @@ module.exports = {
                   }
                   int3 = await interaction2.followUp({
                     components: [battleendcontainer],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                   let collector = int3.createMessageComponentCollector({
-                    time: 600000,
+                    time: 600000
                   });
                   collector.on("collect", async (interaction3) => {
                     try {
@@ -431,9 +440,9 @@ module.exports = {
                         files: [
                           {
                             attachment: txt,
-                            name: `${interaction.user.username} vs Dojobot.txt`,
-                          },
-                        ],
+                            name: `${interaction.user.username} vs Dojobot.txt`
+                          }
+                        ]
                       });
                       let logs = await getLogs();
                       logs.logs.games.botlogsrequested += 1;
@@ -474,7 +483,7 @@ module.exports = {
                     player: [interaction.user.globalName, "DojoBot"],
                     playerturn: 1,
                     newlines: 0,
-                    logfile: `${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`,
+                    logfile: `${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`
                   };
                   const { BattleEmoji } = require("../../functions.js");
                   for (let i = 0; i < 8; i++) {
@@ -511,13 +520,13 @@ module.exports = {
                     .addActionRowComponents(row1);
                   await interaction2.update({
                     components: [challengecontainer],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                 }
               } else {
                 await interaction2.reply({
                   content: `You have a Dojobot battle going on already!`,
-                  flags: "Ephemeral",
+                  flags: "Ephemeral"
                 });
               }
             });
@@ -527,7 +536,7 @@ module.exports = {
             nah.setDisabled(true);
             await interaction.editReply({
               components: [challengecontainer],
-              flags: MessageFlags.IsComponentsV2,
+              flags: MessageFlags.IsComponentsV2
             });
           }
         }
@@ -535,15 +544,15 @@ module.exports = {
         if (bp == true) {
           await interaction.reply({
             content: `You have a Dojobot battle going on already!`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         } else {
           await interaction.reply({
             content: `You cannot battle DojoBot right now! Come back <t:${Math.max(bp, bbcd)}:R>.`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         }
       }
     }
-  },
+  }
 };

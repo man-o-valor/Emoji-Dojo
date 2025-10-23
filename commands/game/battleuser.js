@@ -7,7 +7,7 @@ const {
   TextDisplayBuilder,
   SeparatorBuilder,
   ContainerBuilder,
-  SeparatorSpacingSize,
+  SeparatorSpacingSize
 } = require("discord.js");
 const { emojis } = require("../../data.js");
 const {
@@ -20,7 +20,7 @@ const {
   writeLogs,
   dailyRewardRemind,
   checkSquadValidity,
-  BattleEmoji,
+  BattleEmoji
 } = require("../../functions.js");
 const lodash = require("lodash");
 
@@ -40,22 +40,22 @@ module.exports = {
     if (await setupUser(interaction.user)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`,
+        content: `Greetings, <@${interaction.user.id}>! Check your DMs before you continue.`
       });
     } else if (!othervault) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `<@${battleuser.id}> doesn't have a Squad yet! Show them how to play and then you can Battle.`,
+        content: `<@${battleuser.id}> doesn't have a Squad yet! Show them how to play and then you can Battle.`
       });
     } else if (await checkSquadValidity(interaction.user.id)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `Your squad seems to have some Emojis that aren't in your Dojo.`,
+        content: `Your squad seems to have some Emojis that aren't in your Dojo.`
       });
     } else if (await checkSquadValidity(battleuser.id)) {
       await interaction.reply({
         flags: "Ephemeral",
-        content: `<@${battleuser.id}>'s squad seems to have some Emojis that aren't in their Dojo.`,
+        content: `<@${battleuser.id}>'s squad seems to have some Emojis that aren't in their Dojo.`
       });
     } else {
       if (battleuser.globalName != undefined && battleuser.id != interaction.user.id) {
@@ -66,7 +66,7 @@ module.exports = {
         if (coins <= 40 || coins2 <= 40) {
           await interaction.reply({
             content: `Both users must have at least 40 🪙 to Battle! Use \`/friendlybattle\` to battle your friends with no money involved, or \`/battlebot\` to fight Dojobot and earn some 🪙!`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         } else {
           if (bp < Date.now() / 1000 && bp2 < Date.now() / 1000) {
@@ -119,7 +119,7 @@ module.exports = {
               player: [interaction.user.globalName, battleuser.globalName],
               playerturn: 1,
               newlines: 0,
-              logfile: `${interaction.user.id} (${interaction.user.username}) vs ${battleuser.id} (${battleuser.username})\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`,
+              logfile: `${interaction.user.id} (${interaction.user.username}) vs ${battleuser.id} (${battleuser.username})\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`
             };
             for (let i = 0; i < 8; i++) {
               gamedata.squads[0].push(new BattleEmoji(player1squadarray[i], 1, interaction.user.globalName));
@@ -161,14 +161,14 @@ module.exports = {
 
             const response = await interaction.reply({
               components: [challengecontainer],
-              flags: MessageFlags.IsComponentsV2,
+              flags: MessageFlags.IsComponentsV2
             });
             await dailyRewardRemind(interaction);
 
             const collectorFilter = (i) => i.user.id == interaction.user.id || i.user.id == battleuser.id;
             let collector = response.createMessageComponentCollector({
               filter: collectorFilter,
-              time: 300000,
+              time: 300000
             });
 
             try {
@@ -223,7 +223,7 @@ module.exports = {
                     .addActionRowComponents(row1);
                   interaction.editReply({
                     components: [challengecontainer],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                   await database.set(interaction.user.id + "battlepending", 300 + Math.floor(Date.now() / 1000));
                   await database.set(battleuser.id + "battlepending", 300 + Math.floor(Date.now() / 1000));
@@ -248,7 +248,12 @@ module.exports = {
                   }
                   let prevturn = lodash.cloneDeep(gamedata.squads);
                   try {
-                    while (gamedata.turn < 200 && gamedata.squads[0][0] != null && gamedata.squads[1][0] != null && !gamedata.draw) {
+                    while (
+                      gamedata.turn < 200 &&
+                      gamedata.squads[0][0] != null &&
+                      gamedata.squads[1][0] != null &&
+                      !gamedata.draw
+                    ) {
                       if (gamedata.turn % 5 == 0) {
                         prevturn = lodash.cloneDeep(gamedata.squads);
                       }
@@ -313,17 +318,17 @@ module.exports = {
                           .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                         new ContainerBuilder().addTextDisplayComponents(
                           new TextDisplayBuilder().setContent(richnumberhidden + richtextsnippet)
-                        ),
+                        )
                       ];
                       if (gamedata.turn > 1) {
                         await interaction2.editReply({
                           components: battlecomponents,
-                          flags: MessageFlags.IsComponentsV2,
+                          flags: MessageFlags.IsComponentsV2
                         });
                       } else {
                         await interaction2.reply({
                           components: battlecomponents,
-                          flags: MessageFlags.IsComponentsV2,
+                          flags: MessageFlags.IsComponentsV2
                         });
                       }
                       await delay(battlespeed * 1000);
@@ -346,19 +351,19 @@ module.exports = {
                         new TextDisplayBuilder().setContent(
                           "🤒 An error has occurred and the Battle cannot continue.```" + e + "```"
                         )
-                      ),
+                      )
                     ];
                     await interaction2.editReply({
                       components: battlecomponents,
-                      flags: MessageFlags.IsComponentsV2,
+                      flags: MessageFlags.IsComponentsV2
                     });
                     await interaction2.followUp({
                       files: [
                         {
                           attachment: txt,
-                          name: `${interaction.user.username} vs ${battleuser.username} [error].txt`,
-                        },
-                      ],
+                          name: `${interaction.user.username} vs ${battleuser.username} [error].txt`
+                        }
+                      ]
                     });
                   }
                   await database.set(interaction.user.id + "battlepending", "0");
@@ -372,7 +377,11 @@ module.exports = {
                     .setStyle(ButtonStyle.Primary);
                   const row2 = new ActionRowBuilder().addComponents(exportbutton);
                   let battleendcontainer;
-                  if (gamedata.turn >= 200 || (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) || gamedata.draw) {
+                  if (
+                    gamedata.turn >= 200 ||
+                    (gamedata.squads[0].length == 0 && gamedata.squads[1].length == 0) ||
+                    gamedata.draw
+                  ) {
                     battleendcontainer = new ContainerBuilder()
                       .addTextDisplayComponents(
                         new TextDisplayBuilder().setContent(
@@ -492,10 +501,10 @@ module.exports = {
                   }
                   int3 = await interaction2.followUp({
                     components: [battleendcontainer],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                   let collector = int3.createMessageComponentCollector({
-                    time: 600000,
+                    time: 600000
                   });
                   collector.on("collect", async (interaction3) => {
                     try {
@@ -504,9 +513,9 @@ module.exports = {
                         files: [
                           {
                             attachment: txt,
-                            name: `${interaction.user.username} vs ${battleuser.username}.txt`,
-                          },
-                        ],
+                            name: `${interaction.user.username} vs ${battleuser.username}.txt`
+                          }
+                        ]
                       });
                       let logs = await getLogs();
                       logs.logs.games.userlogsrequested += 1;
@@ -553,7 +562,7 @@ module.exports = {
                     .addActionRowComponents(row1);
                   interaction2.update({
                     components: [challengecontainer],
-                    flags: MessageFlags.IsComponentsV2,
+                    flags: MessageFlags.IsComponentsV2
                   });
                 }
               });
@@ -580,13 +589,13 @@ module.exports = {
                 );
               interaction.editReply({
                 components: [challengecontainer],
-                flags: MessageFlags.IsComponentsV2,
+                flags: MessageFlags.IsComponentsV2
               });
             }
           } else {
             await interaction.reply({
               content: `You cannot battle right now! You'll be able to <t:${bp}:R>, or when your current Battle is over.`,
-              flags: "Ephemeral",
+              flags: "Ephemeral"
             });
           }
         }
@@ -594,15 +603,15 @@ module.exports = {
         if (interaction.user.id == battleuser.id) {
           await interaction.reply({
             content: `You can't battle yourself!`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         } else {
           await interaction.reply({
             content: `You can't battle apps!`,
-            flags: "Ephemeral",
+            flags: "Ephemeral"
           });
         }
       }
     }
-  },
+  }
 };
