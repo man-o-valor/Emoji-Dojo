@@ -399,7 +399,8 @@ module.exports = {
             if (!pagesByStyle[s] || pagesByStyle[s].length === 0) pagesByStyle[s] = [""];
           }
 
-          const pages = pagesByStyle[currentSortStyle];
+          let pages = pagesByStyle[currentSortStyle] ?? [""];
+          if (!Array.isArray(pages) || pages.length === 0) pages = [""];
 
           let pageIndex = 0;
 
@@ -450,8 +451,11 @@ module.exports = {
               if (interaction2.customId === "sortstyle") {
                 await database.set(interaction.user.id + "sortstyle", parseInt(interaction2.values[0]));
                 const newStyle = parseInt(interaction2.values[0]);
+                const sourcePages = Array.isArray(pagesByStyle[newStyle]) && pagesByStyle[newStyle].length > 0
+                  ? pagesByStyle[newStyle]
+                  : [""];
                 pages.length = 0;
-                for (const p of pagesByStyle[newStyle] ?? [""]) pages.push(p);
+                for (const p of sourcePages) pages.push(p);
                 sortDropdown.setPlaceholder(sorttypes[newStyle]);
                 pageIndex = 0;
                 vaultcontainer = new ContainerBuilder()
@@ -538,7 +542,7 @@ async function sortDojo(interaction, vaultarray, sortDropdown, overrideSortStyle
     if (!items || items.length === 0) return "";
     let out = "";
     for (let i = 0; i < items.length; i++) {
-      if (i > 0 && i % 7 === 0) out += "\n";
+      if (i > 0 && i % 6 === 0) out += "\n";
       out += items[i];
     }
     return out;
