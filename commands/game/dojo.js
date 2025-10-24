@@ -25,7 +25,7 @@ const {
   getLogs,
   writeLogs,
   dailyRewardRemind,
-  adminpanel,
+  adminPanel,
   renderqemoji
 } = require("../../functions.js");
 const { closestMatch } = require("closest-match");
@@ -39,7 +39,7 @@ module.exports = {
     const viewemoji = interaction.options.getString("emoji");
     if ((viewemoji ?? "").startsWith("%dev")) {
       if (interaction.user.id == "1013096732147597412" || interaction.user.id == "1146557659349270639") {
-        await adminpanel(interaction, viewemoji);
+        await adminPanel(interaction, viewemoji);
       } else {
         await interaction.reply({
           flags: "Ephemeral",

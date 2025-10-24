@@ -1,68 +1,34 @@
 const healthemojis = [
-  "➖",
-  "0️⃣",
-  "1️⃣",
-  "2️⃣",
-  "3️⃣",
-  "4️⃣",
-  "5️⃣",
-  "6️⃣",
-  "7️⃣",
-  "8️⃣",
-  "9️⃣",
-  "🔟",
-  "➕"
-  /*"<:health_0:1278757291646259232>",
-  "<:health0:1278757283790323854>",
-  "<:health1:1278757275942780968>",
-  "<:health2:1278757268774457376>",
-  "<:health3:1278757260843028551>",
-  "<:health4:1278757251535863862>",
-  "<:health5:1278757242786545767>",
-  "<:health6:1278757232959426592>",
-  "<:health7:1278757222469472339>",
-  "<:health8:1278757213057323164>",
-  "<:health9:1278757200176873544>",
-  "<:health10:1293308044167483545>",
-  "<:health11:1293308058138841290>",
-  "<:health12:1293308069404606464>",
-  "<:health13:1293308089381949480>",
-  "<:health14:1293308105555316837>",
-  "<:health15:1293308124144341033>",*/
+  "<:health_0:1431393230032732191>",
+  "<:health0:1431393228812193812>",
+  "<:health1:1431393227927191562>",
+  "<:health2:1431393226648195093>",
+  "<:health3:1431393225750351903>",
+  "<:health4:1431393222466338846>",
+  "<:health5:1431393221132423301>",
+  "<:health6:1431393214081929337>",
+  "<:health7:1431393213029290225>",
+  "<:health8:1431393212035108925>",
+  "<:health9:1431393210902511806>",
+  "<:health10:1431393210021712056>"
 ];
 
 const dmgemojis = [
-  "➖",
-  "➖",
-  "➖",
-  "➖",
-  "0️⃣",
-  "1️⃣",
-  "2️⃣",
-  "3️⃣",
-  "4️⃣",
-  "5️⃣",
-  "6️⃣",
-  "7️⃣",
-  "8️⃣",
-  "9️⃣",
-  "🔟",
-  "➕"
-  /*"<:attack__3:1308565301226377348>",
-  "<:attack_3:1308565243768733696>",
-  "<:attack_2:1308565231236157470>",
-  "<:attack_1:1308565220930617425>",
-  "<:attack0:1278757419488383090>",
-  "<:attack1:1278757410290405522>",
-  "<:attack2:1278757401511858287>",
-  "<:attack3:1278757393563389995>",
-  "<:attack4:1278757385405730846>",
-  "<:attack5:1278757377222639616>",
-  "<:attack6:1278757369819562036>",
-  "<:attack7:1278757359606435922>",
-  "<:attack8:1278757344066666517>",
-  "<:attack9:1278757315373306009>",
-  "<:attack10:1278757304027844731>",*/
+  "<:attack_3:1431393204636487832>",
+  "<:attackn3:1431393379203289178>",
+  "<:attackn2:1431393381652758538>",
+  "<:attackn1:1431393382881820783>",
+  "<:attack0:1431393203604422656>",
+  "<:attack1:1431393202304454746>",
+  "<:attack2:1431393201029120177>",
+  "<:attack3:1431393199926022274>",
+  "<:attack4:1431393197333938227>",
+  "<:attack5:1431393196361125928>",
+  "<:attack6:1431393195463409757>",
+  "<:attack7:1431393194364370964>",
+  "<:attack8:1431393193072525444>",
+  "<:attack9:1431393191600455791>",
+  "<:attack10:1431393190656606250>"
 ];
 
 const quantityemojis = [
@@ -2141,7 +2107,8 @@ const emojis = [
     rarity: -1,
     names: ["Owl"],
     class: null,
-    description: "When a friendly Emoji is attacked and this is not at the front of the Squad, moves to the front of the Squad (transformed from 🪶)"
+    description:
+      "When a friendly Emoji is attacked and this is not at the front of the Squad, moves to the front of the Squad (starts as 🪶)"
   },
   {
     emoji: "🦅",
@@ -2151,7 +2118,8 @@ const emojis = [
     rarity: 1,
     names: ["Eagle"],
     class: 4,
-    description: "When a friendly Emoji is attacked and this is not at the front of the Squad, moves to the front of the Squad"
+    description:
+      "When a friendly Emoji is attacked and this is not at the front of the Squad, moves to the front of the Squad"
   },
   {
     emoji: "💔",
@@ -2191,7 +2159,8 @@ const emojis = [
     rarity: 2,
     names: ["Rewind", "Rewind Button"],
     class: 2,
-    description: "When this defeats an Emoji, sets itself back to its default stats. Sets the emoji that defeats it back to its default stats"
+    description:
+      "When this defeats an Emoji, sets itself back to its default stats. Sets the emoji that defeats it back to its default stats"
   }
 ];
 

@@ -1967,6 +1967,12 @@ function battleStartAbilities(gamedata) {
             gamedata.squads[j][i - 1].hp = temp;
             gamedata.squads[j].splice(i, 1);
             i -= 1;
+          } else {
+            let temp = lodash.cloneDeep(gamedata.squads[flip01(j)][i - 1].dmg);
+            gamedata.squads[flip01(j)][i - 1].dmg = lodash.cloneDeep(gamedata.squads[flip01(j)][i - 1].hp);
+            gamedata.squads[flip01(j)][i - 1].hp = temp;
+            gamedata.squads[flip01(j)].splice(i, 1);
+            i -= 1;
           }
           break;
         case 128:
@@ -2175,13 +2181,13 @@ function playTurn(gamedata) {
 }
 
 function renderhemoji(value) {
-  if (value === undefined) return "<:healthundefined:1427775422300557403>";
+  if (value === undefined) return "<:healthundefined:1431393231416987761>";
   const index = Math.max(0, Math.min(Math.floor(Number(value)) + 1, healthemojis.length - 1));
   return healthemojis[index];
 }
 
 function renderdemoji(value) {
-  if (value === undefined) return "<:attackundefined:1427775429527343104>";
+  if (value === undefined) return "<:attackundefined:1431393208264429730>";
   const index = Math.max(-4, Math.min(Math.floor(Number(value)) + 1, dmgemojis.length - 4)) + 3;
   return dmgemojis[index];
 }
@@ -2192,7 +2198,7 @@ function renderqemoji(value) {
   return quantityemojis[index];
 }
 
-async function adminpanel(interaction, viewemoji) {
+async function adminPanel(interaction, viewemoji) {
   devdata = viewemoji.split(" ");
   devdata.shift();
   if (devdata[0] == "read") {
@@ -2414,7 +2420,7 @@ module.exports = {
   dailyRewardRemind,
   generateBotSquad,
   checkSquadValidity,
-  adminpanel,
+  adminPanel,
   curveCoins,
   restockCoins,
   renderqemoji,
