@@ -1912,7 +1912,7 @@ const emojis = [
     hp: 2,
     dmg: 2,
     rarity: 0,
-    names: ["Poop", "Poo"],
+    names: ["Poop", "Poo", "Shit"],
     class: 5,
     description: "When defeated, lowers the attack power of the Emoji that defeated it by 1"
   },
