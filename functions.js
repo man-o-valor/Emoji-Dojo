@@ -3,7 +3,7 @@ const lodash = require("lodash");
 const { emojis, healthemojis, dmgemojis, quantityemojis } = require("./data.js");
 const fs = require("fs");
 const formatToJson = require("format-to-json");
-const { MessageFlags } = require("discord.js");
+const { MessageFlags, AttachmentBuilder } = require("discord.js");
 
 const database = new Keyv("sqlite://databases//database.sqlite", {
   namespace: "userdata"
@@ -387,11 +387,10 @@ class BattleEmoji {
       return offender.alterhp(gamedata, target, val, verb, silence);
     }
 
-  ({ gamedata, target, offender, val } = defendAttack(gamedata, target, offender, val));
+    ({ gamedata, target, offender, val } = defendAttack(gamedata, target, offender, val));
 
-
-  if (!target) return gamedata;
-  if (target.hp === undefined || target.hp < 0) target.hp = 0;
+    if (!target) return gamedata;
+    if (target.hp === undefined || target.hp < 0) target.hp = 0;
 
     ({ gamedata, target, offender, val, silence } = beforeAttack(gamedata, target, offender, val, silence));
 
@@ -411,7 +410,6 @@ class BattleEmoji {
       }
       ({ gamedata, target, offender } = onDefeat(gamedata, target, offender));
       if (kill) {
-
         gamedata.graveyard = gamedata.graveyard ?? [];
         const idx = target.index(gamedata);
         target.oldindex = idx;
@@ -2210,9 +2208,11 @@ async function adminPanel(interaction, viewemoji) {
   devdata.shift();
   if (devdata[0] == "read") {
     const data = await database.get(devdata[1]);
+    attachment = new AttachmentBuilder(Buffer.from(data), { name: "data.txt" });
     await interaction.reply({
       flags: "Ephemeral",
-      content: `Found "${data}" at "${devdata[1]}".`
+      content: `Found this at "${devdata[1]}".`,
+      files: [attachment]
     });
   } else if (devdata[0] == "write") {
     await database.set(devdata[1], devdata[2]);
