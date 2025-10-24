@@ -329,6 +329,7 @@ class BattleEmoji {
   }
 
   index(gamedata) {
+    if (this.oldindex !== undefined) return this.oldindex;
     return gamedata.squads[this.squad - 1].findIndex((x) => x.battleId == this.battleId);
   }
 
@@ -410,8 +411,10 @@ class BattleEmoji {
       }
       ({ gamedata, target, offender } = onDefeat(gamedata, target, offender));
       if (kill) {
+
         gamedata.graveyard = gamedata.graveyard ?? [];
         const idx = target.index(gamedata);
+        target.oldindex = idx;
         if (idx !== -1) {
           const [removed] = target.squadarr(gamedata).splice(idx, 1);
           gamedata.graveyard.push(removed);
