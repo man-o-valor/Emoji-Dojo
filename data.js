@@ -1526,7 +1526,6 @@ const emojis = [
       "Last Track",
       "Last Track Button",
       "Last",
-      "Rewind",
       "Backtrack",
       "Last Song"
     ],
@@ -2035,7 +2034,7 @@ const emojis = [
     dmg: 3,
     rarity: 2,
     names: ["Ringed Planet", "Planet", "Planet with Rings", "Saturn"],
-    class: 5,
+    class: 4,
     description:
       "Every other turn, the friendly Emoji in front of this swaps places with the friendly Emoji behind this"
   },
