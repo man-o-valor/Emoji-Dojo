@@ -394,12 +394,18 @@ module.exports = {
           sortDropdown.setPlaceholder(sorttypes[currentSortStyle]);
 
           const pagesByStyle = {};
-          for (let s = 0; s < sorttypes.length; s++) {
-            pagesByStyle[s] = await sortDojo(interaction, vaultarray, sortDropdown, s);
-            if (!pagesByStyle[s] || pagesByStyle[s].length === 0) pagesByStyle[s] = [""];
-          }
+          // Only precompute the pages for the currently selected style to save time.
+          pagesByStyle[currentSortStyle] = await sortDojo(
+            interaction,
+            vaultarray,
+            sortDropdown,
+            currentSortStyle
+          );
+          if (!pagesByStyle[currentSortStyle] || pagesByStyle[currentSortStyle].length === 0)
+            pagesByStyle[currentSortStyle] = [""];
 
-          let pages = pagesByStyle[currentSortStyle] ?? [""];
+          // Copy the precomputed pages so `pages` is independent from the cache entry.
+          let pages = (pagesByStyle[currentSortStyle] ?? [""]).slice();
           if (!Array.isArray(pages) || pages.length === 0) pages = [""];
 
           let pageIndex = 0;
@@ -451,11 +457,11 @@ module.exports = {
               if (interaction2.customId === "sortstyle") {
                 await database.set(interaction.user.id + "sortstyle", parseInt(interaction2.values[0]));
                 const newStyle = parseInt(interaction2.values[0]);
-                const sourcePages = Array.isArray(pagesByStyle[newStyle]) && pagesByStyle[newStyle].length > 0
-                  ? pagesByStyle[newStyle]
-                  : [""];
-                pages.length = 0;
-                for (const p of sourcePages) pages.push(p);
+                if (!Array.isArray(pagesByStyle[newStyle]) || pagesByStyle[newStyle].length === 0) {
+                  pagesByStyle[newStyle] = await sortDojo(interaction, vaultarray, sortDropdown, newStyle);
+                  if (!pagesByStyle[newStyle] || pagesByStyle[newStyle].length === 0) pagesByStyle[newStyle] = [""];
+                }
+                pages = pagesByStyle[newStyle].slice();
                 sortDropdown.setPlaceholder(sorttypes[newStyle]);
                 pageIndex = 0;
                 vaultcontainer = new ContainerBuilder()
