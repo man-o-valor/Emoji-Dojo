@@ -1233,9 +1233,9 @@ function onAttack(gamedata, target, offender, val) {
   }
   if (target?.id == 5 && target.squadarr(gamedata).length > 1) {
     // turtle
-    gamedata = target.move(gamedata, target.squadarr(gamedata).length - 1);
     gamedata = battleLine(gamedata, `\n⇋ ${target.playername}'s ${target.emoji} retreated to the back of the Squad!`);
-    gamedata = target.alterhp(gamedata, target, 1);
+    gamedata = target.move(gamedata, target.squadarr(gamedata).length - 1);
+    gamedata = target.alterhp(gamedata, target, 2);
   }
   if (target?.id == 111) {
     // wrapped gift
@@ -1274,26 +1274,27 @@ function onAttack(gamedata, target, offender, val) {
     target.alterdmg(gamedata, 0 - val);
   }
   for (let i = 0; i < target.squadarr(gamedata).length; i++) {
-    switch (gamedata.squads[target.squad - 1][i]?.id) {
+    const focusedemoji = target.squadarr(gamedata)[i];
+    switch (focusedemoji?.id) {
       case 160:
-        // feather/owl
-        gamedata = gamedata.squads[target.squad - 1][i].move(gamedata, 0);
-        gamedata = battleLine(
-          gamedata,
-          `\n⇋ ${gamedata.squads[target.squad - 1][i].playername}'s ${
-            gamedata.squads[target.squad - 1][i].emoji
-          } flew to the front of the Squad!`
-        );
+        if (gamedata.squads[target.squad - 1][0].battleId != focusedemoji.battleId) {
+          // feather/owl
+          gamedata = focusedemoji.move(gamedata, 0);
+          gamedata = battleLine(
+            gamedata,
+            `\n⇋ ${focusedemoji.playername}'s ${focusedemoji.emoji} flew to the front of the Squad!`
+          );
+        }
         break;
       case 161:
-        // eagle
-        gamedata = gamedata.squads[target.squad - 1][i].move(gamedata, 0);
-        gamedata = battleLine(
-          gamedata,
-          `\n⇋ ${gamedata.squads[target.squad - 1][i].playername}'s ${
-            gamedata.squads[target.squad - 1][i].emoji
-          } flew to the front of the Squad!`
-        );
+        if (gamedata.squads[target.squad - 1][0].battleId != focusedemoji.battleId) {
+          // eagle
+          gamedata = battleLine(
+            gamedata,
+            `\n⇋ ${focusedemoji.playername}'s ${focusedemoji.emoji} flew to the front of the Squad!`
+          );
+          gamedata = focusedemoji.move(gamedata, 0);
+        }
         break;
     }
   }
@@ -1398,17 +1399,20 @@ function afterDefeat(gamedata, target, offender) {
         break;
       case 162:
         // broken heart
-        gamedata = focusedemoji.alterhp(gamedata, offender.squadarr(gamedata)[0], 1);
+        gamedata = focusedemoji.alterhp(gamedata, target.squadarr(gamedata)[0], 1);
         break;
       case 163:
-        // ladder
-        gamedata = battleLine(
-          gamedata,
-          `\n⇋ ${focusedemoji.playername}'s ${focusedemoji.emojiinfront(gamedata).emoji} climbed ${
-            focusedemoji.emoji
-          } to the front of their Squad!`
-        );
-        gamedata = focusedemoji.emojiinfront(gamedata).move(gamedata, 0);
+        if (focusedemoji.emojibehind(gamedata)) {
+          // ladder
+          gamedata = battleLine(
+            gamedata,
+            `\n⇋ ${focusedemoji.playername}'s ${focusedemoji.emojibehind(gamedata).emoji} climbed ${
+              focusedemoji.emoji
+            } to the front of their Squad!`
+          );
+          gamedata = focusedemoji.emojibehind(gamedata).move(gamedata, 0);
+          i++;
+        }
         break;
     }
   }

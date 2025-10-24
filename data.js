@@ -266,7 +266,7 @@ const emojis = [
     rarity: 1,
     names: ["Turtle", "Tortoise", "Slowpoke", "Shell"],
     class: 4,
-    description: "When attacked, moves to the back of your Squad and heals itself by 1"
+    description: "When attacked, moves to the back of your Squad and heals itself by 2"
   },
   {
     emoji: "🗣️",
@@ -1441,7 +1441,7 @@ const emojis = [
     dmg: 2,
     rarity: 2,
     names: ["Adhesive Bandage", "Bandaid", "Bandage", "Band-aid", "Patch", "Heal", "Bandage Up", "Aid", "Adhesive"],
-    class: 1,
+    class: 0,
     description: "Enemy Emojis directly in front of this cannot be healed"
   },
   {
@@ -2136,27 +2136,27 @@ const emojis = [
   {
     emoji: "🦉",
     id: 160,
-    hp: 5,
+    hp: 7,
     dmg: 3,
     rarity: -1,
     names: ["Owl"],
     class: null,
-    description: "When a friendly Emoji is attacked, moves to the front of the Squad (transformed from 🪶)"
+    description: "When a friendly Emoji is attacked and this is not at the front of the Squad, moves to the front of the Squad (transformed from 🪶)"
   },
   {
     emoji: "🦅",
     id: 161,
-    hp: 7,
+    hp: 6,
     dmg: 3,
     rarity: 1,
     names: ["Eagle"],
     class: 4,
-    description: "When a friendly Emoji is attacked, moves to the front of the Squad"
+    description: "When a friendly Emoji is attacked and this is not at the front of the Squad, moves to the front of the Squad"
   },
   {
     emoji: "💔",
     id: 162,
-    hp: 6,
+    hp: 7,
     dmg: 4,
     rarity: 1,
     names: ["Broken Heart", "Heartbreak", "Shattered Heart", "Heart Break", "Broken", "Break"],
@@ -2171,7 +2171,7 @@ const emojis = [
     rarity: 1,
     names: ["Ladder", "Stairs", "Step Ladder", "Steps"],
     class: 4,
-    description: "When an enemy Emoji is defeated, moves the friendly Emoji in front of this to the front of the Squad"
+    description: "When an enemy Emoji is defeated, moves the friendly Emoji behind this to the front of the Squad"
   },
   {
     emoji: "⌛",
