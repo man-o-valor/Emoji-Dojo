@@ -1953,7 +1953,7 @@ const emojis = [
     hp: 3,
     dmg: 2,
     rarity: 2,
-    names: ["Compression", "Clamp", "Compress", "Press", "Vice"],
+    names: ["Compression", "Clamp", "Compress", "Press", "Vise"],
     class: 8,
     description: "When your Squad is Shuffled, this and the two friendly Emojis behind it do not get moved"
   },
