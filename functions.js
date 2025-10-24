@@ -386,9 +386,11 @@ class BattleEmoji {
       return offender.alterhp(gamedata, target, val, verb, silence);
     }
 
-    ({ gamedata, target, offender, val } = defendAttack(gamedata, target, offender, val));
+  ({ gamedata, target, offender, val } = defendAttack(gamedata, target, offender, val));
 
-    if (target.hp === undefined || target.hp < 0) target.hp = 0;
+
+  if (!target) return gamedata;
+  if (target.hp === undefined || target.hp < 0) target.hp = 0;
 
     ({ gamedata, target, offender, val, silence } = beforeAttack(gamedata, target, offender, val, silence));
 
@@ -456,7 +458,9 @@ class BattleEmoji {
   }
 
   summon(gamedata, id, squad, pos, hp, dmg) {
-    gamedata.squads[squad - 1].splice(pos, 0, new BattleEmoji(id, squad, gamedata.player[squad - 1]));
+    const newemoji = new BattleEmoji(id, squad, gamedata.player[squad - 1]);
+    if (newemoji == undefined) return gamedata;
+    gamedata.squads[squad - 1].splice(pos, 0, newemoji);
     gamedata.squads[squad - 1][pos].summoned = true;
     if (hp !== undefined) {
       gamedata.squads[squad - 1][pos].hp = hp;
@@ -1796,7 +1800,7 @@ function shuffleSquad(gamedata, squad) {
 
         if (emoji?.id == 30) {
           // bus
-          gamedata = alterhp(gamedata, squad, idx, squad, idx, 2);
+          gamedata = emoji.alterhp(gamedata, emoji, 2);
           for (let j = partition.length - 1; j > -1; j--) {
             const stopIdx = partition[j];
             if (squadToShuffle[stopIdx]?.id == 29) {
