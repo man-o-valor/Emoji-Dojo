@@ -312,6 +312,7 @@ class BattleEmoji {
   static nextBattleId = 1;
 
   constructor(id, squad, playername) {
+    id = parseInt(id);
     this.battleId = BattleEmoji.nextBattleId++;
     this.id = id;
     this.originalid = id;
@@ -1719,7 +1720,7 @@ function shuffleSquad(gamedata, squad) {
       }
     }
 
-    if (!squadToShuffle.find((i) => i.id == 104)) {
+    if (squadToShuffle.find((i) => i.id == 104) != -1) {
       if (squadToShuffle.some((x) => x.id == 105)) {
         // rock
         gamedata = battleLine(
@@ -1905,43 +1906,44 @@ function shuffleSquad(gamedata, squad) {
 function battleStartAbilities(gamedata) {
   for (let startsi = 0; startsi < gamedata.squads.length; startsi++) {
     for (let startei = 0; startei < gamedata.squads[startsi].length; startei++) {
-      switch (gamedata.squads[startsi][startei]?.id) {
+      const focusedemoji = gamedata.squads[startsi][startei];
+      switch (focusedemoji?.id) {
         case 164:
           // hourglass
           gamedata.drawtime += 200;
           gamedata = battleLine(
             gamedata,
-            `\n${gamedata.squads[startsi][startei].playername}'s ${gamedata.squads[startsi][startei].emoji} delayed the inevitable...`
+            `\n${focusedemoji.playername}'s ${focusedemoji.emoji} delayed the inevitable...`
           );
           break;
         case 142:
           // bust in silhouette
-          gamedata = gamedata.squads[startsi][startei].transform(gamedata, gamedata.squads[flip01(startsi)][startei].id);
+          gamedata = focusedemoji.transform(gamedata, gamedata.squads[flip01(startsi)][startei].id);
           break;
         case 26:
           // cherries
-          gamedata = gamedata.squads[startsi][startei].summon(gamedata, 26, startsi + 1, startei);
+          gamedata = focusedemoji.summon(gamedata, 26, startsi + 1, startei);
           startei++;
           break;
         case 158:
           // blueberries
-          gamedata = gamedata.squads[startsi][startei].summon(gamedata, 158, startsi + 1, 0);
-          gamedata = gamedata.squads[startsi][startei].summon(gamedata, 158, startsi + 1, 0);
+          gamedata = focusedemoji.summon(gamedata, 158, startsi + 1, 0);
+          gamedata = focusedemoji.summon(gamedata, 158, startsi + 1, 0);
           startei = startei + 2;
           break;
         case 70:
           // wireless
           const amtToHeal = gamedata.squads[startsi].filter((element) => element.id == 70).length;
-          gamedata.squads[startsi][startei].hp += amtToHeal;
-          gamedata.squads[startsi][startei].originalhp += amtToHeal;
+          focusedemoji.hp += amtToHeal;
+          focusedemoji.originalhp += amtToHeal;
           break;
         case 95:
           // family
           const amtToBuff = gamedata.squads[startsi].filter((element) => element.class == 8).length;
-          gamedata.squads[startsi][startei].hp += amtToBuff;
-          gamedata.squads[startsi][startei].originalhp += amtToBuff;
-          gamedata.squads[startsi][startei].dmg += amtToBuff;
-          gamedata.squads[startsi][startei].originaldmg += amtToBuff;
+          focusedemoji.hp += amtToBuff;
+          focusedemoji.originalhp += amtToBuff;
+          focusedemoji.dmg += amtToBuff;
+          focusedemoji.originaldmg += amtToBuff;
           break;
         case 76:
           if (gamedata.squads[startsi][startei - 1] != undefined) {
@@ -1977,7 +1979,9 @@ function battleStartAbilities(gamedata) {
             startei -= 1;
           } else {
             let temp = lodash.cloneDeep(gamedata.squads[flip01(startsi)][startei - 1].dmg);
-            gamedata.squads[flip01(startsi)][startei - 1].dmg = lodash.cloneDeep(gamedata.squads[flip01(startsi)][startei - 1].hp);
+            gamedata.squads[flip01(startsi)][startei - 1].dmg = lodash.cloneDeep(
+              gamedata.squads[flip01(startsi)][startei - 1].hp
+            );
             gamedata.squads[flip01(startsi)][startei - 1].hp = temp;
             gamedata.squads[flip01(startsi)].splice(startei, 1);
             startei -= 1;
@@ -1985,11 +1989,7 @@ function battleStartAbilities(gamedata) {
           break;
         case 128:
           // clapper
-          gamedata = gamedata.squads[startsi][startei].alterhp(
-            gamedata,
-            gamedata.squads[flip01(startsi)][0],
-            0 - gamedata.squads[startsi][startei]?.dmg
-          );
+          gamedata = focusedemoji.alterhp(gamedata, gamedata.squads[flip01(startsi)][0], 0 - focusedemoji?.dmg);
           break;
       }
     }
