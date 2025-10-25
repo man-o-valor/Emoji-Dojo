@@ -11,7 +11,7 @@ const database = new Keyv("sqlite://databases//database.sqlite", {
 
 async function getLogs() {
   let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
-  for (i = logs.logs.emojis.length; i < emojis.length; i++) {
+  for (let i = logs.logs.emojis.length; i < emojis.length; i++) {
     logs.logs.emojis.push({});
   }
   return logs;
@@ -586,7 +586,7 @@ function multiAttack(gamedata, target, offender, val, silence) {
       );
       const targetpos = target.index(gamedata);
       const targetsquad = target.squad;
-      for (j = 0; j < offender.squadarr(gamedata).length; j++) {
+      for (let j = 0; j < offender.squadarr(gamedata).length; j++) {
         if (offender.squadarr(gamedata)[j]?.id == 93 && offender.squadarr(gamedata)[j].battleId != offender.battleId) {
           gamedata = offender
             .squadarr(gamedata)
@@ -1004,7 +1004,7 @@ function onDefeat(gamedata, target, offender) {
     }
     if (offender?.id == 52) {
       // night with stars
-      for (i = 0; i < target.squadarr(gamedata).length; i++) {
+      for (let i = 0; i < target.squadarr(gamedata).length; i++) {
         if (target.squadarr(gamedata)[i]?.id == target?.id && target.squadarr(gamedata)[i].hp > 0) {
           gamedata = offender.alterhp(gamedata, target, -1);
         }
@@ -1115,7 +1115,7 @@ function onDefeat(gamedata, target, offender) {
     }
     if (target?.id != 61) {
       // wand
-      for (i = target.squadarr(gamedata).length - 1; i > -1; i--) {
+      for (let i = target.squadarr(gamedata).length - 1; i > -1; i--) {
         if (target.squadarr(gamedata)[i]?.id == 61) {
           gamedata = target
             .squadarr(gamedata)
@@ -1328,7 +1328,7 @@ function onHeal(gamedata, target, val) {
       break;
   }
   if (target.index(gamedata) == 0) {
-    for (i = 1; i < target.squadarr(gamedata).length; i++) {
+    for (let i = 1; i < target.squadarr(gamedata).length; i++) {
       const focusedemoji = target.squadarr(gamedata)[i];
       if (focusedemoji?.id == 106) {
         // satellite
@@ -1350,8 +1350,8 @@ function afterDefeat(gamedata, target, offender) {
       .squadarr(gamedata)
       [offender.squadarr(gamedata).length - 1].alterhp(gamedata, offender, 1, "congratulated");
   }
-  for (i = 0; i < target.squadarr(gamedata).length; i++) {
-    const focusedemoji = target.squadarr(gamedata)[i];
+  for (let f = 0; f < target.squadarr(gamedata).length; f++) {
+    const focusedemoji = target.squadarr(gamedata)[f];
     switch (focusedemoji?.id) {
       case 11:
         if (focusedemoji?.hp > 0) {
@@ -1365,7 +1365,7 @@ function afterDefeat(gamedata, target, offender) {
         break;
       case 51:
         // xray
-        for (j = i + 1; j < target.squadarr(gamedata).length; j++) {
+        for (let j = f + 1; j < target.squadarr(gamedata).length; j++) {
           gamedata = focusedemoji.alterhp(gamedata, target.squadarr(gamedata)[j], 1, null, true);
         }
         gamedata = battleLine(
@@ -1376,7 +1376,7 @@ function afterDefeat(gamedata, target, offender) {
       case 62:
         // skyline
         takeeffect = false;
-        for (j = 0; j < target.squadarr(gamedata).length; j++) {
+        for (let j = 0; j < target.squadarr(gamedata).length; j++) {
           if (target.squadarr(gamedata)[j]?.id == target?.id && target.squadarr(gamedata)[j].hp > 0) {
             gamedata = focusedemoji.alterhp(gamedata, target.squadarr(gamedata)[j], 1, null, true);
           }
@@ -1391,7 +1391,7 @@ function afterDefeat(gamedata, target, offender) {
         break;
     }
   }
-  for (i = 0; i < offender.squadarr(gamedata).length; i++) {
+  for (let i = 0; i < offender.squadarr(gamedata).length; i++) {
     const focusedemoji = offender.squadarr(gamedata)[i];
     switch (focusedemoji?.id) {
       case 25:
@@ -1834,7 +1834,7 @@ function shuffleSquad(gamedata, squad) {
           squadToShuffle.find((i) => i.id == 127).emoji
         } attacked!`
       );
-      for (j = 0; j < squadToShuffle.length; j++) {
+      for (let j = 0; j < squadToShuffle.length; j++) {
         if (squadToShuffle[j]?.id == 127) {
           gamedata = squadToShuffle[j].alterhp(
             gamedata,
@@ -1903,92 +1903,92 @@ function shuffleSquad(gamedata, squad) {
 }
 
 function battleStartAbilities(gamedata) {
-  for (let j = 0; j < gamedata.squads.length; j++) {
-    for (i = 0; i < gamedata.squads[j].length; i++) {
-      switch (gamedata.squads[j][i]?.id) {
+  for (let startsi = 0; startsi < gamedata.squads.length; startsi++) {
+    for (let startei = 0; startei < gamedata.squads[startsi].length; startei++) {
+      switch (gamedata.squads[startsi][startei]?.id) {
         case 164:
           // hourglass
           gamedata.drawtime += 200;
           gamedata = battleLine(
             gamedata,
-            `\n${gamedata.squads[j][i].playername}'s ${gamedata.squads[j][i].emoji} delayed the inevitable...`
+            `\n${gamedata.squads[startsi][startei].playername}'s ${gamedata.squads[startsi][startei].emoji} delayed the inevitable...`
           );
           break;
         case 142:
           // bust in silhouette
-          gamedata = gamedata.squads[j][i].transform(gamedata, gamedata.squads[flip01(j)][i].id);
+          gamedata = gamedata.squads[startsi][startei].transform(gamedata, gamedata.squads[flip01(startsi)][startei].id);
           break;
         case 26:
           // cherries
-          gamedata = gamedata.squads[j][i].summon(gamedata, 26, j + 1, i);
-          i++;
+          gamedata = gamedata.squads[startsi][startei].summon(gamedata, 26, startsi + 1, startei);
+          startei++;
           break;
         case 158:
           // blueberries
-          gamedata = gamedata.squads[j][i].summon(gamedata, 158, j + 1, 0);
-          gamedata = gamedata.squads[j][i].summon(gamedata, 158, j + 1, 0);
-          i = i + 2;
+          gamedata = gamedata.squads[startsi][startei].summon(gamedata, 158, startsi + 1, 0);
+          gamedata = gamedata.squads[startsi][startei].summon(gamedata, 158, startsi + 1, 0);
+          startei = startei + 2;
           break;
         case 70:
           // wireless
-          const amtToHeal = gamedata.squads[j].filter((element) => element.id == 70).length;
-          gamedata.squads[j][i].hp += amtToHeal;
-          gamedata.squads[j][i].originalhp += amtToHeal;
+          const amtToHeal = gamedata.squads[startsi].filter((element) => element.id == 70).length;
+          gamedata.squads[startsi][startei].hp += amtToHeal;
+          gamedata.squads[startsi][startei].originalhp += amtToHeal;
           break;
         case 95:
           // family
-          const amtToBuff = gamedata.squads[j].filter((element) => element.class == 8).length;
-          gamedata.squads[j][i].hp += amtToBuff;
-          gamedata.squads[j][i].originalhp += amtToBuff;
-          gamedata.squads[j][i].dmg += amtToBuff;
-          gamedata.squads[j][i].originaldmg += amtToBuff;
+          const amtToBuff = gamedata.squads[startsi].filter((element) => element.class == 8).length;
+          gamedata.squads[startsi][startei].hp += amtToBuff;
+          gamedata.squads[startsi][startei].originalhp += amtToBuff;
+          gamedata.squads[startsi][startei].dmg += amtToBuff;
+          gamedata.squads[startsi][startei].originaldmg += amtToBuff;
           break;
         case 76:
-          if (gamedata.squads[j][i - 1] != undefined) {
+          if (gamedata.squads[startsi][startei - 1] != undefined) {
             // fog
-            gamedata.squads[j][i - 1].hp += 3;
-            gamedata.squads[j].splice(i, 1);
-            i -= 1;
+            gamedata.squads[startsi][startei - 1].hp += 3;
+            gamedata.squads[startsi].splice(startei, 1);
+            startei -= 1;
           } else {
-            gamedata.squads[flip01(j)][0].hp += 3;
-            gamedata.squads[j].splice(i, 1);
-            i -= 1;
+            gamedata.squads[flip01(startsi)][0].hp += 3;
+            gamedata.squads[startsi].splice(startei, 1);
+            startei -= 1;
           }
           break;
         case 85:
-          if (gamedata.squads[j][i - 1] != undefined) {
+          if (gamedata.squads[startsi][startei - 1] != undefined) {
             // syringe
-            gamedata.squads[j][i - 1].dmg += 1;
-            gamedata.squads[j].splice(i, 1);
-            i -= 1;
+            gamedata.squads[startsi][startei - 1].dmg += 1;
+            gamedata.squads[startsi].splice(startei, 1);
+            startei -= 1;
           } else {
-            gamedata.squads[flip01(j)][0].dmg += 1;
-            gamedata.squads[j].splice(i, 1);
-            i -= 1;
+            gamedata.squads[flip01(startsi)][0].dmg += 1;
+            gamedata.squads[startsi].splice(startei, 1);
+            startei -= 1;
           }
           break;
         case 126:
-          if (gamedata.squads[j][i - 1] != undefined) {
+          if (gamedata.squads[startsi][startei - 1] != undefined) {
             // beer
-            let temp = lodash.cloneDeep(gamedata.squads[j][i - 1].dmg);
-            gamedata.squads[j][i - 1].dmg = lodash.cloneDeep(gamedata.squads[j][i - 1].hp);
-            gamedata.squads[j][i - 1].hp = temp;
-            gamedata.squads[j].splice(i, 1);
-            i -= 1;
+            let temp = lodash.cloneDeep(gamedata.squads[startsi][startei - 1].dmg);
+            gamedata.squads[startsi][startei - 1].dmg = lodash.cloneDeep(gamedata.squads[startsi][startei - 1].hp);
+            gamedata.squads[startsi][startei - 1].hp = temp;
+            gamedata.squads[startsi].splice(startei, 1);
+            startei -= 1;
           } else {
-            let temp = lodash.cloneDeep(gamedata.squads[flip01(j)][i - 1].dmg);
-            gamedata.squads[flip01(j)][i - 1].dmg = lodash.cloneDeep(gamedata.squads[flip01(j)][i - 1].hp);
-            gamedata.squads[flip01(j)][i - 1].hp = temp;
-            gamedata.squads[flip01(j)].splice(i, 1);
-            i -= 1;
+            let temp = lodash.cloneDeep(gamedata.squads[flip01(startsi)][startei - 1].dmg);
+            gamedata.squads[flip01(startsi)][startei - 1].dmg = lodash.cloneDeep(gamedata.squads[flip01(startsi)][startei - 1].hp);
+            gamedata.squads[flip01(startsi)][startei - 1].hp = temp;
+            gamedata.squads[flip01(startsi)].splice(startei, 1);
+            startei -= 1;
           }
           break;
         case 128:
           // clapper
-          gamedata = gamedata.squads[j][i].alterhp(
+          gamedata = gamedata.squads[startsi][startei].alterhp(
             gamedata,
-            gamedata.squads[flip01(j)][0],
-            0 - gamedata.squads[j][i]?.dmg
+            gamedata.squads[flip01(startsi)][0],
+            0 - gamedata.squads[startsi][startei]?.dmg
           );
           break;
       }

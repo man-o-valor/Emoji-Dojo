@@ -1809,7 +1809,7 @@ const emojis = [
     hp: 4,
     dmg: 1,
     rarity: 0,
-    names: ["Revolving Hearts", "Hearts", "Acorns"],
+    names: ["Revolving Hearts", "Hearts", "Acorns", "Revolving"],
     class: 0,
     description:
       "When attacked, switches places with the friendly Emoji behind it and heals the new frontmost friendly Emoji by 1"
