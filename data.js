@@ -537,7 +537,7 @@ const emojis = [
     dmg: 3,
     rarity: 1,
     names: ["Pickup Truck", "Truck", "Pickup", "Vehicle", "Drive", "Transport", "Hauler"],
-    class: 5,
+    class: 4,
     description: "When your Squad is Shuffled, always ends at the back"
   },
   {
@@ -557,7 +557,7 @@ const emojis = [
     dmg: 4,
     rarity: 2,
     names: ["Bus", "Trolley", "Tram", "Train", "Transport", "Vehicle", "Commute", "Public Transport"],
-    class: 5,
+    class: 4,
     description:
       "When your Squad is Shuffled, heals itself by 2, and if there is at least one undefeated friendly 🚏, ends behind it"
   },
@@ -2014,7 +2014,7 @@ const emojis = [
     dmg: 3,
     rarity: 1,
     names: ["Fire Engine", "Fire Truck", "Firefighter", "Firemen", "Firetruck"],
-    class: 5,
+    class: 4,
     description: "When your Squad is Shuffled, always ends at the front"
   },
   {
