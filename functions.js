@@ -595,8 +595,8 @@ function multiAttack(gamedata, target, offender, val, silence) {
               gamedata,
               gamedata.squads[targetsquad - 1][targetpos],
               0 - offender.squadarr(gamedata)[j].dmg,
-              "",
-              true,
+              undefined,
+              false,
               false
             );
         }
@@ -1841,8 +1841,8 @@ function shuffleSquad(gamedata, squad) {
             gamedata,
             gamedata.squads[flip12(squad) - 1][0],
             0 - squadToShuffle[j].dmg,
-            "",
-            true,
+            undefined,
+            false,
             false
           );
         }
@@ -2413,6 +2413,44 @@ async function adminPanel(interaction, viewemoji) {
       flags: "Ephemeral",
       content: names
     });
+  } else if (devdata[0] == "infoon") {
+    let logs = await JSON.parse(fs.readFileSync("logs.json", "utf8"));
+    let user = logs.logs.players["user" + devdata[1]];
+    if (user == undefined) {
+      await interaction.reply({
+        flags: "Ephemeral",
+        content: `I don't recognize ${devdata[1]} (<@${devdata[1]}>).`
+      });
+    } else {
+      let info = `## Info on ${devdata[1]} (<@${devdata[1]}>):`;
+      info += `\n- 🐣 Joined Emoji Dojo on <t:${user.joindate}:F>`;
+      info += `\n- 👉 Last used Emoji Dojo <t:${user.lastboop}:R>`;
+      info += `\n- ⚔️ Battles played: ${user.started || 0}`;
+      info += `\n  - 🤖: ${user.botstarted || 0} (${user.botwins || 0}W/${user.botlosses || 0}L) 📄 ${
+        user.botlogsrequested || 0
+      }`;
+      info += `\n  - 👤: ${user.userstarted || 0} (${user.userwins || 0}W/${user.userlosses || 0}L) 📄 ${
+        user.userlogsrequested || 0
+      }`;
+      info += `\n  - 💕: ${user.friendlystarted || 0} (${user.friendlywins || 0}W/${user.friendlylosses || 0}L) 📄 ${
+        user.friendlylogsrequested || 0
+      }`;
+      info += `\n  - 🎨: ${user.customstarted || 0} 📄 ${user.customlogsrequested || 0}`;
+      info += `\n- 👀 Times dojo viewed: ${user.vaultsviewed || 0}`;
+      info += `\n  - 😀 Times emoji viewed: ${user.emojisviewed || 0}`;
+      info += `\n- 👥 Times squad viewed: ${user.squadsviewed || 0}`;
+      info += `\n  - ✏️ Times squad edited: ${user.squadedited || 0}`;
+      info += `\n- 🪙 Times coins viewed: ${user.coinsviewed || 0}`;
+      info += `\n- 💹 Times shop viewed: ${user.shopsviewed || 0}`;
+      info += `\n  - 🤑 Times emoji bought: ${user.prepickedemojisbought || 0}`;
+      info += `\n  - 🎲 Times random emoji bought: ${user.randomemojisbought || 0}`;
+      info += `\n  - 🎁 Times pack bought: ${user.packsbought || 0}`;
+      info += `\n- 🛐 Emojis Devoted: ${user.emojisdevoted || 0}`;
+      await interaction.reply({
+        flags: "Ephemeral",
+        content: info
+      });
+    }
   }
 }
 
