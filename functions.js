@@ -1834,12 +1834,15 @@ function shuffleSquad(gamedata, squad) {
           squadToShuffle.find((i) => i.id == 127).emoji
         } attacked!`
       );
-      for (i = 0; i < squadToShuffle.length; i++) {
-        if (squadToShuffle[i]?.id == 127) {
-          gamedata = squadToShuffle[i].alterhp(
+      for (j = 0; j < squadToShuffle.length; j++) {
+        if (squadToShuffle[j]?.id == 127) {
+          gamedata = squadToShuffle[j].alterhp(
             gamedata,
             gamedata.squads[flip12(squad) - 1][0],
-            0 - squadToShuffle[i].dmg
+            0 - squadToShuffle[j].dmg,
+            "",
+            true,
+            false
           );
         }
       }
