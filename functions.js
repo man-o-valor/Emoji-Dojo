@@ -1226,16 +1226,16 @@ function onAttack(gamedata, target, offender, val) {
   }
   if (target?.id == 110 && target.squadarr(gamedata).length > 1) {
     // curling stone
-    gamedata = target.move(gamedata, target.index(gamedata) + 1);
-    gamedata = target
-      .emojiinfront(gamedata)
-      .alterhp(gamedata, offender.squadarr(gamedata)[0], 0 - target.emojiinfront(gamedata).dmg, "", true);
     gamedata = battleLine(
       gamedata,
       `\n⇋ ${target.playername}'s ${target.emoji} retreated behind ${target.emojiinfront(gamedata).emoji}, and ${
         target.emojiinfront(gamedata).emoji
       } attacked!`
     );
+    gamedata = target.move(gamedata, target.index(gamedata) + 1);
+    gamedata = target
+      .emojiinfront(gamedata)
+      .alterhp(gamedata, offender.squadarr(gamedata)[0], 0 - target.emojiinfront(gamedata).dmg, "", true);
   }
   if (target?.id == 5 && target.squadarr(gamedata).length > 1) {
     // turtle
@@ -1978,11 +1978,9 @@ function battleStartAbilities(gamedata) {
             gamedata.squads[startsi].splice(startei, 1);
             startei -= 1;
           } else {
-            let temp = lodash.cloneDeep(gamedata.squads[flip01(startsi)][startei - 1].dmg);
-            gamedata.squads[flip01(startsi)][startei - 1].dmg = lodash.cloneDeep(
-              gamedata.squads[flip01(startsi)][startei - 1].hp
-            );
-            gamedata.squads[flip01(startsi)][startei - 1].hp = temp;
+            let temp = lodash.cloneDeep(gamedata.squads[flip01(startsi)][0].dmg);
+            gamedata.squads[flip01(startsi)][0].dmg = lodash.cloneDeep(gamedata.squads[flip01(startsi)][0].hp);
+            gamedata.squads[flip01(startsi)][0].hp = temp;
             gamedata.squads[flip01(startsi)].splice(startei, 1);
             startei -= 1;
           }
