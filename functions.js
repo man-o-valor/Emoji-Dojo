@@ -885,7 +885,7 @@ function beforeAttack(gamedata, target, offender, val, silence) {
     // dancer
     gamedata = battleLine(
       gamedata,
-      `\n⇋ ${offender.playername}'s ${offender?.emoji} retreated behind ${offender.emojiinfront(gamedata)?.emoji}!`
+      `\n⇋ ${offender.playername}'s ${offender?.emoji} retreated behind ${offender.emojibehind(gamedata)?.emoji}!`
     );
     gamedata = offender.move(gamedata, offender.index(gamedata) + 1);
   }
@@ -1226,10 +1226,11 @@ function onAttack(gamedata, target, offender, val) {
   }
   if (target?.id == 110 && target.squadarr(gamedata).length > 1) {
     // curling stone
+    console.log
     gamedata = battleLine(
       gamedata,
-      `\n⇋ ${target.playername}'s ${target.emoji} retreated behind ${target.emojiinfront(gamedata).emoji}, and ${
-        target.emojiinfront(gamedata).emoji
+      `\n⇋ ${target.playername}'s ${target.emoji} retreated behind ${target.emojibehind(gamedata).emoji}, and ${
+        target.emojibehind(gamedata).emoji
       } attacked!`
     );
     gamedata = target.move(gamedata, target.index(gamedata) + 1);
@@ -1950,24 +1951,21 @@ function battleStartAbilities(gamedata) {
             // fog
             gamedata.squads[startsi][startei - 1].hp += 3;
             gamedata.squads[startsi].splice(startei, 1);
-            startei -= 1;
           } else {
             gamedata.squads[flip01(startsi)][0].hp += 3;
-            gamedata.squads[startsi].splice(startei, 1);
-            startei -= 1;
           }
+          gamedata.squads[startsi].splice(startei, 1);
+            startei -= 1;
           break;
         case 85:
           if (gamedata.squads[startsi][startei - 1] != undefined) {
             // syringe
             gamedata.squads[startsi][startei - 1].dmg += 1;
-            gamedata.squads[startsi].splice(startei, 1);
-            startei -= 1;
           } else {
             gamedata.squads[flip01(startsi)][0].dmg += 1;
-            gamedata.squads[startsi].splice(startei, 1);
-            startei -= 1;
           }
+          gamedata.squads[startsi].splice(startei, 1);
+            startei -= 1;
           break;
         case 126:
           if (gamedata.squads[startsi][startei - 1] != undefined) {
@@ -1976,14 +1974,14 @@ function battleStartAbilities(gamedata) {
             gamedata.squads[startsi][startei - 1].dmg = lodash.cloneDeep(gamedata.squads[startsi][startei - 1].hp);
             gamedata.squads[startsi][startei - 1].hp = temp;
             gamedata.squads[startsi].splice(startei, 1);
-            startei -= 1;
           } else {
+            console.log(gamedata);
             let temp = lodash.cloneDeep(gamedata.squads[flip01(startsi)][0].dmg);
             gamedata.squads[flip01(startsi)][0].dmg = lodash.cloneDeep(gamedata.squads[flip01(startsi)][0].hp);
             gamedata.squads[flip01(startsi)][0].hp = temp;
-            gamedata.squads[flip01(startsi)].splice(startei, 1);
-            startei -= 1;
           }
+          gamedata.squads[startsi].splice(startei, 1);
+          startei -= 1;
           break;
         case 128:
           // clapper

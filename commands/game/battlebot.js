@@ -255,6 +255,7 @@ module.exports = {
                       } else if (numberhidden > 0) {
                         richnumberhidden = "-# " + numberhidden + " lines hidden";
                       }
+                      console.log(gamedata.emojitext);
                       const battlecomponents = [
                         new ContainerBuilder()
                           .addTextDisplayComponents(
@@ -265,6 +266,7 @@ module.exports = {
                           .addSeparatorComponents(
                             new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                           )
+                          
                           .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                         new ContainerBuilder().addTextDisplayComponents(
                           new TextDisplayBuilder().setContent(richnumberhidden + richtextsnippet)
