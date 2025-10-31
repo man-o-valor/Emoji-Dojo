@@ -1950,7 +1950,6 @@ function battleStartAbilities(gamedata) {
           if (gamedata.squads[startsi][startei - 1] != undefined) {
             // fog
             gamedata.squads[startsi][startei - 1].hp += 3;
-            gamedata.squads[startsi].splice(startei, 1);
           } else {
             gamedata.squads[flip01(startsi)][0].hp += 3;
           }
@@ -1973,7 +1972,6 @@ function battleStartAbilities(gamedata) {
             let temp = lodash.cloneDeep(gamedata.squads[startsi][startei - 1].dmg);
             gamedata.squads[startsi][startei - 1].dmg = lodash.cloneDeep(gamedata.squads[startsi][startei - 1].hp);
             gamedata.squads[startsi][startei - 1].hp = temp;
-            gamedata.squads[startsi].splice(startei, 1);
           } else {
             console.log(gamedata);
             let temp = lodash.cloneDeep(gamedata.squads[flip01(startsi)][0].dmg);
