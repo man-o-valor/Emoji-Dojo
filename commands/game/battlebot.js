@@ -107,7 +107,6 @@ module.exports = {
             flags: MessageFlags.Ephemeral
           });
         } else {
-          await database.set(interaction.user.id + "battlepending", 20 + Math.floor(Date.now() / 1000));
           let player1squadtext = "";
           for (let i = 7; i > -1; i--) {
             player1squadtext += `${emojis[player1squadarray[i]].emoji} `;
@@ -266,7 +265,7 @@ module.exports = {
                           .addSeparatorComponents(
                             new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small).setDivider(true)
                           )
-                          
+
                           .addTextDisplayComponents(new TextDisplayBuilder().setContent(gamedata.emojitext)),
                         new ContainerBuilder().addTextDisplayComponents(
                           new TextDisplayBuilder().setContent(richnumberhidden + richtextsnippet)
@@ -478,22 +477,13 @@ module.exports = {
                     player2squadtext += `${emojis[player2squadarray[i]].emoji} `;
                   }
 
-                  gamedata = {
-                    squads: [[], []],
-                    emojitext: "",
-                    richtext: [],
-                    turn: 0,
-                    player: [interaction.user.globalName, "DojoBot"],
-                    playerturn: 1,
-                    newlines: 0,
-                    logfile: `${interaction.user.id} (${interaction.user.username}) vs Dojobot\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTurn 1`
-                  };
+                  gamedata.squads = [[], []];
                   const { BattleEmoji } = require("../../functions.js");
                   for (let i = 0; i < 8; i++) {
-                    gamedata.squads[0].push(new BattleEmoji(player1squadarray[i], 1));
+                    gamedata.squads[0].push(new BattleEmoji(player1squadarray[i], 1, interaction.user.globalName));
                   }
                   for (let i = 0; i < 8; i++) {
-                    gamedata.squads[1].push(new BattleEmoji(player2squadarray[i], 2));
+                    gamedata.squads[1].push(new BattleEmoji(player2squadarray[i], 2, "DojoBot"));
                   }
 
                   gamedata.playerturn = Math.floor(Math.random() * 2) + 1;
